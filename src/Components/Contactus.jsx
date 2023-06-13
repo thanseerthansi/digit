@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
+import { Helmet } from 'react-helmet'
+import { Simplecontext } from '../Commonpages/Simplecontext'
 
 export default function Contactus() {
+  const {path} = useContext(Simplecontext)
     useEffect(() => {
         window.scrollTo(0,0)
+        path()
       }, [])
   return (
     <>
@@ -130,7 +134,21 @@ export default function Contactus() {
     </div>
   </section>
 </main>
-
+<Helmet>
+    <script data-cfasync="false" src="../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="/assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/plugins/waypoints.js"></script>
+    <script src="/assets/js/plugins/wow.js"></script>
+    <script src="/assets/js/plugins/magnific-popup.js"></script>
+    <script src="/assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="/assets/js/plugins/select2.min.js"></script>
+    <script src="/assets/js/plugins/isotope.js"></script>
+    <script src="/assets/js/plugins/scrollup.js"></script>
+    <script src="/assets/js/plugins/swiper-bundle.min.js"></script>
+    <script src="/assets/js/main8c94.js?v=4.1"></script>
+</Helmet>
     </>
   )
 }
