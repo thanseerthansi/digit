@@ -4,7 +4,8 @@ import { Simplecontext } from "../Commonpages/Simplecontext";
 
 export default function Header() {
   const { path, pathvalue } = useContext(Simplecontext);
-
+  const windowuser = window.localStorage.getItem("graiduser")??""
+  console.log("windeouser",windowuser)
   const [scrollPosition, setScrollPosition] = useState(0);
   // console.log("scrolll",scrollPosition)
   const mobileHeaderActive = () => {
@@ -36,6 +37,7 @@ export default function Header() {
     const handleScroll = () => {
       const currentPosition = window.pageYOffset;
       setScrollPosition(currentPosition);
+
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -91,6 +93,17 @@ export default function Header() {
               </div>
             </div>
             <div className="header-right">
+              {windowuser?windowuser==="employer"?
+               <div class="block-signin">
+               
+               <Link class="btn btn-default btn-shadow ml-40 hover-up" to="/employer-profile">Profile</Link>
+               </div>:
+               <div class="block-signin">
+               
+               <a class="btn btn-default btn-shadow ml-40 hover-up" href="employee-profile.html">Profile</a>
+               </div>
+               :
+           <>
               {pathvalue === "/Signin" || pathvalue === "/employerlogin" ? (
                 pathvalue === "/Signin" ? (
                   <div className="block-signin">
@@ -126,7 +139,7 @@ export default function Header() {
                     Sign in
                   </Link>
                 </div>
-              )}
+              )}</>}
             </div>
           </div>
         </div>

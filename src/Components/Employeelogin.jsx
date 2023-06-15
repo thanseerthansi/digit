@@ -1,17 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import Footer from "./Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Simplecontext } from "../Commonpages/Simplecontext";
 
 export default function Employeelogin() {
   const { path } = useContext(Simplecontext);
-
+  const navigate = useNavigate()
   useEffect(() => {
     window.scrollTo(0, 0);
     path();
   }, []);
 
+  const formsubmit=(e)=>{
+    e.preventDefault();
+    window.localStorage.setItem('graiduser','employer')
+    navigate('/')
+
+  }
   return (
     <>
       <main className="main">
@@ -42,7 +48,7 @@ export default function Employeelogin() {
                     <span />
                   </div>
                 </div>
-                <form className="login-register text-start mt-20" action="#">
+                <form className="login-register text-start mt-20" onSubmit={(e)=>formsubmit(e)}>
                   <div className="form-group mb-3">
                     <input
                       className="form-control"
@@ -73,7 +79,7 @@ export default function Employeelogin() {
                   <div className="form-group">
                     <button
                       className="btn btn-brand-1 hover-up w-100 "
-                      href="index-employee.html"
+                      // href="index-employee.html"
                       type="submit"
                       name="login"
                     >

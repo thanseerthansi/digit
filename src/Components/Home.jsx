@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
+import { Simplecontext } from '../Commonpages/Simplecontext';
 
 export default function Home() {
+  const { path } = useContext(Simplecontext);
   useEffect(() => {
     window.scrollTo(0,0)
+    path()
   }, [])
   return (
     <>

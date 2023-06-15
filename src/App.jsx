@@ -11,6 +11,7 @@ import Text from "./Components/Text";
 import Employeeregister from "./Components/Employeeregister";
 import Simplecontextprovider from "./Commonpages/Simplecontext";
 import Employerregister from "./Employerpages/Employerregister";
+import Employerprofile from "./Employerpages/employerprofile";
 function App() {
   return (
     <>
@@ -26,6 +27,9 @@ function App() {
             <Route path="employerlogin" element={<Employeelogin />} />
             <Route path="employerregister" element={<Employeeregister />} />
             <Route path="employee-register" element={<Employerregister />} />
+            <Route path="employer-profile" element={<Employerprofile/>} />
+            
+            
           </Route>
           <Route path="*" element={<Notfound />} />
         </Routes>
