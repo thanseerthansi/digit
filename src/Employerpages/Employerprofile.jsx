@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
+import { createContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Simplecontext } from "../Commonpages/Simplecontext";
 
 export default function Employerprofile() {
-  const navigate = useNavigate();
+  const {logouthandler}=useContext(Simplecontext)
+  // const navigate = useNavigate();
 
-  const logouthandler = () => {
-    console.log("entered logout");
-    window.localStorage.removeItem("graiduser");
-    return navigate("/");
-  };
+ 
   return (
     <>
       <main className="main">

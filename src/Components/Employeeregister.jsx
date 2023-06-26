@@ -1,7 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+import Filestack from '../Commonpages/Filestack';
 
+
+const animatedComponents = makeAnimated();
 export default function Employeeregister() {
+  const [employeedata,setemployeedata]=useState([])
+  console.log("valuedata",employeedata)
     useEffect(() => {     
       window.scrollTo(0,0)
     }, [])
@@ -11,6 +18,32 @@ export default function Employeeregister() {
     }
   const selecthandler=(e)=>{
     console.log("eeeevalue selected",e)
+  }
+  const colourOptions = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'grey', label: 'grey' },
+    { value: 'red', label: 'red' }
+  ]
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      // Add your custom styles for the control element here
+    }),
+    clearIndicator: (provided) => ({
+      ...provided,
+      color: 'red', // Set the desired color for the cross button
+    }),
+    dropdownIndicator: (provided) => ({
+      ...provided,
+      color: 'green', // Set the desired color for the dropdown button
+    }),
+  };
+  const Filestackhandler=async()=>{
+    let data =await Filestack()
+    console.log("datafilestack",data)
+    // setemployeedata({...employeedata,key:data})
   }
   return (
     <>
@@ -54,39 +87,43 @@ export default function Employeeregister() {
                         </div> 
                         <div className="form-group col-md-4 ">
                           <label className="form-label" htmlFor="input-1" />
-                          <input className="form-control" id="input-1" type="text" required name="Full Name " placeholder="First Name " />
+                          <input onChange={(e)=>setemployeedata({...employeedata,firstName:e.target.value})} className="form-control" id="input-1" type="text" required name="Full Name " placeholder="First Name " />
                         </div>
                         <div className="form-group col-md-4 ">
                           <label className="form-label" htmlFor="input-1" />
-                          <input className="form-control" id="input-1" type="text" required name="fullname" placeholder="Middile Name" />
+                          <input onChange={(e)=>setemployeedata({...employeedata,middleName:e.target.value})} className="form-control" id="input-1" type="text" required name="fullname" placeholder="Middile Name" />
                         </div>
                         <div className="form-group col-md-4 ">
                           <label className="form-label" htmlFor="input-1" />
-                          <input className="form-control" id="input-1" type="text" required name="fullname" placeholder="Last Name" />
+                          <input className="form-control" id="input-1" type="text" required onChange={(e)=>setemployeedata({...employeedata,lastName:e.target.value})} name="fullname" placeholder="Last Name" />
                         </div>
                         <div className="form-group mt-4 col-md-4 ">
-                          <input className="dob" placeholder="Date of Birth" type="text" onfocus="(this.type = 'date')" id="date" />
+                          <input className="dob" onChange={(e)=>setemployeedata({...employeedata,dob:e.target.value})} placeholder="Date of Birth" type="text" onfocus="(this.type = 'date')" id="date" />
                         </div>
                         <div className="form-group col-md-4">
                           <label className="form-label" htmlFor="input-2" />
-                          <input className="form-control" id="input-2" type="email" required name="emailaddress" placeholder="stevenjob@gmail.com" />
+                          <input className="form-control" id="input-2" type="email"  onChange={(e)=>setemployeedata({...employeedata,email:e.target.value})} required name="emailaddress" placeholder="stevenjob@gmail.com" />
                         </div>
                         <div className="form-group col-md-4 ">
                           <label className="form-label" htmlFor="input-2" />
-                          <input className="form-control" id="input-2" type="tel" required name="emailaddress" placeholder="Phone Number" />
+                          <input className="form-control" id="input-2" type="tel"required name="emailaddress" onChange={(e)=>setemployeedata({...employeedata,phone:e.target.value})} placeholder="Phone Number" />
                         </div>
                         <h6 className="permenent-address education col-12 mb-2 ">Language Known</h6>
                         <div className=" col-lg-6 ">
                           <label className="fieldlabels font-sm color-text-mutted">Read*</label>
-                          <input type="text" className="form-control" placeholder=" Language" id />
+                          <input type="text"  onChange={(e)=>setemployeedata({...employeedata,lngRead:e.target.value})}  className="form-control" placeholder=" Language" id />
                         </div>
                         <div className="form-group col-lg-6 font-sm color-text-mutted">
                           <label className="fieldlabels">Write*</label>
-                          <input type="text" className="form-control" placeholder=" Language" id />
+                          <input type="text" onChange={(e)=>setemployeedata({...employeedata,lngWrite:e.target.value})}  className="form-control" placeholder=" Language" id />
                         </div>
                         <div className="col-md-12 mb-3">
                           <label className="col-sm-12 font-sm color-text-mutted">Upload Your Photo*</label> 
-                          <input type="file" name="pic" accept="image/*" /> 
+                          {/* <input type="file" onClick={(e)=>Filestackhandler(e)} name="pic" accept="image/*" />  */}
+                          <div className='imageselectorborder'>
+                            <button onClick={(e)=>Filestackhandler('profilePhoto')} type='button' className='imageselector'> Choose image</button>
+                          </div>
+
                         </div>
                         <label className="dropdown  col-lg-4 col-md-12 col-sm-12 mt-30">
                           <div className="text__center ">
@@ -254,8 +291,8 @@ export default function Employeeregister() {
                             <input className="check " type="checkbox" /> 
                           </div>
                           <div className="form-group col-lg-11 col-md-11 col-xl-11 col-sm-8 p-address ">
-                            <hp className="p-address">Same as permanent address<p />
-                            </hp></div>
+                            <p className="p-address">Same as permanent address<p />
+                            </p></div>
                           <div className="form-group">
                             <input type="text" className="form-control" placeholder="Address Line 1" id="curAddressLine1" />
                           </div>
@@ -448,7 +485,15 @@ export default function Employeeregister() {
                         </div>
                         <h6 className="mt-3 color-brand-1">Skills</h6>
                         <div className="col-lg-12 col-md-12">
-                          <div className="box-skills">
+                        <Select
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            isMulti
+                            options={colourOptions}
+                            placeholder={<div>Select Skills....</div>}
+                            // styles={customStyles}
+                          />
+                          {/* <div className="box-skills">
                             <div className="form-contact">
                               <div className="form-group">
                                 <input className="form-control search-icon" type="text" defaultValue placeholder="E.g. Angular, Laravel..." />
@@ -456,7 +501,7 @@ export default function Employeeregister() {
                             </div>
                             <div className="box-tags mt-30"><a className="btn btn-grey-small mr-10">Figma<span className="close-icon" /></a><a className="btn btn-grey-small mr-10">Adobe XD<span className="close-icon" /></a><a className="btn btn-grey-small mr-10">NextJS<span className="close-icon" /></a><a className="btn btn-grey-small mr-10">React<span className="close-icon" /></a><a className="btn btn-grey-small mr-10">App<span className="close-icon" /></a><a className="btn btn-grey-small mr-10">Digital<span className="close-icon" /></a><a className="btn btn-grey-small mr-10">NodeJS<span className="close-icon" /></a></div>
                             <div className="mt-40"> <span className="card-info font-sm color-text-paragraph-2">You can add up to 15 skills</span></div>
-                          </div>
+                          </div> */}
                         </div>
                         <h6 className="permenent-address mb-3">Career</h6>
                         <div className="property-fields__ro ">

@@ -15,6 +15,8 @@ import Employerprofile from "./Employerpages/employerprofile";
 import Employeeprofile from "./Employeepages/Employeeprofile";
 import Forgetpassword from "./Employerpages/Forgetpassword";
 import Resetpassord from "./Employerpages/Resetpassord";
+import Notificationfile from "./Employerpages/Notificationfile";
+import Candidates from "./Employerpages/Candidates";
 function App() {
   return (
     <>
@@ -28,12 +30,14 @@ function App() {
             <Route path="contactus" element={<Contactus />} />
             <Route path="Signin" element={<Signin />} />
             <Route path="employerlogin" element={<Employeelogin />} />
-            <Route path="employerregister" element={<Employeeregister />} />
-            <Route path="employee-register" element={<Employerregister />} />
+            <Route path="employeeregister" element={<Employeeregister />} />
+            <Route path="employer-register" element={<Employerregister />} />
             <Route path="employer-profile" element={<Employerprofile/>} />
             <Route path="employee-profile" element={<Employeeprofile/>} />
             <Route path="forget-password" element={<Forgetpassword/>} />
             <Route path="reset-password" element={<Resetpassord/>} />
+            <Route path="notification" element={<Notificationfile/>} />
+            <Route path="candidates" element={<Candidates/>} />
             
           </Route>
           <Route path="*" element={<Notfound />} />

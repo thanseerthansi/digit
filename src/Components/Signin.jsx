@@ -12,9 +12,11 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Axioscall from "../Commonpages/Axioscall";
+import jwt_decode from "jwt-decode";
 
 export default function Signin() {
-  const { path } = useContext(Simplecontext);
+  const { path,userdetail,setuserdetail } = useContext(Simplecontext);
   const navigate = useNavigate();
   const countryCode = "+91";
 
@@ -43,7 +45,10 @@ export default function Signin() {
     console.log("dsf", data);
     if (data._tokenResponse) {
       console.log("email",data._tokenResponse.email)
-      // Checkuserhandler(data)
+      
+      if(data._tokenResponse.email){
+        Checkuserhandler(data._tokenResponse.email)
+      }
     }else{
       notifyerror("Something went wrong")
     }
@@ -57,8 +62,7 @@ export default function Signin() {
     const data = await signInEmail();
     console.log("datafacebook", data);
     // Checkuserhandler(data)
-    // window.localStorage.setItem("graiduser", "employee");
-    // navigate('/employee-profile')
+    
   };
   const requestOTP = (e) => {
     e.preventDefault();
@@ -99,18 +103,41 @@ export default function Signin() {
       .confirm(added_otp)
       .then((result) => {
         console.log("Success");
-        console.log(result);
-        Checkuserhandler(result)
+        console.log(result.user.phoneNumber);
+        if (result.user.phoneNumber){
+           Checkuserhandler(result.user.phoneNumber)
+        }else{
+          notifyerror("wrong OTP")
+        }
       })
       .catch((error) => {
         console.log(error);
-        console.log("Wrong otp");
+        notifyerror("wrong OTP")
       });
   };
-  const Checkuserhandler=(result)=>{
+  // crud functions start................................................................
+  const Checkuserhandler=async(result)=>{
     console.log("result",result)
-    window.localStorage.setItem("graiduser", "employee");
-    navigate('/employee-profile')
+    try {
+      const data = await Axioscall("post","user/login",{username:result,role:"employee"})
+      console.log("dataafter",data)
+        if(data.status===200){
+          if(data.data.data.token){
+            Decodetoken(data.data.data.token)
+          }
+      }else{
+        notifyerror(data.response.data.message)
+      }
+    } catch (error) {
+      console.log("error",error)
+    }
+  }
+  const Decodetoken =(token)=>{
+    console.log(token)
+    var decoded = jwt_decode(token)
+    if(decoded.id){
+      Getuser(decoded.id)
+    }
   }
   const Rememberhandler=(e)=>{
     if (e){
@@ -125,6 +152,25 @@ export default function Signin() {
       setPhoneNumber(data)
     }
   }
+  const Getuser =async(datalist)=>{
+    try {
+        let data = await Axioscall("get","employee",{id:datalist})
+        console.log("data",data)
+        if (data.status===200){
+          console.log("datadocs",data.data.docs)
+          if(data.data.docs){
+            setuserdetail(data.data.docs)
+            window.localStorage.setItem("graiduser", "employee");
+            navigate('/employee-profile')
+          }else{
+            window.localStorage.setItem("graiduser", "employee");
+            navigate('/employeeregister')
+          }
+        }
+    } catch (error) {
+        console.log("datagetuser",error)
+    }
+}
   return (
     <>
       <main className="main">
@@ -216,7 +262,6 @@ export default function Signin() {
                        type="number"
                        value={added_otp}
                        onChange={(e) => setadded_otp(e.target.value)}
-                       required
                        name="otp"
                        placeholder="OTP"
                      />
@@ -231,6 +276,15 @@ export default function Signin() {
                       Verify OTP
                     </button>
                   </div><br/>
+                  <div className="form-group">
+                    <button
+                      className="btn btn-brand-1 hover-up w-100 "
+                      type="submit"
+                      name="login"
+                    >
+                      Re-Send OTP
+                    </button>
+                  </div>
                    </>
                   :<>
                   

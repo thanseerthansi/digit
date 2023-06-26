@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Simplecontext } from "../Commonpages/Simplecontext";
+import { Helmet } from "react-helmet";
 
 export default function Header() {
   const { path, pathvalue } = useContext(Simplecontext);
@@ -85,7 +86,7 @@ export default function Header() {
                   <li className="has-children">
                     <Link to="/contactus">Contact us</Link>
                   </li>
-                  {windowuser==="employer"? <li className="has-children"><Link to="Candidate-grid.html">Candidates</Link>
+                  {windowuser==="employer"? <li className="has-children"><Link to="/candidates">Candidates</Link>
                 </li>:null}
                 </ul>
               </nav>
@@ -95,16 +96,26 @@ export default function Header() {
                 <span className="burger-icon-bottom" />
               </div>
             </div>
+            {windowuser==="employer"?<>
+            {/* <div class="header-right">
+            <div class="block-signin"><Link className="btn btn-default2 btn-shadow ml-40 " to="/notification"><i className="fa-sharp fa-solid fa-bell notification-bell"></i></Link></div>
+          </div> */}
+          <div class="header-right">
+          <div class="block-signin"><Link class="btn btn-default2 btn-shadow ml-40 "  to="/notification"><i class="fa-sharp fa-solid fa-bell notification-bell"></i><span className="notification-label notification-label-red">3</span></Link></div>
+        </div>
+        </>:null}
             <div className="header-right">
-              {windowuser?windowuser==="employer"?
+              {windowuser?windowuser==="employer"?<>
+                
                <div className="block-signin">
                
                <Link className="btn btn-default btn-shadow ml-40 hover-up" to="/employer-profile">Profile</Link>
-               </div>:
+               </div></>:
                <div className="block-signin">
                
                <Link className="btn btn-default btn-shadow ml-40 hover-up" to="/employee-profile">Profile</Link>
                </div>
+               
                :
            <>
               {pathvalue === "/Signin" || pathvalue === "/employerlogin" ? (
@@ -112,7 +123,7 @@ export default function Header() {
                   <div className="block-signin" style={{width:"180px"}}>
                     <a
                       className="btn btn-default btn-shadow ml-40 hover-up"
-                      href="/employerregister "
+                      href="/employeeregister"
                     >
                       Register
                     </a>
@@ -121,7 +132,7 @@ export default function Header() {
                   <div className="block-signin">
                     <Link
                       className="btn btn-default btn-shadow ml-40 hover-up"
-                      to="/employee-register"
+                      to="/employer-register"
                     >
                       Register
                     </Link>
@@ -176,6 +187,9 @@ export default function Header() {
           </div>
         </div>
       </div>
+      <Helmet>
+        <script src="https://kit.fontawesome.com/065c1878aa.js" crossorigin="anonymous"></script>
+      </Helmet>
     </div>
   );
 }

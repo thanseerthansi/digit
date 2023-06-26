@@ -31,7 +31,7 @@ export const signInWithGoogle=async()=>{
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // const user = result.user;
-        // console.log("USER in google", user);
+        // console.log("USER    in google", user);
         // console.log("credential in google", credential);
         // console.log("toketokenn in google", token);
         // console.log("USER in google", user);

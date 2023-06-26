@@ -12166,3 +12166,29 @@ margin-left: 300px!important;
     border-radius: 2px;
     border: 3px none #ffffff;
   }
+
+ 
+  /* Dropdown Button */
+  
+  .css-tj5bde-Svg{
+  color: black !important;
+  display: inline-block;
+  fill: currentColor;
+  line-height: 1;
+  stroke: currentColor;
+  stroke-width: 0%;
+}
+.css-tj5bde-Svg path{
+  fill: #8f8585;
+}
+.imageselector{
+  color: #ffffff !important;
+  background-color: #56b39c !important;
+  border: 0!important;
+  border-radius: 6px !important;
+  padding: 6px !important;
+}
+.imageselectorborder{
+  border: solid 0.5px #e4eaf6 !important;
+  padding: 12px !important;
+}
