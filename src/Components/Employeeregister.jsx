@@ -2,16 +2,20 @@ import React, { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 
 export default function Employeeregister() {
-    useEffect(() => {
+    useEffect(() => {     
       window.scrollTo(0,0)
     }, [])
     
     const tophandler=()=>{
         window.scrollTo(0,200)
     }
+  const selecthandler=(e)=>{
+    console.log("eeeevalue selected",e)
+  }
   return (
     <>
-        <main className="main reg-form-background">
+    <link href="/assets/css/stylecd4e.css?version=4.1" rel="stylesheet"></link>
+    <main className="main reg-form-background">
   <div className="carousel-inner">
   </div>
   <section className="pt-50 login-register">
@@ -21,7 +25,7 @@ export default function Employeeregister() {
           <div className="text-center">
             <p className="font-sm text-brand-2">Register </p>
             <h2 className="mt-10 mb-5 text-brand-1">Complete Profile Today</h2>
-            <p className="font-sm text-muted mb-30">Register and complete Your Profile</p>
+            <p className="font-sm text-muted mb-30">Access to all features. No credit card required.</p>
             <div className="divider-text-center"><span>Register Now</span></div>
           </div>
           {/* multistep */}
@@ -29,8 +33,8 @@ export default function Employeeregister() {
             <div className="row justify-content-center">
               <div className="col-11 col-sm-12 col-md-12 col-lg-9 col-xl-9 text-center p-0 mt-3 mb-2">
                 <div className="card3 px-0 pt-4 pb-0 mt-3 mb-3">
-                  <form id="msform" className="reg-form contact10">
-                    {/*progressbar*/}
+                  <form id="msform"  className="reg-form contact10">
+                    {/* progressbar */}
                     <ul id="progressbar">
                       <li className="active" id="account"><strong>Personal</strong></li>
                       <li id="personal"><strong>Address</strong></li>
@@ -67,26 +71,26 @@ export default function Employeeregister() {
                           <label className="form-label" htmlFor="input-2" />
                           <input className="form-control" id="input-2" type="email" required name="emailaddress" placeholder="stevenjob@gmail.com" />
                         </div>
-                        <div className="form-group col-md-4 ">  
+                        <div className="form-group col-md-4 ">
                           <label className="form-label" htmlFor="input-2" />
                           <input className="form-control" id="input-2" type="tel" required name="emailaddress" placeholder="Phone Number" />
                         </div>
                         <h6 className="permenent-address education col-12 mb-2 ">Language Known</h6>
                         <div className=" col-lg-6 ">
-                          <label className="fieldlabels">Read*</label>
-                          <input type="text" className="form-control" placeholder=" Language" />
+                          <label className="fieldlabels font-sm color-text-mutted">Read*</label>
+                          <input type="text" className="form-control" placeholder=" Language" id />
                         </div>
-                        <div className="form-group col-lg-6 ">
+                        <div className="form-group col-lg-6 font-sm color-text-mutted">
                           <label className="fieldlabels">Write*</label>
-                          <input type="text" className="form-control" placeholder=" Language" />
+                          <input type="text" className="form-control" placeholder=" Language" id />
                         </div>
                         <div className="col-md-12 mb-3">
-                          <label className="col-sm-12">Upload Your Photo*</label> 
+                          <label className="col-sm-12 font-sm color-text-mutted">Upload Your Photo*</label> 
                           <input type="file" name="pic" accept="image/*" /> 
                         </div>
-                        <label className="dropdown col-lg-4 col-md-12 col-sm-12 mt-30">
-                          <div className="text__center">
-                            <select  className="cs-select cs-skin-elastic cs-skin-elastic1">
+                        <label className="dropdown  col-lg-4 col-md-12 col-sm-12 mt-30">
+                          <div className="text__center ">
+                            <select className="cs-select  cs-skin-elastic cs-skin-elastic1">
                               <option value disabled selected>ID Card Type</option>
                               <option value>Driving License</option>
                               <option value>Aadhar</option>
@@ -95,10 +99,11 @@ export default function Employeeregister() {
                           </div>
                         </label>
                         <div className="form-group col-lg-4 col-sm-12">
+                          <label className="col-sm-12 font-sm color-text-mutted">Upload ID card front Side*</label>
                           <input type="file" name="pic" accept="image/*" /> 
                         </div>
                         <div className="form-group col-lg-4 col-sm-12">
-                          <label className="col-sm-12">Upload ID card Back Side*</label> 
+                          <label className="col-sm-12 font-sm color-text-mutted">Upload ID card Back Side*</label> 
                           <input type="file" name="pic" accept="image/*" /> 
                         </div>
                         <label className="dropdown col-lg-4 col-sm-12 mt-30">
@@ -112,10 +117,10 @@ export default function Employeeregister() {
                           </div>
                         </label>
                         <div className="form-group col-lg-4 col-sm-12">
-                          <label className="col-sm-12">Upload Address Proof Front Side*</label> 
+                          <label className="col-sm-12 font-sm color-text-mutted">Upload Address Proof Front Side*</label> 
                           <input type="file" name="pic" accept="image/*" /> 
                         </div>
-                        <div className="form-group col-lg-4 col-sm-12">
+                        <div className="form-group col-lg-4 col-sm-12 font-sm color-text-mutted">
                           <label className="col-sm-12">Upload Address Proof Back Side*</label> 
                           <input type="file" name="pic" accept="image/*" /> 
                         </div>
@@ -136,16 +141,16 @@ export default function Employeeregister() {
                         </div>
                         <h6 className="permenent-address mb-3 col-12 form-t">Family Background</h6>
                         <div className="form-group col-lg-6">
-                          <input type="text" className="form-control" placeholder="Father's Name" />
+                          <input type="text" className="form-control" placeholder="Father's Name" id />
                         </div>
                         <div className="form-group col-lg-6">
-                          <input type="text" className="form-control" placeholder="Father's Occupation" />
+                          <input type="text" className="form-control" placeholder="Father's Occupation" id />
                         </div>
                         <div className="form-group col-lg-6">
-                          <input type="text" className="form-control" placeholder="Mother's Name" />
+                          <input type="text" className="form-control" placeholder="Mother's Name" id />
                         </div>
                         <div className="form-group col-lg-6">
-                          <input type="text" className="form-control" placeholder="Mother's Occupation" />
+                          <input type="text" className="form-control" placeholder="Mother's Occupation" id />
                         </div>
                         <h6 className="permenent-address mb-3 col-12 form-t">Sibling’s details</h6>
                         <div className="form-group col-lg-3">
@@ -158,13 +163,13 @@ export default function Employeeregister() {
                           </div>
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" className="form-control" placeholder="Name" />
+                          <input type="text" className="form-control" placeholder="Name" id />
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" className="form-control" placeholder="Qualification" />
+                          <input type="text" className="form-control" placeholder="Qualification" id />
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" className="form-control" placeholder="Occupation" />
+                          <input type="text" className="form-control" placeholder="Occupation" id />
                         </div>
                         <div className="line-item-property__actions col-12 row mt-3 mb-3">
                           <button className="col-lg-2 button-form1" type="button" id="btnAdd" value="+">Add</button>
@@ -181,13 +186,13 @@ export default function Employeeregister() {
                           </div>
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" className="form-control" placeholder="Name" />
+                          <input type="text" className="form-control" placeholder="Name" id />
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" className="form-control" placeholder="Qualification" />
+                          <input type="text" className="form-control" placeholder="Qualification" id />
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" className="form-control" placeholder="Occupation" />
+                          <input type="text" className="form-control" placeholder="Occupation" id />
                         </div>
                         <h6 className="permenent-address mb-3 col-12 form-t">Child’s details</h6>
                         <div className="form-group col-lg-3">
@@ -200,19 +205,19 @@ export default function Employeeregister() {
                           </div>
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" className="form-control" placeholder="Name" />
+                          <input type="text" className="form-control" placeholder="Name" id />
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" className="form-control" placeholder="Qualification" />
+                          <input type="text" className="form-control" placeholder="Qualification" id />
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" className="form-control" placeholder="Occupation" />
+                          <input type="text" className="form-control" placeholder="Occupation" id />
                         </div>
                         <div className="line-item-property__actions col-12 row mt-3 mb-3">
                           <button className="col-lg-2 button-form1" type="button" id="btnAdd" value="+">Add</button>
                           <button className="col-lg-2 button-form2" type="button" id="btnDel" value="-">Remove</button>
                         </div>
-                      </div> <input  type="button" name="next" className="pr-button next action-button" defaultValue="Next" onClick={()=>tophandler()} />
+                      </div> <input type="button" name="next" onClick={tophandler} className="pr-button next action-button" defaultValue="Next" />
                     </fieldset>
                     <fieldset>
                       <div className="form-card">
@@ -249,8 +254,8 @@ export default function Employeeregister() {
                             <input className="check " type="checkbox" /> 
                           </div>
                           <div className="form-group col-lg-11 col-md-11 col-xl-11 col-sm-8 p-address ">
-                            <p className="p-address">Same as permanent address<p />
-                            </p></div>
+                            <hp className="p-address">Same as permanent address<p />
+                            </hp></div>
                           <div className="form-group">
                             <input type="text" className="form-control" placeholder="Address Line 1" id="curAddressLine1" />
                           </div>
@@ -275,8 +280,8 @@ export default function Employeeregister() {
                         </div>
                         <input type="text" name="phno_2" placeholder="Alternate Contact No." />
                       </div> 
-                      <input type="button"  name="next" className="pr-button next action-button" defaultValue="Next" onClick={()=>tophandler()}  /> 
-                      <input type="button"   name="previous" className="pr-button previous action-button-previous" defaultValue="Previous" />
+                      <input type="button" name="next" onClick={tophandler} className="pr-button next action-button" defaultValue="Next" /> 
+                      <input type="button" name="previous" className="pr-button previous action-button-previous" defaultValue="Previous" />
                     </fieldset>
                     <fieldset>
                       <div className="form-card">
@@ -288,7 +293,7 @@ export default function Employeeregister() {
                         <div className="row">
                           <h6 className="permenent-address mb-3 col-12">Education Qualification</h6>
                           <div className=" ">
-                            <div className="property-fields__row row">
+                            <div id className="property-fields__row row">
                               <h6 className="permenent-address mb-3 col-12 form-t">10th Board</h6>
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
@@ -301,20 +306,20 @@ export default function Employeeregister() {
                                 </div>
                               </div>
                               <div className="form-group col-lg-3  ">
-                                <input type="text" className="form-control" placeholder=" School/University" />
+                                <input type="text" className="form-control" placeholder=" School/University" id />
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" className="form-control" placeholder=" Grade/Score" />
+                                <input type="text" className="form-control" placeholder=" Grade/Score" id />
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" className="form-control" placeholder=" Year" />
+                                <input type="text" className="form-control" placeholder=" Year" id />
                               </div>
                             </div>
                           </div>
                         </div> 
                         <div className="row">
                           <div className=" ">
-                            <div className=" row">
+                            <div id className=" row">
                               <h6 className="permenent-address mb-3 col-12 form-t">12th Board</h6>
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
@@ -327,20 +332,20 @@ export default function Employeeregister() {
                                 </div>
                               </div>
                               <div className="form-group col-lg-3  ">
-                                <input type="text" className="form-control" placeholder=" School/University" />
+                                <input type="text" className="form-control" placeholder=" School/University" id />
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" className="form-control" placeholder=" Grade/Score" />
+                                <input type="text" className="form-control" placeholder=" Grade/Score" id />
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" className="form-control" placeholder=" Year" />
+                                <input type="text" className="form-control" placeholder=" Year" id />
                               </div>
                             </div>
                           </div>
                         </div>
                         <div className="row">
                           <div className=" ">
-                            <div className=" row">
+                            <div id className=" row">
                               <h6 className="permenent-address mb-3 col-12 form-t">Bachelor’s Degree</h6>
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
@@ -363,17 +368,17 @@ export default function Employeeregister() {
                                 </div>
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" className="form-control" placeholder=" Grade/Score" />
+                                <input type="text" className="form-control" placeholder=" Grade/Score" id />
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" className="form-control" placeholder=" Year" />
+                                <input type="text" className="form-control" placeholder=" Year" id />
                               </div>
                             </div>
                           </div>
                         </div>
                         <div className="row">
                           <div className=" ">
-                            <div className=" row">
+                            <div id className=" row">
                               <h6 className="permenent-address mb-3 col-12 form-t">Master’s Degree </h6>
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
@@ -396,10 +401,10 @@ export default function Employeeregister() {
                                 </div>
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" className="form-control" placeholder=" Grade/Score" />
+                                <input type="text" className="form-control" placeholder=" Grade/Score" id />
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" className="form-control" placeholder=" Year" />
+                                <input type="text" className="form-control" placeholder=" Year" id />
                               </div>
                             </div>
                           </div>
@@ -429,10 +434,10 @@ export default function Employeeregister() {
                                 </div>
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" className="form-control" placeholder=" Grade/Score" />
+                                <input type="text" className="form-control" placeholder=" Grade/Score" id />
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" className="form-control" placeholder=" Year" />
+                                <input type="text" className="form-control" placeholder=" Year" id />
                               </div>
                             </div>
                             <div className="line-item-property__actions col-12 row mt-3 mb-3">
@@ -458,30 +463,30 @@ export default function Employeeregister() {
                           <div id="property-fields__row-2" className="property-fields__ro row">
                             <h6 className="permenent-address form-t mb-3 col-12">Company</h6>
                             <div className="form-group col-lg-6 ">
-                              <input type="text" className="form-control" placeholder=" Company Name" />
+                              <input type="text" className="form-control" placeholder=" Company Name" id />
                             </div>
                             <div className="form-group col-lg-6  ">
-                              <input type="text" className="form-control" placeholder=" Position" />
+                              <input type="text" className="form-control" placeholder=" Position" id />
                             </div>
                             <div className="form-group col-lg-6 ">
-                              <input type="tel" className="form-control" placeholder=" Company Phone" />
+                              <input type="tel" className="form-control" placeholder=" Company Phone" id />
                             </div>
                             <div className="form-group col-lg-6  ">
-                              <input type="email" className="form-control" placeholder="Company email" />
+                              <input type="email" className="form-control" placeholder="Company email" id />
                             </div>
                             <div className="form-group col-lg-12  ">
-                              <input type="text" className="form-control" placeholder="Company Address" />
+                              <input type="text" className="form-control" placeholder="Company Address" id />
                             </div>
                             <div className="form-group col-lg-12  ">
-                              <textarea type="text" className="form-control text-area11" placeholder="Job Description" defaultValue={""} />
+                              <textarea type="text" className="form-control text-area11" placeholder="Job Description" id defaultValue={""} />
                             </div>
                             <div className="form-group col-lg-6 ">
-                              <label className="col-sm-12">From*</label> 
-                              <input type="date" className="form-control" placeholder=" From" />
+                              <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
+                              <input type="date" className="form-control" placeholder=" From" id />
                             </div>
                             <div className="form-group col-lg-6 ">
-                              <label className="col-sm-12">To*</label> 
-                              <input type="date" className="form-control" placeholder=" To" />
+                              <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
+                              <input type="date" className="form-control" placeholder=" To" id />
                             </div>
                           </div>
                           <div className="line-item-property__actions col-12 row mt-3 mb-3">
@@ -502,27 +507,27 @@ export default function Employeeregister() {
                               </div>
                             </div>
                             <div className="form-group col-lg-6  ">
-                              <input type="text" className="form-control" placeholder=" Position" />
+                              <input type="text" className="form-control" placeholder=" Position" id />
                             </div>
                             <div className="form-group col-lg-6 ">
-                              <input type="tel" className="form-control" placeholder=" Company Phone" />
+                              <input type="tel" className="form-control" placeholder=" Company Phone" id />
                             </div>
                             <div className="form-group col-lg-6  ">
-                              <input type="email" className="form-control" placeholder="Company email" />
+                              <input type="email" className="form-control" placeholder="Company email" id />
                             </div>
                             <div className="form-group col-lg-12  ">
-                              <input type="text" className="form-control" placeholder="Company Address" />
+                              <input type="text" className="form-control" placeholder="Company Address" id />
                             </div>
                             <div className="form-group col-lg-12  ">
-                              <textarea type="text" className="form-control text-area11" placeholder="Job Description" defaultValue={""} />
+                              <textarea type="text" className="form-control text-area11" placeholder="Job Description" id defaultValue={""} />
                             </div>
                             <div className="form-group col-lg-6 ">
-                              <label className="col-sm-12">From*</label> 
-                              <input type="date" className="form-control" placeholder=" From" />
+                              <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
+                              <input type="date" className="form-control" placeholder=" From" id />
                             </div>
                             <div className="form-group col-lg-6 ">
-                              <label className="col-sm-12">To*</label> 
-                              <input type="date" className="form-control" placeholder=" To" />
+                              <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
+                              <input type="date" className="form-control" placeholder=" To" id />
                             </div>
                           </div>
                           <div className="line-item-property__actions col-12 row mt-3 mb-3">
@@ -533,11 +538,11 @@ export default function Employeeregister() {
                         <div className="row">
                           <h6 className=" form-t mb-3 mt-3 col-12">Any other Proficiancy</h6>
                           <div className="form-group col-lg-12 ">
-                            <textarea type="text" className="form-control text-area11" placeholder="Message" defaultValue={""} />
+                            <textarea type="text" className="form-control text-area11" placeholder="Message" id defaultValue={""} />
                           </div>
                         </div>
                       </div>
-                      <input type="button" onClick={()=>tophandler()}  name="next" className="pr-button next action-button" defaultValue="Submit" /> 
+                      <input type="button" name="next" className="pr-button next action-button"   defaultValue="Submit" /> 
                       <input type="button" name="previous" className="pr-button previous action-button-previous" defaultValue="Previous" />
                     </fieldset>
                     <fieldset>
@@ -550,16 +555,25 @@ export default function Employeeregister() {
                         </div> <br /><br />
                         <h2 className="purple-text text-center mb-20"><strong>SUCCESS </strong></h2> <br />
                         <div className="row justify-content-center">
-                          <div className="col-md-4 "> 
-                            <div className="card6 center6">
-                              <div className="avatar6">
-                                <img src="assets/imgs/page/login-register/qr.png" className="is-circle6" />
-                              </div>
-                              <div className="infos6 mt-20">
-                                <p className="username6 p6">Steven</p>
-                                <p className="label6 p6">Unique ID: 8819098908</p>
-                              </div>
+                          <div className="theme--dark">
+                            <div id="container" className="container99 container98">
+                              <div className="header">
+                                <div className="logo" />
+                              </div>    
+                              <section className="left-section">
+                                <img src="assets/imgs/page/login-register/qr.png" className="is-circle6 profile-pic" />
+                                <div className="profile-detail">
+                                  <p className="profile-name">CRAG CARD</p>
+                                  <span className="profile-summary">Deepak</span>
+                                  <a className="profile-cv">ID:08INKL9507290001</a>
+                                </div>
+                              </section>
+                              <div className="front-smooth" />
                             </div>
+                          </div>
+                          <div className="profile-pils mt-20">
+                            <span className="pils"><a href="candidate-profile.html" target="_blank"><i className="fa fa-eye" />View Profile</a></span>
+                            <span className="pils"><a href target="_blank"><i className="fa fa-paper-plane-o" /> Share Profile</a></span>
                           </div>
                         </div> <br /><br />
                         <div className="row justify-content-center mt-130">
@@ -578,6 +592,8 @@ export default function Employeeregister() {
     </div>
   </section>
 </main>
+
+
     <Helmet>
         <script src="/assets/js/vendor/modernizr-3.6.0.min.js"></script>
         <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>

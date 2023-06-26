@@ -1,4 +1,5 @@
 
+
 //mainform end
 
 $(document).ready(function () {
@@ -196,7 +197,7 @@ $(document).ready(function () {
       }
     }, l.prototype._init = function() {
       var e = this.el.querySelector("option[selected]");
-      this.hasDefaultPlaceholder = e && e.disabled, this.selectedOpt = e || this.el.querySelector("option"), this._createSelectEl(), this.selOpts = [].slice.call(this.selEl.querySelectorAll("li[data-option]")), this.selOptsCount = this.selOpts.length, this.current = this.selOpts.indexOf(this.selEl.querySelector("li.cs-selected")) || -1, this.selPlaceholder = this.selEl.querySelector("span.cs-placeholder"), this._initEvents()
+      this.hasDefaultPlaceholder = e && e.disabled, this.selectedOpt = e || this.el.querySelector("option"), this._createSelectEl(), this.selOpts = [].slice.call(this.selEl.querySelectorAll("option[data-option]")), this.selOptsCount = this.selOpts.length, this.current = this.selOpts.indexOf(this.selEl.querySelector("option.cs-selected")) || -1, this.selPlaceholder = this.selEl.querySelector("span.cs-placeholder"), this._initEvents()
     }, l.prototype._createSelectEl = function() {
       var e = "",
         t = function(e) {
@@ -527,7 +528,7 @@ function duplicate() {
             navbarTrigger.removeClass("burger-close");
         });
     }
-    // mobileHeaderActive();
+    mobileHeaderActive();
     /*---------------------
         Mobile menu active
     ------------------------ */

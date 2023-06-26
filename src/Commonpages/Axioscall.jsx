@@ -9,8 +9,8 @@ export default async function Axioscall(method,url,datalist) {
       body:datalist
     }
   if(method==="get"){
-    data = await axios(url)
-    
+    data = await axios.get(url,datalist)
+    console.log("data",data)
   }
   return data
 }

@@ -12,13 +12,16 @@ import Employeeregister from "./Components/Employeeregister";
 import Simplecontextprovider from "./Commonpages/Simplecontext";
 import Employerregister from "./Employerpages/Employerregister";
 import Employerprofile from "./Employerpages/employerprofile";
+import Employeeprofile from "./Employeepages/Employeeprofile";
+import Forgetpassword from "./Employerpages/Forgetpassword";
+import Resetpassord from "./Employerpages/Resetpassord";
 function App() {
   return (
     <>
       <BrowserRouter>
       <Simplecontextprovider>
         <Routes>
-          <Route default path="text" element={<Text/>}/>
+          {/* <Route default path="text" element={<Text/>}/> */}
           <Route path="/" element={<Outlethome />}>
             <Route index element={<Home />} />
             <Route path="aboutus" element={<Aboutus />} />
@@ -28,7 +31,9 @@ function App() {
             <Route path="employerregister" element={<Employeeregister />} />
             <Route path="employee-register" element={<Employerregister />} />
             <Route path="employer-profile" element={<Employerprofile/>} />
-            
+            <Route path="employee-profile" element={<Employeeprofile/>} />
+            <Route path="forget-password" element={<Forgetpassword/>} />
+            <Route path="reset-password" element={<Resetpassord/>} />
             
           </Route>
           <Route path="*" element={<Notfound />} />

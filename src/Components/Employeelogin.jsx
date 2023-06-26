@@ -3,14 +3,27 @@ import Footer from "./Footer";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Simplecontext } from "../Commonpages/Simplecontext";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Employeelogin() {
   const { path } = useContext(Simplecontext);
   const navigate = useNavigate()
+  const [formdata,setformdata]=useState({username:"",password:""});
+  // console.log("data",formdata)
   useEffect(() => {
+    getcraigcredintial()
     window.scrollTo(0, 0);
     path();
   }, []);
+  const notify = (msg) => toast.success(msg, {
+    position: "top-left",
+    theme: "dark",
+    });
+  const notifyerror = (msg) => toast.error(msg, {
+    position: "top-left",
+    theme: "dark",
+    });
 
   const formsubmit=(e)=>{
     e.preventDefault();
@@ -18,9 +31,31 @@ export default function Employeelogin() {
     navigate('/')
 
   }
+  const setvaluehandler =(event)=>{
+    const { name, value } = event.target;
+    setformdata(prevState => ({ ...prevState, [name]: value }));
+  }
+  const Rememberhandler=(e)=>{
+    if(e){
+      if(formdata.username && formdata.password){
+        window.localStorage.setItem("craig-employercredintial",JSON.stringify(formdata))
+      }
+    }else{
+      window.localStorage.removeItem("craig-employercredintial")
+    }    
+  }
+  const getcraigcredintial=()=>{
+    //window.localStorage.removeItem("craig-employercredintial")
+    console.log("window",JSON.parse(localStorage.getItem('craig-employercredintial')))
+    let data = JSON.parse(localStorage.getItem('craig-employercredintial'))
+    if (data){
+      setformdata(data)
+    }
+  }
   return (
     <>
       <main className="main">
+        <ToastContainer/>
         <div className="carousel-inner"></div>
         {/* <div className="bubbles">
           <div className="bubble" />
@@ -55,7 +90,9 @@ export default function Employeelogin() {
                       id="input-1"
                       type="tel"
                       required
-                      name="fullname"
+                      name="username"
+                      onChange={setvaluehandler}
+                      value={formdata.username}
                       placeholder="User Name/Mail id"
                     />
                   </div>
@@ -65,14 +102,16 @@ export default function Employeelogin() {
                       id="input-1"
                       type="password"
                       required
-                      name="fullname"
+                      name="password"
+                      onChange={setvaluehandler}
+                      value={formdata.password}
                       placeholder="Password"
                     />
                   </div>
                   <div className="login_footer form-group d-flex justify-content-between mt-3">
                     <label className="cb-container">
-                      <input type="checkbox" />
-                      <span className="text-small">Remenber me</span>
+                      <input type="checkbox"  onChange={(e)=>Rememberhandler(e.target.checked)} />
+                      <span className="text-small">Remember me</span>
                       <span className="checkmark" />
                     </label>
                   </div>

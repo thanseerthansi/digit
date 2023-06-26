@@ -63,14 +63,15 @@ export default function Header() {
         <div className="container">
           <div className="main-header">
             <div className="header-left">
-              <div className="header-logo">
+            <div className="header-logo"><Link className="d-flex" href="index.html"><h3 className="header-text">CRAIG</h3></Link></div>
+              {/* <div className="header-logo">
                 <Link className="d-flex" to="/">
                   <img
                     alt="jobBox"
                     src="./assets/imgs/template/jobhub-logo copy 2.png"
                   />
                 </Link>
-              </div>
+              </div> */}
             </div>
             <div className="header-nav">
               <nav className="nav-main-menu">
@@ -84,6 +85,8 @@ export default function Header() {
                   <li className="has-children">
                     <Link to="/contactus">Contact us</Link>
                   </li>
+                  {windowuser==="employer"? <li className="has-children"><Link to="Candidate-grid.html">Candidates</Link>
+                </li>:null}
                 </ul>
               </nav>
               <div className="burger-icon burger-icon-white">
@@ -94,25 +97,25 @@ export default function Header() {
             </div>
             <div className="header-right">
               {windowuser?windowuser==="employer"?
-               <div class="block-signin">
+               <div className="block-signin">
                
-               <Link class="btn btn-default btn-shadow ml-40 hover-up" to="/employer-profile">Profile</Link>
+               <Link className="btn btn-default btn-shadow ml-40 hover-up" to="/employer-profile">Profile</Link>
                </div>:
-               <div class="block-signin">
+               <div className="block-signin">
                
-               <a class="btn btn-default btn-shadow ml-40 hover-up" href="employee-profile.html">Profile</a>
+               <Link className="btn btn-default btn-shadow ml-40 hover-up" to="/employee-profile">Profile</Link>
                </div>
                :
            <>
               {pathvalue === "/Signin" || pathvalue === "/employerlogin" ? (
                 pathvalue === "/Signin" ? (
-                  <div className="block-signin">
-                    <Link
+                  <div className="block-signin" style={{width:"180px"}}>
+                    <a
                       className="btn btn-default btn-shadow ml-40 hover-up"
-                      to="/employerregister "
+                      href="/employerregister "
                     >
                       Register
-                    </Link>
+                    </a>
                   </div>
                 ) : (
                   <div className="block-signin">
@@ -125,7 +128,7 @@ export default function Header() {
                   </div>
                 )
               ) : (
-                <div className="block-signin">
+                <div className="block-signin block-signin1">
                   <Link
                     className="text-link-bd-btom hover-up"
                     to="/employerlogin"
