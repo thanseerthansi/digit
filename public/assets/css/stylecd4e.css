@@ -1451,12 +1451,13 @@ padding-top: 8px;
 
 @media only screen and (min-width: 600px) {
   .p-address {
-    margin-top: 14px;
+    margin-top: 8px;
+    margin-left: -20px;
   }
 }
 @media only screen and (min-width: 850px) {
   .p-address {
-    margin-top: 14px;
+    margin-top: 8px;
     margin-left: -20px;
   
   }
@@ -12186,9 +12187,12 @@ margin-left: 300px!important;
   background-color: #56b39c !important;
   border: 0!important;
   border-radius: 6px !important;
-  padding: 6px !important;
+  padding: 4px !important;
+  /* width: 110px !important; */
+  font-size: small;
 }
 .imageselectorborder{
   border: solid 0.5px #e4eaf6 !important;
   padding: 12px !important;
+  border-radius: 6px;
 }
