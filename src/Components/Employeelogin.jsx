@@ -5,11 +5,15 @@ import { Helmet } from "react-helmet";
 import { Simplecontext } from "../Commonpages/Simplecontext";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Axioscall from "../Commonpages/Axioscall";
+import { Form } from "react-bootstrap";
+import jwt_decode from "jwt-decode";
 
 export default function Employeelogin() {
-  const { path } = useContext(Simplecontext);
+  const { path,Check_Validation,setuserdetail} = useContext(Simplecontext);
   const navigate = useNavigate()
   const [formdata,setformdata]=useState({username:"",password:""});
+  const [Validated,setValidated]=useState(false)
   // console.log("data",formdata)
   useEffect(() => {
     getcraigcredintial()
@@ -25,12 +29,60 @@ export default function Employeelogin() {
     theme: "dark",
     });
 
-  const formsubmit=(e)=>{
-    e.preventDefault();
-    window.localStorage.setItem('graiduser','employer')
-    navigate('/')
+  const LoginEmployer=async()=>{
+    try {
+      let datalist = {...formdata}
+      datalist.role="employer"
+      let data = await Axioscall("post","user/login",datalist)
+      console.log("data",data)
+      if (data.status===200){
+        console.log("datadocs",data.data.data.token)
+          if(data.data.data.token){
+            window.localStorage.setItem("craig-token",data.data.data.token)
+            Decodetoken(data.data.data.token)
+          }else{
+            // window.localStorage.setItem("graiduser", "employer");
+            // navigate('/employeeregister')
+            notifyerror("invalid Username or password")
+          }
+      }else{
+        notifyerror("invalid Username or password")
+      }
+    } catch (error) {
+      console.log("errorr",error)
+      notifyerror("Something went wong try again later")
+    }
+    // window.localStorage.setItem('graiduser','employer')
+    // navigate('/')
 
   }
+  const Decodetoken =(token)=>{
+    console.log(token)
+    var decoded = jwt_decode(token)
+    if(decoded.id){
+      console.log("decodeid",decoded.id)
+      Getuser(decoded.id)
+    }
+  }
+  const Getuser =async(datalist)=>{
+    try {
+        let data = await Axioscall("get","company",{userid:datalist})
+        // console.log("data",data)
+        if (data.status===200){
+          console.log("datadocs",data.data.data)
+          if(data.data.data){
+            setuserdetail(data.data.data)
+            window.localStorage.setItem("graiduser", "employer");
+            navigate('/employer-profile')
+          }else{
+            // window.localStorage.setItem("graiduser", "employee");
+            // navigate('/employeeregister')
+          }
+        }
+    } catch (error) {
+        console.log("datagetuser",error)
+    }
+}
   const setvaluehandler =(event)=>{
     const { name, value } = event.target;
     setformdata(prevState => ({ ...prevState, [name]: value }));
@@ -83,7 +135,7 @@ export default function Employeelogin() {
                     <span />
                   </div>
                 </div>
-                <form className="login-register text-start mt-20" onSubmit={(e)=>formsubmit(e)}>
+                <Form noValidate validated={Validated} className="login-register text-start mt-20" onSubmit={(e)=>Check_Validation(e,LoginEmployer,setValidated)}>
                   <div className="form-group mb-3">
                     <input
                       className="form-control"
@@ -95,6 +147,9 @@ export default function Employeelogin() {
                       value={formdata.username}
                       placeholder="User Name/Mail id"
                     />
+                    <Form.Control.Feedback type="invalid">
+                          Please provide a Username
+                        </Form.Control.Feedback>
                   </div>
                   <div className="form-group">
                     <input
@@ -107,6 +162,9 @@ export default function Employeelogin() {
                       value={formdata.password}
                       placeholder="Password"
                     />
+                    <Form.Control.Feedback type="invalid">
+                      Please provide a password
+                    </Form.Control.Feedback>
                   </div>
                   <div className="login_footer form-group d-flex justify-content-between mt-3">
                     <label className="cb-container">
@@ -127,11 +185,11 @@ export default function Employeelogin() {
                   </div>
                   <div className="text-muted text-center mt-3">
                     New in Digit?{" "}
-                    <a href="employee-register.html">Create an account</a>
+                    <Link to="employer-register">Create an account</Link>
                     <br />
-                    <a href="password-reset.html">Forgot password</a>
+                    <Link to="password-reset.html">Forgot password</Link>
                   </div>
-                </form>
+                </Form>
               </div>
             </div>
           </div>

@@ -1,14 +1,18 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axioscall from "./Axioscall";
+import jwt_decode from "jwt-decode";
 export const Simplecontext = createContext();
+
 
 export default function Simplecontextprovider({children}){
     const navigate= useNavigate();
     const [pathvalue,setpathvalue]=useState('')
     const [userdetail,setuserdetail]=useState('')
+    const [employeedata,setemployeedata]=useState('')
     useEffect(() => {
         path()
+        getUser()
       }, [])
     const path =()=>{
         // console.log("path",window.location.pathname)
@@ -21,9 +25,9 @@ export default function Simplecontextprovider({children}){
         return navigate("/");
       }; 
     const Check_Validation = (event,fun_name,setstate)=>{
-    console.log("dataevent",event)
+    // console.log("dataevent",event)
     const form = event.currentTarget
-    event.preventDefault()
+    event.preventDefault();
     setstate(true)
     if (form.checkValidity() === false){
         console.log("empty")
@@ -35,7 +39,44 @@ export default function Simplecontextprovider({children}){
         return true
     }
     }
-    
+    const getUser=async()=>{
+        if (window.localStorage.getItem('craig-token')){
+            let datalist;
+            var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
+            if(decoded.id){
+                console.log("decodeid",decoded.id)
+                datalist = decoded.id
+            }
+            if(window.localStorage.getItem("graiduser")==="employer"){
+                let data = await Axioscall("get","company",{userid:datalist})
+                // console.log("data",data)
+                if (data.status===200){
+                  console.log("datadocs",data.data.data)
+                  if(data.data.data){
+                    setuserdetail(data.data.data)
+                    setemployeedata(data.data.data)
+                  }else{
+                    // window.localStorage.setItem("graiduser", "employee");
+                    // navigate('/employeeregister')
+                  }
+                }
+            }
+            }else if(window.localStorage.getItem("graiduser")==="employee"){
+                let data = await Axioscall("get","company",{id:datalist})
+                // console.log("data",data)
+                if (data.status===200){
+                  console.log("datadocs",data.data.data)
+                  if(data.data.data){
+                    setuserdetail(data.data.data)
+                    setemployeedata(data.data.data)
+                  }else{
+                    // window.localStorage.setItem("graiduser", "employee");
+                    // navigate('/employeeregister')
+                  }
+                }
+            }
+           console.log("userdatain context",userdetail,setemployeedata,employeedata)
+    }
 return (
     <Simplecontext.Provider value={{
         path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail

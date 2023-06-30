@@ -19,7 +19,7 @@ export default async function Axioscall(method,url,datalist) {
       console.log("post body",body)
       data = await axios(body)
     }
-    console.log("data return",data)
+    // console.log("data return",data)
     return data
   } catch (error) {
     console.log("error")

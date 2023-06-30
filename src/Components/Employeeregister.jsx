@@ -5,6 +5,7 @@ import makeAnimated from 'react-select/animated';
 import Filestack from '../Commonpages/Filestack';
 import { notifyerror } from '../Commonpages/toast';
 import { ToastContainer } from 'react-toastify';
+import Axioscall from '../Commonpages/Axioscall';
 
 
 const animatedComponents = makeAnimated();
@@ -12,6 +13,7 @@ export default function Employeeregister() {
   const [selectedskills,setselectedskills]=useState('')
   const [employeedata,setemployeedata]=useState([])
   const [carddata,setcarddata]=useState([])
+  const [addressproof,setaddressproof]=useState({})
   const [addressdata,setaddressdata]=useState([])
   const [currentaddressdata,setcurrentaddressdata]=useState([])
   const [siblingdata,setsiblingdata]=useState({})
@@ -24,18 +26,25 @@ export default function Employeeregister() {
   const [bachlerdata,setbachlerdata]=useState([])
   const [masterDegreedata,setmasterDegreedata]=useState([])
   const [additionaldata,setadditionaldata]=useState({})
-  const [additionalarray,setadditionalarray]=useState({})
+  const [additionalarray,setadditionalarray]=useState([])
+  const [precompanydata,setprecompanydata]=useState({})
+  const [precompanyarray,setprecompanyarray]=useState([])
+  const [companydata,setcompanydata]=useState({})
+  const [companyarray,setcompanyarray]=useState([])
 
   console.log("valuedata",employeedata)
   // console.log("carddata",carddata)
   // console.log("siblingdata",siblingdata)
-  // console.log("siblingarray",siblingsarray)
+  console.log("siblingarray",siblingsarray)
   // console.log("childdata",childdata)
   // console.log("childsarray",childsarray)
   // console.log("addressdata",addressdata)
-  console.log("currentaddressdata",currentaddressdata)
-  console.log("masterDegreedata",masterDegreedata)
-  console.log("selectedskills",selectedskills)
+  // console.log("currentaddressdata",currentaddressdata)
+  // console.log("masterDegreedata",masterDegreedata)
+  // console.log("selectedskills",selectedskills)
+  console.log("companydaprecompanydatata",precompanydata)
+  console.log("companydata",companydata)
+  console.log("companyarray",companyarray)
 
     useEffect(() => {     
       window.scrollTo(0,0)
@@ -46,11 +55,13 @@ export default function Employeeregister() {
     }
   
   const colourOptions = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'grey', label: 'grey' },
-    { value: 'red', label: 'red' }
+    { value: 'Reactjs', label: 'Reactjs' },
+    { value: 'Node.js', label: 'Node.js' },
+    { value: 'Flutter', label: 'Flutter' },
+    { value: 'Python', label: 'Python' },
+    { value: 'CSS', label: 'CSS' },
+    { value: 'Bootsrtap', label: 'Bootsrtap' },
+    { value: 'HTML', label: 'HTML' }
   ]
   const customStyles = {
     control: (provided) => ({
@@ -76,12 +87,12 @@ export default function Employeeregister() {
     
   }
   const pushhandler=(arraydata,setarraydata,listdata,setlistdata)=>{
-    console.log("data",arraydata.length)
+    console.log("data",arraydata)
     if (Object.keys(arraydata).length){
       setlistdata([...listdata,arraydata])
       setarraydata({})
     }else{
-      notifyerror("no dataa dded")
+      notifyerror("no dataa added")
     }
   }
   const removeHandler=(listdata,setlistdata)=>{
@@ -91,11 +102,118 @@ export default function Employeeregister() {
     }
   }
   const addressHandler=(e)=>{
-    setaddressdata({...addressdata,isCurrentsame:e.target.checked})
+    setemployeedata({...employeedata,isCurrentsame:e.target.checked})
     if (e.target.checked){
       setcurrentaddressdata(addressdata)
     }else{
       setcurrentaddressdata({})
+    }
+  }
+  const registerEmployee=async(e)=>{
+    e.preventDefault();
+    try {
+      let datalist ={...employeedata}
+      //......................carddata push to datalist
+      if(Object.keys(carddata).length){
+        datalist.idcard=[{...carddata}]
+      }
+      //......................addresproof push to datalist
+      if(Object.keys(addressproof).length){
+        datalist.addressproof=[{...addressproof}]
+      }
+      //......................lngread nad lngwrite push as list
+      if(datalist.lngRead){
+        let readdata = datalist.lngRead.split(',')
+        // console.log("lngread",readdata)
+        datalist.lngRead=readdata
+      }
+      if(datalist.lngWrite){
+        let readdata = datalist.lngWrite.split(',')
+        // console.log("lngread",readdata)
+        datalist.lngWrite=readdata
+      }
+      //......................siblingsdata add to siblingarray and push to datalist
+      let arraysibling = siblingsarray
+      if(Object.keys(siblingdata).length){
+        arraysibling.push(siblingdata) 
+      }
+      if (arraysibling.length){
+        datalist.siblingsDetails=arraysibling
+      }
+      if(Object.keys(spousedata).length){
+        datalist.spouseDetails=[{...spousedata}]
+      }
+      let arraychild = childsarray
+      if(Object.keys(childdata).length){
+        arraychild.push(childdata) 
+      }
+      if (arraychild.length){
+        datalist.childDetails=arraychild
+      }
+      if(Object.keys(addressdata).length){
+        datalist.permanantAddress=[{...addressdata}]
+      }
+      if(Object.keys(currentaddressdata).length){
+        datalist.currentAddress=[{...currentaddressdata}]
+      }
+      if(Object.keys(tenthdata).length){
+        datalist.tenth=[{...tenthdata}]
+      }
+      if(Object.keys(twelthdata).length){
+        datalist.twelth=[{...twelthdata}]
+      }
+      if(Object.keys(bachlerdata).length){
+        datalist.bachelorDegree=[{...bachlerdata}]
+      }
+      if(Object.keys(masterDegreedata).length){
+        datalist.masterDegree=[{...masterDegreedata}]
+      }
+      let additional = additionalarray
+      if(Object.keys(additionaldata).length){
+        additional.push(additionaldata) 
+      }
+      console.log("addtitional",additional)
+      if (additional.length){
+        datalist.additional=additional
+      }
+      if(selectedskills.length){
+        let skills =[]
+        console.log("skills",selectedskills)
+        selectedskills.forEach(element => {
+          console.log("dataskils",element.value)
+          skills.push(element.value)
+        });
+        if (skills.length){
+          datalist.skills=skills
+        }
+      }
+        // ...........................company data push to datalist
+        let company = companyarray
+        console.log("companyjhbjjljlk",company)
+        if(Object.keys(companydata).length){
+          company.push(companydata) 
+        }
+        if(company.length){
+          company.forEach(element=>         
+            element.is_craigcompany=true
+            )}
+        let precompany = precompanyarray
+        if(Object.keys(precompanydata).length){
+          precompany.push(precompanydata) 
+        }
+        if(precompany.length){
+          precompany.forEach(element=>         
+            element.is_craigcompany=false
+            )
+            company=[...company,...precompany]
+        }
+        if(company.length){
+          datalist.prevCompanies=company
+        }
+      console.log("datalistbefore",datalist)
+      // let data = await Axioscall("post","employee",)
+    } catch (error) {
+      console.log(error)
     }
   }
   
@@ -121,7 +239,7 @@ export default function Employeeregister() {
             <div className="row justify-content-center">
               <div className="col-11 col-sm-12 col-md-12 col-lg-9 col-xl-9 text-center p-0 mt-3 mb-2">
                 <div className="card3 px-0 pt-4 pb-0 mt-3 mb-3">
-                  <form id="msform"  className="reg-form contact10">
+                  <form id="msform"   className="reg-form contact10">
                     {/* progressbar */}
                     <ul id="progressbar">
                       <li className="active" id="account"><strong>Personal</strong></li>
@@ -153,7 +271,7 @@ export default function Employeeregister() {
                           <input className="form-control" id="input-1" type="text" required onChange={(e)=>setemployeedata({...employeedata,lastName:e.target.value})} value={employeedata.lastName??""}  name="fullname" placeholder="Last Name" />
                         </div>
                         <div className="form-group mt-4 col-md-4 ">
-                          <input className="dob" onChange={(e)=>setemployeedata({...employeedata,dob:e.target.value})} value={employeedata.dob??""} placeholder="Date of Birth" type="text" onfocus="(this.type = 'date')" id="date" />
+                          <input className="dob" onChange={(e)=>setemployeedata({...employeedata,dob:e.target.value})} value={employeedata.dob??""} placeholder="Date of Birth" type="date" onfocus="(this.type = 'date')" id="date" />
                         </div>
                         <div className="form-group col-md-4">
                           <label className="form-label" htmlFor="input-2" />
@@ -209,8 +327,8 @@ export default function Employeeregister() {
                         </div>
                         <label className="dropdown col-lg-4 col-sm-12 mt-30">
                           <div className="text__center">
-                            <select onChange={(e)=>setaddressdata({...addressdata,type:e.target.value})} value={addressdata.type??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                              <option value disabled selected>Address Proof</option>
+                            <select onChange={(e)=>setaddressproof({...addressproof,type:e.target.value})} value={addressproof.type??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                              <option value hidden  >Address Proof</option>
                               <option value>Driving License</option>
                               <option value>Aadhar</option>
                               <option value>Passport</option>
@@ -221,16 +339,16 @@ export default function Employeeregister() {
                           <label className="col-sm-12 font-sm color-text-mutted">Upload Address Proof Front Side*</label> 
                           {/* <input type="file" name="pic" accept="image/*" />  */}
                           <div className='imageselectorborder d-flex '>
-                            <button onClick={()=>Filestackhandler("landscape",setaddressdata,addressdata,'frontUrl')} type='button' className='imageselector'> Choose Image</button>
-                            <p style={{overflow:"hidden"}}>&nbsp;{addressdata.frontUrl??<span>No file chosen</span>}</p>
+                            <button onClick={()=>Filestackhandler("landscape",setaddressproof,addressproof,'frontUrl')} type='button' className='imageselector'> Choose Image</button>
+                            <p style={{overflow:"hidden"}}>&nbsp;{addressproof.frontUrl??<span>No file chosen</span>}</p>
                           </div>
                         </div>
                         <div className="form-group col-lg-4 col-sm-12 font-sm color-text-mutted">
                           <label className="col-sm-12">Upload Address Proof Back Side*</label> 
                           {/* <input type="file" name="pic" accept="image/*" />  */}
                           <div className='imageselectorborder d-flex '>
-                            <button onClick={()=>Filestackhandler("landscape",setaddressdata,addressdata,'backUrl')} type='button' className='imageselector'> Choose Image</button>
-                            <p style={{overflow:"hidden"}}>&nbsp;{addressdata.backUrl??<span>No file chosen</span>}</p>
+                            <button onClick={()=>Filestackhandler("landscape",setaddressproof,addressproof,'backUrl')} type='button' className='imageselector'> Choose Image</button>
+                            <p style={{overflow:"hidden"}}>&nbsp;{addressproof.backUrl??<span>No file chosen</span>}</p>
                           </div>
                         </div>
                         <div className="col-12 row mt-3 mb-20">
@@ -269,7 +387,7 @@ export default function Employeeregister() {
                              <div className="text__center">
                              <input type="text"  disabled value={itm.type}  className="" placeholder="Name" id=" " />
                              {/* <select disabled value={itm.type} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                               <option hidden selected>Select</option>
+                               <option hidden  >Select</option>
                                <option value="brother">Brother</option>
                                <option value="sister">Sister</option>
                              </select> */}
@@ -291,7 +409,7 @@ export default function Employeeregister() {
                         <div className="form-group col-lg-3">                         
                           <div className="text__center">
                             <select onChange={(e)=>setsiblingdata({...siblingdata,type:e.target.value})} value={siblingdata.type??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                              <option hidden selected>Select</option>
+                              <option hidden  >Select</option>
                               <option value="brother">Brother</option>
                               <option value="sister">Sister</option>
                             </select>
@@ -308,13 +426,13 @@ export default function Employeeregister() {
                         </div>
                         <div className="line-item-property__actions col-12 row mt-3 mb-3">
                           <button onClick={()=>pushhandler(siblingdata,setsiblingdata,siblingsarray,setsiblingsarray)} className="col-lg-2 button-form1" type="button" id="btnAdd" value="+">Add</button>
-                          <button onClick={()=>removeHandler(siblingsarray,setsiblingsarray)} className="col-lg-2 button-form2" type="button" id="btnDel" value="-">Remove</button>
+                          <button onClick={()=>removeHandler(siblingsarray,setsiblingsarray)}  className="col-lg-2 button-form2" type="button"  value="-">Remove</button>
                         </div>
                         <h6 className="permenent-address mb-3 col-12 form-t">Spouse details</h6>
                         <div className="form-group col-lg-3">
                           <div className="text__center">
                             <select onChange={(e)=>setspousedata({...spousedata,type:e.target.value})} value={spousedata.type??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                              <option value="" hidden selected>Select</option>
+                              <option value="" hidden  >Select</option>
                               <option value="wife">Wife</option>
                               <option value="husband">Husband</option>
                             </select>
@@ -354,7 +472,7 @@ export default function Employeeregister() {
                         <div className="form-group col-lg-3">
                           <div className="text__center">
                             <select  onChange={(e)=>setchilddata({...childdata,type:e.target.value})} value={childdata.type??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                              <option value="" hidden selected>Select</option>
+                              <option value="" hidden  >Select</option>
                               <option value="daughter">Daughter</option>
                               <option value="son">Son</option>
                             </select>
@@ -371,9 +489,13 @@ export default function Employeeregister() {
                         </div>
                         <div className="line-item-property__actions col-12 row mt-3 mb-3">
                           <button onClick={()=>pushhandler(childdata,setchilddata,childsarray,setchildsarray)}  className="col-lg-2 button-form1" type="button" id="btnAdd" value="+">Add</button>
-                          <button onClick={()=>removeHandler(childsarray,setchildsarray)} className="col-lg-2 button-form2" type="button" id="btnDel" value="-">Remove</button>
+                          <button onClick={()=>removeHandler(childsarray,setchildsarray)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
                         </div>
-                      </div> <input type="button" name="next" onClick={tophandler} className="pr-button next action-button" defaultValue="Next" />
+                       
+                      </div>
+                      
+                       <input type="button" name="next" onClick={tophandler} className="pr-button next action-button" defaultValue="Next" />
+                      
                     </fieldset>
                     <fieldset>
                       <div className="form-card">
@@ -411,8 +533,8 @@ export default function Employeeregister() {
                            
                           </div>
                           <div className="form-group col-lg-11 col-md-11 col-xl-11 col-sm-8 p-address ">
-                            <p className="p-address">Same as permanent address<p />
-                            </p></div>
+                            <p className="p-address">Same as permanent address</p>
+                            </div>
                           <div className="form-group">
                             <input type="text" onChange={(e)=>setcurrentaddressdata({...currentaddressdata,line1:e.target.value})} value={currentaddressdata.line1??""} className="form-control" placeholder="Address Line 1" id="curAddressLine1" />
                           </div>
@@ -454,7 +576,7 @@ export default function Employeeregister() {
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
                                   <select onChange={(e)=>settenthdata({...tenthdata,board:e.target.value})} value={tenthdata.board??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden selected>Board</option>
+                                    <option value="" hidden  >Board</option>
                                     <option value="Kerala Board">Kerala Board</option>
                                     <option value="CBSC">CBSE</option>
                                     <option value="Karnataka Board">Karnataka Board</option>
@@ -480,7 +602,7 @@ export default function Employeeregister() {
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
                                   <select  onChange={(e)=>settwelthdata({...twelthdata,board:e.target.value})} value={twelthdata.board??""}  className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden selected>Board</option>
+                                    <option value="" hidden  >Board</option>
                                     <option value="Kerala Board">Kerala Board</option>
                                     <option value="CBSC" >CBSE</option>
                                     <option value="Karnataka Board" >Karnataka Board</option>
@@ -506,7 +628,7 @@ export default function Employeeregister() {
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
                                   <select  onChange={(e)=>setbachlerdata({...bachlerdata,course:e.target.value})} value={bachlerdata.course??""}  className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value ="" hidden selected>Course</option>
+                                    <option value ="" hidden  >Course</option>
                                     <option value="Computer science">Computer science</option>
                                     <option value="Electronics">Electronics</option>
                                     <option value="Civil">Civil</option>
@@ -516,7 +638,7 @@ export default function Employeeregister() {
                               <div className="form-group col-lg-3  ">
                                 <div className="text__center">
                                   <select onChange={(e)=>setbachlerdata({...bachlerdata,collage:e.target.value})} value={bachlerdata.collage??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden selected>Collage</option>
+                                    <option value="" hidden  >Collage</option>
                                     <option value="">Dummy collage1</option>
                                     <option value="">Dummy collage2</option>
                                     <option value="">Dummy collage3</option>
@@ -539,7 +661,7 @@ export default function Employeeregister() {
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
                                   <select onChange={(e)=>setmasterDegreedata({...masterDegreedata,course:e.target.value})} value={masterDegreedata.course??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden selected>Course</option>
+                                    <option value="" hidden  >Course</option>
                                     <option value="">Computer science</option>
                                     <option value="">Electronics</option>
                                     <option value="">Civil</option>
@@ -549,7 +671,7 @@ export default function Employeeregister() {
                               <div className="form-group col-lg-3  ">
                                 <div className="text__center">
                                   <select onChange={(e)=>setmasterDegreedata({...masterDegreedata,collage:e.target.value})} value={masterDegreedata.collage??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden selected>Collage</option>
+                                    <option value="" hidden  >Collage</option>
                                     <option value="">Dummy collage1</option>
                                     <option value="">Dummy collage2</option>
                                     <option value="">Dummy collage3</option>
@@ -569,20 +691,52 @@ export default function Employeeregister() {
                           <div className="property-fields__roww ">
                             <div id="property-fields__row-1" className="property-fields__row row">
                               <h6 className="permenent-address mb-3 col-12 form-t">Additional Qualification</h6>
-                              <div className="form-group col-lg-3 ">
+                              {additionalarray.length?additionalarray.map((aitm,ak)=>
+                              <React.Fragment key={ak}>
+                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
-                                  <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden selected>Course</option>
+                                <input  disabled  value={aitm.course??""} type="text" className="" placeholder=" course" id=" " />
+                                  {/* <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                                    <option value="" hidden  >Course</option>
                                     <option value="">Computer science</option>
                                     <option value="">Electronics</option>
                                     <option value="">Civil</option>
+                                  </select> */}
+                                </div>
+                              </div>
+                              <div className="form-group col-lg-3  ">
+                                <div className="text__center">
+                                <input  disabled  value={aitm.collage??""} type="text" className="" placeholder=" collage" id=" " />
+                                  {/* <select  onChange={(e)=>setadditionaldata({...additionaldata,collage:e.target.value})} value={additionaldata.collage??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                                    <option value="" hidden  >Collage</option>
+                                    <option value="">Dummy collage1</option>
+                                    <option value="">Dummy collage2</option>
+                                    <option value="">Dummy collage3</option>
+                                  </select> */}
+                                </div>
+                              </div>
+                              <div className="form-group col-lg-3 ">
+                                <input type="text" disabled  value={aitm["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
+                              </div>
+                              <div className="form-group col-lg-3 ">
+                                <input  disabled  value={aitm.year??""} type="text" className="" placeholder=" Year" id=" " />
+                              </div>
+                            
+                              </React.Fragment>):null}
+                              <div className="form-group col-lg-3 ">
+                                <div className="text__center">
+                                  <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                                    <option value="" hidden  >Course</option>
+                                    <option value="Computer science">Computer science</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Civil">Civil</option>
                                   </select>
                                 </div>
                               </div>
                               <div className="form-group col-lg-3  ">
                                 <div className="text__center">
                                   <select  onChange={(e)=>setadditionaldata({...additionaldata,collage:e.target.value})} value={additionaldata.collage??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden selected>Collage</option>
+                                    <option value="" hidden  >Collage</option>
                                     <option value="">Dummy collage1</option>
                                     <option value="">Dummy collage2</option>
                                     <option value="">Dummy collage3</option>
@@ -598,7 +752,7 @@ export default function Employeeregister() {
                             </div>
                             <div className="line-item-property__actions col-12 row mt-3 mb-3">
                               <button onClick={()=>pushhandler(additionaldata,setadditionaldata,additionalarray,setadditionalarray)} className="col-lg-2 button-form1" type="button" id="btnAdd" value="+">Add</button>
-                              <button onClick={()=>removeHandler(additionalarray,setadditionalarray)} className="col-lg-2 button-form2" type="button" id="btnDel" value="-">Remove</button>
+                              <button onClick={()=>removeHandler(additionalarray,setadditionalarray)} className="col-lg-2 button-form2" type="button"  value="-">Remove</button>
                             </div>
                           </div>
                         </div>
@@ -610,7 +764,7 @@ export default function Employeeregister() {
                             isMulti
                             options={colourOptions}
                             placeholder={<div>Select Skills....</div>}
-                            // onchange={sel}
+                            onChange={newcontent => { setselectedskills( newcontent ) }}
                             // styles={customStyles}
                           />
                           {/* <div className="box-skills">
@@ -627,88 +781,163 @@ export default function Employeeregister() {
                         <div className="property-fields__ro ">
                           <div id="property-fields__row-2" className="property-fields__ro row">
                             <h6 className="permenent-address form-t mb-3 col-12">Company</h6>
+                            {precompanyarray.length?precompanyarray.map((citm,ck)=>
+                            <React.Fragment key={ck}>
+                             
+                            
+                             <div className="form-group col-lg-6 ">
+                               <div className="text__center">
+                                 <select value={citm.name} disabled className="cs-select cs-skin-elastic cs-skin-elastic1">
+                                   <option value="" hidden  >Company Name</option>
+                                   <option value="Company1">Company1</option>
+                                   <option value="Company2">Company2</option>
+                                 </select>
+                               </div>
+                             </div>
+                             <div className="form-group col-lg-6  ">
+                               <input type="text"  value={citm.position} className="" disabled placeholder=" Position" id=" " />
+                             </div>
+                             <div className="form-group col-lg-6 ">
+                               <input type="tel"  value={citm.phone} className="" disabled placeholder=" Company Phone" id=" " />
+                             </div>
+                             <div className="form-group col-lg-6  ">
+                               <input type="email"  value={citm.email} className="" disabled placeholder="Company email" id=" " />
+                             </div>
+                             <div className="form-group col-lg-12  ">
+                               <input type="text"  value={citm.address} disabled className="" placeholder="Company Address" id=" " />
+                             </div>
+                             <div className="form-group col-lg-12  ">
+                               <textarea type="text"  value={citm.jobDescription} disabled className=" text-area11" placeholder="Job Description" id=" " defaultValue={""} />
+                             </div>
+                             <div className="form-group col-lg-6 ">
+                               <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
+                               <input type="date" disabled value={citm.from} className="" placeholder=" From" id=" " />
+                             </div>
+                             <div className="form-group col-lg-6 ">
+                               <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
+                               <input type="date"  disabled value={citm.to} className="" placeholder=" To" id=" " />
+                             </div>
+                               {/* <hr/> */}
+                             </React.Fragment>):null}
                             <div className="form-group col-lg-6 ">
-                              <input type="text" className="form-control" placeholder=" Company Name" id=" " />
+                              <input type="text" onChange={(e)=>setprecompanydata({...precompanydata,name:e.target.value})} value={precompanydata.name??""} className="form-control" placeholder=" Company Name" id=" " />
                             </div>
                             <div className="form-group col-lg-6  ">
-                              <input type="text" className="form-control" placeholder=" Position" id=" " />
+                              <input type="text" onChange={(e)=>setprecompanydata({...precompanydata,position:e.target.value})} value={precompanydata.position??""} className="form-control" placeholder=" Position" id=" " />
                             </div>
                             <div className="form-group col-lg-6 ">
-                              <input type="tel" className="form-control" placeholder=" Company Phone" id=" " />
+                              <input type="tel"onChange={(e)=>setprecompanydata({...precompanydata,phone:e.target.value})} value={precompanydata.phone??""} className="form-control" placeholder=" Company Phone" id=" " />
                             </div>
                             <div className="form-group col-lg-6  ">
-                              <input type="email" className="form-control" placeholder="Company email" id=" " />
+                              <input type="email"onChange={(e)=>setprecompanydata({...precompanydata,email:e.target.value})} value={precompanydata.email??""} className="form-control" placeholder="Company email" id=" " />
                             </div>
                             <div className="form-group col-lg-12  ">
-                              <input type="text" className="form-control" placeholder="Company Address" id=" " />
+                              <input type="text"onChange={(e)=>setprecompanydata({...precompanydata,address:e.target.value})} value={precompanydata.address??""} className="form-control" placeholder="Company Address" id=" " />
                             </div>
                             <div className="form-group col-lg-12  ">
-                              <textarea type="text" className="form-control text-area11" placeholder="Job Description" id=" " defaultValue={""} />
+                              <textarea type="text"onChange={(e)=>setprecompanydata({...precompanydata,jobDescription:e.target.value})} value={precompanydata.jobDescription??""} className="form-control text-area11" placeholder="Job Description" id=" " defaultValue={""} />
                             </div>
                             <div className="form-group col-lg-6 ">
                               <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
-                              <input type="date" className="form-control" placeholder=" From" id=" " />
+                              <input type="date"onChange={(e)=>setprecompanydata({...precompanydata,from:e.target.value})} value={precompanydata.from??""} className="form-control" placeholder=" From" id=" " />
                             </div>
                             <div className="form-group col-lg-6 ">
                               <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
-                              <input type="date" className="form-control" placeholder=" To" id=" " />
+                              <input type="date"onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className="form-control" placeholder=" To" id=" " />
                             </div>
                           </div>
                           <div className="line-item-property__actions col-12 row mt-3 mb-3">
-                            <button className="col-lg-2 button-form1" type="button" id="btnAd" value="+">Add</button>
-                            <button className="col-lg-2 button-form2" type="button" id="btnDe" value="-">Remove</button>
+                          <button onClick={()=>pushhandler(precompanydata,setprecompanydata,precompanyarray,setprecompanyarray)}  className="col-lg-2 button-form1" type="button"  value="+">Add</button>
+                          <button onClick={()=>removeHandler(precompanyarray,setprecompanyarray)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
                           </div>
                         </div>
                         <div className="property-fields__ro ">
                           <div id="property-fields__row-2" className="property-fields__ro row">
                             <h6 className="permenent-address form-t mb-3 col-12">Company</h6>
+                            {companyarray.length?companyarray.map((citm,ck)=>
+                            <React.Fragment key={ck}>
                             <div className="form-group col-lg-6 ">
                               <div className="text__center">
-                                <select className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                  <option value disabled selected>Company Name</option>
-                                  <option value="france">Company1</option>
-                                  <option value="brazil">Company2</option>
+                                <select value={citm.name} disabled className="cs-select cs-skin-elastic cs-skin-elastic1">
+                                  <option value="" hidden  >Company Name</option>
+                                  <option value="Company1">Company1</option>
+                                  <option value="Company2">Company2</option>
                                 </select>
                               </div>
                             </div>
                             <div className="form-group col-lg-6  ">
-                              <input type="text" className="form-control" placeholder=" Position" id=" " />
+                              <input type="text"  value={citm.position} className="" disabled placeholder=" Position" id=" " />
                             </div>
                             <div className="form-group col-lg-6 ">
-                              <input type="tel" className="form-control" placeholder=" Company Phone" id=" " />
+                              <input type="tel"  value={citm.phone} className="" disabled placeholder=" Company Phone" id=" " />
                             </div>
                             <div className="form-group col-lg-6  ">
-                              <input type="email" className="form-control" placeholder="Company email" id=" " />
+                              <input type="email"  value={citm.email} className="" disabled placeholder="Company email" id=" " />
                             </div>
                             <div className="form-group col-lg-12  ">
-                              <input type="text" className="form-control" placeholder="Company Address" id=" " />
+                              <input type="text"  value={citm.address} disabled className="" placeholder="Company Address" id=" " />
                             </div>
                             <div className="form-group col-lg-12  ">
-                              <textarea type="text" className="form-control text-area11" placeholder="Job Description" id=" " defaultValue={""} />
+                              <textarea type="text"  value={citm.jobDescription} disabled className=" text-area11" placeholder="Job Description" id=" " defaultValue={""} />
                             </div>
                             <div className="form-group col-lg-6 ">
                               <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
-                              <input type="date" className="form-control" placeholder=" From" id=" " />
+                              <input type="date" disabled value={citm.from} className="" placeholder=" From" id=" " />
                             </div>
                             <div className="form-group col-lg-6 ">
                               <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
-                              <input type="date" className="form-control" placeholder=" To" id=" " />
+                              <input type="date"  disabled value={citm.to} className="" placeholder=" To" id=" " />
+                            </div>
+                              {/* <hr/> */}
+                            </React.Fragment>):null}
+                            <div className="form-group col-lg-6 ">
+                              <div className="text__center">
+                                <select onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata.name} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                                  <option value="" hidden  >Company Name</option>
+                                  <option value="Company1">Company1</option>
+                                  <option value="Company2">Company2</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div className="form-group col-lg-6  ">
+                              <input type="text" onChange={(e)=>setcompanydata({...companydata,position:e.target.value})} value={companydata.position??""} className="form-control" placeholder=" Position" id=" " />
+                            </div>
+                            <div className="form-group col-lg-6 ">
+                              <input type="tel" onChange={(e)=>setcompanydata({...companydata,phone:e.target.value})} value={companydata.phone??""} className="form-control" placeholder=" Company Phone" id=" " />
+                            </div>
+                            <div className="form-group col-lg-6  ">
+                              <input type="email" onChange={(e)=>setcompanydata({...companydata,email:e.target.value})} value={companydata.email??""} className="form-control" placeholder="Company email" id=" " />
+                            </div>
+                            <div className="form-group col-lg-12  ">
+                              <input type="text" onChange={(e)=>setcompanydata({...companydata,address:e.target.value})} value={companydata.address??""} className="form-control" placeholder="Company Address" id=" " />
+                            </div>
+                            <div className="form-group col-lg-12  ">
+                              <textarea type="text" onChange={(e)=>setcompanydata({...companydata,jobDescription:e.target.value})} value={companydata.jobDescription??""} className="form-control text-area11" placeholder="Job Description" id=" " defaultValue={""} />
+                            </div>
+                            <div className="form-group col-lg-6 ">
+                              <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
+                              <input type="date" onChange={(e)=>setcompanydata({...companydata,from:e.target.value})} value={companydata.from??""} className="form-control" placeholder=" From" id=" " />
+                            </div>
+                            <div className="form-group col-lg-6 ">
+                              <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
+                              <input type="date" onChange={(e)=>setcompanydata({...companydata,to:e.target.value})} value={companydata.to??""} className="form-control" placeholder=" To" id=" " />
                             </div>
                           </div>
                           <div className="line-item-property__actions col-12 row mt-3 mb-3">
-                            <button className="col-lg-2 button-form1" type="button" id="btnAd" value="+">Add</button>
-                            <button className="col-lg-2 button-form2" type="button" id="btnDe" value="-">Remove</button>
+                          <button onClick={()=>pushhandler(companydata,setcompanydata,companyarray,setcompanyarray)}  className="col-lg-2 button-form1" type="button"  value="+">Add</button>
+                          <button onClick={()=>removeHandler(companyarray,setcompanyarray)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
                           </div>
                         </div>
                         <div className="row">
                           <h6 className=" form-t mb-3 mt-3 col-12">Any other Proficiancy</h6>
                           <div className="form-group col-lg-12 ">
-                            <textarea type="text" className="form-control text-area11" placeholder="Message" id=" " defaultValue={""} />
+                            <textarea onChange={(e)=>setemployeedata({...employeedata,otherproficency:e.target.value})}  value={employeedata.otherproficency??''} type="text" className="form-control text-area11" placeholder="Message" id=" " defaultValue={""} />
                           </div>
                         </div>
                       </div>
-                      <input type="button" name="next" className="pr-button next action-button"   defaultValue="Submit" /> 
+                      <input type="button" name="next" className="pr-button next action-button"  onClick={(e)=>registerEmployee(e)}  defaultValue="Submit" /> 
                       <input type="button" name="previous" className="pr-button previous action-button-previous" defaultValue="Previous" />
+                      <button onClick={(e)=>registerEmployee(e)} > click</button>
                     </fieldset>
                     <fieldset>
                       <div className="form-card">

@@ -100,8 +100,8 @@ export default function Header() {
             {/* <div class="header-right">
             <div class="block-signin"><Link className="btn btn-default2 btn-shadow ml-40 " to="/notification"><i className="fa-sharp fa-solid fa-bell notification-bell"></i></Link></div>
           </div> */}
-          <div class="header-right">
-          <div class="block-signin"><Link class="btn btn-default2 btn-shadow ml-40 "  to="/notification"><i class="fa-sharp fa-solid fa-bell notification-bell"></i><span className="notification-label notification-label-red">3</span></Link></div>
+          <div className="header-right">
+          <div className="block-signin"><Link className="btn btn-default2 btn-shadow ml-40 "  to="/notification"><i className="fa-sharp fa-solid fa-bell notification-bell"></i><span className="notification-label notification-label-red">3</span></Link></div>
         </div>
         </>:null}
             <div className="header-right">

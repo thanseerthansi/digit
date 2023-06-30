@@ -1,13 +1,30 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { createContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Simplecontext } from "../Commonpages/Simplecontext";
+import { Form } from "react-bootstrap";
 
 export default function Employerprofile() {
-  const {logouthandler}=useContext(Simplecontext)
+  const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata}=useContext(Simplecontext)
+  
+  const [validated,setValidated]=useState(false)
+  console.log("userdetailin profile",userdetail)
+  console.log("employeedata profile",employeedata)
+  
   // const navigate = useNavigate();
+  useEffect(() => {
+    console.log("useeffectemployee",userdetail)
+  }, [])
+  
+ const Employeeupdate=async(e)=>{
+    console.log("okentered to employee update")
+    try {
+      
+    } catch (error) {
+      
+    }
 
- 
+ }
   return (
     <>
       <main className="main">
@@ -31,13 +48,13 @@ export default function Employerprofile() {
               <div className="row mt-10">
                 <div className="col-lg-8 col-md-12">
                   <h5 className="f-18">
-                    Steven Jobs{" "}
+                    {userdetail?userdetail.user.username:""}
                     <span className="card-location font-regular ml-20">
-                      New York, US
+                      {userdetail?userdetail.address[0].city:""},{userdetail?userdetail.address[0].country:""}
                     </span>
                   </h5>
                   <p className="mt-0 font-md color-text-paragraph-2 mb-15">
-                    Software Compony Hr
+                    {userdetail?userdetail?.name??"":""}
                   </p>
                 </div>
               </div>
@@ -99,10 +116,10 @@ export default function Employerprofile() {
                                 </div>
                                 <div className="card-profile pt-10">
                                   <a href="candidate-details.html">
-                                    <h5>Robert Fox</h5>
+                                    <h5>{userdetail?userdetail?.user.username??""??"":""}</h5>
                                   </a>
                                   <span className="font-xs color-text-mutted">
-                                    Software compony Hr
+                                    {userdetail?.name??""}
                                   </span>
                                 </div>
                               </div>
@@ -115,27 +132,27 @@ export default function Employerprofile() {
                                 <p className="font-sm color-brand-1">
                                   E Mail
                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  : &nbsp;stevenjob@gmail.com
+                                  : &nbsp;{userdetail?.email??""}
                                 </p>
                                 <p className="font-sm color-brand-1">
                                   Mobile &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;
-                                  01 - 234 567 89
+                                  {userdetail?.phone??""}
                                 </p>
                                 <p className="font-sm color-brand-1">
-                                  Country &nbsp;&nbsp;:&nbsp; USA
+                                  Country &nbsp;&nbsp;:&nbsp; {userdetail?userdetail.address[0]?.country??"":""}
                                 </p>
                                 <p className="font-sm color-brand-1">
                                   State
                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  : &nbsp;New York
+                                  : &nbsp;{userdetail?userdetail.address[0]?.state??"":""}
                                 </p>
                                 <p className="font-sm color-brand-1">
-                                  Zip code :&nbsp; 67345
+                                  Zip code :&nbsp; {userdetail?userdetail.address?.[0]?.zipcode??"":""}
                                 </p>
-                                <p className="font-sm color-brand-1">
+                                {/* <p className="font-sm color-brand-1">
                                   Website&nbsp;&nbsp; :
                                   &nbsp;https://alithemes.com/
-                                </p>
+                                </p> */}
                                 <div className="card-2-bottom card-2-bottom-candidate mt-30">
                                   <div className="text-start"></div>
                                 </div>
@@ -145,7 +162,7 @@ export default function Employerprofile() {
                                       <span className="d-flex align-items-center">
                                         <i className="fi-rr-marker mr-5 ml-0" />
                                         <span className="font-sm color-text-mutted">
-                                          Chicago, US
+                                        {userdetail?userdetail.address[0].city:""},{userdetail?userdetail.address[0].country:""}
                                         </span>
                                       </span>
                                     </div>
@@ -184,6 +201,7 @@ export default function Employerprofile() {
                         <a className="btn btn-link">Delete</a>
                       </div>
                       <div className="row form-contact">
+                        <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Employeeupdate,setValidated)} >
                         <div className="col-lg-12 col-md-12 row ">
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">
@@ -192,8 +210,12 @@ export default function Employerprofile() {
                             <input
                               className="form-control"
                               type="text"
-                              defaultValue="Steven Job"
+                              value={employeedata?.user?.username??""}
+                              onChange={(e)=>setemployeedata({...employeedata,user:{...employeedata.user,username:e.target.value}})}
                             />
+                            <Form.Control.Feedback type="invalid">
+                          Please provide a Username
+                        </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">
@@ -201,9 +223,13 @@ export default function Employerprofile() {
                             </label>
                             <input
                               className="form-control"
-                              type="text"
-                              defaultValue="stevenjob@gmail.com"
+                              type="email"
+                              value={employeedata?.email??""}
+                              onChange={(e)=>setemployeedata({...employeedata,email:e.target.value})}
                             />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide valid email
+                            </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">
@@ -211,9 +237,13 @@ export default function Employerprofile() {
                             </label>
                             <input
                               className="form-control"
-                              type="text"
-                              defaultValue="01 - 234 567 89"
+                              type="tel"
+                              value={employeedata?.phone??""}
+                              onChange={(e)=>setemployeedata({...employeedata,phone:e.target.value})}
                             />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide a valid phone
+                            </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">
@@ -222,8 +252,11 @@ export default function Employerprofile() {
                             <input
                               className="form-control"
                               type="url"
-                              defaultValue="https://alithemes.com/"
+                              value={employeedata?.website??""}
                             />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide a valid website
+                            </Form.Control.Feedback>
                           </div>
                           <div className="form-group mb-3">
                             <label className="font-sm color-text-mutted mb-10">
@@ -232,10 +265,15 @@ export default function Employerprofile() {
                             <textarea
                               className="form-control"
                               rows={4}
-                              defaultValue={
-                                "We are AliThemes , a creative and dedicated group of individuals who love web development almost as much as we love our customers. We are passionate team with the mission for achieving the perfection in web design."
-                              }
+                              value={employeedata?.bio??""}
+                              onChange={(e)=>setemployeedata({...employeedata,bio:e.target.value})}
+                              // defaultValue={
+                              //   "We are AliThemes , a creative and dedicated group of individuals who love web development almost as much as we love our customers. We are passionate team with the mission for achieving the perfection in web design."
+                              // }
                             />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide bio
+                            </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">
@@ -244,8 +282,13 @@ export default function Employerprofile() {
                             <input
                               className="form-control"
                               type="text"
-                              defaultValue="United States"
+                              value={employeedata?.address?.[0]?.country??""??""}
+                              onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,country:e.target.value}]})}
+
                             />
+                            <Form.Control.Feedback type="invalid">
+                          Please provide country
+                        </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">
@@ -254,8 +297,12 @@ export default function Employerprofile() {
                             <input
                               className="form-control"
                               type="text"
-                              defaultValue="New York"
+                              value={employeedata?.address?.address[0].state??''}
+                              onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.state,state:e.target.value}]})}
                             />
+                            <Form.Control.Feedback type="invalid">
+                          Please provide state
+                        </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">
@@ -283,6 +330,7 @@ export default function Employerprofile() {
                             </button>
                           </div>
                         </div>
+                        </Form>
                       </div>
                     </div>
                   </div>
