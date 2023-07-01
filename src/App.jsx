@@ -11,7 +11,7 @@ import Text from "./Components/Text";
 import Employeeregister from "./Components/Employeeregister";
 import Simplecontextprovider from "./Commonpages/Simplecontext";
 import Employerregister from "./Employerpages/Employerregister";
-import Employerprofile from "./Employerpages/employerprofile";
+import Employerprofile from "./Employerpages/Employerprofile";
 import Employeeprofile from "./Employeepages/Employeeprofile";
 import Forgetpassword from "./Employerpages/Forgetpassword";
 import Resetpassord from "./Employerpages/Resetpassord";

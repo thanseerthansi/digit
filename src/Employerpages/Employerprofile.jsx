@@ -33,7 +33,8 @@ export default function Employerprofile() {
           <div className="container">
             <div className="banner-hero banner-image-single">
               <img
-                src="assets/imgs/page/candidates/img copy.png"
+                src={ userdetail?.bannerImage ?? 'assets/imgs/page/candidates/img copy.png'}
+                style={{ width:"1116px",height:"308px"}}
                 alt="jobbox"
               />
               <a className="btn-editor" href="#" />
@@ -41,7 +42,8 @@ export default function Employerprofile() {
             <div className="box-company-profile">
               <div className="image-compay">
                 <img
-                  src="assets/imgs/page/candidates/candidate-profile copy.png"
+                style={{ height:"85px" , width:"85px"}}
+                  src={ userdetail?.profileImage ?? 'assets/imgs/page/candidates/candidate-profile copy.png'}
                   alt="jobbox"
                 />
               </div>

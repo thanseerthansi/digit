@@ -2,12 +2,24 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import Filestack from "../Commonpages/Filestack";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Axioscall from "../Commonpages/Axioscall";
 
 export default function Employerregister() {
   const [companydata,setcompanydata]=useState([]);
   const [certificatedata,setcertificatedata]=useState([]);
   const [addressdata,setaddressdata]=useState([]);
 
+
+  const notify = (msg) => toast.success(msg, {
+    position: "top-left",
+    theme: "dark",
+    });
+  const notifyerror = (msg) => toast.error(msg, {
+    position: "top-left",
+    theme: "dark",
+    });
 
   const navigate  = useNavigate();
  
@@ -20,7 +32,16 @@ export default function Employerregister() {
     }
     
   }
-  const Regstersubmithandler=(e)=>{
+
+
+  const ImageFilestachHandler = async (ratio,value)=> {
+    let data =await Filestack(ratio)
+    if (data){
+      setcompanydata({...companydata, [value] :data})
+    }
+  }
+  
+  const Regstersubmithandler= async (e)=>{
     e.preventDefault();
     console.log("ok")
     try {
@@ -29,14 +50,33 @@ export default function Employerregister() {
         datalist.address=[{...addressdata}]
       }
       if(Object.keys(certificatedata).length){
-        datalist.certificate = [{...certificatedata}]
+        datalist.certificate = [{...certificatedata , name : companydata.address_proof_type}]
       }
       console.log("datalist employer",datalist)
+      datalist.role = "employer"
+      datalist.status = "verified"
+      if (  datalist.password != datalist.repassword)
+      {
+        notifyerror("Password Mismatch")
+      }
+      else
+      {
+        console.log("---------------------------------------")
+        console.log( datalist )
+        const data = await Axioscall("post","company/",datalist)
+        console.log( data)
+        if (data.status === 200)
+        {
+          notify("Company Registered Successfully , Please Login Your Account")
+          navigate("/employerlogin")
+        }
+      }
       // navigate("/employer-profile")
     } catch (error) {
       console.log("error",error)
     }
   }
+
   const sss=(e)=>{
     e.preventDefault();
     console.log("ss enteres")
@@ -84,30 +124,49 @@ export default function Employerregister() {
             <label className="dropdown col-lg-6 col-sm-12 mt-20">
               <div className="text__center">
                 <select onChange={(e)=>setcompanydata({...companydata,industryType:e.target.value})} value={companydata.industryType??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                  <option value disabled selected>Industry Type</option>
-                  <option value>IT</option>
-                  <option value>Medical</option>
-                  <option value>Education</option>
+                  <option value defaultValue="" selected>Industry Type</option>
+                  <option value="software-development">Software Development</option>
+                  <option value="web-development">Web Development</option>
+                  <option value="mobile-app-development">Mobile App Development</option>
+                  <option value="data-analytics">Data Analytics</option>
+                  <option value="cloud-computing">Cloud Computing</option>
+                  <option value="cybersecurity">Cybersecurity</option>
+                  <option value="artificial-intelligence">Artificial Intelligence</option>
+                  <option value="machine-learning">Machine Learning</option>
+                  <option value="networking-infrastructure">Networking and Infrastructure</option>
+                  <option value="database-management">Database Management</option>
+                  <option value="IT-consulting">IT Consulting</option>
+                  <option value="IT-support">IT Support and Services</option>
+
                 </select>
               </div>
             </label>
             <label className="dropdown col-lg-6 col-sm-12 mt-20">
               <div className="text__center">
                 <select onChange={(e)=>setcompanydata({...companydata,serviceProdvided:e.target.value})} value={companydata.serviceProdvided??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                  <option value disabled selected>Service Provided</option>
-                  <option value>IT</option>
-                  <option value>Medical</option>
-                  <option value>Education</option>
+                  <option value defaultValue="" selected> -- Service Provided -- </option>
+                  <option value="software-development">Software Development</option>
+                  <option value="web-development">Web Development</option>
+                  <option value="mobile-app-development">Mobile App Development</option>
+                  <option value="data-analytics">Data Analytics</option>
+                  <option value="cloud-computing">Cloud Computing</option>
+                  <option value="cybersecurity">Cybersecurity</option>
+                  <option value="artificial-intelligence">Artificial Intelligence</option>
+                  <option value="machine-learning">Machine Learning</option>
+                  <option value="networking-infrastructure">Networking and Infrastructure</option>
+                  <option value="database-management">Database Management</option>
+                  <option value="IT-consulting">IT Consulting</option>
+                  <option value="IT-support">IT Support and Services</option>
                 </select>
               </div>
             </label>
             <label className="dropdown col-lg-12 col-sm-12 mt-15">
               <div className="text__center">
-                <select onChange={(e)=>setcertificatedata({...certificatedata,name:e.target.value})} value={certificatedata.name??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                <select onChange={(e)=>setcompanydata({...companydata,address_proof_type:e.target.value})} value={companydata.address_proof_type??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
                   <option value disabled selected>Government Approved Certificate</option>
-                  <option value>Driving License</option>
-                  <option value>Aadhar</option>
-                  <option value>Passport</option>
+                  <option value="Driving Liscence">Driving License</option>
+                  <option value="Aadhaar">Aadhar</option>
+                  <option value="Passport">Passport</option>
                 </select>
               </div>
             </label>
@@ -122,11 +181,29 @@ export default function Employerregister() {
             <div className="form-group col-lg-6 col-sm-12">
               <label className="font-sm color-text-mutted">Certificate Back side*</label> 
               <div className='imageselectorborder d-flex '>
-                <button onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'backurl')}type='button' className='imageselector'> Choose Image</button>
+              <button onClick={()=>Filestackhandler("landscape",setcertificatedata,certificatedata,'back_url')}  type='button' className='imageselector'> Choose Image</button>
                 <p style={{overflow:"hidden"}}>&nbsp;{certificatedata.backUrl??<span>No file chosen</span>}</p>
               </div>
               {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'backurl')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
             </div>
+
+            <div className="form-group col-lg-6 col-sm-12">
+              <label className="font-sm color-text-mutted">Profile Image*</label> 
+              <div className='imageselectorborder d-flex '>
+                <button onClick={()=>ImageFilestachHandler("square",'profileImage')}  type='button' className='imageselector'> Choose Image</button>
+                <p style={{overflow:"hidden"}}>&nbsp;{certificatedata.profileImage??<span>No file chosen</span>}</p>
+              </div>
+            {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'front_url')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
+            </div>
+            <div className="form-group col-lg-6 col-sm-12">
+              <label className="font-sm color-text-mutted">Banner Image</label> 
+              <div className='imageselectorborder d-flex '>
+              <button onClick={()=>ImageFilestachHandler("landscape",'bannerImage')}  type='button' className='imageselector'> Choose Image</button>
+                <p style={{overflow:"hidden"}}>&nbsp;{certificatedata.bannerImage??<span>No file chosen</span>}</p>
+              </div>
+              {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'backurl')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
+            </div>
+
             <h6 className="permenent-address"> Address</h6>
             <div className="form-group mt-4">
               <input onChange={(e)=>setaddressdata({...addressdata,line1:e.target.value})} value={addressdata.line1??""} type="text" className="form-control" placeholder="Address Line 1" id="pAddressLine1" />
