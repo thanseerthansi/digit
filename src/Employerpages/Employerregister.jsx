@@ -41,6 +41,7 @@ export default function Employerregister() {
     }
   }
   
+  
   const Regstersubmithandler= async (e)=>{
     e.preventDefault();
     console.log("ok")
@@ -77,10 +78,7 @@ export default function Employerregister() {
     }
   }
 
-  const sss=(e)=>{
-    e.preventDefault();
-    console.log("ss enteres")
-  }
+ 
   return (
     <>
     <main className="main">

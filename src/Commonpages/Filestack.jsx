@@ -35,6 +35,7 @@ import { useState } from "react";
 //       client.picker(options).open();
 //     };
     export default function Filestack(ratio) {
+      console.log("ratioin filestack",ratio)
       return new Promise((resolve) => {
         var client = filestack.init(Apikey);
         const options = {
@@ -42,7 +43,7 @@ import { useState } from "react";
           accept: ["image/*"],
           transformations: {
             crop: {
-              aspectRatio: ratio==="landscape"?3/2:1/1,
+              aspectRatio: ratio==="landscape"?3/2:"banner"?14/4:1/1,
               force: true,
             },
           },

@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axioscall from "./Axioscall";
 import jwt_decode from "jwt-decode";
+import Filestack from "./Filestack";
 export const Simplecontext = createContext();
 
 
@@ -10,6 +11,7 @@ export default function Simplecontextprovider({children}){
     const [pathvalue,setpathvalue]=useState('')
     const [userdetail,setuserdetail]=useState('')
     const [employeedata,setemployeedata]=useState('')
+    // console.log("employeedatain context",employeedata)
     useEffect(() => {
         path()
         getUser()
@@ -20,7 +22,7 @@ export default function Simplecontextprovider({children}){
     }
     // const path = window.location.pathname
     const logouthandler = () => {
-        console.log("entered logout");
+        // console.log("entered logout");
         window.localStorage.removeItem("graiduser");
         return navigate("/");
       }; 
@@ -30,7 +32,7 @@ export default function Simplecontextprovider({children}){
     event.preventDefault();
     setstate(true)
     if (form.checkValidity() === false){
-        console.log("empty")
+        // console.log("empty")
         event.stopPropagation()
         return false
     }
@@ -39,7 +41,7 @@ export default function Simplecontextprovider({children}){
         return true
     }
     }
-    const getUser=async()=>{
+    async function getUser (){  
         if (window.localStorage.getItem('craig-token')){
             let datalist;
             var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
@@ -75,11 +77,21 @@ export default function Simplecontextprovider({children}){
                   }
                 }
             }
-           console.log("userdatain context",userdetail,setemployeedata,employeedata)
+          //  console.log("userdatain context",userdetail)
+    }
+    async function Filestackhandler(ratio,setvalue,value,keypair){
+      console.log("keypair",keypair)
+      let data =await Filestack(ratio)
+
+      console.log("datafilestack",data)
+      if (data){
+        setvalue({...value,[keypair]:data})
+      }
+      
     }
 return (
     <Simplecontext.Provider value={{
-        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail
+        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler
     }}>{children}</Simplecontext.Provider>
     )
 }

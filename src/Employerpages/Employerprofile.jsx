@@ -3,28 +3,64 @@ import { createContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Simplecontext } from "../Commonpages/Simplecontext";
 import { Form } from "react-bootstrap";
+import Axioscall from "../Commonpages/Axioscall";
+import moment from 'moment';
+import { notify } from "../Commonpages/toast";
+import Filestack from "../Commonpages/Filestack";
 
 export default function Employerprofile() {
-  const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata}=useContext(Simplecontext)
-  
+  const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
-  console.log("userdetailin profile",userdetail)
+  // console.log("userdetailin profile",userdetail)
   console.log("employeedata profile",employeedata)
   
   // const navigate = useNavigate();
   useEffect(() => {
-    console.log("useeffectemployee",userdetail)
+    window.scrollTo(0,0)
   }, [])
   
  const Employeeupdate=async(e)=>{
-    console.log("okentered to employee update")
-    try {
-      
-    } catch (error) {
-      
+  try {
+    console.log("okentered to employee update",employeedata)
+    let datalist = {...employeedata}
+    if (employeedata._id){
+      datalist.id=employeedata._id   
     }
+    let data = await Axioscall("put","company",datalist)
+    console.log(" response",data)
+    if(data.status===200){
+      getUser(); 
+      notify("Updated Successfully")
+      window.scrollTo(0,0)
+    } 
+  } catch (error) {
+    console.log("error",error)
+  }
 
  }
+ const Bannerhandler=async(ratio)=>{
+  try {
+    console.log("atio in function",ratio)
+    let data =await Filestack(ratio)
+    let datalist = {...employeedata}
+    if (data){
+      datalist.id=employeedata._id
+      datalist.bannerImage=data
+    }
+    console.log("datalist",datalist)
+    let dataupdate = await Axioscall("put","company",datalist)
+    if (dataupdate.status){
+      getUser(); 
+      notify("Image Updated")  
+    }
+  
+  } catch (error) {
+    console.log(error)
+  }
+  
+ }
+
+
   return (
     <>
       <main className="main">
@@ -33,11 +69,11 @@ export default function Employerprofile() {
           <div className="container">
             <div className="banner-hero banner-image-single">
               <img
-                src={ userdetail?.bannerImage ?? 'assets/imgs/page/candidates/img copy.png'}
+                src={userdetail.bannerImage?userdetail?.bannerImage ?? 'assets/imgs/page/candidates/img copy.png':'assets/imgs/page/candidates/img copy.png'}
                 style={{ width:"1116px",height:"308px"}}
                 alt="jobbox"
               />
-              <a className="btn-editor" href="#" />
+              <button className="btn-editor" style={{border:"0"}} onClick={()=>Bannerhandler("banner")} />
             </div>
             <div className="box-company-profile">
               <div className="image-compay">
@@ -87,6 +123,11 @@ export default function Employerprofile() {
                         Update Profile
                       </a>
                     </li>
+                    <li>
+                      <Link className="btn btn-border recruitment-icon mb-20" to="/employeelist" >
+                        Employees
+                      </Link>
+                    </li>
                   </ul>
                   <div className="border-bottom pt-10 pb-10" />
                   <div className="mt-10 mb-10">
@@ -125,52 +166,55 @@ export default function Employerprofile() {
                                   </span>
                                 </div>
                               </div>
-                              <div className="card-block-info">
-                                <p className="font-xs color-text-paragraph-2">
-                                  | Lorem ipsum dolor sit amet consectetur
-                                  adipisicing elit. Vero repellendus magni,
-                                  atque delectus molestias quis?
-                                </p>
-                                <p className="font-sm color-brand-1">
-                                  E Mail
-                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  : &nbsp;{userdetail?.email??""}
-                                </p>
-                                <p className="font-sm color-brand-1">
-                                  Mobile &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;
-                                  {userdetail?.phone??""}
-                                </p>
-                                <p className="font-sm color-brand-1">
-                                  Country &nbsp;&nbsp;:&nbsp; {userdetail?userdetail.address[0]?.country??"":""}
-                                </p>
-                                <p className="font-sm color-brand-1">
-                                  State
-                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  : &nbsp;{userdetail?userdetail.address[0]?.state??"":""}
-                                </p>
-                                <p className="font-sm color-brand-1">
-                                  Zip code :&nbsp; {userdetail?userdetail.address?.[0]?.zipcode??"":""}
-                                </p>
-                                {/* <p className="font-sm color-brand-1">
-                                  Website&nbsp;&nbsp; :
-                                  &nbsp;https://alithemes.com/
-                                </p> */}
-                                <div className="card-2-bottom card-2-bottom-candidate mt-30">
-                                  <div className="text-start"></div>
-                                </div>
-                                <div className="employers-info align-items-center justify-content-center mt-15">
-                                  <div className="row">
-                                    <div className="col-6">
-                                      <span className="d-flex align-items-center">
-                                        <i className="fi-rr-marker mr-5 ml-0" />
-                                        <span className="font-sm color-text-mutted">
-                                        {userdetail?userdetail.address[0].city:""},{userdetail?userdetail.address[0].country:""}
-                                        </span>
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+                              {/* profile start..................... */}
+                             <div className="card-block-info class-verification1">
+                              <table>
+                                <tbody><tr>
+                                    <td>Email</td>
+                                    <td>:</td>
+                                    <td className="td-verify">{userdetail?.email??""}</td>
+                                  </tr>
+                                  <tr>
+                                    <td> Phone Number</td>
+                                    <td>:</td>
+                                    <td className="td-verify">{userdetail?.phone??""}</td>
+                                  </tr>
+                                  <tr>
+                                    <td> Location</td>
+                                    <td>:</td>
+                                    <td className="td-verify">{employeedata?.address?.[0]?.line2??""??""}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Age of the Company</td>
+                                    <td>:</td>
+                                    <td className="td-verify">{userdetail?.ageOfCompany??""}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Number of Employees </td>
+                                    <td>:</td>
+                                    <td className="td-verify">{userdetail?.noOfemployees??""}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Number of Directors</td>
+                                    <td>:</td>
+                                    <td className="td-verify">{userdetail?.noOfdirectors??""}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Industry Type</td>
+                                    <td>:</td>
+                                    <td className="td-verify">{userdetail?.industryType??""}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Service Provided </td>
+                                    <td>:</td>
+                                    <td className="td-verify">{userdetail?.serviceProdvided??""}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+
+                              {/* profile end..................... */}
+                             
                             </div>
                           </div>
                         </div>
@@ -195,117 +239,179 @@ export default function Employerprofile() {
                       <div className="mt-35 mb-40 box-info-profie">
                         <div className="image-profile">
                           <img
-                            src="assets/imgs/page/candidates/candidate-profile copy.png"
+                            src={employeedata.profileImage?employeedata.profileImage:"assets/imgs/page/candidates/candidate-profile copy.png"}
                             alt="jobbox"
                           />
                         </div>
-                        <a className="btn btn-apply">Upload Avatar</a>
-                        <a className="btn btn-link">Delete</a>
+                        <button className="btn btn-apply" onClick={()=>Filestackhandler("square",setemployeedata,employeedata,'profileImage')}>Upload Avatar</button>
+                        <button className="btn btn-link" onClick={()=>setemployeedata({...employeedata,profileImage:''})}>Delete</button>
                       </div>
+                      {/* form ................................... */}
                       <div className="row form-contact">
                         <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Employeeupdate,setValidated)} >
                         <div className="col-lg-12 col-md-12 row ">
                           <div className="form-group col-lg-6 mb-3">
-                            <label className="font-sm color-text-mutted mb-10">
-                              Full Name *
-                            </label>
-                            <input
-                              className="form-control"
-                              type="text"
-                              value={employeedata?.user?.username??""}
-                              onChange={(e)=>setemployeedata({...employeedata,user:{...employeedata.user,username:e.target.value}})}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                          Please provide a Username
-                        </Form.Control.Feedback>
+                            <label className="font-sm color-text-mutted mb-10">Company Name *</label>
+                            <input required value={employeedata?.user?.username??""} onChange={(e)=>setemployeedata({...employeedata,user:{...employeedata.user,username:e.target.value}})} className="form-control" type="text" placeholder="Company Name" />
+                            <Form.Control.Feedback type="invalid">Please provide a Company Name</Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
-                            <label className="font-sm color-text-mutted mb-10">
-                              Email *
-                            </label>
-                            <input
-                              className="form-control"
-                              type="email"
-                              value={employeedata?.email??""}
-                              onChange={(e)=>setemployeedata({...employeedata,email:e.target.value})}
-                            />
+                            <label className="font-sm color-text-mutted mb-10">Email *</label>
+                            <input required className="form-control" type="text"value={employeedata?.email??""} onChange={(e)=>setemployeedata({...employeedata,email:e.target.value})}/>
                             <Form.Control.Feedback type="invalid">
                               Please provide valid email
                             </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
-                            <label className="font-sm color-text-mutted mb-10">
-                              Contact number
-                            </label>
-                            <input
-                              className="form-control"
-                              type="tel"
-                              value={employeedata?.phone??""}
-                              onChange={(e)=>setemployeedata({...employeedata,phone:e.target.value})}
-                            />
+                            <label className="font-sm color-text-mutted mb-10">Contact number</label>
+                            <input required className="form-control" type="text" value={employeedata?.phone??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,phone:e.target.value})} />
                             <Form.Control.Feedback type="invalid">
                               Please provide a valid phone
                             </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
-                            <label className="font-sm color-text-mutted mb-10">
-                              Personal website
-                            </label>
-                            <input
-                              className="form-control"
-                              type="url"
-                              value={employeedata?.website??""}
-                            />
+                            <label className="font-sm color-text-mutted mb-10">Incorporation Date</label>
+                            <input required className="form-control" type="date" value={moment(employeedata?.incorporationDate).format("YYYY-MM-DD")??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,incorporationDate:e.target.value})}  />
                             <Form.Control.Feedback type="invalid">
-                              Please provide a valid website
+                              Please provide Incorporation Date
+                            </Form.Control.Feedback>
+                          </div>
+                         
+                          <label className="dropdown col-lg-6 col-sm-12 ">
+                          <label required className="font-sm color-text-mutted mb-10">Industry Type</label>
+                            <div className="text__center">
+                              <select value={employeedata?.industryType??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,industryType:e.target.value})} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                              <option value defaultValue="" hidden selected>Industry Type</option>
+                              <option value="software-development">Software Development</option>
+                              <option value="web-development">Web Development</option>
+                              <option value="mobile-app-development">Mobile App Development</option>
+                              <option value="data-analytics">Data Analytics</option>
+                              <option value="cloud-computing">Cloud Computing</option>
+                              <option value="cybersecurity">Cybersecurity</option>
+                              <option value="artificial-intelligence">Artificial Intelligence</option>
+                              <option value="machine-learning">Machine Learning</option>
+                              <option value="networking-infrastructure">Networking and Infrastructure</option>
+                              <option value="database-management">Database Management</option>
+                              <option value="IT-consulting">IT Consulting</option>
+                              <option value="IT-support">IT Support and Services</option>
+                              </select>
+                            </div>
+                            <Form.Control.Feedback type="invalid">
+                              Please provide Industry type
+                            </Form.Control.Feedback>
+                          </label>
+                          
+                          <label className="dropdown col-lg-6 col-sm-12  ">
+                          <label className="font-sm color-text-mutted mb-10">Service Provided</label>
+                            <div className="text__center">
+                              <select required value={employeedata?.serviceProdvided??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,serviceProdvided:e.target.value})} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                              <option value hidden defaultValue="" >Service Provided</option>
+                              <option value="software-development">Software Development</option>
+                              <option value="web-development">Web Development</option>
+                              <option value="mobile-app-development">Mobile App Development</option>
+                              <option value="data-analytics">Data Analytics</option>
+                              <option value="cloud-computing">Cloud Computing</option>
+                              <option value="cybersecurity">Cybersecurity</option>
+                              <option value="artificial-intelligence">Artificial Intelligence</option>
+                              <option value="machine-learning">Machine Learning</option>
+                              <option value="networking-infrastructure">Networking and Infrastructure</option>
+                              <option value="database-management">Database Management</option>
+                              <option value="IT-consulting">IT Consulting</option>
+                              <option value="IT-support">IT Support and Services</option>
+                              </select>
+                            </div>
+                            <Form.Control.Feedback type="invalid">
+                              Please provide Service Provided
+                            </Form.Control.Feedback>
+                          </label>
+                          <div className="form-group col-lg-4 mb-3">
+                            <label className="font-sm color-text-mutted mb-10">Age of the company</label>
+                            <input required  className="form-control" type="number"value={employeedata?.ageOfCompany??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,ageOfCompany:e.target.value})} />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide Age of the company
+                            </Form.Control.Feedback>
+                          </div>
+                          <div className="form-group col-lg-4 mb-3">
+                            <label className="font-sm color-text-mutted mb-10">Number Of Employees</label>
+                            <input required className="form-control" type="number" value={employeedata?.noOfemployees??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,noOfemployees:e.target.value})} />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide No of Employees
+                            </Form.Control.Feedback>
+                          </div>
+                          <div className="form-group col-lg-4 mb-3">
+                            <label className="font-sm color-text-mutted mb-10">Number Of Directors</label>
+                            <input required className="form-control" type="number" value={employeedata?.noOfdirectors??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,noOfdirectors:e.target.value})} />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide No of Directors
+                            </Form.Control.Feedback>
+                          </div>
+                          <h6 className="permenent-address mb-3"> Address</h6>
+                          <div className="form-group mb-3">
+                            <label className="font-sm color-text-mutted mb-10">Address Line 1</label>
+                            <input required type="text" className="form-control" placeholder="Address Line 1"   value={employeedata?.address?.[0]?.line1??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,line1:e.target.value}]})} id="pAddressLine1" />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide address
                             </Form.Control.Feedback>
                           </div>
                           <div className="form-group mb-3">
-                            <label className="font-sm color-text-mutted mb-10">
-                              Bio
-                            </label>
-                            <textarea
-                              className="form-control"
-                              rows={4}
-                              value={employeedata?.bio??""}
-                              onChange={(e)=>setemployeedata({...employeedata,bio:e.target.value})}
-                              // defaultValue={
-                              //   "We are AliThemes , a creative and dedicated group of individuals who love web development almost as much as we love our customers. We are passionate team with the mission for achieving the perfection in web design."
-                              // }
-                            />
+                            <label className="font-sm color-text-mutted mb-10">Address Line 2</label>
+                            <input required type="text" className="form-control" placeholder="Address Line 2"  value={employeedata?.address?.[0]?.line2??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,line2:e.target.value}]})} id="pAddressLine2" />
                             <Form.Control.Feedback type="invalid">
-                              Please provide bio
+                              Please provide address 
                             </Form.Control.Feedback>
                           </div>
-                          <div className="form-group col-lg-6 mb-3">
-                            <label className="font-sm color-text-mutted mb-10">
-                              Country
-                            </label>
-                            <input
-                              className="form-control"
-                              type="text"
-                              value={employeedata?.address?.[0]?.country??""??""}
-                              onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,country:e.target.value}]})}
+                          <div className="form-group col-md-6 mb-3">
+                            <label className="font-sm color-text-mutted mb-10">Landmark</label>
+                            <input type="text" className="form-control" placeholder="Landmark" id="pLandmark"  value={employeedata?.address?.[0]?.landmark??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,landmark:e.target.value}]})}/>
+                            <Form.Control.Feedback type="invalid">
+                              Please provide landmark
+                            </Form.Control.Feedback>
+                          </div>
+                          <div className="form-group col-md-6 mb-3 ">
+                            <label className="font-sm color-text-mutted mb-10">Zip Code</label>
+                            <input required type="text" className="form-control" placeholder="Zip Code"  value={employeedata?.address?.[0]?.zipcode??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,zipcode:e.target.value}]})} id="pZipcode" />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide Zipcode
+                            </Form.Control.Feedback>
+                          </div>
+                          <div className="form-group col-md-4  mb-3">
+                            <label className="font-sm color-text-mutted mb-10">City</label>
+                            <input required type="text" className="form-control" placeholder="City"  value={employeedata?.address?.[0]?.city??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,city:e.target.value}]})} id="pCity" />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide city
+                            </Form.Control.Feedback>
+                          </div>
+                          <div className="form-group col-md-4 mb-3">
+                            <label className="font-sm color-text-mutted mb-10">State</label>
+                            <input required type="text" className="form-control" placeholder="State" id="pState" value={employeedata?.address?.[0].state??''} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,state:e.target.value}]})}/>
+                            <Form.Control.Feedback type="invalid">
+                              Please provide state
+                            </Form.Control.Feedback>
+                          </div>
+                          <div className="form-group col-md-4 mb-3 ">
+                            <label className="font-sm color-text-mutted mb-10">Country</label>
+                            <input required type="text" className="form-control" placeholder="country" id="pCountry" value={employeedata?.address?.[0]?.country??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,country:e.target.value}]})}/>
+                            <Form.Control.Feedback type="invalid">
+                              Please provide country
+                            </Form.Control.Feedback>
+                          </div>
+                          <div className="box-button mt-15 ">
+                            <button  type="submit" className="btn btn-apply-big font-md font-bold">Update</button>
+                          </div>
+                        </div>
+                          </Form>
+                      </div>
 
-                            />
-                            <Form.Control.Feedback type="invalid">
-                          Please provide country
-                        </Form.Control.Feedback>
-                          </div>
-                          <div className="form-group col-lg-6 mb-3">
-                            <label className="font-sm color-text-mutted mb-10">
-                              State
-                            </label>
-                            <input
-                              className="form-control"
-                              type="text"
-                              value={employeedata?.address?.address[0].state??''}
-                              onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.state,state:e.target.value}]})}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                          Please provide state
-                        </Form.Control.Feedback>
-                          </div>
+                      {/* form ends................................... */}
+                      {/* <div className="row form-contact">
+                        <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Employeeupdate,setValidated)} >
+                        <div className="col-lg-12 col-md-12 row ">
+                          
+                          
+                         
+                         
+                          
+                         
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">
                               City
@@ -333,7 +439,7 @@ export default function Employerprofile() {
                           </div>
                         </div>
                         </Form>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
