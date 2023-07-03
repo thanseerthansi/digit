@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet'
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import Filestack from '../Commonpages/Filestack';
-import { notifyerror } from '../Commonpages/toast';
+import { notify, notifyerror } from '../Commonpages/toast';
 import { ToastContainer } from 'react-toastify';
 import Axioscall from '../Commonpages/Axioscall';
 
@@ -211,7 +211,11 @@ export default function Employeeregister() {
           datalist.prevCompanies=company
         }
       console.log("datalistbefore",datalist)
-      // let data = await Axioscall("post","employee",)
+      let data = await Axioscall("post","employee",datalist)
+      if(data.status===200){
+        notify("Successfully Saved")
+        
+      }
     } catch (error) {
       console.log(error)
     }

@@ -123,6 +123,7 @@ export default function Signin() {
       console.log("dataafter",data)
         if(data.status===200){
           if(data.data.data.token){
+            window.localStorage.setItem("craig-token",data.data.data.token)
             Decodetoken(data.data.data.token)
           }
       }else{

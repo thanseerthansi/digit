@@ -124,9 +124,9 @@ export default function Employerprofile() {
                       </a>
                     </li>
                     <li>
-                      <Link className="btn btn-border recruitment-icon mb-20" to="/employeelist" >
+                      {/* <Link className="btn btn-border recruitment-icon mb-20" to="/employeelist" >
                         Employees
-                      </Link>
+                      </Link> */}
                     </li>
                   </ul>
                   <div className="border-bottom pt-10 pb-10" />

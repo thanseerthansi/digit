@@ -13,10 +13,10 @@ export default async function Axioscall(method,url,datalist) {
     }
     
     if(method==="get"){
-      console.log("get")
+      // console.log("get")
       data = await axios.get(baseurl,{params:datalist})
     }else {
-      console.log("post body",body)
+      // console.log("post body",body)
       data = await axios(body)
     }
     // console.log("data return",data)

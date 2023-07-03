@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Filestack from "../Commonpages/Filestack";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Axioscall from "../Commonpages/Axioscall";
+import { Form } from "react-bootstrap";
 
 export default function Employerregister() {
   const [companydata,setcompanydata]=useState([]);
   const [certificatedata,setcertificatedata]=useState([]);
   const [addressdata,setaddressdata]=useState([]);
-
+  const [validated,setValidated]=useState(false)
+  useEffect(() => {
+    window.scrollTo(0,0)
+  }, [])
+  
+  
 
   const notify = (msg) => toast.success(msg, {
     position: "top-left",
@@ -93,35 +99,42 @@ export default function Employerregister() {
             <h2 className="mt-10 mb-5 text-brand-1">Complete Profile Today</h2>
             <p className="font-sm text-muted mb-30">Access to all features. No credit card required.</p>
           </div>
-          <form className="login-register text-start mt-20 reg-form row" onSubmit={(e)=>Regstersubmithandler(e)}>
+          <Form  noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Regstersubmithandler,setValidated)} className="login-register text-start mt-20 reg-form row" >
             <div className="form-group mb-3">
-              <input className="form-control" onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata.name??""}  type="text" required name="name" placeholder="Company Name" />
+              <input className="form-control" required onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata.name??""}  type="text"  name="name" placeholder="Company Name" />
+              <Form.Control.Feedback type="invalid">Please provide a Company Name</Form.Control.Feedback>             
             </div>
             <div className="form-group mb-3 col-md-6">
-              <input className="form-control " id="input-2" onChange={(e)=>setcompanydata({...companydata,email:e.target.value})} value={companydata.email??""} type="email" required name="emailaddress" placeholder="Company email" />
+              <input className="form-control " id="input-2" required onChange={(e)=>setcompanydata({...companydata,email:e.target.value})} value={companydata.email??""} type="email"  name="emailaddress" placeholder="Company email" />
+              <Form.Control.Feedback type="invalid">Please provide a Company email</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3 col-md-6">
-              <input className="form-control" id="input-3" onChange={(e)=>setcompanydata({...companydata,phone:e.target.value})} value={companydata.phone??""} type="tel" required name="username" placeholder="Company Phone" />
+              <input className="form-control" id="input-3" req onChange={(e)=>setcompanydata({...companydata,phone:e.target.value})} value={companydata.phone??""} type="tel" required name="username" placeholder="Company Phone" />
+              <Form.Control.Feedback type="invalid">Please provide contact Number</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3 col-md-6">
               <label className="col-sm-12 font-sm color-text-mutted">Incorporation Date*</label> 
               <input className="form-control" id="input-3" onChange={(e)=>setcompanydata({...companydata,incorporationDate:e.target.value})} value={companydata.incorporationDate??""} type="date" required name="username" placeholder="Incorporation Date" />
+              <Form.Control.Feedback type="invalid">Please provide incorporationDate</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3 col-md-6">
               <label className="col-sm-12 font-sm color-text-mutted">Age of the company (Year)*</label>
               <input className="form-control" id="input-3" onChange={(e)=>setcompanydata({...companydata,ageOfCompany:e.target.value})} value={companydata.ageOfCompany??""} type="number" required name="username" placeholder="Age of the company" />
+              <Form.Control.Feedback type="invalid">Please provide Age of Company</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3 col-md-6">
               <label className="col-sm-12 font-sm color-text-mutted">Number Of Employees*</label> 
               <input className="form-control" id="input-3" onChange={(e)=>setcompanydata({...companydata,noOfemployees:e.target.value})} value={companydata.noOfemployees??""} type="number" required name="username" placeholder="Number Of Employees" />
+              <Form.Control.Feedback type="invalid">Please provide Number of Employees</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3 col-md-6">
               <label className="col-sm-12 font-sm color-text-mutted">Number of Directors*</label>
               <input className="form-control" id="input-3" onChange={(e)=>setcompanydata({...companydata,noOfdirectors:e.target.value})} value={companydata.noOfdirectors??""} type="number" required name="username" placeholder="Number of Directors" />
+              <Form.Control.Feedback type="invalid">Please provide Number of Directors</Form.Control.Feedback>
             </div>
             <label className="dropdown col-lg-6 col-sm-12 mt-20">
               <div className="text__center">
-                <select onChange={(e)=>setcompanydata({...companydata,industryType:e.target.value})} value={companydata.industryType??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                <select required onChange={(e)=>setcompanydata({...companydata,industryType:e.target.value})} value={companydata.industryType??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
                   <option value defaultValue="" selected>Industry Type</option>
                   <option value="software-development">Software Development</option>
                   <option value="web-development">Web Development</option>
@@ -138,10 +151,11 @@ export default function Employerregister() {
 
                 </select>
               </div>
+              <Form.Control.Feedback type="invalid">Please Select Industry Type</Form.Control.Feedback>
             </label>
             <label className="dropdown col-lg-6 col-sm-12 mt-20">
               <div className="text__center">
-                <select onChange={(e)=>setcompanydata({...companydata,serviceProdvided:e.target.value})} value={companydata.serviceProdvided??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                <select required onChange={(e)=>setcompanydata({...companydata,serviceProdvided:e.target.value})} value={companydata.serviceProdvided??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
                   <option value defaultValue="" selected> -- Service Provided -- </option>
                   <option value="software-development">Software Development</option>
                   <option value="web-development">Web Development</option>
@@ -157,16 +171,18 @@ export default function Employerregister() {
                   <option value="IT-support">IT Support and Services</option>
                 </select>
               </div>
+              <Form.Control.Feedback type="invalid">Please Select a Service Provided</Form.Control.Feedback>
             </label>
             <label className="dropdown col-lg-12 col-sm-12 mt-15">
               <div className="text__center">
-                <select onChange={(e)=>setcompanydata({...companydata,address_proof_type:e.target.value})} value={companydata.address_proof_type??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                <select onChange={(e)=>setcompanydata({...companydata,address_proof_type:e.target.value})} required value={companydata.address_proof_type??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
                   <option value disabled selected>Government Approved Certificate</option>
                   <option value="Driving Liscence">Driving License</option>
                   <option value="Aadhaar">Aadhar</option>
                   <option value="Passport">Passport</option>
                 </select>
               </div>
+              <Form.Control.Feedback type="invalid">Please Select Certificate type</Form.Control.Feedback>
             </label>
             <div className="form-group col-lg-6 col-sm-12">
               <label className="font-sm color-text-mutted">Certificate Front side*</label> 
@@ -204,34 +220,43 @@ export default function Employerregister() {
 
             <h6 className="permenent-address"> Address</h6>
             <div className="form-group mt-4">
-              <input onChange={(e)=>setaddressdata({...addressdata,line1:e.target.value})} value={addressdata.line1??""} type="text" className="form-control" placeholder="Address Line 1" id="pAddressLine1" />
+              <input onChange={(e)=>setaddressdata({...addressdata,line1:e.target.value})} value={addressdata.line1??""} required type="text" className="form-control" placeholder="Address Line 1" id="pAddressLine1" />
+              <Form.Control.Feedback type="invalid">Please provide Address </Form.Control.Feedback>
             </div>
             <div className="form-group">
               <input onChange={(e)=>setaddressdata({...addressdata,line2:e.target.value})} value={addressdata.line2??""} type="text" className="form-control mt-3" placeholder="Address Line 2" id="pAddressLine2" />
             </div>
             <div className="form-group col-md-6 mt-3">
-              <input  onChange={(e)=>setaddressdata({...addressdata,landmark:e.target.value})} value={addressdata.landmark??""}type="text" className="form-control" placeholder="Landmark" id="pLandmark" />
+              <input  onChange={(e)=>setaddressdata({...addressdata,landmark:e.target.value})} required value={addressdata.landmark??""}type="text" className="form-control" placeholder="Landmark" id="pLandmark" />
+              <Form.Control.Feedback type="invalid">Please provide Landmark</Form.Control.Feedback>           
             </div>
             <div className="form-group col-md-6  mt-3">
               <input  onChange={(e)=>setaddressdata({...addressdata,zipcode:e.target.value})} value={addressdata.zipcode??""}type="text" className="form-control" placeholder="Zip Code" id="pZipcode" />
+              <Form.Control.Feedback type="invalid">Please provide Zipcode</Form.Control.Feedback>
             </div>
             <div className="form-group col-md-4 mt-3">
-              <input onChange={(e)=>setaddressdata({...addressdata,city:e.target.value})} value={addressdata.city??""} type="text" className="form-control" placeholder="City" id="pCity" />
+              <input onChange={(e)=>setaddressdata({...addressdata,city:e.target.value})} required value={addressdata.city??""} type="text" className="form-control" placeholder="City" id="pCity" />
+              <Form.Control.Feedback type="invalid">Please provide City</Form.Control.Feedback>
             </div>
             <div className="form-group col-md-4 mt-3">
-              <input  onChange={(e)=>setaddressdata({...addressdata,state:e.target.value})} value={addressdata.state??""}type="text" className="form-control" placeholder="State" id="pState" />
+              <input  onChange={(e)=>setaddressdata({...addressdata,state:e.target.value})} required value={addressdata.state??""}type="text" className="form-control" placeholder="State" id="pState" />
+              <Form.Control.Feedback type="invalid">Please provide  state</Form.Control.Feedback>
             </div>
             <div className="form-group col-md-4 mt-3">
-              <input onChange={(e)=>setaddressdata({...addressdata,country:e.target.value})} value={addressdata.country??""} type="text" className="form-control" placeholder="country" id="pCountry" />
+              <input onChange={(e)=>setaddressdata({...addressdata,country:e.target.value})} required value={addressdata.country??""} type="text" className="form-control" placeholder="country" id="pCountry" />
+              <Form.Control.Feedback type="invalid">Please provide country</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3 mt-50">
               <input onChange={(e)=>setcompanydata({...companydata,username:e.target.value})} value={companydata.username??""} className="form-control" id="input-3" type="text" required name="username" placeholder="User Name" />
+              <Form.Control.Feedback type="invalid">Please provide a  UserName/email</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3">
               <input onChange={(e)=>setcompanydata({...companydata,password:e.target.value})} value={companydata.password??""} className="form-control" id="input-4" type="password" required name="password" placeholder="password" />
+              <Form.Control.Feedback type="invalid">Please provide a Password</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3">
               <input onChange={(e)=>setcompanydata({...companydata,repassword:e.target.value})} value={companydata.repassword??""} className="form-control mb-3" id="input-5" type="password" required name="re-password" placeholder="re-password" />
+              <Form.Control.Feedback type="invalid">Please provide a password</Form.Control.Feedback>
             </div>
             <div className="login_footer form-group d-flex justify-content-between mb-3">
               <label className="cb-container">
@@ -241,8 +266,8 @@ export default function Employerregister() {
             <div className="form-group">
               <button className="btn btn-brand-1 hover-up w-100" type="submit"  name="login">Submit &amp; Register</button>
             </div>
-            <div className="text-muted text-center mt-3">Already have an account? <a href="employee-login.html">Sign in</a></div>
-          </form>
+            <div className="text-muted text-center mt-3">Already have an account? <Link to="/employerlogin">Sign in</Link></div>
+          </Form>
         </div>
       </div>
     </div>
