@@ -11,8 +11,8 @@ import Filestack from "../Commonpages/Filestack";
 export default function Employerprofile() {
   const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
-  console.log("userdetailin profile",userdetail)
-  console.log("employeedata profile",employeedata)
+  // console.log("userdetailin profile",userdetail)
+  // console.log("employeedata profile",employeedata)
   
   // const navigate = useNavigate();
   useEffect(() => {
