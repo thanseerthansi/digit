@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
@@ -6,10 +6,12 @@ import Filestack from '../Commonpages/Filestack';
 import { notify, notifyerror } from '../Commonpages/toast';
 import { ToastContainer } from 'react-toastify';
 import Axioscall from '../Commonpages/Axioscall';
-
+import { Form } from "react-bootstrap";
+import { Simplecontext } from "../Commonpages/Simplecontext";
 
 const animatedComponents = makeAnimated();
 export default function Employeeregister() {
+  const {Check_Validation}=useContext(Simplecontext)
   const [selectedskills,setselectedskills]=useState('')
   const [employeedata,setemployeedata]=useState([])
   const [carddata,setcarddata]=useState([])
@@ -31,6 +33,8 @@ export default function Employeeregister() {
   const [precompanyarray,setprecompanyarray]=useState([])
   const [companydata,setcompanydata]=useState({})
   const [companyarray,setcompanyarray]=useState([])
+  const [validated,setValidated]=useState(false)
+  
 
   console.log("valuedata",employeedata)
   // console.log("carddata",carddata)
@@ -235,7 +239,7 @@ export default function Employeeregister() {
           <div className="text-center">
             <p className="font-sm text-brand-2">Register </p>
             <h2 className="mt-10 mb-5 text-brand-1">Complete Profile Today</h2>
-            <p className="font-sm text-muted mb-30">Access to all features. No credit card required.</p>
+            {/* <p className="font-sm text-muted mb-30">Access to all features. No credit card required.</p> */}
             <div className="divider-text-center"><span>Register Now</span></div>
           </div>
           {/* multistep */}
@@ -243,7 +247,7 @@ export default function Employeeregister() {
             <div className="row justify-content-center">
               <div className="col-11 col-sm-12 col-md-12 col-lg-9 col-xl-9 text-center p-0 mt-3 mb-2">
                 <div className="card3 px-0 pt-4 pb-0 mt-3 mb-3">
-                  <form id="msform"   className="reg-form contact10">
+                  <Form  noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Regstersubmithandler,setValidated)}   className="reg-form contact10 " >
                     {/* progressbar */}
                     <ul id="progressbar">
                       <li className="active" id="account"><strong>Personal</strong></li>
@@ -941,7 +945,7 @@ export default function Employeeregister() {
                       </div>
                       <input type="button" name="next" className="pr-button next action-button"  onClick={(e)=>registerEmployee(e)}  defaultValue="Submit" /> 
                       <input type="button" name="previous" className="pr-button previous action-button-previous" defaultValue="Previous" />
-                      <button onClick={(e)=>registerEmployee(e)} > click</button>
+                      {/* <button onClick={(e)=>registerEmployee(e)} > click</button> */}
                     </fieldset>
                     <fieldset>
                       <div className="form-card">
@@ -980,7 +984,7 @@ export default function Employeeregister() {
                         </div>
                       </div>
                     </fieldset>
-                  </form>
+                  </Form>
                 </div>
               </div>
             </div>

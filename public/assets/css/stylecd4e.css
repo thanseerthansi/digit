@@ -366,7 +366,8 @@ input[type=number]:focus,
   background-color: #ffffff;
   padding: 11px 15px 13px 15px;
   width: 100%;
-  color: #A0ABB8;
+  /* color: #A0ABB8; */
+  color: #656769;
 }
 .form-control::-moz-placeholder {
   color: #A0ABB8;
@@ -9079,7 +9080,7 @@ input[type=file]::file-selector-button:hover {
 }
 
 .nav-tavs-profile {
-  padding-right: 30px;
+  padding-right: 10px;
 }
 .nav-tavs-profile ul li {
   width: 100%;
@@ -12196,3 +12197,31 @@ margin-left: 300px!important;
   padding: 12px !important;
   border-radius: 6px;
 }
+.spinner-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(139 139 139 / 70%);;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.spinner {
+  border: 8px solid rgb(57 55 55 / 70%);
+  border-top-color: #1FAB89;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s ease-in-out infinite;
+}
+  
+ 
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }

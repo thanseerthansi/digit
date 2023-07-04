@@ -43,7 +43,7 @@ import { useState } from "react";
           accept: ["image/*"],
           transformations: {
             crop: {
-              aspectRatio: ratio==="landscape"?3/2:"banner"?14/4:1/1,
+              aspectRatio: ratio==="landscape"?3/2:ratio==="banner"?14/4:1/1,
               force: true,
             },
           },

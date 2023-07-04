@@ -12,6 +12,7 @@ export default function Simplecontextprovider({children}){
     const [userdetail,setuserdetail]=useState('')
     const [employeedata,setemployeedata]=useState('')
     // console.log("window.localStorage.getItem('craig-token')",window.localStorage.getItem('craig-token'))
+    console.log("userdetails",userdetail)
     useEffect(() => {
         path()
         getUser()

@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState ,useEffect, useContext} from "react";
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 import Filestack from "../Commonpages/Filestack";
@@ -6,17 +6,22 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Axioscall from "../Commonpages/Axioscall";
 import { Form } from "react-bootstrap";
+import { Simplecontext } from "../Commonpages/Simplecontext";
+import axios from "axios";
 
 export default function Employerregister() {
+  const {Check_Validation}=useContext(Simplecontext)
   const [companydata,setcompanydata]=useState([]);
   const [certificatedata,setcertificatedata]=useState([]);
   const [addressdata,setaddressdata]=useState([]);
   const [validated,setValidated]=useState(false)
+  const [load,setload]=useState(false)
+  console.log("certificate data",certificatedata)
   useEffect(() => {
     window.scrollTo(0,0)
   }, [])
   
-  
+  let regex = new RegExp(/(0|91)?[6-9][0-9]{9}/);
 
   const notify = (msg) => toast.success(msg, {
     position: "top-left",
@@ -40,17 +45,18 @@ export default function Employerregister() {
   }
 
 
-  const ImageFilestachHandler = async (ratio,value)=> {
-    let data =await Filestack(ratio)
-    if (data){
-      setcompanydata({...companydata, [value] :data})
-    }
-  }
+  // const ImageFilestachHandler = async (ratio,value)=> {
+  //   let data =await Filestack(ratio)
+  //   if (data){
+  //     setcompanydata({...companydata, [value] :data})
+  //   }
+  // }
   
   
-  const Regstersubmithandler= async (e)=>{
-    e.preventDefault();
+  const Regstersubmithandler= async ()=>{
+    // e.preventDefault();
     console.log("ok")
+    
     try {
       let datalist = {...companydata}
       if (Object.keys(addressdata).length){
@@ -83,11 +89,22 @@ export default function Employerregister() {
       console.log("error",error)
     }
   }
-
+  const zipcodeHandler=async(e,code)=>{
+    setload(true)
+    let data =await axios.get(`https://api.postalpincode.in/pincode/${code}`)
+    console.log("zipcode data",data.data[0].Status)
+    if(data.data[0].Status==='Error'){
+      e.target.classList.add('is-invalid');
+    }else{
+      e.target.classList.remove('is-invalid');
+    }
+    setload(false)
+  }
  
   return (
     <>
     <main className="main">
+    
   <div className="carousel-inner">
   </div>
   <section className="pt-20 login-register">
@@ -97,20 +114,26 @@ export default function Employerregister() {
           <div className="text-center">
             <p className="font-sm text-brand-2">Register</p>
             <h2 className="mt-10 mb-5 text-brand-1">Complete Profile Today</h2>
-            <p className="font-sm text-muted mb-30">Access to all features. No credit card required.</p>
+            {/* <p className="font-sm text-muted mb-30">Access to all features. No credit card required.</p> */}
           </div>
           <Form  noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Regstersubmithandler,setValidated)} className="login-register text-start mt-20 reg-form row" >
             <div className="form-group mb-3">
               <input className="form-control" required onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata.name??""}  type="text"  name="name" placeholder="Company Name" />
               <Form.Control.Feedback type="invalid">Please provide a Company Name</Form.Control.Feedback>             
             </div>
+            {load? 
+            <div className="spinner-container">
+                        <div className="spinner " />
+                      </div>:null}
+                     
+            <div class="loader"></div>
             <div className="form-group mb-3 col-md-6">
               <input className="form-control " id="input-2" required onChange={(e)=>setcompanydata({...companydata,email:e.target.value})} value={companydata.email??""} type="email"  name="emailaddress" placeholder="Company email" />
               <Form.Control.Feedback type="invalid">Please provide a Company email</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3 col-md-6">
-              <input className="form-control" id="input-3" req onChange={(e)=>setcompanydata({...companydata,phone:e.target.value})} value={companydata.phone??""} type="tel" required name="username" placeholder="Company Phone" />
-              <Form.Control.Feedback type="invalid">Please provide contact Number</Form.Control.Feedback>
+              <input className={`form-control  ${companydata.phone?regex.test(companydata.phone)?'': 'is-invalid' :""}`} id="input-3" req onChange={(e)=>setcompanydata({...companydata,phone:e.target.value})} value={companydata.phone??""} type="tel" required name="username" placeholder="Company Phone" />
+              <Form.Control.Feedback type="invalid">Please provide valid Phone Number</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3 col-md-6">
               <label className="col-sm-12 font-sm color-text-mutted">Incorporation Date*</label> 
@@ -134,8 +157,8 @@ export default function Employerregister() {
             </div>
             <label className="dropdown col-lg-6 col-sm-12 mt-20">
               <div className="text__center">
-                <select required onChange={(e)=>setcompanydata({...companydata,industryType:e.target.value})} value={companydata.industryType??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                  <option value defaultValue="" selected>Industry Type</option>
+                <select required onChange={(e)=>setcompanydata({...companydata,industryType:e.target.value})} value={companydata.industryType??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                  <option value="" defaultValue="" disabled>Industry Type</option>
                   <option value="software-development">Software Development</option>
                   <option value="web-development">Web Development</option>
                   <option value="mobile-app-development">Mobile App Development</option>
@@ -150,13 +173,14 @@ export default function Employerregister() {
                   <option value="IT-support">IT Support and Services</option>
 
                 </select>
+                <Form.Control.Feedback type="invalid">Please Select Industry Type</Form.Control.Feedback>
               </div>
-              <Form.Control.Feedback type="invalid">Please Select Industry Type</Form.Control.Feedback>
+              
             </label>
             <label className="dropdown col-lg-6 col-sm-12 mt-20">
               <div className="text__center">
-                <select required onChange={(e)=>setcompanydata({...companydata,serviceProdvided:e.target.value})} value={companydata.serviceProdvided??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                  <option value defaultValue="" selected> -- Service Provided -- </option>
+                <select required onChange={(e)=>setcompanydata({...companydata,serviceProdvided:e.target.value})} value={companydata.serviceProdvided??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                  <option defaultValue="" value='' disabled> -- Service Provided -- </option>
                   <option value="software-development">Software Development</option>
                   <option value="web-development">Web Development</option>
                   <option value="mobile-app-development">Mobile App Development</option>
@@ -170,19 +194,20 @@ export default function Employerregister() {
                   <option value="IT-consulting">IT Consulting</option>
                   <option value="IT-support">IT Support and Services</option>
                 </select>
+                <Form.Control.Feedback type="invalid">Please Select a Service Provided</Form.Control.Feedback>
               </div>
-              <Form.Control.Feedback type="invalid">Please Select a Service Provided</Form.Control.Feedback>
+              
             </label>
             <label className="dropdown col-lg-12 col-sm-12 mt-15">
               <div className="text__center">
-                <select onChange={(e)=>setcompanydata({...companydata,address_proof_type:e.target.value})} required value={companydata.address_proof_type??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                  <option value disabled selected>Government Approved Certificate</option>
+                <select required onChange={(e)=>setcompanydata({...companydata,address_proof_type:e.target.value})}  value={companydata.address_proof_type??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                  <option value="" defaultValue="" disabled>Government Approved Certificate</option>
                   <option value="Driving Liscence">Driving License</option>
                   <option value="Aadhaar">Aadhar</option>
                   <option value="Passport">Passport</option>
                 </select>
-              </div>
               <Form.Control.Feedback type="invalid">Please Select Certificate type</Form.Control.Feedback>
+              </div>
             </label>
             <div className="form-group col-lg-6 col-sm-12">
               <label className="font-sm color-text-mutted">Certificate Front side*</label> 
@@ -196,7 +221,7 @@ export default function Employerregister() {
               <label className="font-sm color-text-mutted">Certificate Back side*</label> 
               <div className='imageselectorborder d-flex '>
               <button onClick={()=>Filestackhandler("landscape",setcertificatedata,certificatedata,'back_url')}  type='button' className='imageselector'> Choose Image</button>
-                <p style={{overflow:"hidden"}}>&nbsp;{certificatedata.backUrl??<span>No file chosen</span>}</p>
+                <p style={{overflow:"hidden"}}>&nbsp;{certificatedata.back_url??<span>No file chosen</span>}</p>
               </div>
               {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'backurl')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
             </div>
@@ -204,16 +229,16 @@ export default function Employerregister() {
             <div className="form-group col-lg-6 col-sm-12">
               <label className="font-sm color-text-mutted">Profile Image*</label> 
               <div className='imageselectorborder d-flex '>
-                <button onClick={()=>ImageFilestachHandler("square",'profileImage')}  type='button' className='imageselector'> Choose Image</button>
-                <p style={{overflow:"hidden"}}>&nbsp;{certificatedata.profileImage??<span>No file chosen</span>}</p>
+                <button onClick={()=>Filestackhandler("square",setcompanydata,companydata,'profileImage')}  type='button' className='imageselector'> Choose Image</button>
+                <p style={{overflow:"hidden"}}>&nbsp;{companydata.profileImage??<span>No file chosen</span>}</p>
               </div>
             {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'front_url')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
             </div>
             <div className="form-group col-lg-6 col-sm-12">
               <label className="font-sm color-text-mutted">Banner Image</label> 
               <div className='imageselectorborder d-flex '>
-              <button onClick={()=>ImageFilestachHandler("landscape",'bannerImage')}  type='button' className='imageselector'> Choose Image</button>
-                <p style={{overflow:"hidden"}}>&nbsp;{certificatedata.bannerImage??<span>No file chosen</span>}</p>
+              <button onClick={()=>Filestackhandler("banner",setcompanydata,companydata,'bannerImage')}  type='button' className='imageselector'> Choose Image</button>
+                <p style={{overflow:"hidden"}}>&nbsp;{companydata.bannerImage??<span>No file chosen</span>}</p>
               </div>
               {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'backurl')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
             </div>
@@ -231,8 +256,8 @@ export default function Employerregister() {
               <Form.Control.Feedback type="invalid">Please provide Landmark</Form.Control.Feedback>           
             </div>
             <div className="form-group col-md-6  mt-3">
-              <input  onChange={(e)=>setaddressdata({...addressdata,zipcode:e.target.value})} value={addressdata.zipcode??""}type="text" className="form-control" placeholder="Zip Code" id="pZipcode" />
-              <Form.Control.Feedback type="invalid">Please provide Zipcode</Form.Control.Feedback>
+              <input onBlur={(e)=>zipcodeHandler(e,addressdata.zipcode)} required onChange={(e)=>setaddressdata({...addressdata,zipcode:e.target.value})} value={addressdata.zipcode??""}type="number" className="form-control" placeholder="Zip Code" id="pZipcode" />
+              <Form.Control.Feedback type="invalid">Please provide Valid Zipcode</Form.Control.Feedback>
             </div>
             <div className="form-group col-md-4 mt-3">
               <input onChange={(e)=>setaddressdata({...addressdata,city:e.target.value})} required value={addressdata.city??""} type="text" className="form-control" placeholder="City" id="pCity" />
@@ -255,12 +280,13 @@ export default function Employerregister() {
               <Form.Control.Feedback type="invalid">Please provide a Password</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3">
-              <input onChange={(e)=>setcompanydata({...companydata,repassword:e.target.value})} value={companydata.repassword??""} className="form-control mb-3" id="input-5" type="password" required name="re-password" placeholder="re-password" />
-              <Form.Control.Feedback type="invalid">Please provide a password</Form.Control.Feedback>
+              <input onChange={(e)=>setcompanydata({...companydata,repassword:e.target.value})} value={companydata.repassword??""} className={`form-control mb-3  ${companydata.password?companydata.password===companydata.repassword ?'': 'is-invalid' :""}`} id="input-5" type="password" required name="re-password" placeholder="re-password" />
+              <Form.Control.Feedback type="invalid">Passwords do not match</Form.Control.Feedback>
             </div>
             <div className="login_footer form-group d-flex justify-content-between mb-3">
               <label className="cb-container">
-                <input type="checkbox" /><span className="text-small">Agree our terms and policy</span><span className="checkmark" />
+                <input required type="checkbox" /><span className="text-small">Agree our terms and policy</span><span className="checkmark" />
+                <Form.Control.Feedback type="invalid">Please Tick Terms and policy</Form.Control.Feedback>
               </label>
             </div>
             <div className="form-group">
