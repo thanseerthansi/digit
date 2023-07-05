@@ -202,9 +202,9 @@ export default function Employerregister() {
               <div className="text__center">
                 <select required onChange={(e)=>setcompanydata({...companydata,address_proof_type:e.target.value})}  value={companydata.address_proof_type??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                   <option value="" defaultValue="" disabled>Government Approved Certificate</option>
-                  <option value="Driving Liscence">Driving License</option>
-                  <option value="Aadhaar">Aadhar</option>
-                  <option value="Passport">Passport</option>
+                  <option value="MOA">MOA</option>
+                  <option value="Incorporation Certificate">Incorporation Certificate</option>
+                  <option value="Panchayath Certificate">Panchayath Certificate</option>
                 </select>
               <Form.Control.Feedback type="invalid">Please Select Certificate type</Form.Control.Feedback>
               </div>

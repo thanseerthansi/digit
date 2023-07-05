@@ -12225,3 +12225,27 @@ margin-left: 300px!important;
       transform: rotate(360deg);
     }
   }
+  .action-button{
+    width: 100px;
+    background: #1FAB89;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 10px;
+    margin: 10px 0px 10px 5px;
+    float: right;
+  }
+  .action-button-prev{
+    width: 100px;
+    background: #616161;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px 10px 0px;
+    float: right;
+  }

@@ -64,7 +64,7 @@ export default function Header() {
         <div className="container">
           <div className="main-header">
             <div className="header-left">
-            <div className="header-logo"><Link className="d-flex" href="index.html"><h3 className="header-text">CRAIG</h3></Link></div>
+            <div className="header-logo"><Link className="d-flex" to="index.html"><h3 className="header-text">CRAIG</h3></Link></div>
               {/* <div className="header-logo">
                 <Link className="d-flex" to="/">
                   <img
@@ -121,12 +121,12 @@ export default function Header() {
               {pathvalue === "/Signin" || pathvalue === "/employerlogin" ? (
                 pathvalue === "/Signin" ? (
                   <div className="block-signin" style={{width:"180px"}}>
-                    <a
+                    <Link
                       className="btn btn-default btn-shadow ml-40 hover-up"
-                      href="/employeeregister"
+                      to="/employeeregister"
                     >
                       Register
-                    </a>
+                    </Link>
                   </div>
                 ) : (
                   <div className="block-signin">
