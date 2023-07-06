@@ -11,11 +11,11 @@ import { Simplecontext } from "../Commonpages/Simplecontext";
 
 const animatedComponents = makeAnimated();
 export default function Employeeregister() {
-  const {Check_Validation}=useContext(Simplecontext)
+  const {Check_Validation,Decodetoken}=useContext(Simplecontext)
   const [selectedskills,setselectedskills]=useState('')
   const [employeedata,setemployeedata]=useState([])
   const [employeedata2,setemployeedata2]=useState([])
-  // const [employeedata3,setemployeedata3]=useState([])
+  const [employeedata3,setemployeedata3]=useState([])
   const [carddata,setcarddata]=useState([])
   const [addressproof,setaddressproof]=useState({})
   const [addressdata,setaddressdata]=useState([])
@@ -36,31 +36,55 @@ export default function Employeeregister() {
   const [companydata,setcompanydata]=useState({})
   const [companyarray,setcompanyarray]=useState([])
   const [validated,setValidated]=useState(false)
+  const [validated2,setValidated2]=useState(false)
+  const [validated3,setValidated3]=useState(false)
   const [wizard,setWizard]=useState(1)
   const [load,setload]=useState(false)
+  const [companyvalues,setcompanyvalues]=useState([])
 
-  console.log("valuedata",employeedata)
+  // console.log("valuedata",employeedata)
   // console.log("carddata",carddata)
   // console.log("siblingdata",siblingdata)
-  console.log("siblingarray",siblingsarray)
+  // console.log("siblingarray",siblingsarray)
   // console.log("childdata",childdata)
   // console.log("childsarray",childsarray)
   // console.log("addressdata",addressdata)
   // console.log("currentaddressdata",currentaddressdata)
   // console.log("masterDegreedata",masterDegreedata)
   // console.log("selectedskills",selectedskills)
-  console.log("companydaprecompanydatata",precompanydata)
-  console.log("companydata",companydata)
-  console.log("companyarray",companyarray)
+  // console.log("companydaprecompanydatata",precompanydata)
+  // console.log("companydata",companydata)
+  // console.log("companyarray",companyarray)
 
     useEffect(() => {     
       window.scrollTo(0,0)
+      getCompanydata()
+      tokenhandler()
     }, [])
     
-    const tophandler=()=>{
-        window.scrollTo(0,200)
+    const tophandler=(f,t)=>{
+        window.scrollTo(f,t)
     }
-  
+  const getCompanydata=async()=>{
+    try {
+      let data=await Axioscall('get',"company")
+      if (data.status===200){
+        // console.log("datalogcompany",data.data.data)
+        setcompanyvalues(data.data.data.docs)
+
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const tokenhandler=()=>{
+    let token = window.localStorage.getItem('craig-token')??""
+    if(token){
+      let data  = Decodetoken(token)
+      console.log("dataid",data)
+      return data
+    }
+  }
   const colourOptions = [
     { value: 'Reactjs', label: 'Reactjs' },
     { value: 'Node.js', label: 'Node.js' },
@@ -85,16 +109,16 @@ export default function Employeeregister() {
     }),
   };
   const Filestackhandler=async(ratio,setvalue,value,keypair)=>{
-    console.log("keypair",keypair)
+    // console.log("keypair",keypair)
     let data =await Filestack(ratio)
-    console.log("datafilestack",data)
+    // console.log("datafilestack",data)
     if (data){
       setvalue({...value,[keypair]:data})
     }
     
   }
   const pushhandler=(arraydata,setarraydata,listdata,setlistdata)=>{
-    console.log("data",arraydata)
+    // console.log("data",arraydata)
     if (Object.keys(arraydata).length){
       setlistdata([...listdata,arraydata])
       setarraydata({})
@@ -119,15 +143,39 @@ export default function Employeeregister() {
   const registerEmployee=async()=>{
     // e.preventDefault();
     try {
-      setWizard(2)
+      setload(true)
       let datalist ={...employeedata}
+      // user id push to datalist.at...........
+      let userid = tokenhandler()
+      if (userid){
+        // console.log("userid",userid)
+        datalist.user=userid
+      }
+      if (!datalist.profilePhoto){
+        notifyerror("please Provide Profile Photo")
+        setload(false)
+        return
+      }
       //......................carddata push to datalist
       if(Object.keys(carddata).length){
-        datalist.idcard=[{...carddata}]
+        if(carddata.frontUrl && carddata.backUrl){
+          datalist.idcard=[{...carddata}]
+        }else{
+          notifyerror("Please provide IDCard Images")
+          setload(false)
+          return
+        }
+        
       }
       //......................addresproof push to datalist
       if(Object.keys(addressproof).length){
-        datalist.addressproof=[{...addressproof}]
+        if(carddata.frontUrl && carddata.backUrl){
+          datalist.addressproof=[{...addressproof}]
+        }else{
+          notifyerror("Please provide address proof Images")
+          setload(false)
+          return
+        }   
       }
       //......................lngread nad lngwrite push as list
       if(datalist.lngRead){
@@ -161,20 +209,31 @@ export default function Employeeregister() {
      
       
       console.log("datalistbefore",datalist)
-      // let data = await Axioscall("post","employee",datalist)
-      // if(data.status===200){
-      //   notify("Successfully Saved")
+      let data = await Axioscall("post","employee",datalist)
+      if(data.status===200){
+        // notify("Successfully Saved")
+        setWizard(2)
         
-      // }
+        tophandler(0,200)
+      }
+      setload(false)
     } catch (error) {
       console.log(error)
+      setload(false)
     }
   }
   
-  const RegsterSecondform=()=>{
+  const RegsterSecondform=async()=>{
     try {
-      setWizard(3)
+      
+      setload(true)
       let datalist ={...employeedata2}
+      // user id push to datalist.at...........
+      let userid = tokenhandler()
+      if (userid){
+        // console.log("userid",userid)
+        datalist.user=userid
+      }
       if(Object.keys(addressdata).length){
         datalist.permanantAddress=[{...addressdata}]
       }
@@ -182,13 +241,26 @@ export default function Employeeregister() {
         datalist.currentAddress=[{...currentaddressdata}]
       }
       console.log("form2",datalist)
+      let data = await Axioscall("post","employee/address",datalist)
+      if(data.status===200){
+        setWizard(3)
+        setload(false)
+        tophandler(0,200)
+      }
     } catch (error) {
-      
+      setload(false)
     }
   }
-  const RegsterThirdform=()=>{
+  const RegsterThirdform=async()=>{
     try {
-      setWizard(4)
+      
+      setload(true)
+      // user id push to datalist.at...........
+      let userid = tokenhandler()
+      if (userid){
+        // console.log("userid",userid)
+        datalist.user=userid
+      }
       let datalist ={...employeedata3}
       if(Object.keys(tenthdata).length){
         datalist.tenth=[{...tenthdata}]
@@ -246,8 +318,15 @@ export default function Employeeregister() {
         }
 
         console.log("data",datalist)
+        let data = await Axioscall("post","employee/educationandcareer",datalist)
+        if(data.status===200){
+          setWizard(4)      
+          tophandler(0,200)
+        }
+        setload(false)
     } catch (error) {
-      
+      console.log(error)
+      setload(false)
     }
   }
   const zipcodeHandler=async(e,code)=>{
@@ -269,9 +348,9 @@ export default function Employeeregister() {
   <div className="carousel-inner">
   </div>
   {load? 
-            <div className="spinner-container">
-                        <div className="spinner " />
-                      </div>:null}
+  <div className="spinner-container">
+    <div className="spinner" />
+  </div>:null}
   <section className="pt-50 login-register">
     <div> 
       <div className=" login-register-cover">
@@ -299,6 +378,7 @@ export default function Employeeregister() {
                       <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin={0} aria-valuemax={100}>
                       </div>
                     </div> <br /> {/* fieldsets */}
+                    {wizard===1?
                     <Form  noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,registerEmployee,setValidated)}  className="reg-form contact10 ">
                     <fieldset>
                       <div className="form-card row">
@@ -324,7 +404,7 @@ export default function Employeeregister() {
                         </div>
                         
                         <div className="form-group mt-4 col-md-4 ">
-                          <input className="dob" required onChange={(e)=>setemployeedata({...employeedata,dob:e.target.value})} value={employeedata.dob??""} placeholder="Date of Birth" type="date" onfocus="(this.type = 'date')" id="date" />
+                        <input className="dob" required onChange={(e)=>setemployeedata({...employeedata,dob:e.target.value})} value={employeedata.dob??""} placeholder="Date of Birth" type="date" onfocus="(this.type = 'date')" id="date" />
                           <Form.Control.Feedback type="invalid">Please provide dob</Form.Control.Feedback>
                         </div>
                         <div className="form-group col-md-4">
@@ -474,21 +554,23 @@ export default function Employeeregister() {
                         <div className="form-group col-lg-3">                         
                           <div className="text__center">
                             <select onChange={(e)=>setsiblingdata({...siblingdata,type:e.target.value})} value={siblingdata.type??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                              <option hidden  >Select</option>
+                              <option value="" defaultValue=""   >Select</option>
                               <option value="brother">Brother</option>
                               <option value="sister">Sister</option>
                             </select>
                           </div>
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" onChange={(e)=>setsiblingdata({...siblingdata,name:e.target.value})} value={siblingdata.name??""} className="form-control" placeholder="Name" id=" " />
-                    
+                          <input type="text" required={siblingdata.type} onChange={(e)=>setsiblingdata({...siblingdata,name:e.target.value})} value={siblingdata.name??""} className="form-control" placeholder="Name" id=" " />
+                          <Form.Control.Feedback type="invalid">Please provide Sibling name </Form.Control.Feedback>
                         </div>
                         <div className="form-group col-lg-3">
-                          <input onChange={(e)=>setsiblingdata({...siblingdata,qualification:e.target.value})} value={siblingdata.qualification??""} type="text" className="form-control" placeholder="Qualification" id=" " />
+                          <input required={siblingdata.type} onChange={(e)=>setsiblingdata({...siblingdata,qualification:e.target.value})} value={siblingdata.qualification??""} type="text" className="form-control" placeholder="Qualification" id=" " />
+                          <Form.Control.Feedback type="invalid">Please provide Sibling Qualification </Form.Control.Feedback>
                         </div>
                         <div className="form-group col-lg-3">
-                          <input onChange={(e)=>setsiblingdata({...siblingdata,occupation:e.target.value})} value={siblingdata.occupation??""} type="text" className="form-control" placeholder="Occupation" id=" " />
+                          <input required={siblingdata.type} onChange={(e)=>setsiblingdata({...siblingdata,occupation:e.target.value})} value={siblingdata.occupation??""} type="text" className="form-control" placeholder="Occupation" id=" " />
+                          <Form.Control.Feedback type="invalid">Please provide Sibling Occupation </Form.Control.Feedback>
                         </div>
                         <div className="line-item-property__actions col-12 row mt-3 mb-3">
                           <button onClick={()=>pushhandler(siblingdata,setsiblingdata,siblingsarray,setsiblingsarray)} className="col-lg-2 button-form1" type="button" id="btnAdd" value="+">Add</button>
@@ -498,20 +580,23 @@ export default function Employeeregister() {
                         <div className="form-group col-lg-3">
                           <div className="text__center">
                             <select onChange={(e)=>setspousedata({...spousedata,type:e.target.value})} value={spousedata.type??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                              <option value="" hidden  >Select</option>
+                              <option value="" defaultValue=""  >Select</option>
                               <option value="wife">Wife</option>
                               <option value="husband">Husband</option>
                             </select>
                           </div>
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text"  onChange={(e)=>setspousedata({...spousedata,name:e.target.value})} value={spousedata.name??""} className="form-control" placeholder="Name" id=" " />
+                          <input type="text" required={spousedata.type}  onChange={(e)=>setspousedata({...spousedata,name:e.target.value})} value={spousedata.name??""} className="form-control" placeholder="Name" id=" " />
+                          <Form.Control.Feedback type="invalid">Please provide Spouse name </Form.Control.Feedback>
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" onChange={(e)=>setspousedata({...spousedata,qualification:e.target.value})} value={spousedata.qualification??""} className="form-control" placeholder="Qualification" id=" " />
+                          <input type="text" required={spousedata.type} onChange={(e)=>setspousedata({...spousedata,qualification:e.target.value})} value={spousedata.qualification??""} className="form-control" placeholder="Qualification" id=" " />
+                          <Form.Control.Feedback type="invalid">Please provide Spouse Qualification </Form.Control.Feedback>
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text"  onChange={(e)=>setspousedata({...spousedata,occupation:e.target.value})} value={spousedata.occupation??""} className="form-control" placeholder="Occupation" id=" " />
+                          <input type="text" required={spousedata.type}  onChange={(e)=>setspousedata({...spousedata,occupation:e.target.value})} value={spousedata.occupation??""} className="form-control" placeholder="Occupation" id=" " />
+                          <Form.Control.Feedback type="invalid">Please provide Spouse Occupation </Form.Control.Feedback>
                         </div>
                         <h6 className="permenent-address mb-3 col-12 form-t">Child’s details</h6>
                         {childsarray.length?<>
@@ -538,20 +623,23 @@ export default function Employeeregister() {
                         <div className="form-group col-lg-3">
                           <div className="text__center">
                             <select  onChange={(e)=>setchilddata({...childdata,type:e.target.value})} value={childdata.type??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                              <option value="" hidden  >Select</option>
+                              <option value="" defaultValue=""  >Select</option>
                               <option value="daughter">Daughter</option>
                               <option value="son">Son</option>
                             </select>
                           </div>
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" onChange={(e)=>setchilddata({...childdata,name:e.target.value})} value={childdata.name??""} className="form-control" placeholder="Name" id=" " />
+                          <input type="text" required={childdata.type} onChange={(e)=>setchilddata({...childdata,name:e.target.value})} value={childdata.name??""} className="form-control" placeholder="Name" id=" " />
+                          <Form.Control.Feedback type="invalid">Please provide Child Name </Form.Control.Feedback>
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" onChange={(e)=>setchilddata({...childdata,qualification:e.target.value})} value={childdata.qualification??""} className="form-control" placeholder="Qualification" id=" " />
+                          <input type="text" required={childdata.type} onChange={(e)=>setchilddata({...childdata,qualification:e.target.value})} value={childdata.qualification??""} className="form-control" placeholder="Qualification" id=" " />
+                          <Form.Control.Feedback type="invalid">Please provide Child Qualification </Form.Control.Feedback>
                         </div>
                         <div className="form-group col-lg-3">
-                          <input type="text" onChange={(e)=>setchilddata({...childdata,occupation:e.target.value})} value={childdata.occupation??""} className="form-control" placeholder="Occupation" id=" " />
+                          <input type="text" required={childdata.type} onChange={(e)=>setchilddata({...childdata,occupation:e.target.value})} value={childdata.occupation??""} className="form-control" placeholder="Occupation" id=" " />
+                          <Form.Control.Feedback type="invalid">Please provide Child Occupation </Form.Control.Feedback>
                         </div>
                         <div className="line-item-property__actions col-12 row mt-3 mb-3">
                           <button onClick={()=>pushhandler(childdata,setchilddata,childsarray,setchildsarray)}  className="col-lg-2 button-form1" type="button" id="btnAdd" value="+">Add</button>
@@ -560,11 +648,13 @@ export default function Employeeregister() {
                        
                       </div>
                       
-                       <input type="submit" name="next"  className="pr-button  action-button" defaultValue="Next" />
+                       <input type="submit" name="next" onClick={()=>tophandler(0,500)} className="pr-button  action-button" defaultValue="Next" />
                       
                     </fieldset>
                     </Form>
-                    <Form  noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,RegsterSecondform,setValidated)}  className="reg-form contact10 ">
+                    :null}
+                    {wizard===2?
+                    <Form  noValidate validated={validated2} onSubmit={(e)=>Check_Validation(e,RegsterSecondform,setValidated2)}  className="reg-form contact10 ">
                     <fieldset>
                       <div className="form-card">
                         <div className="row">
@@ -591,13 +681,16 @@ export default function Employeeregister() {
                             <Form.Control.Feedback type="invalid">Please provide valid pincode </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-4 mt-20">
-                            <input type="text"  onChange={(e)=>setaddressdata({...addressdata,city:e.target.value})} value={addressdata.city??""} className="form-control" placeholder="City" id="pCity" />
+                            <input type="text" required  onChange={(e)=>setaddressdata({...addressdata,city:e.target.value})} value={addressdata.city??""} className="form-control" placeholder="City" id="pCity" />
+                            <Form.Control.Feedback type="invalid">Please provide City </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-4 mt-20">
-                            <input type="text"  onChange={(e)=>setaddressdata({...addressdata,state:e.target.value})} value={addressdata.state??""} className="form-control" placeholder="State" id="pState" />
+                            <input type="text"  required onChange={(e)=>setaddressdata({...addressdata,state:e.target.value})} value={addressdata.state??""} className="form-control" placeholder="State" id="pState" />
+                            <Form.Control.Feedback type="invalid">Please provide State </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-4 mt-20">
-                            <input type="text"  onChange={(e)=>setaddressdata({...addressdata,country:e.target.value})} value={addressdata.country??""} className="form-control" placeholder="country" id="pCountry" />
+                            <input type="text" required  onChange={(e)=>setaddressdata({...addressdata,country:e.target.value})} value={addressdata.country??""} className="form-control" placeholder="country" id="pCountry" />
+                            <Form.Control.Feedback type="invalid">Please provide Country </Form.Control.Feedback>
                           </div>
                           <h6 className='mt-20'>Current Address</h6>
                           <div className="form-group col-lg-1 col-md-1 col-xl-1 col-sm-2 ">
@@ -608,33 +701,42 @@ export default function Employeeregister() {
                             <p className="p-address">Same as permanent address</p>
                             </div>
                           <div className="form-group ">
-                            <input type="text" onChange={(e)=>setcurrentaddressdata({...currentaddressdata,line1:e.target.value})} value={currentaddressdata.line1??""} className="form-control" placeholder="Address Line 1" id="curAddressLine1" />
+                            <input type="text" required onChange={(e)=>setcurrentaddressdata({...currentaddressdata,line1:e.target.value})} value={currentaddressdata.line1??""} className="form-control" placeholder="Address Line 1" id="curAddressLine1" />
+                            <Form.Control.Feedback type="invalid">Please provide Address </Form.Control.Feedback>
                           </div>
                           <div className="form-group mt-20">
-                            <input type="text" onChange={(e)=>setcurrentaddressdata({...currentaddressdata,line2:e.target.value})} value={currentaddressdata.line2??""} className="form-control" placeholder="Address Line 2" id="curAddressLine2" />
+                            <input type="text" required onChange={(e)=>setcurrentaddressdata({...currentaddressdata,line2:e.target.value})} value={currentaddressdata.line2??""} className="form-control" placeholder="Address Line 2" id="curAddressLine2" />
+                            <Form.Control.Feedback type="invalid">Please provide Address </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mt-20">
-                            <input type="text" onChange={(e)=>setcurrentaddressdata({...currentaddressdata,landmark:e.target.value})} value={currentaddressdata.landmark??""} className="form-control" placeholder="Landmark" id="curLandmark" />
+                            <input type="text" required onChange={(e)=>setcurrentaddressdata({...currentaddressdata,landmark:e.target.value})} value={currentaddressdata.landmark??""} className="form-control" placeholder="Landmark" id="curLandmark" />
+                            <Form.Control.Feedback type="invalid">Please provide landmark </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mt-20">
-                            <input type="text" onChange={(e)=>setcurrentaddressdata({...currentaddressdata,zip:e.target.value})} value={currentaddressdata.zip??""} className="form-control" placeholder="Zip Code" id="curZipcode" />
+                            <input type="text" required onBlur={(e)=>zipcodeHandler(e,addressdata.zipcode)} onChange={(e)=>setcurrentaddressdata({...currentaddressdata,zip:e.target.value})} value={currentaddressdata.zip??""} className="form-control" placeholder="Zip Code" id="curZipcode" />
+                            <Form.Control.Feedback type="invalid">Please provide valid Pincode </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-4 mt-20">
-                            <input type="text"  onChange={(e)=>setcurrentaddressdata({...currentaddressdata,city:e.target.value})} value={currentaddressdata.city??""} className="form-control" placeholder="City" id="curCity" />
+                            <input type="text"  required onChange={(e)=>setcurrentaddressdata({...currentaddressdata,city:e.target.value})} value={currentaddressdata.city??""} className="form-control" placeholder="City" id="curCity" />
+                            <Form.Control.Feedback type="invalid">Please provide city </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-4 mt-20">
-                            <input type="text" onChange={(e)=>setcurrentaddressdata({...currentaddressdata,state:e.target.value})} value={currentaddressdata.state??""} className="form-control" placeholder="State" id="curState" />
+                            <input type="text" required onChange={(e)=>setcurrentaddressdata({...currentaddressdata,state:e.target.value})} value={currentaddressdata.state??""} className="form-control" placeholder="State" id="curState" />
+                            <Form.Control.Feedback type="invalid">Please provide State </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-4 mt-20">
-                            <input type="text" onChange={(e)=>setcurrentaddressdata({...currentaddressdata,country:e.target.value})} value={currentaddressdata.country??""} className="form-control" placeholder="country" id="curCountry" />
+                            <input type="text" required onChange={(e)=>setcurrentaddressdata({...currentaddressdata,country:e.target.value})} value={currentaddressdata.country??""} className="form-control" placeholder="country" id="curCountry" />
+                            <Form.Control.Feedback type="invalid">Please provide country </Form.Control.Feedback>
                           </div>
                         </div>
                       </div> 
-                      <input type="submit" name="next"  className="pr-button  action-button" defaultValue="Next" /> 
-                      <input type="button" name="previous" className="pr-button  action-button-prev" defaultValue="Previous" />
+                      <input type="submit" name="next" onClick={()=>tophandler(0,500)}  className="pr-button  action-button" defaultValue="Next" /> 
+                      <input type="button" name="previous" onClick={()=>setWizard(1)} className="pr-button  action-button-prev" defaultValue="Previous" />
                     </fieldset>
                     </Form>
-                    <Form  noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,RegsterThirdform,setValidated)}  className="reg-form contact10 ">
+                    :null}
+                    {wizard===3?
+                    <Form  noValidate validated={validated3} onSubmit={(e)=>Check_Validation(e,RegsterThirdform,setValidated3)}  className="reg-form contact10 ">
                     <fieldset>
                       <div className="form-card">
                         <div className="row">
@@ -649,22 +751,26 @@ export default function Employeeregister() {
                               <h6 className="permenent-address mb-3 col-12 form-t">10th Board</h6>
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
-                                  <select onChange={(e)=>settenthdata({...tenthdata,board:e.target.value})} value={tenthdata.board??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden  >Board</option>
+                                  <select required onChange={(e)=>settenthdata({...tenthdata,board:e.target.value})} value={tenthdata.board??""} className="cs-select form-control cs-skin-elastic cs-skin-elastic1">
+                                    <option value="" defaultValue="" disabled  >Board</option>
                                     <option value="Kerala Board">Kerala Board</option>
                                     <option value="CBSC">CBSE</option>
                                     <option value="Karnataka Board">Karnataka Board</option>
                                   </select>
+                                  <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
                                 </div>
                               </div>
                               <div className="form-group col-lg-3  ">
-                                <input type="text"  onChange={(e)=>settenthdata({...tenthdata,"school/university":e.target.value})} value={tenthdata["school/university"]??""}  className="form-control" placeholder=" School/University" id=" " />
+                                <input type="text" required onChange={(e)=>settenthdata({...tenthdata,"school/university":e.target.value})} value={tenthdata["school/university"]??""}  className="form-control" placeholder=" School/University" id=" " />
+                                <Form.Control.Feedback type="invalid">Please provide school </Form.Control.Feedback>
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text"  onChange={(e)=>settenthdata({...tenthdata,"garde/score":e.target.value})} value={tenthdata["garde/score"]??""}  className="form-control" placeholder=" Grade/Score" id=" " />
+                                <input type="text" required onChange={(e)=>settenthdata({...tenthdata,"garde/score":e.target.value})} value={tenthdata["garde/score"]??""}  className="form-control" placeholder=" Grade/Score" id=" " />
+                                <Form.Control.Feedback type="invalid">Please provide grade/score </Form.Control.Feedback>
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text"  onChange={(e)=>settenthdata({...tenthdata,year:e.target.value})} value={tenthdata.year??""}  className="form-control" placeholder=" Year" id=" " />
+                                <input type="text" required onChange={(e)=>settenthdata({...tenthdata,year:e.target.value})} value={tenthdata.year??""}  className="form-control" placeholder=" Year" id=" " />
+                                <Form.Control.Feedback type="invalid">Please provide year </Form.Control.Feedback>
                               </div>
                             </div>
                           </div>
@@ -675,22 +781,26 @@ export default function Employeeregister() {
                               <h6 className="permenent-address mb-3 col-12 form-t">12th Board</h6>
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
-                                  <select  onChange={(e)=>settwelthdata({...twelthdata,board:e.target.value})} value={twelthdata.board??""}  className="cs-select cs-skin-elastic cs-skin-elastic1">
+                                  <select required onChange={(e)=>settwelthdata({...twelthdata,board:e.target.value})} value={twelthdata.board??""}  className=" form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value="" hidden  >Board</option>
                                     <option value="Kerala Board">Kerala Board</option>
                                     <option value="CBSC" >CBSE</option>
                                     <option value="Karnataka Board" >Karnataka Board</option>
                                   </select>
+                                  <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
                                 </div>
                               </div>
                               <div className="form-group col-lg-3  ">
-                                <input type="text" onChange={(e)=>settenthdata({...tenthdata,"school/university":e.target.value})} value={tenthdata["school/university"]??""} className="form-control" placeholder=" School/University" id=" " />
+                                <input type="text" required onChange={(e)=>settenthdata({...tenthdata,"school/university":e.target.value})} value={tenthdata["school/university"]??""} className="form-control" placeholder=" School/University" id=" " />
+                                <Form.Control.Feedback type="invalid">Please provide school </Form.Control.Feedback>
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" onChange={(e)=>settenthdata({...tenthdata,"garde/score":e.target.value})} value={tenthdata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
+                                <input type="text" required onChange={(e)=>settenthdata({...tenthdata,"garde/score":e.target.value})} value={tenthdata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
+                                <Form.Control.Feedback type="invalid">Please provide grade </Form.Control.Feedback>
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" onChange={(e)=>settenthdata({...tenthdata,year:e.target.value})} value={tenthdata.year??""} className="form-control" placeholder=" Year" id=" " />
+                                <input type="text" required onChange={(e)=>settenthdata({...tenthdata,year:e.target.value})} value={tenthdata.year??""} className="form-control" placeholder=" Year" id=" " />
+                                <Form.Control.Feedback type="invalid">Please provide year </Form.Control.Feedback>
                               </div>
                             </div>
                           </div>
@@ -701,29 +811,36 @@ export default function Employeeregister() {
                               <h6 className="permenent-address mb-3 col-12 form-t">Bachelor’s Degree</h6>
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
-                                  <select  onChange={(e)=>setbachlerdata({...bachlerdata,course:e.target.value})} value={bachlerdata.course??""}  className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value ="" hidden  >Course</option>
+                                  <select   onChange={(e)=>setbachlerdata({...bachlerdata,course:e.target.value})} value={bachlerdata.course??""}  className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                                    <option value ="" defaultValue="" disabled  >Course</option>
                                     <option value="Computer science">Computer science</option>
                                     <option value="Electronics">Electronics</option>
                                     <option value="Civil">Civil</option>
                                   </select>
+                                  <Form.Control.Feedback type="invalid">Please provide Course </Form.Control.Feedback>
                                 </div>
                               </div>
                               <div className="form-group col-lg-3  ">
-                                <div className="text__center">
-                                  <select onChange={(e)=>setbachlerdata({...bachlerdata,collage:e.target.value})} value={bachlerdata.collage??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                              <input type="text" required={bachlerdata.course} onChange={(e)=>setbachlerdata({...bachlerdata,collage:e.target.value})} value={bachlerdata.collage??""} className="form-control" placeholder=" College" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide College </Form.Control.Feedback>
+                                {/* <div className="text__center">
+                                  <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
+                                  <select required onChange={(e)=>setbachlerdata({...bachlerdata,collage:e.target.value})} value={bachlerdata.collage??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value="" hidden  >Collage</option>
                                     <option value="">Dummy collage1</option>
                                     <option value="">Dummy collage2</option>
                                     <option value="">Dummy collage3</option>
                                   </select>
-                                </div>
+                                  
+                                </div> */}
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" onChange={(e)=>setbachlerdata({...bachlerdata,"garde/score":e.target.value})} value={bachlerdata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
+                                <input type="text" required={bachlerdata.course}  onChange={(e)=>setbachlerdata({...bachlerdata,"garde/score":e.target.value})} value={bachlerdata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
+                                <Form.Control.Feedback type="invalid">Please provide grade </Form.Control.Feedback>
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input  onChange={(e)=>setbachlerdata({...bachlerdata,year:e.target.value})} value={bachlerdata.year??""} type="text" className="form-control" placeholder=" Year" id=" " />
+                                <input required={bachlerdata.course}  onChange={(e)=>setbachlerdata({...bachlerdata,year:e.target.value})} value={bachlerdata.year??""} type="text" className="form-control" placeholder=" Year" id=" " />
+                                <Form.Control.Feedback type="invalid">Please provide Year </Form.Control.Feedback>
                               </div>
                             </div>
                           </div>
@@ -734,29 +851,35 @@ export default function Employeeregister() {
                               <h6 className="permenent-address mb-3 col-12 form-t">Master’s Degree </h6>
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
-                                  <select onChange={(e)=>setmasterDegreedata({...masterDegreedata,course:e.target.value})} value={masterDegreedata.course??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden  >Course</option>
+                                  <select onChange={(e)=>setmasterDegreedata({...masterDegreedata,course:e.target.value})} value={masterDegreedata.course??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                                    <option value="" defaultValue=""  >Course</option>
                                     <option value="">Computer science</option>
                                     <option value="">Electronics</option>
                                     <option value="">Civil</option>
                                   </select>
+                                  <Form.Control.Feedback type="invalid">Please provide Course </Form.Control.Feedback>
                                 </div>
                               </div>
                               <div className="form-group col-lg-3  ">
-                                <div className="text__center">
-                                  <select onChange={(e)=>setmasterDegreedata({...masterDegreedata,collage:e.target.value})} value={masterDegreedata.collage??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                              <input type="text" required={masterDegreedata.course} onChange={(e)=>setmasterDegreedata({...masterDegreedata,collage:e.target.value})} value={masterDegreedata.collage??""} className="form-control" placeholder=" College" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide College </Form.Control.Feedback>
+                                {/* <div className="text__center">
+                                  <select onChange={(e)=>setmasterDegreedata({...masterDegreedata,collage:e.target.value})} value={masterDegreedata.collage??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value="" hidden  >Collage</option>
                                     <option value="">Dummy collage1</option>
                                     <option value="">Dummy collage2</option>
                                     <option value="">Dummy collage3</option>
                                   </select>
-                                </div>
+                                  <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
+                                </div> */}
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text"  onChange={(e)=>setmasterDegreedata({...masterDegreedata,"garde/score":e.target.value})} value={masterDegreedata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
+                                <input type="text" required={masterDegreedata.course}  onChange={(e)=>setmasterDegreedata({...masterDegreedata,"garde/score":e.target.value})} value={masterDegreedata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
+                                <Form.Control.Feedback type="invalid">Please provide grade </Form.Control.Feedback>
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" onChange={(e)=>setmasterDegreedata({...masterDegreedata,year:e.target.value})} value={masterDegreedata.year??""} className="form-control" placeholder=" Year" id=" " />
+                                <input type="text" required={masterDegreedata.course} onChange={(e)=>setmasterDegreedata({...masterDegreedata,year:e.target.value})} value={masterDegreedata.year??""} className="form-control" placeholder=" Year" id=" " />
+                                <Form.Control.Feedback type="invalid">Please provide year </Form.Control.Feedback>
                               </div>
                             </div>
                           </div>
@@ -799,29 +922,35 @@ export default function Employeeregister() {
                               </React.Fragment>):null}
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
-                                  <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden  >Course</option>
+                                  <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                                    <option value="" defaultValue=""   >Course</option>
                                     <option value="Computer science">Computer science</option>
                                     <option value="Electronics">Electronics</option>
                                     <option value="Civil">Civil</option>
                                   </select>
+                                  <Form.Control.Feedback type="invalid">Please provide Course </Form.Control.Feedback>
                                 </div>
                               </div>
                               <div className="form-group col-lg-3  ">
-                                <div className="text__center">
-                                  <select  onChange={(e)=>setadditionaldata({...additionaldata,collage:e.target.value})} value={additionaldata.collage??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                              <input type="text" required={additionaldata.course} onChange={(e)=>setadditionaldata({...additionaldata,collage:e.target.value})} value={additionaldata.collage??""} className="form-control" placeholder=" college" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide college </Form.Control.Feedback>
+                                {/* <div className="text__center">
+                                  <select  onChange={(e)=>setadditionaldata({...additionaldata,collage:e.target.value})} value={additionaldata.collage??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value="" hidden  >Collage</option>
                                     <option value="">Dummy collage1</option>
                                     <option value="">Dummy collage2</option>
                                     <option value="">Dummy collage3</option>
                                   </select>
-                                </div>
+                                  <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
+                                </div> */}
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text"  onChange={(e)=>setadditionaldata({...additionaldata,"garde/score":e.target.value})} value={additionaldata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
+                                <input type="text" required={additionaldata.course} onChange={(e)=>setadditionaldata({...additionaldata,"garde/score":e.target.value})} value={additionaldata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
+                                <Form.Control.Feedback type="invalid">Please provide grade</Form.Control.Feedback>
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input  onChange={(e)=>setadditionaldata({...additionaldata,year:e.target.value})} value={additionaldata.year??""} type="text" className="form-control" placeholder=" Year" id=" " />
+                                <input required={additionaldata.course} onChange={(e)=>setadditionaldata({...additionaldata,year:e.target.value})} value={additionaldata.year??""} type="text" className="form-control" placeholder=" Year" id=" " />
+                                <Form.Control.Feedback type="invalid">Please provide year</Form.Control.Feedback>
                               </div>
                             </div>
                             <div className="line-item-property__actions col-12 row mt-3 mb-3">
@@ -838,9 +967,12 @@ export default function Employeeregister() {
                             isMulti
                             options={colourOptions}
                             placeholder={<div>Select Skills....</div>}
+                            required
+                            className='form-control'
                             onChange={newcontent => { setselectedskills( newcontent ) }}
                             // styles={customStyles}
                           />
+                          <Form.Control.Feedback type="invalid">Please provide Skills </Form.Control.Feedback>
                           {/* <div className="box-skills">
                             <div className="form-contact">
                               <div className="form-group">
@@ -859,11 +991,12 @@ export default function Employeeregister() {
                             <React.Fragment key={ck}>
                              <div className="form-group col-lg-6 mt-20">
                                <div className="text__center">
-                                 <select value={citm.name} disabled className="cs-select cs-skin-elastic cs-skin-elastic1">
+                               <input type="text"  value={citm.name} className="" disabled placeholder=" Position" id=" " />
+                                 {/* <select value={citm.name} disabled className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                    <option value="" hidden  >Company Name</option>
                                    <option value="Company1">Company1</option>
                                    <option value="Company2">Company2</option>
-                                 </select>
+                                 </select> */}
                                </div>
                              </div>
                              <div className="form-group col-lg-6 mt-20 ">
@@ -892,30 +1025,38 @@ export default function Employeeregister() {
                                {/* <hr/> */}
                              </React.Fragment>):null}
                             <div className="form-group col-lg-6 ">
-                              <input type="text" onChange={(e)=>setprecompanydata({...precompanydata,name:e.target.value})} value={precompanydata.name??""} className="form-control" placeholder=" Company Name" id=" " />
+                              <input type="text"  onChange={(e)=>setprecompanydata({...precompanydata,name:e.target.value})} value={precompanydata.name??""} className="form-control" placeholder=" Company Name" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide company name </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6  ">
-                              <input type="text" onChange={(e)=>setprecompanydata({...precompanydata,position:e.target.value})} value={precompanydata.position??""} className="form-control" placeholder=" Position" id=" " />
+                              <input type="text" required={precompanydata.name} onChange={(e)=>setprecompanydata({...precompanydata,position:e.target.value})} value={precompanydata.position??""} className="form-control" placeholder=" Position" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide position </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6 mt-20">
-                              <input type="tel"onChange={(e)=>setprecompanydata({...precompanydata,phone:e.target.value})} value={precompanydata.phone??""} className="form-control" placeholder=" Company Phone" id=" " />
+                              <input type="tel" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,phone:e.target.value})} value={precompanydata.phone??""} className="form-control" placeholder=" Company Phone" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide phone </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6  mt-20">
-                              <input type="email"onChange={(e)=>setprecompanydata({...precompanydata,email:e.target.value})} value={precompanydata.email??""} className="form-control" placeholder="Company email" id=" " />
+                              <input type="email" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,email:e.target.value})} value={precompanydata.email??""} className="form-control" placeholder="Company email" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide valid email </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-12  mt-20">
-                              <input type="text"onChange={(e)=>setprecompanydata({...precompanydata,address:e.target.value})} value={precompanydata.address??""} className="form-control" placeholder="Company Address" id=" " />
+                              <input type="text" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,address:e.target.value})} value={precompanydata.address??""} className="form-control" placeholder="Company Address" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide address </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-12  mt-20">
-                              <textarea type="text"onChange={(e)=>setprecompanydata({...precompanydata,jobDescription:e.target.value})} value={precompanydata.jobDescription??""} className="form-control text-area11" placeholder="Job Description" id=" " defaultValue={""} />
+                              <textarea required={precompanydata.name}  type="text"onChange={(e)=>setprecompanydata({...precompanydata,jobDescription:e.target.value})} value={precompanydata.jobDescription??""} className="form-control text-area11" placeholder="Job Description" id=" " defaultValue={""} />
+                              <Form.Control.Feedback type="invalid">Please provide Job Description </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6 mt-20 ">
                               <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
-                              <input type="date"onChange={(e)=>setprecompanydata({...precompanydata,from:e.target.value})} value={precompanydata.from??""} className="form-control" placeholder=" From" id=" " />
+                              <input required={precompanydata.name}  type="date"onChange={(e)=>setprecompanydata({...precompanydata,from:e.target.value})} value={precompanydata.from??""} className="form-control" placeholder=" From" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide Join date </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6 mt-20">
                               <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
-                              <input type="date"onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className="form-control" placeholder=" To" id=" " />
+                              <input type="date"  onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className="form-control" placeholder=" To" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide to date </Form.Control.Feedback>
                             </div>
                           </div>
                           <div className="line-item-property__actions col-12 row mt-3 mb-3">
@@ -930,7 +1071,7 @@ export default function Employeeregister() {
                             <React.Fragment key={ck}>
                             <div className="form-group col-lg-6 ">
                               <div className="text__center">
-                                <select value={citm.name} disabled className="cs-select cs-skin-elastic cs-skin-elastic1">
+                                <select value={citm.name} disabled className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                   <option value="" hidden  >Company Name</option>
                                   <option value="Company1">Company1</option>
                                   <option value="Company2">Company2</option>
@@ -964,35 +1105,44 @@ export default function Employeeregister() {
                             </React.Fragment>):null}
                             <div className="form-group col-lg-6 ">
                               <div className="text__center">
-                                <select onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata.name} className="cs-select cs-skin-elastic cs-skin-elastic1">
+                                <select onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata.name} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                   <option value="" hidden  >Company Name</option>
-                                  <option value="Company1">Company1</option>
-                                  <option value="Company2">Company2</option>
+                                  {companyvalues.map((company,k)=>(
+                                    <option value={company._id}>{company.name}</option>
+                                  ))} 
                                 </select>
+                                <Form.Control.Feedback type="invalid">Please provide Company </Form.Control.Feedback>
                               </div>
                             </div>
                             <div className="form-group col-lg-6  ">
-                              <input type="text" onChange={(e)=>setcompanydata({...companydata,position:e.target.value})} value={companydata.position??""} className="form-control" placeholder=" Position" id=" " />
+                              <input type="text" required={companydata.name} onChange={(e)=>setcompanydata({...companydata,position:e.target.value})} value={companydata.position??""} className="form-control" placeholder=" Position" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide position </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6 ">
-                              <input type="tel" onChange={(e)=>setcompanydata({...companydata,phone:e.target.value})} value={companydata.phone??""} className="form-control" placeholder=" Company Phone" id=" " />
+                              <input type="tel" required={companydata.name} onChange={(e)=>setcompanydata({...companydata,phone:e.target.value})} value={companydata.phone??""} className="form-control" placeholder=" Company Phone" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide  phone</Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6  ">
-                              <input type="email" onChange={(e)=>setcompanydata({...companydata,email:e.target.value})} value={companydata.email??""} className="form-control" placeholder="Company email" id=" " />
+                              <input type="email" required={companydata.name} onChange={(e)=>setcompanydata({...companydata,email:e.target.value})} value={companydata.email??""} className="form-control" placeholder="Company email" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide valid email </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-12  mt-20">
-                              <input type="text" onChange={(e)=>setcompanydata({...companydata,address:e.target.value})} value={companydata.address??""} className="form-control" placeholder="Company Address" id=" " />
+                              <input type="text" required={companydata.name} onChange={(e)=>setcompanydata({...companydata,address:e.target.value})} value={companydata.address??""} className="form-control" placeholder="Company Address" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide address </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-12  mt-20">
-                              <textarea type="text" onChange={(e)=>setcompanydata({...companydata,jobDescription:e.target.value})} value={companydata.jobDescription??""} className="form-control text-area11" placeholder="Job Description" id=" " defaultValue={""} />
+                              <textarea type="text" required={companydata.name} onChange={(e)=>setcompanydata({...companydata,jobDescription:e.target.value})} value={companydata.jobDescription??""} className="form-control text-area11" placeholder="Job Description" id=" " defaultValue={""} />
+                              <Form.Control.Feedback type="invalid">Please provide Job Description </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6 mt-20">
                               <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
-                              <input type="date" onChange={(e)=>setcompanydata({...companydata,from:e.target.value})} value={companydata.from??""} className="form-control" placeholder=" From" id=" " />
+                              <input type="date" required={companydata.name} onChange={(e)=>setcompanydata({...companydata,from:e.target.value})} value={companydata.from??""} className="form-control" placeholder=" From" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide joining date </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6 mt-20">
                               <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
                               <input type="date" onChange={(e)=>setcompanydata({...companydata,to:e.target.value})} value={companydata.to??""} className="form-control" placeholder=" To" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide to date </Form.Control.Feedback>
                             </div>
                           </div>
                           <div className="line-item-property__actions col-12 row mt-3 mb-3">
@@ -1003,15 +1153,18 @@ export default function Employeeregister() {
                         <div className="row">
                           <h6 className=" form-t mb-3 mt-3 col-12">Any other Proficiancy</h6>
                           <div className="form-group col-lg-12 ">
-                            <textarea onChange={(e)=>setemployeedata({...employeedata,otherproficency:e.target.value})}  value={employeedata.otherproficency??''} type="text" className="form-control text-area11" placeholder="Message" id=" " defaultValue={""} />
+                            <textarea onChange={(e)=>setemployeedata3({...employeedata3,otherproficency:e.target.value})}  value={employeedata.otherproficency??''} type="text" className="form-control text-area11" placeholder="Message" id=" " defaultValue={""} />
+                            <Form.Control.Feedback type="invalid">Please provide otherproficency </Form.Control.Feedback>
                           </div>
                         </div>
                       </div>
-                      <input type="submit" name="next" className="pr-button next action-button"   defaultValue="Submit" /> 
-                      <input type="button" name="previous" className="pr-button  action-button-prev" defaultValue="Previous" />
+                      <input type="submit" name="next" onClick={()=>tophandler(0,500)} className="pr-button next action-button"   defaultValue="Submit" /> 
+                      <input type="button" name="previous" onClick={()=>setWizard(2)} className="pr-button  action-button-prev" defaultValue="Previous" />
                       {/* <button onClick={(e)=>registerEmployee(e)} > click</button> */}
                     </fieldset>
                     </Form>
+                    :null}
+                    {wizard===4?
                     <fieldset>
                       <div className="form-card reg-form">
                         <div className="row">
@@ -1049,6 +1202,7 @@ export default function Employeeregister() {
                         </div>
                       </div>
                     </fieldset>
+                    :null}
                   {/* </Form> */}
                 </div>
               </div>

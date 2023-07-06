@@ -4,9 +4,10 @@ import { Simplecontext } from "../Commonpages/Simplecontext";
 import { Helmet } from "react-helmet";
 
 export default function Header() {
-  const { path, pathvalue } = useContext(Simplecontext);
+  const { path, pathvalue,userdetail } = useContext(Simplecontext);
   const windowuser = window.localStorage.getItem("graiduser")??""
-  console.log("windeouser",windowuser)
+  // console.log("windeouser",windowuser)
+  console.log("userdetail",userdetail)
   const [scrollPosition, setScrollPosition] = useState(0);
   // console.log("scrolll",scrollPosition)
   const mobileHeaderActive = () => {
@@ -64,15 +65,16 @@ export default function Header() {
         <div className="container">
           <div className="main-header">
             <div className="header-left">
-            <div className="header-logo"><Link className="d-flex" to="index.html"><h3 className="header-text">CRAIG</h3></Link></div>
-              {/* <div className="header-logo">
+            {/* <div className="header-logo"><Link className="d-flex" to="index.html"><h3 className="header-text">CRAIG</h3></Link></div> */}
+              <div className="header-logo">
                 <Link className="d-flex" to="/">
                   <img
                     alt="jobBox"
-                    src="./assets/imgs/template/jobhub-logo copy 2.png"
+                    src=".\assets\imgs\logo\craig-logo-dark.png"
+                    height={30}
                   />
                 </Link>
-              </div> */}
+              </div>
             </div>
             <div className="header-nav">
               <nav className="nav-main-menu">
@@ -110,25 +112,27 @@ export default function Header() {
                <div className="block-signin">
                
                <Link className="btn btn-default btn-shadow ml-40 hover-up" to="/employer-profile">Profile</Link>
-               </div></>:
+               </div></>:userdetail?<>
                <div className="block-signin">
-               
+                {pathvalue==="/employeeregister"?<div className="block-signin" style={{width:"180px"}}/>:
                <Link className="btn btn-default btn-shadow ml-40 hover-up" to="/employee-profile">Profile</Link>
+               }
                </div>
-               
+               </>:<div className="block-signin" style={{width:"180px"}}/>
                :
            <>
               {pathvalue === "/Signin" || pathvalue === "/employerlogin" ? (
                 pathvalue === "/Signin" ? (
                   <div className="block-signin" style={{width:"180px"}}>
-                    <Link
+                    {/* <Link
                       className="btn btn-default btn-shadow ml-40 hover-up"
                       to="/employeeregister"
                     >
                       Register
-                    </Link>
+                    </Link> */}
                   </div>
-                ) : (
+                ) : 
+                (
                   <div className="block-signin">
                     <Link
                       className="btn btn-default btn-shadow ml-40 hover-up"

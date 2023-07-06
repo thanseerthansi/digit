@@ -1,11 +1,29 @@
 import React, { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
+import Axioscall from '../Commonpages/Axioscall'
 
 export default function Notificationfile() {
     useEffect(() => {
      window.scrollTo(0,0)
     }, [])
-    
+    const tokenhandler=()=>{
+      let token = window.localStorage.getItem('craig-token')??""
+      if(token){
+        let data  = Decodetoken(token)
+        console.log("dataid",data)
+        return data
+      }
+    }
+    const getNotification=async()=>{
+      try {
+        let data = await Axioscall("get","")
+        if (data.status===200){
+
+        }
+      } catch (error) {
+        
+      }
+    }
   return (
     <>
     <main className="main notification-container">

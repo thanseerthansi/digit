@@ -90,9 +90,17 @@ export default function Simplecontextprovider({children}){
       }
       
     }
+    function Decodetoken (token){
+      console.log(token)
+      var decoded = jwt_decode(token)
+      if(decoded.id){
+        // console.log("decodeid",decoded.id)
+        return decoded.id
+      }
+    }
 return (
     <Simplecontext.Provider value={{
-        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler
+        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler,Decodetoken
     }}>{children}</Simplecontext.Provider>
     )
 }
