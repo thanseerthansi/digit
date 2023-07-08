@@ -1,4 +1,4 @@
-import React, { useState ,useEffect, useContext} from "react";
+import React, { useState ,useEffect, useContext, useRef} from "react";
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 import Filestack from "../Commonpages/Filestack";
@@ -8,7 +8,9 @@ import Axioscall from "../Commonpages/Axioscall";
 import { Form } from "react-bootstrap";
 import { Simplecontext } from "../Commonpages/Simplecontext";
 import axios from "axios";
-
+import ru from 'react-phone-number-input/locale/ru'
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css';
 export default function Employerregister() {
   const {Check_Validation}=useContext(Simplecontext)
   const [companydata,setcompanydata]=useState([]);
@@ -16,11 +18,20 @@ export default function Employerregister() {
   const [addressdata,setaddressdata]=useState([]);
   const [validated,setValidated]=useState(false)
   const [load,setload]=useState(false)
+  const [emailvalid,setemailvalid]=useState(false)
+  const [phonevalid,setphonevalid]=useState(false)
+  const [phonevalidationdata,setphonevalidationdata]=useState({otp:"",verifynumber:false})
+  const [emailvalidationdata,setemailvalidationdata]=useState({otp:"",verifyemail:false})
+  const inputemail = useRef(false);
+  const [disablephone,setdisablephone]=useState(false)
+  
+  // const inputphone = useRef(false);
+  // const phoneInputRef = useRef(null);
   console.log("certificate data",certificatedata)
+  console.log("phonevalidationdata ",phonevalidationdata)
   useEffect(() => {
     window.scrollTo(0,0)
   }, [])
-  
   let regex = new RegExp(/(0|91)?[6-9][0-9]{9}/);
 
   const notify = (msg) => toast.success(msg, {
@@ -44,7 +55,10 @@ export default function Employerregister() {
     
   }
 
-
+  const handlePhoneChange = (value) => {
+    console.log("value",value)
+    setcompanydata({ ...companydata, phone: value });
+  };
   // const ImageFilestachHandler = async (ratio,value)=> {
   //   let data =await Filestack(ratio)
   //   if (data){
@@ -59,11 +73,25 @@ export default function Employerregister() {
     
     try {
       let datalist = {...companydata}
+      if (!datalist.profileImage){
+        notifyerror("please add ProfileImage")
+        return 
+      }
+      if (!datalist.bannerImage){
+        notifyerror("please add bannerImage")
+        return 
+      }
       if (Object.keys(addressdata).length){
         datalist.address=[{...addressdata}]
       }
+      
       if(Object.keys(certificatedata).length){
-        datalist.certificate = [{...certificatedata , name : companydata.address_proof_type}]
+        if (certificatedata.front_url&&certificatedata.back_url){
+          datalist.certificate = [{...certificatedata , name : companydata.address_proof_type}]
+        }else{
+          notifyerror("please add Certificte images")
+        }
+        
       }
       console.log("datalist employer",datalist)
       datalist.role = "employer"
@@ -100,7 +128,89 @@ export default function Employerregister() {
     }
     setload(false)
   }
+  const emailVerification=async()=>{
+    try {
+      // setemailvalid(true)
+      // console.log("email",companydata.email)
+      setload(true)
+      let data = await Axioscall("post","company/sendcode",{email:companydata.email})
+      console.log("dataemail",data)
+      if(data.status===200){
+        notify("check your mail for verification otp")
+        setemailvalidationdata({...emailvalidationdata,verifynumber:true})
+      }else{
+        notifyerror("Something Went wrong Sent again")
+      }
+      setload(false)
+    } catch (error) {
+      setload(false)
+      notifyerror("Something Went wrong Sent again")
+    }
  
+  }
+  const emailotpverify=async()=>{
+    try {
+      
+      let body={
+        "email" : companydata.email,
+        "otp" : emailvalidationdata.otp
+      }
+      // console.log("e",body)
+      let data = await Axioscall("post","company/verifycode",body)
+      // console.log("data",data)
+      if(data.status===200){
+        inputemail.current.disabled=true
+        setemailvalid(true)
+      }
+      else(
+        notifyerror(data.response.data.message )
+        // console.log("errordfghjkl",data.response.data.message )
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const phoneVerification=async()=>{
+    try {
+      setload(true)
+      let data =await Axioscall("post","otp/send-otp",{mobile:companydata.phone})
+      console.log("daat",data)
+      if (data.status===200){
+        notify("check your phone for verification otp")
+        setphonevalidationdata({...phonevalidationdata,verifynumber:true})
+      }
+      
+      // inputphone.current.disabled=true
+      
+    } catch (error) {
+      
+      notifyerror("try again")
+    }
+    setload(false)
+  }
+  const phoneotpverify=async()=>{
+    try {
+      
+      let body={
+        "mobile" : companydata.phone,
+        "otp" : phonevalidationdata.otp
+      }
+      // console.log("e",body)
+      let data = await Axioscall("post","otp/verify-otp",body)
+      console.log("data",data)
+      if(data.status===200){
+        // inputphone.current.disabled=true
+        setdisablephone(true)
+        setphonevalid(true)
+      }
+      else(
+        notifyerror(data.response.data.message )
+        // console.log("errordfghjkl",data.response.data.message )
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <>
     <main className="main">
@@ -121,20 +231,34 @@ export default function Employerregister() {
               <input className="form-control" required onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata.name??""}  type="text"  name="name" placeholder="Company Name" />
               <Form.Control.Feedback type="invalid">Please provide a Company Name</Form.Control.Feedback>             
             </div>
+
             {load? 
             <div className="spinner-container">
                         <div className="spinner " />
                       </div>:null}
                      
-            <div class="loader"></div>
-            <div className="form-group mb-3 col-md-6">
-              <input className="form-control " id="input-2" required onChange={(e)=>setcompanydata({...companydata,email:e.target.value})} value={companydata.email??""} type="email"  name="emailaddress" placeholder="Company email" />
+            <div className="loader"></div>
+            <div className="form-group mb-3 ">
+              <input className="form-control " ref={inputemail} id="input-2" required onChange={(e)=>setcompanydata({...companydata,email:e.target.value})} value={companydata.email??""} type="email"  name="emailaddress" placeholder="Company email" />
               <Form.Control.Feedback type="invalid">Please provide a Company email</Form.Control.Feedback>
             </div>
-            <div className="form-group mb-3 col-md-6">
-              <input className={`form-control  ${companydata.phone?regex.test(companydata.phone)?'': 'is-invalid' :""}`} id="input-3" req onChange={(e)=>setcompanydata({...companydata,phone:e.target.value})} value={companydata.phone??""} type="tel" required name="username" placeholder="Company Phone" />
+            {emailvalid?<>
+            <div className="form-group mb-3 ">
+            <div className="d-flex">
+            <PhoneInput
+                international
+                countryCallingCodeEditable={false}
+                defaultCountry="IN"
+                disabled={disablephone}
+                value={companydata.phone}
+                onChange={handlePhoneChange}
+                style={{ width:"100%",fontSize: '14px',display:"flex",border:'1px solid #E0E6F6',borderRadius:"6px",paddingLeft:"13px"}}
+                />
+            </div>
+              {/* <input className={`form-control  ${companydata.phone?regex.test(companydata.phone)?'': 'is-invalid' :""}`} id="input-3" ref={inputphone} onChange={(e)=>setcompanydata({...companydata,phone:e.target.value})} value={companydata.phone??""} type="tel" required name="username" placeholder="Company Phone" /> */}
               <Form.Control.Feedback type="invalid">Please provide valid Phone Number</Form.Control.Feedback>
             </div>
+            {phonevalid?<>
             <div className="form-group mb-3 col-md-6">
               <label className="col-sm-12 font-sm color-text-mutted">Incorporation Date*</label> 
               <input className="form-control" id="input-3" onChange={(e)=>setcompanydata({...companydata,incorporationDate:e.target.value})} value={companydata.incorporationDate??""} type="date" required name="username" placeholder="Incorporation Date" />
@@ -292,6 +416,34 @@ export default function Employerregister() {
             <div className="form-group">
               <button className="btn btn-brand-1 hover-up w-100" type="submit"  name="login">Submit &amp; Register</button>
             </div>
+            </>:<><div className="form-group">
+              <button className="btn btn-brand-1 hover-up w-100" type="button" onClick={()=>phoneVerification()} name="login">Send otp</button>
+            </div>
+            {phonevalidationdata.verifynumber?<>
+             <div className="form-group mb-3 mt-10">
+             <input onChange={(e)=>setphonevalidationdata({...phonevalidationdata,otp:e.target.value})} value={phonevalidationdata.otp??""} className={`form-control mb-3`} id="input-5" type="otp"  name="otp" placeholder="OTP" />
+             <Form.Control.Feedback type="invalid">not  match</Form.Control.Feedback>
+           </div>
+           <div className="form-group">
+           <button className="btn btn-brand-1 hover-up w-100" type="button" onClick={()=>phoneotpverify()} name="login">Submit OTP</button>
+         </div>
+           </> :""}
+            
+            </>}
+            </>:<><div className="form-group">
+              <button className="btn btn-brand-1 hover-up w-100" type="button" onClick={()=>emailVerification()} name="login">send email</button>
+            </div>
+            {emailvalidationdata.verifynumber?<>
+             <div className="form-group  mt-10">
+             <input onChange={(e)=>setemailvalidationdata({...emailvalidationdata,otp:e.target.value})} value={emailvalidationdata.otp??""} className={`form-control mb-3`} id="input-5" type="otp"  name="otp" placeholder="otp" />
+             <Form.Control.Feedback type="invalid">not  match</Form.Control.Feedback>
+           </div>
+           <div className="form-group">
+           <button className="btn btn-brand-1 hover-up w-100" type="button" onClick={()=>emailotpverify()} name="login">Submit OTP</button>
+         </div>
+           </> :""}
+            </>
+            }
             <div className="text-muted text-center mt-3">Already have an account? <Link to="/employerlogin">Sign in</Link></div>
           </Form>
         </div>

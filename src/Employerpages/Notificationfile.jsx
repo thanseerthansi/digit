@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import Axioscall from '../Commonpages/Axioscall'
+import { Simplecontext } from '../Commonpages/Simplecontext';
 
 export default function Notificationfile() {
+  const {userdetail } = useContext(Simplecontext);
     useEffect(() => {
      window.scrollTo(0,0)
+     getNotification()
     }, [])
+    console.log("useruserdetail",userdetail)
     const tokenhandler=()=>{
       let token = window.localStorage.getItem('craig-token')??""
       if(token){
@@ -16,12 +20,17 @@ export default function Notificationfile() {
     }
     const getNotification=async()=>{
       try {
-        let data = await Axioscall("get","")
+        let body ={
+          email:userdetail.email,
+          page:1,
+          limit:10
+        }
+        let data = await Axioscall("get","notification",body)
         if (data.status===200){
-
+          console.log("data",data)
         }
       } catch (error) {
-        
+        console.log(error)
       }
     }
   return (
@@ -40,7 +49,7 @@ export default function Notificationfile() {
           <div className="box-body p-0">
             <div className="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header">
               <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt />
+                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png"  alt=""/>
               </div>
               <div className="font-weight-bold mr-3">
                 <a href="verification.html"><div className="text-truncate ">Request For Profile Verification</div>
@@ -52,7 +61,7 @@ export default function Notificationfile() {
             </div>
             <div className="p-3 d-flex align-items-center osahan-post-header">
               <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt />
+                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png"  alt=""/>
               </div>
               <div className="font-weight-bold mr-3">
                 <div className="text-truncate ">Request For Profile Verification</div>
@@ -71,7 +80,7 @@ export default function Notificationfile() {
           <div className="box-body p-0">
             <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
               <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt />
+                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png"  alt=""/>
               </div>
               <div className="font-weight-bold mr-3">
                 <div className="text-truncate ">Request For Profile Verification</div>
@@ -82,7 +91,7 @@ export default function Notificationfile() {
               </div>
             </div>
             <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
-              <div className="dropdown-list-image mr-3"><img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt /></div>
+              <div className="dropdown-list-image mr-3"><img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png"  alt=""/></div>
               <div className="font-weight-bold mr-3">
                 <div className="text-truncate">DAILY RUNDOWN: SATURDAY</div>
                 <div className="small">Pellentesque semper ex diam, at tristique ipsum varius sed. Pellentesque non </div>
@@ -91,7 +100,7 @@ export default function Notificationfile() {
             </div>
             <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
               <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar2.png" alt />
+                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar2.png"  alt=""/>
               </div>
               <div className="font-weight-bold mr-3">
                 <div className="mb-2"><span className="font-weight-normal">Congratulate Gurdeep Singh Osahan (iamgurdeeposahan)</span> for 5 years </div>
@@ -100,7 +109,7 @@ export default function Notificationfile() {
             </div>
             <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
               <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar4.png" alt />
+                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar4.png"  alt=""/>
               </div>
               <div className="font-weight-bold mr-3">
                 <div>
@@ -118,7 +127,7 @@ export default function Notificationfile() {
               </div>
             </div>
             <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
-              <div className="dropdown-list-image mr-3"><img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt /></div>
+              <div className="dropdown-list-image mr-3"><img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png"  alt=""/></div>
               <div className="font-weight-bold mr-3">
                 <div className="text-truncate">DAILY RUNDOWN: SATURDAY</div>
                 <div className="small">Pellentesque semper ex diam, at tristique ipsum varius sed. Pellentesque non metus </div>
@@ -126,7 +135,7 @@ export default function Notificationfile() {
             </div>
             <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
               <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt />
+                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png"  alt=""/>
               </div>
               <div className="font-weight-bold mr-3">
                 <div className="mb-2"><span className="font-weight-normal">Congratulate Gurdeep Singh Osahan (iamgurdeeposahan)</span> for 5 years.</div>
@@ -134,7 +143,7 @@ export default function Notificationfile() {
             </div>
             <div className="p-3 d-flex align-items-center osahan-post-header">
               <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar2.png" alt />
+                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar2.png"  alt=""/>
               </div>
               <div className="font-weight-bold mr-3">
                 <div>

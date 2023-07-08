@@ -1,7 +1,20 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
+import Axioscall from '../Commonpages/Axioscall'
 
 export default function Candidates() {
+  const getCandidte=async()=>{
+    try {
+      let body={
+        limit:10,
+        page:1,
+        uniqueid:"",
+      }
+      let data= Axioscall("get","employee",body)
+    } catch (error) {
+      
+    }
+  }
   return (
     <>
     <main className="main">

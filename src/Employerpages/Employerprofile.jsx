@@ -8,11 +8,13 @@ import moment from 'moment';
 import { notify } from "../Commonpages/toast";
 import Filestack from "../Commonpages/Filestack";
 
+
 export default function Employerprofile() {
   const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
-  // console.log("userdetailin profile",userdetail)
-  // console.log("employeedata profile",employeedata)
+  console.log("userdetailin profile",userdetail)
+  console.log("employeedata profile",employeedata)
+  const [isOpen, setIsOpen] = useState(false);
   
   // const navigate = useNavigate();
   useEffect(() => {
@@ -182,7 +184,8 @@ export default function Employerprofile() {
                                   <tr>
                                     <td> Location</td>
                                     <td>:</td>
-                                    <td className="td-verify">{employeedata?.address?.[0]?.line2??""??""}</td>
+                                    {/* <td className="td-verify">{employeedata?.address?.[0]?.city??""}</td> */}
+                                    <td className="td-verify">{userdetail?.address?.[0]?.landmark??""}</td>
                                   </tr>
                                   <tr>
                                     <td>Age of the Company</td>
@@ -257,14 +260,14 @@ export default function Employerprofile() {
                           </div>
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">Email *</label>
-                            <input required className="form-control" type="text"value={employeedata?.email??""} onChange={(e)=>setemployeedata({...employeedata,email:e.target.value})}/>
+                            <input required className="form-control" disabled type="text"value={employeedata?.email??""} onChange={(e)=>setemployeedata({...employeedata,email:e.target.value})}/>
                             <Form.Control.Feedback type="invalid">
                               Please provide valid email
                             </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">Contact number</label>
-                            <input required className="form-control" type="text" value={employeedata?.phone??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,phone:e.target.value})} />
+                            <input required className="form-control" disabled type="text" value={employeedata?.phone??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,phone:e.target.value})} />
                             <Form.Control.Feedback type="invalid">
                               Please provide a valid phone
                             </Form.Control.Feedback>
@@ -479,6 +482,27 @@ export default function Employerprofile() {
               </div>
             </div>
           </div>
+          {/* modal................................................................ */}
+          {/* <Button variant="primary" onClick={setShow(true)}>
+        Launch demo modal
+      </Button>
+
+      <Modal show={show} onHide={setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={setShow(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={setShow(false)}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal> */}
+
+
         </section>
       </main>
     </>

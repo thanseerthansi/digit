@@ -4,12 +4,10 @@ import { Simplecontext } from "../Commonpages/Simplecontext";
 import { Helmet } from "react-helmet";
 
 export default function Header() {
-  const { path, pathvalue,userdetail } = useContext(Simplecontext);
+  const { path, pathvalue,userdetail,logouthandler } = useContext(Simplecontext);
   const windowuser = window.localStorage.getItem("graiduser")??""
-  // console.log("windeouser",windowuser)
-  console.log("userdetail",userdetail)
   const [scrollPosition, setScrollPosition] = useState(0);
-  // console.log("scrolll",scrollPosition)
+  
   const mobileHeaderActive = () => {
     // console.log("entered hamburg")
     var navbarTrigger = $(".burger-icon"),
@@ -39,7 +37,13 @@ export default function Header() {
     const handleScroll = () => {
       const currentPosition = window.pageYOffset;
       setScrollPosition(currentPosition);
-
+      // console.log("windowuser",window.localStorage.getItem("graiduser"))
+      // console.log("userdetail",userdetail)
+      // console.log("window.location.pathname",window.location.pathname)
+      if(window.localStorage.getItem("graiduser")==="employee" && !userdetail && window.location.pathname!=="/employeeregister"){
+        console.log("no user.............................................................")
+        logouthandler()
+      }
     };
 
     window.addEventListener("scroll", handleScroll);

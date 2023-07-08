@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import Axioscall from '../Commonpages/Axioscall';
 import { Form } from "react-bootstrap";
 import { Simplecontext } from "../Commonpages/Simplecontext";
+import axios from 'axios';
 
 const animatedComponents = makeAnimated();
 export default function Employeeregister() {
@@ -41,7 +42,17 @@ export default function Employeeregister() {
   const [wizard,setWizard]=useState(1)
   const [load,setload]=useState(false)
   const [companyvalues,setcompanyvalues]=useState([])
-
+  const debounceDelay = 500; 
+  const abortControllerRef = useRef(null); // Reference to the AbortController
+  const [skilloptions,setskilloptions]=useState( [
+    { value: 'Reactjs', label: 'Reactjs' },
+    { value: 'Node.js', label: 'Node.js' },
+    { value: 'Flutter', label: 'Flutter' },
+    { value: 'Python', label: 'Python' },
+    { value: 'CSS', label: 'CSS' },
+    { value: 'Bootsrtap', label: 'Bootsrtap' },
+    { value: 'HTML', label: 'HTML' }
+  ])
   // console.log("valuedata",employeedata)
   // console.log("carddata",carddata)
   // console.log("siblingdata",siblingdata)
@@ -55,13 +66,19 @@ export default function Employeeregister() {
   // console.log("companydaprecompanydatata",precompanydata)
   // console.log("companydata",companydata)
   // console.log("companyarray",companyarray)
-
     useEffect(() => {     
       window.scrollTo(0,0)
       getCompanydata()
       tokenhandler()
     }, [])
-    
+    useEffect(() => {
+      return () => {
+        // Clean up the abort controller on component unmount
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort();
+        }
+      };
+    }, []);
     const tophandler=(f,t)=>{
         window.scrollTo(f,t)
     }
@@ -85,15 +102,8 @@ export default function Employeeregister() {
       return data
     }
   }
-  const colourOptions = [
-    { value: 'Reactjs', label: 'Reactjs' },
-    { value: 'Node.js', label: 'Node.js' },
-    { value: 'Flutter', label: 'Flutter' },
-    { value: 'Python', label: 'Python' },
-    { value: 'CSS', label: 'CSS' },
-    { value: 'Bootsrtap', label: 'Bootsrtap' },
-    { value: 'HTML', label: 'HTML' }
-  ]
+  
+  // console.log("skilloptions",skilloptions)
   const customStyles = {
     control: (provided) => ({
       ...provided,
@@ -209,13 +219,13 @@ export default function Employeeregister() {
      
       
       console.log("datalistbefore",datalist)
-      let data = await Axioscall("post","employee",datalist)
-      if(data.status===200){
+      // let data = await Axioscall("post","employee/personal",datalist)
+      // if(data.status===200){
         // notify("Successfully Saved")
         setWizard(2)
         
         tophandler(0,200)
-      }
+      // }
       setload(false)
     } catch (error) {
       console.log(error)
@@ -241,12 +251,12 @@ export default function Employeeregister() {
         datalist.currentAddress=[{...currentaddressdata}]
       }
       console.log("form2",datalist)
-      let data = await Axioscall("post","employee/address",datalist)
-      if(data.status===200){
+      // let data = await Axioscall("post","employee/address",datalist)
+      // if(data.status===200){
         setWizard(3)
         setload(false)
         tophandler(0,200)
-      }
+      // }
     } catch (error) {
       setload(false)
     }
@@ -339,6 +349,36 @@ export default function Employeeregister() {
       e.target.classList.remove('is-invalid');
     }
     setload(false)
+  }
+  const skillapicall=(value)=>{
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort(); // Cancel the previous request
+    }
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController; // Update the reference to the new AbortController
+    try {
+       new Promise((resolve) => setTimeout(resolve, debounceDelay)); // Delay the request for debounceDelay milliseconds
+      axios.get("https://api.apilayer.com/skills", {
+        params: {
+          q: value
+        },
+        headers: {
+          apikey: "Y59xvT9r5Axhf7Go4DG1yAnSJtZWmWnD"
+        },
+        signal: abortController.signal // Assign the AbortSignal to the request
+      }).then(res=>{
+        // console.log("ok",res.data)
+        if(res.data){
+          // console.log("datapresent")
+          let opt=[]        
+          res.data.forEach(data => {
+            opt.push({ value: data, label: data })
+          });
+          setskilloptions(opt)
+        }  }
+      )    
+    } catch (error) {    
+    }
   }
   return (
     <>
@@ -890,7 +930,7 @@ export default function Employeeregister() {
                               <h6 className="permenent-address mb-3 col-12 form-t">Additional Qualification</h6>
                               {additionalarray.length?additionalarray.map((aitm,ak)=>
                               <React.Fragment key={ak}>
-                               <div className="form-group col-lg-3 ">
+                               <div className="form-group col-lg-3 mt-10">
                                 <div className="text__center">
                                 <input  disabled  value={aitm.course??""} type="text" className="" placeholder=" course" id=" " />
                                   {/* <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
@@ -901,7 +941,7 @@ export default function Employeeregister() {
                                   </select> */}
                                 </div>
                               </div>
-                              <div className="form-group col-lg-3  ">
+                              <div className="form-group col-lg-3  mt-10">
                                 <div className="text__center">
                                 <input  disabled  value={aitm.collage??""} type="text" className="" placeholder=" collage" id=" " />
                                   {/* <select  onChange={(e)=>setadditionaldata({...additionaldata,collage:e.target.value})} value={additionaldata.collage??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
@@ -912,15 +952,15 @@ export default function Employeeregister() {
                                   </select> */}
                                 </div>
                               </div>
-                              <div className="form-group col-lg-3 ">
-                                <input type="text" disabled  value={aitm["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
+                              <div className="form-group col-lg-3 mt-10">
+                                <input type="text" disabled  value={aitm["garde/score"]??""} className="" placeholder=" Grade/Score" id=" " />
                               </div>
                               <div className="form-group col-lg-3 ">
                                 <input  disabled  value={aitm.year??""} type="text" className="" placeholder=" Year" id=" " />
                               </div>
                             
                               </React.Fragment>):null}
-                              <div className="form-group col-lg-3 ">
+                              <div className="form-group col-lg-3 mt-10">
                                 <div className="text__center">
                                   <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value="" defaultValue=""   >Course</option>
@@ -931,7 +971,7 @@ export default function Employeeregister() {
                                   <Form.Control.Feedback type="invalid">Please provide Course </Form.Control.Feedback>
                                 </div>
                               </div>
-                              <div className="form-group col-lg-3  ">
+                              <div className="form-group col-lg-3 mt-10 ">
                               <input type="text" required={additionaldata.course} onChange={(e)=>setadditionaldata({...additionaldata,collage:e.target.value})} value={additionaldata.collage??""} className="form-control" placeholder=" college" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide college </Form.Control.Feedback>
                                 {/* <div className="text__center">
@@ -944,11 +984,11 @@ export default function Employeeregister() {
                                   <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
                                 </div> */}
                               </div>
-                              <div className="form-group col-lg-3 ">
+                              <div className="form-group col-lg-3 mt-10">
                                 <input type="text" required={additionaldata.course} onChange={(e)=>setadditionaldata({...additionaldata,"garde/score":e.target.value})} value={additionaldata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
                                 <Form.Control.Feedback type="invalid">Please provide grade</Form.Control.Feedback>
                               </div>
-                              <div className="form-group col-lg-3 ">
+                              <div className="form-group col-lg-3 mt-10">
                                 <input required={additionaldata.course} onChange={(e)=>setadditionaldata({...additionaldata,year:e.target.value})} value={additionaldata.year??""} type="text" className="form-control" placeholder=" Year" id=" " />
                                 <Form.Control.Feedback type="invalid">Please provide year</Form.Control.Feedback>
                               </div>
@@ -959,17 +999,26 @@ export default function Employeeregister() {
                             </div>
                           </div>
                         </div>
-                        <h6 className="mt-3 color-brand-1">Skills</h6>
+                        <h6 className="mt-3 color-brand-1">Designation</h6>
+                        <div className="col-lg-12 col-md-12">
+                          <select   className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                            <option value="" hidden  >Select Designation</option>
+                            <option value="Company1">Company1</option>
+                            <option value="Company2">Company2</option>
+                          </select>
+                          </div>
+                        <h6 className="mt-3 ">Skills</h6>
                         <div className="col-lg-12 col-md-12">
                         <Select
                             closeMenuOnSelect={false}
                             components={animatedComponents}
                             isMulti
-                            options={colourOptions}
+                            options={skilloptions}
                             placeholder={<div>Select Skills....</div>}
                             required
-                            className='form-control'
-                            onChange={newcontent => { setselectedskills( newcontent ) }}
+                            className=''
+                            onChange={newcontent => {setselectedskills( newcontent ) }}
+                            onInputChange={(value)=>skillapicall(value)} 
                             // styles={customStyles}
                           />
                           <Form.Control.Feedback type="invalid">Please provide Skills </Form.Control.Feedback>
@@ -1009,10 +1058,10 @@ export default function Employeeregister() {
                                <input type="email"  value={citm.email} className="" disabled placeholder="Company email" id=" " />
                              </div>
                              <div className="form-group col-lg-12  mt-20">
-                               <input type="text"  value={citm.address} disabled className="" placeholder="Company Address" id=" " />
+                               <input type="text" value={citm.address} disabled className="" placeholder="Company Address" id=" " />
                              </div>
                              <div className="form-group col-lg-12 mt-20 ">
-                               <textarea type="text"  value={citm.jobDescription} disabled className=" text-area11" placeholder="Job Description" id=" " defaultValue={""} />
+                               <textarea type="text" value={citm.jobDescription} disabled className=" text-area11" placeholder="Job Description" id=" "  />
                              </div>
                              <div className="form-group col-lg-6 mt-20">
                                <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
@@ -1045,7 +1094,7 @@ export default function Employeeregister() {
                               <Form.Control.Feedback type="invalid">Please provide address </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-12  mt-20">
-                              <textarea required={precompanydata.name}  type="text"onChange={(e)=>setprecompanydata({...precompanydata,jobDescription:e.target.value})} value={precompanydata.jobDescription??""} className="form-control text-area11" placeholder="Job Description" id=" " defaultValue={""} />
+                              <textarea required={precompanydata.name}  type="text"onChange={(e)=>setprecompanydata({...precompanydata,jobDescription:e.target.value})} value={precompanydata.jobDescription??""} className="form-control text-area11" placeholder="Job Description" id=" "  />
                               <Form.Control.Feedback type="invalid">Please provide Job Description </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6 mt-20 ">
@@ -1091,7 +1140,7 @@ export default function Employeeregister() {
                               <input type="text"  value={citm.address} disabled className="" placeholder="Company Address" id=" " />
                             </div>
                             <div className="form-group col-lg-12  mt-20">
-                              <textarea type="text"  value={citm.jobDescription} disabled className=" text-area11" placeholder="Job Description" id=" " defaultValue={""} />
+                              <textarea type="text"  value={citm.jobDescription} disabled className=" text-area11" placeholder="Job Description" id=" "  />
                             </div>
                             <div className="form-group col-lg-6 mt-20">
                               <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
@@ -1131,7 +1180,7 @@ export default function Employeeregister() {
                               <Form.Control.Feedback type="invalid">Please provide address </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-12  mt-20">
-                              <textarea type="text" required={companydata.name} onChange={(e)=>setcompanydata({...companydata,jobDescription:e.target.value})} value={companydata.jobDescription??""} className="form-control text-area11" placeholder="Job Description" id=" " defaultValue={""} />
+                              <textarea type="text" required={companydata.name} onChange={(e)=>setcompanydata({...companydata,jobDescription:e.target.value})} value={companydata.jobDescription??""} className="form-control text-area11" placeholder="Job Description" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide Job Description </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6 mt-20">
@@ -1153,7 +1202,7 @@ export default function Employeeregister() {
                         <div className="row">
                           <h6 className=" form-t mb-3 mt-3 col-12">Any other Proficiancy</h6>
                           <div className="form-group col-lg-12 ">
-                            <textarea onChange={(e)=>setemployeedata3({...employeedata3,otherproficency:e.target.value})}  value={employeedata.otherproficency??''} type="text" className="form-control text-area11" placeholder="Message" id=" " defaultValue={""} />
+                            <textarea onChange={(e)=>setemployeedata3({...employeedata3,otherproficency:e.target.value})}  value={employeedata.otherproficency??''} type="text" className="form-control text-area11" placeholder="Message" id=" "  />
                             <Form.Control.Feedback type="invalid">Please provide otherproficency </Form.Control.Feedback>
                           </div>
                         </div>
