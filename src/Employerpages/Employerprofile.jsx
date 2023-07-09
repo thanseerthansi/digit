@@ -7,7 +7,8 @@ import Axioscall from "../Commonpages/Axioscall";
 import moment from 'moment';
 import { notify } from "../Commonpages/toast";
 import Filestack from "../Commonpages/Filestack";
-
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 export default function Employerprofile() {
   const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler}=useContext(Simplecontext) 
@@ -408,13 +409,7 @@ export default function Employerprofile() {
                       {/* form ends................................... */}
                       {/* <div className="row form-contact">
                         <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Employeeupdate,setValidated)} >
-                        <div className="col-lg-12 col-md-12 row ">
-                          
-                          
-                         
-                         
-                          
-                         
+                        <div className="col-lg-12 col-md-12 row "> 
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">
                               City
@@ -483,26 +478,55 @@ export default function Employerprofile() {
             </div>
           </div>
           {/* modal................................................................ */}
-          {/* <Button variant="primary" onClick={setShow(true)}>
+          {/* <button variant="primary" onClick={()=>setIsOpen(true)}>
+        Launch demo modal
+      </button> */}
+
+      
+      {/* <div className="modal " id="exampleModalCenter" tabIndex={1} aria-labelledby="exampleModalCenterTitle" aria-modal="true" role="dialog" style={isOpen === true ? { display: 'block', paddingRight: 17 } : { display: 'none' }}>
+        <div className="modal-dialog modal-dialog-centered modal-lg box-shadow-blank" >
+          <div className="modal-content"><div className="modal-header">
+            <h5 className="modal-title" id="exampleModalCenterTitle">Department</h5>
+            <button onClick={() => setIsOpen(!isOpen)} type="button" className="btn-close" data-bs-dismiss="modal" aria-label="btn-close" />
+          </div>
+            <form className="forms-sample" onSubmit={(e)=>Postdepartrment(e)} >
+              <div className="modal-body">
+                
+                <div />
+              </div>
+              <div className="modal-footer">
+                <button onClick={() => setIsOpen(!isOpen)} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" className="btn btn-primary">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div> */}
+
+<Button variant="primary" onClick={()=>setIsOpen(true)}>
         Launch demo modal
       </Button>
 
-      <Modal show={show} onHide={setShow(false)}>
+      <Modal show={isOpen} onHide={()=>setIsOpen(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Check your email for Otp</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+        <Modal.Body>
+        <div className="form-group  mt-10">
+             <input   className={`form-control mb-3`} id="input-5" type="otp"  name="otp" placeholder="otp" />
+             <Form.Control.Feedback type="invalid">not  match</Form.Control.Feedback>
+           </div>
+           <div className="form-group">
+           <button className="btn btn-brand-1 hover-up w-100" type="button"  name="login">Submit OTP</button>
+         </div>
+        </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={setShow(false)}>
+          <Button variant="secondary" onClick={()=>setIsOpen(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={setShow(false)}>
-            Save Changes
-          </Button>
+          
         </Modal.Footer>
-      </Modal> */}
-
-
+      </Modal>
         </section>
       </main>
     </>
