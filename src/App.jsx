@@ -18,6 +18,7 @@ import Resetpassord from "./Employerpages/Resetpassord";
 import Notificationfile from "./Employerpages/Notificationfile";
 import Candidates from "./Employerpages/Candidates";
 import Employeeslist from "./Employerpages/Employeeslist";
+import Notificationprofile from "./Employerpages/Notificationprofile";
 // import Employeeslist from "./Employerpages/Employeeslist";
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
             <Route path="notification" element={<Notificationfile/>} />
             <Route path="candidates" element={<Candidates/>} />
             <Route path="employeelist" element={<Employeeslist/>} />
+            <Route  default path="verification/:id/:userId" element={<Notificationprofile/>} />
             
           </Route>
           <Route path="*" element={<Notfound />} />

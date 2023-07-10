@@ -73,6 +73,7 @@ export default function Employeelogin() {
           if(data.data.data){
             setuserdetail(data.data.data)
             window.localStorage.setItem("graiduser", "employer");
+            window.localStorage.setItem("graiduseremail",data.data.data.docs.email);
             navigate('/employer-profile')
           }else{
             // window.localStorage.setItem("graiduser", "employee");

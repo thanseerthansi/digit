@@ -2,14 +2,18 @@ import React, { useContext, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import Axioscall from '../Commonpages/Axioscall'
 import { Simplecontext } from '../Commonpages/Simplecontext';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Notificationfile() {
   const {userdetail } = useContext(Simplecontext);
+  const [notificationdata,setnotificationdata]=useState([])
     useEffect(() => {
      window.scrollTo(0,0)
      getNotification()
+
     }, [])
-    console.log("useruserdetail",userdetail)
+    // console.log("useruserdetail",userdetail)
     const tokenhandler=()=>{
       let token = window.localStorage.getItem('craig-token')??""
       if(token){
@@ -21,13 +25,15 @@ export default function Notificationfile() {
     const getNotification=async()=>{
       try {
         let body ={
-          email:userdetail.email,
+          // email:window.localStorage.getItem("graiduseremail"),
           page:1,
           limit:10
         }
+        console.log("body notify",body)
         let data = await Axioscall("get","notification",body)
         if (data.status===200){
-          console.log("data",data)
+          console.log("notification_data",data)
+          setnotificationdata(data.data.data.docs)
         }
       } catch (error) {
         console.log(error)
@@ -47,7 +53,8 @@ export default function Notificationfile() {
             <h6 className="m-0">Recent</h6>
           </div>
           <div className="box-body p-0">
-            <div className="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header">
+            {notificationdata.filter(t=>t.message.is_verified===false).length?notificationdata.filter(t=>t.message.is_verified===false).map((newnot,nk)=>(
+            <div key={nk} className="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header">
               <div className="dropdown-list-image mr-3">
                 <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png"  alt=""/>
               </div>
@@ -55,11 +62,14 @@ export default function Notificationfile() {
                 <a href="verification.html"><div className="text-truncate ">Request For Profile Verification</div>
                   <div className="small">Income tax sops on the cards, The bias in VC funding, and other top news for you</div></a>
               </div>
+              
               <div className="font-weight-bold mr-3 ml-30 margin-left1">
-                <button type="button" href="verification.html" className="btn btn-outline-success btn-sm ">Verify</button>
+                <Link type="button" to={`/verification/${newnot._id}/${newnot.user._id}`} className="btn btn-outline-success btn-sm ">Verify</Link>
               </div>
+              
             </div>
-            <div className="p-3 d-flex align-items-center osahan-post-header">
+            )):<div><p className='text-center'>No Recent Notifications Found</p></div>}
+            {/* <div className="p-3 d-flex align-items-center osahan-post-header">
               <div className="dropdown-list-image mr-3">
                 <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png"  alt=""/>
               </div>
@@ -70,7 +80,7 @@ export default function Notificationfile() {
               <div className="font-weight-bold mr-3 ml-30 margin-left1">
                 <button type="button" className="btn btn-outline-success btn-sm">Verify</button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="box shadow-sm rounded bg-white mb-3">
@@ -78,6 +88,7 @@ export default function Notificationfile() {
             <h6 className="m-0">Earlier</h6>
           </div>
           <div className="box-body p-0">
+          {notificationdata.filter(t=>t.message.is_verified===true).length?notificationdata.filter(t=>t.message.is_verified===true).map((newnot,nk)=>(
             <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
               <div className="dropdown-list-image mr-3">
                 <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png"  alt=""/>
@@ -90,7 +101,8 @@ export default function Notificationfile() {
                 <button type="button" className="btn btn-outline-success btn-sm">Verify</button>
               </div>
             </div>
-            <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
+            )):<div><p className='text-center'>No Earlier Notifications Found</p></div>}
+            {/* <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
               <div className="dropdown-list-image mr-3"><img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png"  alt=""/></div>
               <div className="font-weight-bold mr-3">
                 <div className="text-truncate">DAILY RUNDOWN: SATURDAY</div>
@@ -151,7 +163,7 @@ export default function Notificationfile() {
                   <div className="small text-success"><i className="fa fa-check-circle" /> Verified</div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

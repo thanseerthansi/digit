@@ -55,12 +55,14 @@ export default function Simplecontextprovider({children}){
             }
             if(window.localStorage.getItem("graiduser")==="employer"){
                 let data = await Axioscall("get","company",{userid:datalist})
-                // console.log("data",data)
+                console.log("data",data)
                 if (data.status===200){
                   console.log("datadocs",data.data.data)
                   if(data.data.data){
                     setuserdetail(data.data.data)
                     setemployeedata(data.data.data)
+                    // console.log("datadaa.............",data.data.data.email)
+                    // window.localStorage.setItem("graiduseremail",data.data.data.email);
                   }else{
                     // window.localStorage.setItem("graiduser", "employee");
                     // navigate('/employeeregister')

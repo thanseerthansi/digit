@@ -1,18 +1,30 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import Axioscall from '../Commonpages/Axioscall'
+import { useEffect } from 'react'
+import { useState } from 'react'
 
 export default function Candidates() {
+  const [employeesdata,setemployeedata]=useState([])
+  const [currentpage,setcurrentpage]=useState(1)
+  useEffect(() => {
+    getCandidte()
+  }, [])
+  
   const getCandidte=async()=>{
     try {
       let body={
         limit:10,
-        page:1,
+        page:currentpage,
         uniqueid:"",
       }
-      let data= Axioscall("get","employee",body)
+      let data=await Axioscall("get","employee",body)
+      console.log("dataemployee",data)
+      if (data.status===200){
+        setemployeedata(data.data.data.docs)
+      }
     } catch (error) {
-      
+      console.log(error)
     }
   }
   return (
@@ -70,19 +82,21 @@ export default function Candidates() {
           </div>
         </div>
         <div className="row">
-          <div className="col-xl-3 col-lg-4 col-md-6">
+          {employeesdata.length?employeesdata.map((emp,ek)=>(
+            <div key={ek} className="col-xl-3 col-lg-4 col-md-6">
             <div className="card-grid-2 hover-up">
               <div className="card-grid-2-image-left">
                 <div className="card-grid-2-image-rd online"><a href="candidate-details.html">
                     <figure><img alt="jobBox" src="assets/imgs/page/candidates/user1.png" /></figure></a></div>
                 <div className="card-profile pt-10"><a href="candidate-details.html">
-                    <h5>Robert Fox</h5></a><span className="font-xs color-text-mutted">UI/UX Designer</span>
-                  <h6 className="card-id">ID:9088667766</h6>
-                  <div className="rate-reviews-small pt-5"><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span className="ml-10 color-text-mutted font-xs">(65)</span></div>
+                    <h5>Robert Fox</h5></a><span className="font-xs color-text-mutted">{emp?.careerandeducation?.designation??"designation"}</span>
+                  <h6 className="card-id">ID:{emp.uniqueid}</h6>
+                  {/* <div className="rate-reviews-small pt-5"><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span className="ml-10 color-text-mutted font-xs">(65)</span></div> */}
                 </div>
               </div>
               <div className="card-block-info">
-                <p className="font-xs color-text-paragraph-2">| Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero repellendus magni, atque delectus molestias quis?</p>
+                <p className="font-xs color-text-paragraph-2">{emp?.address?.permanantAddress??""}</p>
+                <p className="font-xs color-text-paragraph-2"></p>
                 <div className="card-2-bottom card-2-bottom-candidate mt-30">
                   <div className="text-start"><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Figma</a><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Adobe XD</a><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">PSD</a><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">App</a><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Digital</a>
                   </div>
@@ -96,7 +110,9 @@ export default function Candidates() {
               </div>
             </div>
           </div>
-          <div className="col-xl-3 col-lg-4 col-md-6">
+          )):<div><p>No Employees Found</p></div>}
+          
+          {/* <div className="col-xl-3 col-lg-4 col-md-6">
             <div className="card-grid-2 hover-up">
               <div className="card-grid-2-image-left">
                 <div className="card-grid-2-image-rd online"><a href="candidate-details.html">
@@ -485,20 +501,14 @@ export default function Candidates() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
-      <div className="paginations">
+      <div className="paginations ">
         <ul className="pager">
-          <li><a className="pager-prev" href="#" /></li>
-          <li><a className="pager-number" href="#">1</a></li>
-          <li><a className="pager-number" href="#">2</a></li>
-          <li><a className="pager-number" href="#">3</a></li>
-          <li><a className="pager-number" href="#">4</a></li>
-          <li><a className="pager-number" href="#">5</a></li>
-          <li><a className="pager-number active" href="#">6</a></li>
-          <li><a className="pager-number" href="#">7</a></li>
-          <li><a className="pager-next" href="#" /></li>
+          <li><button className="pager-prev border-0" onClick={()=>currentpage>1?setcurrentpage(currentpage-1):''} /></li>
+          <li><a className="pager-number active" >{currentpage}</a></li>
+          <li><button className="pager-next border-0" onClick={()=>employeesdata?.hasNextPage?setcurrentpage(currentpage+1):''??""} /></li>
         </ul>
       </div>
     </div>
@@ -512,7 +522,7 @@ export default function Candidates() {
             <h2 className="text-md-newsletter text-center">New Things Will Always<br /> Update Regularly</h2>
             <div className="box-form-newsletter mt-40">
               <form className="form-newsletter">
-                <input className="input-newsletter" type="text" defaultValue placeholder="Enter your email here" />
+                <input className="input-newsletter" type="text" value="" placeholder="Enter your email here" />
                 <button className="btn btn-default font-heading icon-send-letter">Subscribe</button>
               </form>
             </div>

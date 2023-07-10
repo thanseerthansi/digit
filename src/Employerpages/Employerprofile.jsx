@@ -5,7 +5,7 @@ import { Simplecontext } from "../Commonpages/Simplecontext";
 import { Form } from "react-bootstrap";
 import Axioscall from "../Commonpages/Axioscall";
 import moment from 'moment';
-import { notify } from "../Commonpages/toast";
+import { notify, notifyerror } from "../Commonpages/toast";
 import Filestack from "../Commonpages/Filestack";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -13,44 +13,50 @@ import Modal from 'react-bootstrap/Modal';
 export default function Employerprofile() {
   const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
-  console.log("userdetailin profile",userdetail)
-  console.log("employeedata profile",employeedata)
+  // console.log("userdetailin profile",userdetail)
+  // console.log("employeedata profile",employeedata)
   const [isOpen, setIsOpen] = useState(false);
-  
+  const [load,setload]=useState(false)
+  const [emailotp,setemailotp]=useState('')
+  const numberRegex = /^\d+$/;
   // const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0,0)
   }, [])
   
- const Employeeupdate=async(e)=>{
+ const Employeeupdate=async()=>{
   try {
-    console.log("okentered to employee update",employeedata)
+    setIsOpen(true)
+    // console.log("okentered to employee update",employeedata)
     let datalist = {...employeedata}
+    // console.log("no of eeeeeeeeeeeeeeeemployes",datalist.noOfemployees)
     if (employeedata._id){
       datalist.id=employeedata._id   
     }
     let data = await Axioscall("put","company",datalist)
-    console.log(" response",data)
+    // console.log(" response",data)
     if(data.status===200){
       getUser(); 
       notify("Updated Successfully")
       window.scrollTo(0,0)
     } 
+    setIsOpen(false)
   } catch (error) {
     console.log("error",error)
+    setIsOpen(false)
   }
 
  }
  const Bannerhandler=async(ratio)=>{
   try {
-    console.log("atio in function",ratio)
+    // console.log("atio in function",ratio)
     let data =await Filestack(ratio)
     let datalist = {...employeedata}
     if (data){
       datalist.id=employeedata._id
       datalist.bannerImage=data
     }
-    console.log("datalist",datalist)
+    // console.log("datalist",datalist)
     let dataupdate = await Axioscall("put","company",datalist)
     if (dataupdate.status){
       getUser(); 
@@ -62,12 +68,61 @@ export default function Employerprofile() {
   }
   
  }
+const ConfirmmailSend=async()=>{
+  try {
+    // setemailvalid(true)
+    // console.log("email",userdetail.email)
+    setload(true)
+    let data = await Axioscall("post","company/sendcode",{email:userdetail.email})
+    // console.log("dataemail",data)
+    if(data.status===200){
+      notify("check your mail for verification otp")
+      setIsOpen(true)
+    }else{
+      notifyerror("Something Went wrong Sent again")
+    }
+    setload(false)
+  } catch (error) {
+    setload(false)
+    console.log(error)
+    notifyerror("Something Went wrong Sent again")
+  }
+ 
+}
 
+const verifyotp=async()=>{
+  try {
+      
+    let body={
+      "email" : userdetail.email,
+      "otp" : emailotp
+    }
+    // console.log("e",body)
+    let data = await Axioscall("post","company/verifycode",body)
+    // console.log("data",data)
+    if(data.status===200){
+      setIsOpen(false)
+      Employeeupdate()
+      
+    }
+    else(
+      notifyerror(data.response.data.message )
+      // console.log("errordfghjkl",data.response.data.message )
+    )
+  } catch (error) {
+    console.log(error)
+  }
 
+}
   return (
     <>
       <main className="main">
         <div className="carousel-inner"></div>
+        {load? 
+            <div className="spinner-container">
+                        <div className="spinner " />
+                      </div>:null}
+                     
         <section className="section-box-2">
           <div className="container">
             <div className="banner-hero banner-image-single">
@@ -127,9 +182,14 @@ export default function Employerprofile() {
                       </a>
                     </li>
                     <li>
-                      {/* <Link className="btn btn-border recruitment-icon mb-20" to="/employeelist" >
+                    <Link className="btn btn-border people-icon mb-20" to="/employeelist" >
+                        HR
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="btn btn-border peoples-icon mb-20" to="/employeelist" >
                         Employees
-                      </Link> */}
+                      </Link>
                     </li>
                   </ul>
                   <div className="border-bottom pt-10 pb-10" />
@@ -252,7 +312,7 @@ export default function Employerprofile() {
                       </div>
                       {/* form ................................... */}
                       <div className="row form-contact">
-                        <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Employeeupdate,setValidated)} >
+                        <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,ConfirmmailSend,setValidated)} >
                         <div className="col-lg-12 col-md-12 row ">
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">Company Name *</label>
@@ -285,7 +345,7 @@ export default function Employerprofile() {
                           <label required className="font-sm color-text-mutted mb-10">Industry Type</label>
                             <div className="text__center">
                               <select value={employeedata?.industryType??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,industryType:e.target.value})} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                              <option value defaultValue="" hidden selected>Industry Type</option>
+                              <option value="" defaultValue="" disabled >Industry Type</option>
                               <option value="software-development">Software Development</option>
                               <option value="web-development">Web Development</option>
                               <option value="mobile-app-development">Mobile App Development</option>
@@ -330,21 +390,21 @@ export default function Employerprofile() {
                           </label>
                           <div className="form-group col-lg-4 mb-3">
                             <label className="font-sm color-text-mutted mb-10">Age of the company</label>
-                            <input required  className="form-control" type="number"value={employeedata?.ageOfCompany??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,ageOfCompany:e.target.value})} />
+                            <input required  className={`form-control ${employeedata.ageOfCompany?numberRegex.test(employeedata.ageOfCompany)?"":"is-invalid":""}` } type="text" pattern="[0-9]*" value={employeedata?.ageOfCompany??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,ageOfCompany:e.target.value})} />
                             <Form.Control.Feedback type="invalid">
-                              Please provide Age of the company
+                              Please provide Age of the company as digit
                             </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-4 mb-3">
                             <label className="font-sm color-text-mutted mb-10">Number Of Employees</label>
-                            <input required className="form-control" type="number" value={employeedata?.noOfemployees??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,noOfemployees:e.target.value})} />
+                            <input required className={`form-control ${employeedata.noOfemployees?numberRegex.test(employeedata.noOfemployees)?"":"is-invalid":""}` } type="text" pattern="[0-9]*" value={employeedata?.noOfemployees??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,noOfemployees:e.target.value})} />
                             <Form.Control.Feedback type="invalid">
-                              Please provide No of Employees
+                              Please provide No of Employees as digit
                             </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-4 mb-3">
                             <label className="font-sm color-text-mutted mb-10">Number Of Directors</label>
-                            <input required className="form-control" type="number" value={employeedata?.noOfdirectors??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,noOfdirectors:e.target.value})} />
+                            <input required className={`form-control ${employeedata.noOfdirectors?numberRegex.test(employeedata.noOfdirectors)?"":"is-invalid":""}` } type="text" pattern="[0-9]*" value={employeedata?.noOfdirectors??""} placeholder="01 - 234 567 89" onChange={(e)=>setemployeedata({...employeedata,noOfdirectors:e.target.value})} />
                             <Form.Control.Feedback type="invalid">
                               Please provide No of Directors
                             </Form.Control.Feedback>
@@ -503,21 +563,21 @@ export default function Employerprofile() {
         </div>
       </div> */}
 
-<Button variant="primary" onClick={()=>setIsOpen(true)}>
+{/* <Button variant="primary" onClick={()=>setIsOpen(true)}>
         Launch demo modal
-      </Button>
+      </Button> */}
 
       <Modal show={isOpen} onHide={()=>setIsOpen(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Check your email for Otp</Modal.Title>
+          <Modal.Title><h4>Check your email for otp</h4></Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <div className="form-group  mt-10">
-             <input   className={`form-control mb-3`} id="input-5" type="otp"  name="otp" placeholder="otp" />
+             <input onChange={(e)=>setemailotp(e.target.value)}  className={`form-control mb-3`} id="input-5" type="otp"  name="otp" placeholder="otp" />
              <Form.Control.Feedback type="invalid">not  match</Form.Control.Feedback>
            </div>
            <div className="form-group">
-           <button className="btn btn-brand-1 hover-up w-100" type="button"  name="login">Submit OTP</button>
+           <button className="btn btn-brand-1 hover-up w-100" type="button" onClick={()=>verifyotp()}  name="login">Submit OTP</button>
          </div>
         </Modal.Body>
         <Modal.Footer>
