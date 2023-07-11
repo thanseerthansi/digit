@@ -16,7 +16,7 @@ import Axioscall from "../Commonpages/Axioscall";
 import jwt_decode from "jwt-decode";
 
 export default function Signin() {
-  const { path,userdetail,setuserdetail } = useContext(Simplecontext);
+  const { path,userdetail,setuserdetail,setemployeedata } = useContext(Simplecontext);
   const navigate = useNavigate();
   const countryCode = "+91";
 
@@ -155,12 +155,14 @@ export default function Signin() {
   }
   const Getuser =async(datalist)=>{
     try {
+      console.log("id:::::",datalist)
         let data = await Axioscall("get","employee",{id:datalist})
-        console.log("data",data)
+        console.log("datagetuser",data)
         if (data.status===200){
-          console.log("datadocs",data.data.docs)
-          if(data.data.docs){
-            setuserdetail(data.data.docs)
+          console.log("datadocs",data.data.data.docs)
+          if(data.data.data.docs){
+            setuserdetail(data.data.data.docs[0])
+            setemployeedata(data.data.data.docs[0])
             window.localStorage.setItem("graiduser", "employee");
             navigate('/employee-profile')
           }else{

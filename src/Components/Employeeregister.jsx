@@ -12,7 +12,7 @@ import axios from 'axios';
 
 const animatedComponents = makeAnimated();
 export default function Employeeregister() {
-  const {Check_Validation,Decodetoken}=useContext(Simplecontext)
+  const {Check_Validation,Decodetoken,getUser,userdetail}=useContext(Simplecontext)
   const [selectedskills,setselectedskills]=useState('')
   const [employeedata,setemployeedata]=useState([])
   const [employeedata2,setemployeedata2]=useState([])
@@ -66,6 +66,7 @@ export default function Employeeregister() {
   // console.log("companydaprecompanydatata",precompanydata)
   // console.log("companydata",companydata)
   // console.log("companyarray",companyarray)
+  console.log("userdetail",userdetail)
     useEffect(() => {     
       window.scrollTo(0,0)
       getCompanydata()
@@ -219,13 +220,13 @@ export default function Employeeregister() {
      
       
       console.log("datalistbefore",datalist)
-      // let data = await Axioscall("post","employee/personal",datalist)
-      // if(data.status===200){
-        // notify("Successfully Saved")
-        setWizard(2)
-        
+      let data = await Axioscall("post","employee/personal",datalist)
+      console.log("datapersonal",data)
+      if(data.status===200){
+        notify("Successfully Saved")
+        setWizard(2)     
         tophandler(0,200)
-      // }
+      }
       setload(false)
     } catch (error) {
       console.log(error)
@@ -251,12 +252,13 @@ export default function Employeeregister() {
         datalist.currentAddress=[{...currentaddressdata}]
       }
       console.log("form2",datalist)
-      // let data = await Axioscall("post","employee/address",datalist)
-      // if(data.status===200){
+      let data = await Axioscall("post","employee/address",datalist)
+      console.log("dataaddress",data)
+      if(data.status===200){
         setWizard(3)
         setload(false)
         tophandler(0,200)
-      // }
+      }
     } catch (error) {
       setload(false)
     }
@@ -267,11 +269,12 @@ export default function Employeeregister() {
       setload(true)
       // user id push to datalist.at...........
       let userid = tokenhandler()
+      let datalist ={...employeedata3}
       if (userid){
         // console.log("userid",userid)
         datalist.user=userid
       }
-      let datalist ={...employeedata3}
+      
       if(Object.keys(tenthdata).length){
         datalist.tenth=[{...tenthdata}]
       }
@@ -327,11 +330,12 @@ export default function Employeeregister() {
           datalist.prevCompanies=company
         }
 
-        console.log("data",datalist)
+        // console.log("data",datalist)
         let data = await Axioscall("post","employee/educationandcareer",datalist)
         if(data.status===200){
           setWizard(4)      
           tophandler(0,200)
+          getUser()
         }
         setload(false)
     } catch (error) {
@@ -831,15 +835,15 @@ export default function Employeeregister() {
                                 </div>
                               </div>
                               <div className="form-group col-lg-3  ">
-                                <input type="text" required onChange={(e)=>settenthdata({...tenthdata,"school/university":e.target.value})} value={tenthdata["school/university"]??""} className="form-control" placeholder=" School/University" id=" " />
+                                <input type="text" required onChange={(e)=>settwelthdata({...twelthdata,"school/university":e.target.value})} value={twelthdata["school/university"]??""} className="form-control" placeholder=" School/University" id=" " />
                                 <Form.Control.Feedback type="invalid">Please provide school </Form.Control.Feedback>
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" required onChange={(e)=>settenthdata({...tenthdata,"garde/score":e.target.value})} value={tenthdata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
+                                <input type="text" required onChange={(e)=>settwelthdata({...twelthdata,"garde/score":e.target.value})} value={twelthdata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
                                 <Form.Control.Feedback type="invalid">Please provide grade </Form.Control.Feedback>
                               </div>
                               <div className="form-group col-lg-3 ">
-                                <input type="text" required onChange={(e)=>settenthdata({...tenthdata,year:e.target.value})} value={tenthdata.year??""} className="form-control" placeholder=" Year" id=" " />
+                                <input type="text" required onChange={(e)=>settwelthdata({...twelthdata,year:e.target.value})} value={twelthdata.year??""} className="form-control" placeholder=" Year" id=" " />
                                 <Form.Control.Feedback type="invalid">Please provide year </Form.Control.Feedback>
                               </div>
                             </div>
@@ -1001,11 +1005,14 @@ export default function Employeeregister() {
                         </div>
                         <h6 className="mt-3 color-brand-1">Designation</h6>
                         <div className="col-lg-12 col-md-12">
-                          <select   className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
-                            <option value="" hidden  >Select Designation</option>
-                            <option value="Company1">Company1</option>
-                            <option value="Company2">Company2</option>
+                          <select  value={employeedata3.designation}  onChange={(e)=>setemployeedata3({...employeedata3,designation:e.target.value})} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                            <option value="" defaultValue="" disabled  >Select Designation</option>
+                            <option value="FullStack Developer">FullStack Developer</option>
+                            <option value="Frontend Developer">Frontend Developer</option>
+                            <option value="Backend Developer">Backend Developer</option>
+                            <option value="Marketing">Marketing</option>
                           </select>
+                          <Form.Control.Feedback type="invalid">Please provide Designation</Form.Control.Feedback>
                           </div>
                         <h6 className="mt-3 ">Skills</h6>
                         <div className="col-lg-12 col-md-12">
@@ -1121,9 +1128,9 @@ export default function Employeeregister() {
                             <div className="form-group col-lg-6 ">
                               <div className="text__center">
                                 <select value={citm.name} disabled className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
-                                  <option value="" hidden  >Company Name</option>
+                                  {/* <option value="" hidden  >Company Name</option>
                                   <option value="Company1">Company1</option>
-                                  <option value="Company2">Company2</option>
+                                  <option value="Company2">Company2</option> */}
                                 </select>
                               </div>
                             </div>
@@ -1157,7 +1164,7 @@ export default function Employeeregister() {
                                 <select onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata.name} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                   <option value="" hidden  >Company Name</option>
                                   {companyvalues.map((company,k)=>(
-                                    <option value={company._id}>{company.name}</option>
+                                    <option key={k} value={company._id}>{company.name}</option>
                                   ))} 
                                 </select>
                                 <Form.Control.Feedback type="invalid">Please provide Company </Form.Control.Feedback>
@@ -1233,8 +1240,8 @@ export default function Employeeregister() {
                                 <img src="assets/imgs/page/login-register/qr.png" className="is-circle6 profile-pic" />
                                 <div className="profile-detail">
                                   <p className="profile-name">CRAG CARD</p>
-                                  <span className="profile-summary">Deepak</span>
-                                  <a className="profile-cv">ID:08INKL9507290001</a>
+                                  <span className="profile-summary">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""}</span>
+                                  <a className="profile-cv">ID:{userdetail.uniqueid}</a>
                                 </div>
                               </section>
                               <div className="front-smooth" />

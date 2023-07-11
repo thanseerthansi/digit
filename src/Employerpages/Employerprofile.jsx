@@ -14,7 +14,7 @@ export default function Employerprofile() {
   const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
   // console.log("userdetailin profile",userdetail)
-  // console.log("employeedata profile",employeedata)
+  console.log("employeedata profile",employeedata)
   const [isOpen, setIsOpen] = useState(false);
   const [load,setload]=useState(false)
   const [emailotp,setemailotp]=useState('')
@@ -320,6 +320,7 @@ const verifyotp=async()=>{
                             <Form.Control.Feedback type="invalid">Please provide a Company Name</Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
+                            {/* {employeedata.user.username} */}
                             <label className="font-sm color-text-mutted mb-10">Email *</label>
                             <input required className="form-control" disabled type="text"value={employeedata?.email??""} onChange={(e)=>setemployeedata({...employeedata,email:e.target.value})}/>
                             <Form.Control.Feedback type="invalid">

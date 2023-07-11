@@ -40,7 +40,7 @@ export default function Header() {
       // console.log("windowuser",window.localStorage.getItem("graiduser"))
       // console.log("userdetail",userdetail)
       // console.log("window.location.pathname",window.location.pathname)
-      if(window.localStorage.getItem("graiduser")==="employee" && !userdetail && window.location.pathname!=="/employeeregister"){
+      if(window.localStorage.getItem("graiduser")==="employee" && !userdetail && window.location.pathname !== "/employeeregister"){
         console.log("no user.............................................................")
         logouthandler()
       }

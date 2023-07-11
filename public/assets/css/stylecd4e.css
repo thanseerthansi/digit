@@ -9331,7 +9331,10 @@ input[type=file]::file-selector-button:hover {
 
 .sidebar-border, .sidebar-shadow {
   border: 1px solid #E0E6F7;
-  padding: 25px;
+  /* padding: 25px; */
+  padding-left: 0px;
+  padding-top: 25px;
+  padding-bottom: 25px;
   border-radius: 8px;
   background-color: #ffffff;
   margin-bottom: 40px;
@@ -12056,7 +12059,7 @@ margin-left: 300px!important;
 .timeline-sm .timeline-sm-item {
   position: relative;
   padding-bottom: 20px;
-  padding-left: 40px;
+  padding-left: 10px;
   border-left: 2px solid #dee2e6;
 }
 .timeline-sm .timeline-sm-item:after {

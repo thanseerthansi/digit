@@ -14,7 +14,7 @@ export default function Candidates() {
   const getCandidte=async()=>{
     try {
       let body={
-        limit:10,
+        limit:16,
         page:currentpage,
         uniqueid:"",
       }

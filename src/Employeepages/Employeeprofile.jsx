@@ -1,9 +1,11 @@
 import React, { useContext } from 'react'
 import { Simplecontext } from '../Commonpages/Simplecontext'
 import { Helmet } from 'react-helmet'
+import moment from 'moment';
 
 export default function Employeeprofile() {
-  const {logouthandler}=useContext(Simplecontext)
+  const {logouthandler,userdetail,employeedata}=useContext(Simplecontext)
+  console.log("userdetail in employee profile",userdetail)
   return (
     <>
       <main className="main">
@@ -11,19 +13,19 @@ export default function Employeeprofile() {
   </div>
   <section className="section-box-2">
     <div className="container">
-      <div className="banner-hero banner-image-single"><img src="assets/imgs/page/candidates/img copy1.png" alt="jobbox" /><a className="btn-editor" href="#" /></div>
+      <div className="banner-hero banner-image-single"><img src={userdetail?.bannerImage??"assets/imgs/page/candidates/img copy1.png"} alt="jobbox" /><a className="btn-editor" href="#" /></div>
       <div className="box-company-profile">
         <div className="image-compay"><img src="assets/imgs/page/candidates/candidate-profile copy1.png" alt="jobbox" /></div>
         <div className="row mt-10">
           <div className="col-lg-8 col-md-12">
-            <h5 className="f-18">Steven Jobs <span className="card-location font-regular ml-20">New York, US</span></h5><br />
-            <h5 className="f-18 u-color">Unique ID : <span>889900673321</span></h5>
-            <p className="mt-0 font-md color-text-paragraph-2 mb-15">UI/UX Designer. Front end Developer</p>
-            <div className="rate-reviews-small pt-5"><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span className="ml-10 color-text-mutted font-xs">(65)</span></div>
+            <h5 className="f-18">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.landmark??""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></h5><br />
+            <h5 className="f-18 u-color">Unique ID : <span>{userdetail?.uniqueid??""}</span></h5>
+            <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation??""}</p>
+            {/* <div className="rate-reviews-small pt-5"><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span className="ml-10 color-text-mutted font-xs">(65)</span></div> */}
           </div>
           <div className="col-lg-4 col-md-12 text-lg-end">     
             <div>
-              <section>
+              {/* <section>
                 <h5 className="score-section mb-20">Score</h5>
                 <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                   <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
@@ -33,7 +35,7 @@ export default function Employeeprofile() {
                     <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={2}>Out of 999</text>
                   </g>
                 </svg>
-              </section>
+              </section> */}
               <div id="circle-staticstic-demo" />
             </div></div>
         </div>
@@ -52,7 +54,7 @@ export default function Employeeprofile() {
               <li><a className="btn btn-border recruitment-icon mb-20" href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Update Profile</a></li>
             </ul>
             <div className="border-bottom pt-10 pb-10" />
-            <div className="mt-20 mb-20"><a className href="#">Share Profile</a></div>
+            <div className="mt-20 mb-20"><a  href="#">Share Profile</a></div>
             <div className="mt-10 mb-10">
                     <a href="#" onClick={()=>{logouthandler();}}> Log Out</a>
                   </div>
@@ -75,118 +77,136 @@ export default function Employeeprofile() {
                         </div>
                         <div className="card-block-info">
                           <div className="class-verification1">
-                            <p className="font-md color-text-paragraph-2 ">| Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero repellendus magni, atque delectus molestias quis?</p>
+                            {/* <p className="font-md color-text-paragraph-2 ">| Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero repellendus magni, atque delectus molestias quis?</p> */}
                             <table>
                               <tbody>
                                 <tr>
                                   <td>Date of birth</td>
                                   <td>:</td>
-                                  <td className="td-verify">10/10/1998</td>
+                                  <td className="td-verify">{userdetail?.dob?moment(userdetail.dob).format("YYYY-MM-DD"):"f"??"no"}</td>
                                 </tr>
                                 <tr>
                                   <td>Email</td>
                                   <td>:</td>
-                                  <td className="td-verify">imdezcode@gmail.com</td>
+                                  <td className="td-verify">{userdetail?.email??""}</td>
                                 </tr>
                                 <tr>
                                   <td> Phone Number</td>
                                   <td>:</td>
-                                  <td className="td-verify">+9089987867</td>
+                                  <td className="td-verify">{userdetail?.phone??""}</td>
                                 </tr>
                                 <tr>
                                   <td> Permenent Address</td>
                                   <td>:</td>
-                                  <td className="td-verify">Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016</td>
+                                  <td className="td-verify">{userdetail?.address?.[0]?.permanantAddress?.[0]?.line1??""} {userdetail?.address?.[0]?.permanantAddress?.[0]?.line2??""} {userdetail?.address?.[0]?.permanantAddress?.[0]?.landmark??""} {userdetail?.address?.[0]?.permanantAddress?.[0]?.city??""}-{userdetail?.address?.[0]?.permanantAddress?.[0]?.zip??""}</td>
                                 </tr>
                                 <tr>
                                   <td> Current Address</td>
                                   <td>:</td>
-                                  <td className="td-verify">Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016</td>
-                                </tr>
+                                  <td className="td-verify">{userdetail?.address?.[0]?.currentAddress?.[0]?.line1??""} {userdetail?.address?.[0]?.currentAddress?.[0]?.line2??""} {userdetail?.address?.[0]?.currentAddress?.[0]?.landmark??""} {userdetail?.address?.[0]?.currentAddress?.[0]?.city??""}-{userdetail?.address?.[0]?.currentAddress?.[0]?.zip??""}</td>
+                                  </tr>
                                 <tr>
                                   <td>Merital Status</td>
                                   <td>:</td>
-                                  <td className="td-verify">Married</td>
+                                  <td className="td-verify">{userdetail?.maritalStatus??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Father's Name</td>
                                   <td>:</td>
-                                  <td className="td-verify">Rahul</td>
+                                  <td className="td-verify">{userdetail?.fatherName??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Father's Occupation</td>
                                   <td>:</td>
-                                  <td className="td-verify">Engineer</td>
+                                  <td className="td-verify">{userdetail?.fatherOccupation??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Mother's Name</td>
                                   <td>:</td>
-                                  <td className="td-verify">Beena</td>
+                                  <td className="td-verify">{userdetail?.motherName??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Mother's Occupation</td>
                                   <td>:</td>
-                                  <td className="td-verify">Doctor</td>
+                                  <td className="td-verify">{userdetail?.motherOccupation??""}</td>
                                 </tr>
+                               
                                 <tr>
-                                  <td className=" verification-tb-margin" colSpan={3}><h6>Brother Details</h6></td>
+                                  <td className=" verification-tb-margin" colSpan={3}><h6>Sibling Details</h6></td>
                                 </tr>
-                                <tr>
+                                {userdetail?.siblingsDetails?.length?userdetail.siblingsDetails.map((sibling,sk)=>(<>
+                                  <tr key={sk}>
                                   <td>Name</td>
                                   <td>:</td>
-                                  <td className="td-verify">Deepak</td>
+                                  <td className="td-verify">{sibling?.name??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Qualification</td>
                                   <td>:</td>
-                                  <td className="td-verify">B-Tech</td>
+                                  <td className="td-verify">{sibling?.qualification??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Occuption</td>
                                   <td>:</td>
-                                  <td className="td-verify">Designer</td>
+                                  <td className="td-verify">{sibling?.occupation??""}</td>
                                 </tr>
+                                </>)):"No Siblings Found"??""}
+                                
+                               
                                 <tr>
+                                
                                   <td className=" verification-tb-margin" colSpan={3}><h6>Spouse Details</h6></td>
                                 </tr>
-                                <tr>
+                                {userdetail?.spouseDetails?.length?userdetail.spouseDetails.map((spouse,sk)=>(<>
+                                <tr key={sk}>
                                   <td>Name</td>
                                   <td>:</td>
-                                  <td className="td-verify">Veena</td>
+                                  <td className="td-verify">{spouse?.name??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Qualification</td>
                                   <td>:</td>
-                                  <td className="td-verify">MBBS</td>
+                                  <td className="td-verify">{spouse?.qualification??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Occuption</td>
                                   <td>:</td>
-                                  <td className="td-verify">Doctor</td>
+                                  <td className="td-verify">{spouse?.occupation??""}</td>
                                 </tr>
+                                </>)):"No Spouse Found"??""}
                                 <tr>
                                   <td className=" verification-tb-margin" colSpan={3}><h6>Child Details</h6></td>
                                 </tr>
+                                {userdetail?.childDetails?.length?userdetail.childDetails.map((child,ck)=>(<>
                                 <tr>
                                   <td>Name</td>
                                   <td>:</td>
-                                  <td className="td-verify">Hari</td>
+                                  <td className="td-verify">{spouse?.name??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Qualification</td>
                                   <td>:</td>
-                                  <td className="td-verify">1 St Standerd</td>
+                                  <td className="td-verify">{spouse?.qualification??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Occuption</td>
                                   <td>:</td>
-                                  <td className="td-verify">Nill</td>
+                                  <td className="td-verify">{spouse?.occupation??""}</td>
                                 </tr>
+                                </>)):"No Child Found"??""}
                               </tbody>
                             </table>
                           </div>
                           <div className="card-2-bottom card-2-bottom-candidate mt-30">
-                            <div className="text-start"><a className="btn btn-tags-sm mb-10 mr-5">Figma</a><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Adobe XD</a><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">PSD</a><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">App</a><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Digital</a>
+                            <div className="text-start">
+                              {userdetail?.careerandeducation?.[0]?.skills.map((caritm,crk)=>(
+                                <a key={caritm} className="btn btn-tags-sm mb-10 mr-5">{caritm}</a>
+                              ))??""}
+                              
+                              {/* <a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Adobe XD</a> */}
+                              {/* <a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">PSD</a>
+                              <a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">App</a>
+                              <a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Digital</a> */}
                             </div>
                           </div>
                         </div>
@@ -202,12 +222,15 @@ export default function Employeeprofile() {
                           <h5 className="f-18 mt-10">Experiance</h5>
                           <div className="sidebar-list-job88 text-imp">
                             <ul className="list-unstyled timeline-sm">
-                              <li className="timeline-sm-item">
-                                <span className="timeline-sm-date">2015 - 19</span>
-                                <h6 className="mt-0 mb-1">Lead designer / Developer</h6>
-                                <p>websitename.com</p>
-                              </li>
-                              <li className="timeline-sm-item">
+                              {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
+                                 <li className="timeline-sm-item">
+                                 <span className="timeline-sm-date">2015 - 19</span>
+                                 <h6 className="mt-0 mb-1">Lead designer / Developer</h6>
+                                 <p>websitename.com</p>
+                               </li>
+                              ))??""}
+                             
+                              {/* <li className="timeline-sm-item">
                                 <span className="timeline-sm-date">2012 - 15</span>
                                 <h6 className="mt-0 mb-1">Senior Graphic Designer</h6>
                                 <p>Software Inc.</p>
@@ -216,11 +239,11 @@ export default function Employeeprofile() {
                                 <span className="timeline-sm-date">2010 - 12</span>
                                 <h6 className="mt-0 mb-1">Graphic Designer</h6>
                                 <p>Coderthemes LLP</p>
-                              </li>
+                              </li> */}
                             </ul>
                           </div>
                           <div className="sidebar-list-job text-imp ">
-                            <h6 className="mb-3 mt-4 text-uppercase "><i className="mdi mdi-cards-variant mr-1" />
+                            <h6 className="mb-3 mt-4 text-uppercase text-center "><i className="mdi mdi-cards-variant mr-1" />
                               LANGUAGE KNOWN</h6>
                             <div className="table-responsive mb-30">
                               <table className="table table-borderless mb-0">
@@ -465,7 +488,7 @@ export default function Employeeprofile() {
                     <label className="dropdown col-md-3 col-sm-12 mt-30">
                       <div className="text__center">
                         <select className="cs-select cs-skin-elastic cs-skin-elastic1">
-                          <option value disabled selected>Brother</option>
+                          <option value="" defaultValue="" disabled>Brother</option>
                           <option value>Sister</option>
                         </select>
                       </div>
@@ -570,8 +593,8 @@ export default function Employeeprofile() {
                       <input className="check " type="checkbox" /> 
                     </div>
                     <div className="form-group col-lg-11 col-md-11 col-xl-11 col-sm-8 p-address ">
-                      <hp className="p-address">Same as permanent address<p />
-                      </hp></div>
+                      <h4 className="p-address">Same as permanent address<p />
+                      </h4></div>
                     <div className="form-group col-md-12 mb-3 mt-20">
                       <label className="font-sm color-text-mutted mb-10">Address Line 1*</label>
                       <input className="form-control" type="text" defaultValue="United States" />

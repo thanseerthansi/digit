@@ -10,7 +10,7 @@ import { Form } from "react-bootstrap";
 import jwt_decode from "jwt-decode";
 
 export default function Employeelogin() {
-  const { path,Check_Validation,setuserdetail} = useContext(Simplecontext);
+  const { path,Check_Validation,setuserdetail,setemployeedata} = useContext(Simplecontext);
   const navigate = useNavigate()
   const [formdata,setformdata]=useState({username:"",password:""});
   const [Validated,setValidated]=useState(false)
@@ -72,12 +72,15 @@ export default function Employeelogin() {
           console.log("datadocs",data.data.data)
           if(data.data.data){
             setuserdetail(data.data.data)
+            setemployeedata(data.data.data)
             window.localStorage.setItem("graiduser", "employer");
-            window.localStorage.setItem("graiduseremail",data.data.data.docs.email);
+            // console.log("datauseremila",data.data.data.email)
+            window.localStorage.setItem("graiduseremail",data.data.data.email);
             navigate('/employer-profile')
           }else{
             // window.localStorage.setItem("graiduser", "employee");
             // navigate('/employeeregister')
+            console.log("something went wrong")
           }
         }
     } catch (error) {

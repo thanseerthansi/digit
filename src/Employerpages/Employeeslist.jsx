@@ -83,7 +83,7 @@ export default function Employeeslist() {
               </div>
             </div>
           </div>
-          <div className="col-xl-3 col-lg-4 col-md-6">
+          {/* <div className="col-xl-3 col-lg-4 col-md-6">
             <div className="card-grid-2 hover-up">
               <div className="card-grid-2-image-left">
                 <div className="card-grid-2-image-rd online"><a href="candidate-details.html">
@@ -472,7 +472,7 @@ export default function Employeeslist() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="paginations">

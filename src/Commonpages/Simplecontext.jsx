@@ -46,6 +46,9 @@ export default function Simplecontextprovider({children}){
     }
     }
     async function getUser (){  
+      try {
+        let user = window.localStorage.getItem("graiduser")
+        console.log("usertoken",user)
         if (window.localStorage.getItem('craig-token')){
             let datalist;
             var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
@@ -53,7 +56,9 @@ export default function Simplecontextprovider({children}){
                 console.log("decodeid",decoded.id)
                 datalist = decoded.id
             }
-            if(window.localStorage.getItem("graiduser")==="employer"){
+            console.log("usertoken",user)
+            if(user==="employer"){
+              console.log("employerrrrrrrrrrrrrr")
                 let data = await Axioscall("get","company",{userid:datalist})
                 console.log("data",data)
                 if (data.status===200){
@@ -68,22 +73,31 @@ export default function Simplecontextprovider({children}){
                     // navigate('/employeeregister')
                   }
                 }
-            }
-            }else if(window.localStorage.getItem("graiduser")==="employee"){
-                let data = await Axioscall("get","company",{id:datalist})
-                // console.log("data",data)
+            }else if(user==="employee"){
+              console.log("emplpyeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",datalist)
+                let data = await Axioscall("get","employee",{id:datalist,page:1,limit:1})
+                console.log("data",data)
                 if (data.status===200){
                   console.log("datadocs",data.data.data)
                   if(data.data.data){
-                    setuserdetail(data.data.data)
-                    setemployeedata(data.data.data)
+                    setuserdetail(data.data.data.docs[0])
+                    setemployeedata(data.data.data.docs[0])
                   }else{
+                    
                     // window.localStorage.setItem("graiduser", "employee");
                     // navigate('/employeeregister')
                   }
                 }
+            }else{
+              console.log("elseeeeeeeeeeeeeeeeeeee")
             }
-          //  console.log("userdatain context",userdetail)
+            }
+           console.log("userdatain context",userdetail)
+        
+      } catch (error) {
+        console.log("errorrr",error)
+      }
+     
     }
     async function Filestackhandler(ratio,setvalue,value,keypair){
       console.log("keypair",keypair)
