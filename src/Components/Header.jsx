@@ -37,13 +37,6 @@ export default function Header() {
     const handleScroll = () => {
       const currentPosition = window.pageYOffset;
       setScrollPosition(currentPosition);
-      // console.log("windowuser",window.localStorage.getItem("graiduser"))
-      // console.log("userdetail",userdetail)
-      // console.log("window.location.pathname",window.location.pathname)
-      if(window.localStorage.getItem("graiduser")==="employee" && !userdetail && window.location.pathname !== "/employeeregister"){
-        console.log("no user.............................................................")
-        logouthandler()
-      }
     };
 
     window.addEventListener("scroll", handleScroll);

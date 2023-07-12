@@ -9,9 +9,10 @@ import Axioscall from '../Commonpages/Axioscall';
 import { Form } from "react-bootstrap";
 import { Simplecontext } from "../Commonpages/Simplecontext";
 import axios from 'axios';
+import moment from 'moment';
 
 const animatedComponents = makeAnimated();
-export default function Employeeregister() {
+export default function Employeeprofupdate() {
   const {Check_Validation,Decodetoken,getUser,userdetail}=useContext(Simplecontext)
   const [selectedskills,setselectedskills]=useState('')
   const [employeedata,setemployeedata]=useState([])
@@ -58,20 +59,24 @@ export default function Employeeregister() {
   // console.log("siblingdata",siblingdata)
   // console.log("siblingarray",siblingsarray)
   // console.log("childdata",childdata)
-  // console.log("childsarray",childsarray)
-  // console.log("addressdata",addressdata)
-  // console.log("currentaddressdata",currentaddressdata)
+//   console.log("childsarray",childsarray)
+//   console.log("addressproof",addressproof)
+//   console.log("currentaddressdata",currentaddressdata)
   // console.log("masterDegreedata",masterDegreedata)
   // console.log("selectedskills",selectedskills)
   // console.log("companydaprecompanydatata",precompanydata)
   // console.log("companydata",companydata)
   // console.log("companyarray",companyarray)
-  console.log("userdetail",userdetail)
+//   console.log("userdetail",userdetail)
     useEffect(() => {     
       window.scrollTo(0,0)
       getCompanydata()
       tokenhandler()
-    }, [])
+      getPersonal()
+      getaddress()
+      getCarreer()
+    //   setload(false)
+     }, [])
     useEffect(() => {
       return () => {
         // Clean up the abort controller on component unmount
@@ -157,10 +162,10 @@ export default function Employeeregister() {
       setload(true)
       let datalist ={...employeedata}
       // user id push to datalist.at...........
-      let userid = tokenhandler()
-      if (userid){
+    //   let userid = tokenhandler()
+      if (datalist._id){
         // console.log("userid",userid)
-        datalist.user=userid
+        datalist.id=datalist._id
       }
       if (!datalist.profilePhoto){
         notifyerror("please Provide Profile Photo")
@@ -189,12 +194,14 @@ export default function Employeeregister() {
         }   
       }
       //......................lngread nad lngwrite push as list
-      if(datalist.lngRead){
+      
+      if(!Array.isArray(datalist.lngRead)){
+      
         let readdata = datalist.lngRead.split(',')
         // console.log("lngread",readdata)
         datalist.lngRead=readdata
       }
-      if(datalist.lngWrite){
+      if(!Array.isArray(datalist.lngWrite)){
         let readdata = datalist.lngWrite.split(',')
         // console.log("lngread",readdata)
         datalist.lngWrite=readdata
@@ -220,7 +227,7 @@ export default function Employeeregister() {
      
       
       console.log("datalistbefore",datalist)
-      let data = await Axioscall("post","employee/personal",datalist)
+      let data = await Axioscall("put","employee/personal",datalist)
       console.log("datapersonal",data)
       if(data.status===200){
         notify("Successfully Saved")
@@ -240,10 +247,9 @@ export default function Employeeregister() {
       setload(true)
       let datalist ={...employeedata2}
       // user id push to datalist.at...........
-      let userid = tokenhandler()
-      if (userid){
+      if (datalist._id){
         // console.log("userid",userid)
-        datalist.user=userid
+        datalist.id=datalist._id
       }
       if(Object.keys(addressdata).length){
         datalist.permanantAddress=[{...addressdata}]
@@ -251,8 +257,8 @@ export default function Employeeregister() {
       if(Object.keys(currentaddressdata).length){
         datalist.currentAddress=[{...currentaddressdata}]
       }
-      console.log("form2",datalist)
-      let data = await Axioscall("post","employee/address",datalist)
+      console.log("form22222222222222222222222",datalist)
+      let data = await Axioscall("put","employee/address",datalist)
       console.log("dataaddress",data)
       if(data.status===200){
         setWizard(3)
@@ -262,17 +268,17 @@ export default function Employeeregister() {
     } catch (error) {
       setload(false)
     }
+    setload(false)
   }
   const RegsterThirdform=async()=>{
     try {
       
       setload(true)
+      let datalist = {...employeedata3}
       // user id push to datalist.at...........
-      let userid = tokenhandler()
-      let datalist ={...employeedata3}
-      if (userid){
+      if (datalist._id){
         // console.log("userid",userid)
-        datalist.user=userid
+        datalist.id=datalist._id
       }
       
       if(Object.keys(tenthdata).length){
@@ -331,7 +337,7 @@ export default function Employeeregister() {
         }
 
         // console.log("data",datalist)
-        let data = await Axioscall("post","employee/educationandcareer",datalist)
+        let data = await Axioscall("put","employee/educationandcareer",datalist)
         if(data.status===200){
           setWizard(4)      
           tophandler(0,200)
@@ -384,9 +390,74 @@ export default function Employeeregister() {
     } catch (error) {    
     }
   }
+  const getPersonal=async()=>{
+    try {
+        let user = tokenhandler()
+        let data =await Axioscall("get","employee/personal",{user:user})
+        // console.log("personaldara",data.data.data)
+        if (data.status===200){
+            let userdata =data.data.data
+            if(userdata.dob){
+                userdata.dob = moment(userdata.dob).format("YYYY-MM-DD")
+            }
+            // console.log("addressproof",userdata.addressproof)
+            if(userdata.addressproof.length){
+                setaddressproof(userdata.addressproof[0])
+            }
+            if(userdata.idcard.length){
+                setcarddata(userdata.idcard[0])
+            }
+            if(userdata.siblingsDetails.length){
+                setsiblingsarray(userdata.siblingsDetails)
+            }
+            if(userdata.spouseDetails.length){
+                setspousedata(userdata.spouseDetails[0])
+            }
+            if(userdata.childDetails.length){
+                setchildsarray(userdata.childDetails)
+            }
+            setemployeedata(userdata)
+        }
+        
+    } catch (error) {
+        console.log(error)
+    }
+  }
+  const getaddress=async()=>{
+    try {
+        let user = tokenhandler()
+        let data =await Axioscall("get","employee/address",{user:user})
+        // console.log("addressdataaaaaaaaaaaa",data.data.data)
+        if(data.status===200){
+            let userdata = data.data.data
+            if(userdata.permanantAddress.length){
+                setaddressdata(userdata.permanantAddress[0])
+            }
+            if(userdata.currentAddress.length){
+                setcurrentaddressdata(userdata.currentAddress[0])
+            }
+            if(userdata._id){
+                setemployeedata2({...employeedata,id:userdata._id})
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+  }
+  const getCarreer=async()=>{
+    try {
+        let user = tokenhandler()
+        let data =await Axioscall("get","employee/educationandcareer",{user:user})
+        console.log("careeeeeeeeeeeeeeeeeeeeeeervht",data.data.data)
+        if(data.status===200){
+
+        }
+    } catch (error) {
+        
+    }
+  }
   return (
-    <>
-    
+    <> 
     <link href="/assets/css/stylecd4e.css?version=4.1" rel="stylesheet"></link>
     <main className="main reg-form-background">
   <div className="carousel-inner">
@@ -395,20 +466,15 @@ export default function Employeeregister() {
   <div className="spinner-container">
     <div className="spinner" />
   </div>:null}
-  <section className="pt-50 login-register">
+  <section className=" login-register">
     <div> 
       <div className=" login-register-cover">
         <div className="col-12  mx-auto">
-          <div className="text-center">
-            <p className="font-sm text-brand-2">Register </p>
-            <h2 className="mt-10 mb-5 text-brand-1">Complete Profile Today</h2>
-            {/* <p className="font-sm text-muted mb-30">Access to all features. No credit card required.</p> */}
-            <div className="divider-text-center"><span>Register Now</span></div>
-          </div>
+         
           {/* multistep */}
           <div className="container-fluid">
             <div className="row justify-content-center">
-              <div className="col-11 col-sm-12 col-md-12 col-lg-9 col-xl-9 text-center p-0 mt-3 mb-2">
+              <div className="col-11 col-sm-12 col-md-12 col-lg-9 col-xl-12 text-center p-0 mt-3 mb-2">
                 <div className="card3 px-0 pt-4 pb-0 mt-3 mb-3">
                   {/* <Form  noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Regstersubmithandler,setValidated)}   className="reg-form contact10 " > */}
                     {/* progressbar */}

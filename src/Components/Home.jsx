@@ -4,11 +4,25 @@ import { Link } from 'react-router-dom'
 import { Simplecontext } from '../Commonpages/Simplecontext';
 
 export default function Home() {
-  const { path } = useContext(Simplecontext);
+  const { path,userdetail,logouthandler } = useContext(Simplecontext);
   useEffect(() => {
     window.scrollTo(0,0)
     path()
-  }, [])
+    loghandler()
+}, [])
+const loghandler=()=>{
+  let user = window.localStorage.getItem("graiduser")
+    let path = window.location.pathname
+    let userdata = userdetail
+          console.log("windowuser",user)
+          console.log("userdetail",userdata) 
+          console.log("window.location.pathname",path)
+
+    if(user==="employee" && !userdata && path !== "/employeeregister"&& path !== "/"){
+      console.log("no user.............................................................")
+      logouthandler()
+    }
+}
   return (
     <>
     <main className="main">

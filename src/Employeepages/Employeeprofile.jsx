@@ -2,10 +2,42 @@ import React, { useContext } from 'react'
 import { Simplecontext } from '../Commonpages/Simplecontext'
 import { Helmet } from 'react-helmet'
 import moment from 'moment';
+import QRCode from 'qrcode.react';
+import Filestack from '../Commonpages/Filestack';
+import Axioscall from '../Commonpages/Axioscall';
+import Employeeprofupdate from './Employeeprofupdate';
 
 export default function Employeeprofile() {
-  const {logouthandler,userdetail,employeedata}=useContext(Simplecontext)
+  const {logouthandler,userdetail,employeedata,getUser}=useContext(Simplecontext)
   console.log("userdetail in employee profile",userdetail)
+  const maxLength = userdetail ? Math.max(userdetail.lngRead.length, userdetail.lngWrite.length) : 0;
+const rows = Array.from({ length: maxLength }, (_, index) => (
+  <tr key={index}>
+    <td data-label="Read">{userdetail && index < userdetail.lngRead.length ? userdetail.lngRead[index] : ''}</td>
+    <td data-label="Write">{userdetail && index < userdetail.lngWrite.length ? userdetail.lngWrite[index] : ''}</td>
+  </tr>
+));
+const Bannerhandler=async(ratio)=>{
+  try {
+    // console.log("atio in function",ratio)
+    let data =await Filestack(ratio)
+    let datalist = {id:userdetail._id}
+    if (data){
+      datalist.id=userdetail._id
+      datalist.bannerImage=data
+    }
+    // console.log("datalist",datalist)
+    let dataupdate = await Axioscall("put","employee/personal",datalist)
+    if (dataupdate.status){
+      getUser(); 
+      notify("Image Updated")  
+    }
+  
+  } catch (error) {
+    console.log(error)
+  }
+  
+ }
   return (
     <>
       <main className="main">
@@ -13,9 +45,15 @@ export default function Employeeprofile() {
   </div>
   <section className="section-box-2">
     <div className="container">
-      <div className="banner-hero banner-image-single"><img src={userdetail?.bannerImage??"assets/imgs/page/candidates/img copy1.png"} alt="jobbox" /><a className="btn-editor" href="#" /></div>
+      <div className="banner-hero banner-image-single">
+        <img  style={{ width:"1116px",height:"308px"}}  src={userdetail?.bannerImage??"assets/imgs/page/candidates/img copy1.png"} alt="jobbox" />
+        <button className="btn-editor" style={{border:"0"}} onClick={()=>Bannerhandler("banner")} />
+        </div>
       <div className="box-company-profile">
-        <div className="image-compay"><img src="assets/imgs/page/candidates/candidate-profile copy1.png" alt="jobbox" /></div>
+        <div className="image-compay">
+          <img style={{ height:"85px" , width:"85px"}} src={userdetail?.profilePhoto??"assets/imgs/page/candidates/candidate-profile copy1.png"} alt="jobbox" />
+          
+          </div>
         <div className="row mt-10">
           <div className="col-lg-8 col-md-12">
             <h5 className="f-18">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.landmark??""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></h5><br />
@@ -214,7 +252,7 @@ export default function Employeeprofile() {
                     </div>
                     <div className="col-xl-4 col-lg-4  col-sm-12  pl-lg-15 mt-lg-30">
                       <div className="sidebar-border">
-                        <div className="box-profile-completed text-center mb-30">
+                        <div className="box-profile-completed text-center mb-10">
                           <div className="grid">
                             <section>
                               <div id="circle-staticstic-demo" />
@@ -223,10 +261,10 @@ export default function Employeeprofile() {
                           <div className="sidebar-list-job88 text-imp">
                             <ul className="list-unstyled timeline-sm">
                               {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
-                                 <li className="timeline-sm-item">
-                                 <span className="timeline-sm-date">2015 - 19</span>
-                                 <h6 className="mt-0 mb-1">Lead designer / Developer</h6>
-                                 <p>websitename.com</p>
+                                 <li key={pk} className="timeline-sm-item">
+                                 <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{ pcompany?.to?moment(pcompany.to).format('YY'):""??""}</span>
+                                 <h6 className="mt-0 mb-1">{pcompany.name} / {pcompany.position}</h6>
+                                 <p>{pcompany.email}</p>
                                </li>
                               ))??""}
                              
@@ -246,7 +284,7 @@ export default function Employeeprofile() {
                             <h6 className="mb-3 mt-4 text-uppercase text-center "><i className="mdi mdi-cards-variant mr-1" />
                               LANGUAGE KNOWN</h6>
                             <div className="table-responsive mb-30">
-                              <table className="table table-borderless mb-0">
+                              <table className="table table-borderless mb-0 text-center">
                                 <thead className="t-head-verify">
                                   <tr>
                                     <th scope="col">Read</th>
@@ -254,22 +292,7 @@ export default function Employeeprofile() {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr>
-                                    <td data-label="Cource">Hindi</td>
-                                    <td data-label="Field/board">Hindi</td>
-                                  </tr>
-                                  <tr>
-                                    <td scope="row" data-label="Cource">English</td>
-                                    <td data-label="Field/board">Englidh</td>
-                                  </tr>
-                                  <tr>
-                                    <td scope="row" data-label="Cource">Malayalam</td>
-                                    <td data-label="Field/board">Malayalam</td>
-                                  </tr>
-                                  <tr>
-                                    <td scope="row" data-label="Cource">Arabic</td>
-                                    <td data-label="Field/board">Arabic</td>
-                                  </tr>
+                                  {rows}
                                 </tbody>
                               </table>
                             </div>
@@ -282,11 +305,12 @@ export default function Employeeprofile() {
                             <div className="logo" />
                           </div>    
                           <section className="left-section">
-                            <img src="assets/imgs/page/login-register/qr.png" className="is-circle6 profile-pic" />
+                            {/* <img src="assets/imgs/page/login-register/qr.png" className="is-circle6 profile-pic" /> */}
+                            <QRCode style={{height:"100px",width:"100px"}} value="assets/imgs/page/login-register/qr.png" />
                             <div className="profile-detail">
                               <p className="profile-name">CRAG CARD</p>
-                              <span className="profile-summary">Deepak</span>
-                              <a className="profile-cv">ID:08INKL9507290001</a>
+                              <span className="profile-summary">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""}</span>
+                              <a className="profile-cv">ID:{userdetail?.uniqueid??""}</a>
                             </div>
                           </section>
                           <div className="front-smooth" />
@@ -303,7 +327,7 @@ export default function Employeeprofile() {
                         <div className="row">
                         </div>
                         <div className="box-timeline mt-50">
-                          <div className="item-timeline"> 
+                          {/* <div className="item-timeline"> 
                             <div className="timeline-year"> <span>2008-2012</span></div>
                             <div className="timeline-info"> 
                               <h5 className="color-brand-1 mb-20">Company 1</h5>
@@ -314,20 +338,21 @@ export default function Employeeprofile() {
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, quibusdam?</p>
                               <p className="color-text-paragraph-2 mb-15">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam debitis voluptas quas ut quisquam vel maiores odit iure nobis ea?</p>
                             </div>
-                          </div>
-                          <div className="item-timeline"> 
-                            <div className="timeline-year"> <span>2012-2013</span></div>
+                          </div> */}
+                          {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
+                          <div key={pk} className="item-timeline"> 
+                            <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{ pcompany?.to?moment(pcompany.to).format('yyy'):"Present"??""}</span></div>
                             <div className="timeline-info"> 
-                              <h5 className="color-brand-1 mb-20">Company 2</h5>
-                              <h6 className="color-text-paragraph-2 mb-15">Software engineer</h6>
-                              <p className="color-text-paragraph-2 mb-15">company mail:Dummy@gmail.com</p>
-                              <p className="color-text-paragraph-2 mb-15">Company Phone&nbsp;:+964545432</p>
-                              <p className="color-text-paragraph-2 mb-15">Location:
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, quibusdam?</p>
-                              <p className="color-text-paragraph-2 mb-15">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam debitis voluptas quas ut quisquam vel maiores odit iure nobis ea?</p>
+                              <h5 className="color-brand-1 mb-20">{pcompany?.name??""}</h5>
+                              <h6 className="color-text-paragraph-2 mb-15">{pcompany.position}</h6>
+                              <p className="color-text-paragraph-2 mb-15">company mail:{pcompany.email}</p>
+                              <p className="color-text-paragraph-2 mb-15">Company Phone&nbsp;:{pcompany.phone}</p>
+                              <p className="color-text-paragraph-2 mb-15">Location:{pcompany.address}</p>
+                              {/* <p className="color-text-paragraph-2 mb-15">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam debitis voluptas quas ut quisquam vel maiores odit iure nobis ea?</p> */}
                             </div>
                           </div>
-                          <div className="item-timeline"> 
+                           ))??""}
+                          {/* <div className="item-timeline"> 
                             <div className="timeline-year"> <span>2014-2015</span></div>
                             <div className="timeline-info"> 
                               <h5 className="color-brand-1 mb-20">Company 3</h5>
@@ -350,7 +375,7 @@ export default function Employeeprofile() {
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, quibusdam?</p>
                               <p className="color-text-paragraph-2 mb-15">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam debitis voluptas quas ut quisquam vel maiores odit iure nobis ea?</p>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -375,32 +400,43 @@ export default function Employeeprofile() {
                             <tbody>
                               <tr>
                                 <td data-label="Cource">10th Board</td>
-                                <td data-label="Field/board">Kerala Board</td>
-                                <td data-label="Collage">Dummy School</td>
-                                <td data-label="Grade/Score">9.6</td>
-                                <td data-label="Year">03/31/2016</td>
+                                <td data-label="Field/board">{userdetail?.careerandeducation?.[0]?.tenth?.[0]?.board??""}</td>
+                                <td data-label="Collage">{userdetail?.careerandeducation?.[0]?.tenth?.[0]?.['school/university']??""}</td>
+                                <td data-label="Grade/Score">{userdetail?.careerandeducation?.[0]?.tenth?.[0]?.['garde/score']??""}</td>
+                                <td data-label="Year">{userdetail?.careerandeducation?.[0]?.tenth?.[0]?.year??""}</td>
                               </tr>
                               <tr>
                                 <td scope="row" data-label="Cource">12th Board</td>
-                                <td data-label="Field/board">Kerala Board</td>
-                                <td data-label="Collage">Dummy School</td>
-                                <td data-label="Grade/Score">6.8</td>
-                                <td data-label="Year">02/29/2016</td>
+                                <td data-label="Field/board">{userdetail?.careerandeducation?.[0]?.twelth?.[0]?.board??""}</td>
+                                <td data-label="Collage">{userdetail?.careerandeducation?.[0]?.twelth?.[0]?.['school/university']??""}</td>
+                                <td data-label="Grade/Score">{userdetail?.careerandeducation?.[0]?.twelth?.[0]?.['garde/score']??""}</td>
+                                <td data-label="Year">{userdetail?.careerandeducation?.[0]?.twelth?.[0]?.year??""}</td>
                               </tr>
                               <tr>
                                 <td scope="row" data-label="Cource">Bachelor’s</td>
-                                <td data-label="Field/board">Computer Science</td>
-                                <td data-label="Collage">Dummy Collage</td>
-                                <td data-label="Grade/Score">9.6</td>
-                                <td data-label="Year">02/29/2016</td>
+                                <td data-label="Field/board">{userdetail?.careerandeducation?.[0]?.bachelorDegree?.[0]?.course??""}</td>
+                                <td data-label="Collage">{userdetail?.careerandeducation?.[0]?.bachelorDegree?.[0]?.collage??""}</td>
+                                <td data-label="Grade/Score">{userdetail?.careerandeducation?.[0]?.bachelorDegree?.[0]?.['garde/score']??""}</td>
+                                <td data-label="Year">{userdetail?.careerandeducation?.[0]?.bachelorDegree?.[0]?.year??""}</td>
                               </tr>
+                              {userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?
                               <tr>
                                 <td scope="row" data-label="Cource">Master’s</td>
-                                <td data-label="Field/board">Electronics</td>
-                                <td data-label="Collage">Dummy Collage</td>
-                                <td data-label="Grade/Score">8.9</td>
-                                <td data-label="Year">01/31/2016</td>
+                                <td data-label="Field/board">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.course??""}</td>
+                                <td data-label="Collage">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.collage??""}</td>
+                                <td data-label="Grade/Score">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.['garde/score']??""}</td>
+                                <td data-label="Year">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.year??""}</td>
                               </tr>
+                              :""??""}
+                              {/* {userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?
+                              <tr>
+                                <td scope="row" data-label="Cource">Master’s</td>
+                                <td data-label="Field/board">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.course??""}</td>
+                                <td data-label="Collage">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.collage??""}</td>
+                                <td data-label="Grade/Score">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.['garde/score']??""}</td>
+                                <td data-label="Year">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.year??""}</td>
+                              </tr>
+                              :""??""} */}
                             </tbody>
                           </table>
                         </div>
@@ -411,7 +447,7 @@ export default function Employeeprofile() {
               </div>
               <div className="tab-pane fade" id="tab-my-jobs" role="tabpanel" aria-labelledby="tab-my-jobs">
                 <h3 className="mt-0 mb-15 color-brand-1">Update Profile</h3><a className="font-md color-text-paragraph-2" href="#">Update your profile</a>
-                <div className="mt-35 mb-40 box-info-profie">
+                {/* <div className="mt-35 mb-40 box-info-profie">
                   <div className="image-profile"><img src="assets/imgs/page/candidates/candidate-profile copy1.png" alt="jobbox" /></div><a className="btn btn-apply">Upload Avatar</a><a className="btn btn-link">Delete</a>
                 </div>
                 <div className="row form-contact">
@@ -773,7 +809,8 @@ export default function Employeeprofile() {
                       <button className="btn btn-apply-big font-mx font-bold ft-button1 mb-10 ">Save All Changes</button><button className="btn btn-apply-big font-mx font-bold ft-button2 mb-10 ">Reset</button>
                     </div>
                   </div>
-                </div>
+                </div> */}
+                <Employeeprofupdate/>
               </div>
             </div>
           </div>

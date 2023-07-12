@@ -23,6 +23,7 @@ export default function Signin() {
   const [phoneNumber, setPhoneNumber] = useState(countryCode);
   const [expandForm, setExpandForm] = useState(false);
   const [added_otp, setadded_otp] = useState("");
+  const [load,setload]=useState(false)
 
   useEffect(() => {
     Getusernumber()
@@ -64,24 +65,24 @@ export default function Signin() {
     // Checkuserhandler(data)
     
   };
-  const requestOTP = (e) => {
-    e.preventDefault();
-    if (phoneNumber.length >= 12) {
-      // console.log("Enter");
-      setExpandForm(true);
-      generateRecaptcha();
-      const appVerifier = window.recaptchaVerifier;
-      console.log("APP VERIFIER", appVerifier);
-      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-        .then((confirmationResult) => {
-          console.log(confirmationResult);
-          window.confirmationResult = confirmationResult;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  };
+  // const requestOTP = (e) => {
+  //   e.preventDefault();
+  //   if (phoneNumber.length >= 12) {
+  //     // console.log("Enter");
+  //     setExpandForm(true);
+  //     generateRecaptcha();
+  //     const appVerifier = window.recaptchaVerifier;
+  //     console.log("APP VERIFIER", appVerifier);
+  //     signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+  //       .then((confirmationResult) => {
+  //         console.log(confirmationResult);
+  //         window.confirmationResult = confirmationResult;
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }
+  // };
   const generateRecaptcha = () => {
     if (!window.recaptchaVerifier) {     
       window.recaptchaVerifier = new RecaptchaVerifier(
@@ -96,25 +97,25 @@ export default function Signin() {
     console.log("enters recapth")
     window.recaptchaVerifier.render();  
   };
-  const verifyOTP = (e) => {
-    console.log(added_otp);
-    let confirmationResult = window.confirmationResult;
-    confirmationResult
-      .confirm(added_otp)
-      .then((result) => {
-        console.log("Success");
-        console.log(result.user.phoneNumber);
-        if (result.user.phoneNumber){
-           Checkuserhandler(result.user.phoneNumber)
-        }else{
-          notifyerror("wrong OTP")
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        notifyerror("wrong OTP")
-      });
-  };
+  // const verifyOTP = (e) => {
+  //   console.log(added_otp);
+  //   let confirmationResult = window.confirmationResult;
+  //   confirmationResult
+  //     .confirm(added_otp)
+  //     .then((result) => {
+  //       console.log("Success");
+  //       console.log(result.user.phoneNumber);
+  //       if (result.user.phoneNumber){
+  //          Checkuserhandler(result.user.phoneNumber)
+  //       }else{
+  //         notifyerror("wrong OTP")
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       notifyerror("wrong OTP")
+  //     });
+  // };
   // crud functions start................................................................
   const Checkuserhandler=async(result)=>{
     console.log("result",result)
@@ -127,7 +128,8 @@ export default function Signin() {
             Decodetoken(data.data.data.token)
           }
       }else{
-        notifyerror(data.response.data.message)
+        console.log(data)
+        notifyerror("something went wrong ")
       }
     } catch (error) {
       console.log("error",error)
@@ -164,7 +166,12 @@ export default function Signin() {
             setuserdetail(data.data.data.docs[0])
             setemployeedata(data.data.data.docs[0])
             window.localStorage.setItem("graiduser", "employee");
-            navigate('/employee-profile')
+            if (data.data.data.docs[0]){
+              navigate('/employee-profile')
+            }else{
+              navigate('/employeeregister')
+            }
+            
           }else{
             window.localStorage.setItem("graiduser", "employee");
             navigate('/employeeregister')
@@ -174,11 +181,63 @@ export default function Signin() {
         console.log("datagetuser",error)
     }
 }
+const requestOTP=async(e)=>{
+  try {
+    e.preventDefault();
+    setload(true)
+    
+    let data =await Axioscall("post","otp/send-otp",{mobile:phoneNumber})
+    // console.log("daat",data)
+    if (data.status===200){
+      setExpandForm(true);
+      generateRecaptcha();
+      notify("check your phone for verification otp")
+      
+    }
+    
+    // inputphone.current.disabled=true
+    
+  } catch (error) {
+    
+    notifyerror("try again")
+  }
+  setload(false)
+}
+const verifyOTP=async()=>{
+  try {
+    setload(true)
+    
+    let body={
+      "mobile" : phoneNumber,
+      "otp" : added_otp
+    }
+    // console.log("e",body)
+    let data = await Axioscall("post","otp/verify-otp",body)
+    console.log("data",data)
+    if(data.status===200){
+      // inputphone.current.disabled=true
+      Checkuserhandler(phoneNumber)
+      // setdisablephone(true)
+      // setphonevalid(true)
+    }
+    else(
+      notifyerror(data.response.data.message )
+      // console.log("errordfghjkl",data.response.data.message )
+    )
+  } catch (error) {
+    console.log(error)
+  }
+  setload(false)
+}
   return (
     <>
       <main className="main">
         <ToastContainer/>
         <div className="carousel-inner"></div>
+        {load? 
+            <div className="spinner-container">
+                        <div className="spinner " />
+                      </div>:null}
         {/* <div className="bubbles">
           <div className="bubble" />
           <div className="bubble" />
@@ -243,7 +302,7 @@ export default function Signin() {
                 </div>
                 <form
                   className="login-register text-start mt-20"
-                  onSubmit={requestOTP}
+                  onSubmit={(e)=>requestOTP(e)}
                 >
                   <div className="form-group">
                     <input

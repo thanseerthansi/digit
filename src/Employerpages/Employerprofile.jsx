@@ -137,7 +137,7 @@ const verifyotp=async()=>{
               <div className="image-compay">
                 <img
                 style={{ height:"85px" , width:"85px"}}
-                  src={ userdetail?.profileImage ?? 'assets/imgs/page/candidates/candidate-profile copy.png'}
+                  src={ userdetail?.profilePhoto ?? 'assets/imgs/page/candidates/candidate-profile copy.png'}
                   alt="jobbox"
                 />
               </div>
@@ -303,12 +303,12 @@ const verifyotp=async()=>{
                       <div className="mt-35 mb-40 box-info-profie">
                         <div className="image-profile">
                           <img
-                            src={employeedata.profileImage?employeedata.profileImage:"assets/imgs/page/candidates/candidate-profile copy.png"}
+                            src={employeedata.profilePhoto?employeedata.profilePhoto:"assets/imgs/page/candidates/candidate-profile copy.png"}
                             alt="jobbox"
                           />
                         </div>
-                        <button className="btn btn-apply" onClick={()=>Filestackhandler("square",setemployeedata,employeedata,'profileImage')}>Upload Avatar</button>
-                        <button className="btn btn-link" onClick={()=>setemployeedata({...employeedata,profileImage:''})}>Delete</button>
+                        <button className="btn btn-apply" onClick={()=>Filestackhandler("square",setemployeedata,employeedata,'profilePhoto')}>Upload Avatar</button>
+                        <button className="btn btn-link" onClick={()=>setemployeedata({...employeedata,profilePhoto:''})}>Delete</button>
                       </div>
                       {/* form ................................... */}
                       <div className="row form-contact">
