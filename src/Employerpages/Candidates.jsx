@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet'
 import Axioscall from '../Commonpages/Axioscall'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 export default function Candidates() {
   const [employeesdata,setemployeedata]=useState([])
@@ -19,7 +20,7 @@ export default function Candidates() {
         uniqueid:"",
       }
       let data=await Axioscall("get","employee",body)
-      console.log("dataemployee",data)
+      console.log("dataemployee",data.data.data.docs)
       if (data.status===200){
         setemployeedata(data.data.data.docs)
       }
@@ -52,7 +53,7 @@ export default function Candidates() {
   <section className="section-box mt-30">
     <div className="container">           
       <div className="content-page">
-        <div className="box-filters-job">
+        {/* <div className="box-filters-job">
           <div className="row">
             <div className="col-xl-6 col-lg-5"><span className="text-small text-showing">Showing <strong>41-60 </strong>of <strong>944 </strong>jobs</span></div>
             <div className="col-xl-6 col-lg-7 text-lg-end mt-sm-15">
@@ -80,30 +81,35 @@ export default function Candidates() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="row">
           {employeesdata.length?employeesdata.map((emp,ek)=>(
             <div key={ek} className="col-xl-3 col-lg-4 col-md-6">
             <div className="card-grid-2 hover-up">
               <div className="card-grid-2-image-left">
-                <div className="card-grid-2-image-rd online"><a href="candidate-details.html">
-                    <figure><img alt="jobBox" src="assets/imgs/page/candidates/user1.png" /></figure></a></div>
-                <div className="card-profile pt-10"><a href="candidate-details.html">
-                    <h5>Robert Fox</h5></a><span className="font-xs color-text-mutted">{emp?.careerandeducation?.designation??"designation"}</span>
+                <div className="card-grid-2-image-rd online"><Link to={`/candidatedetails/${emp._id}`}>
+                    <figure><img alt="jobBox" src="assets/imgs/page/candidates/user1.png" /></figure></Link></div>
+                <div className="card-profile pt-10"><Link to={`/candidatedetails/${emp._id}`}>
+                    <h5>{emp.firstName} {emp.middleName} {emp.lastName}</h5></Link><span className="font-xs color-text-mutted">{emp?.careerandeducation?.[0]?.designation??"designation"}</span>
                   <h6 className="card-id">ID:{emp.uniqueid}</h6>
                   {/* <div className="rate-reviews-small pt-5"><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span className="ml-10 color-text-mutted font-xs">(65)</span></div> */}
                 </div>
               </div>
               <div className="card-block-info">
-                <p className="font-xs color-text-paragraph-2">{emp?.address?.permanantAddress??""}</p>
+                <p className="font-xs color-text-paragraph-2">{emp?.address?.[0]?.permanantAddress?.[0]?.line1??""} {emp?.address?.[0]?.permanantAddress?.[0]?.line2??""}</p>
+                <p className="font-xs color-text-paragraph-2">{emp?.address?.[0]?.permanantAddress?.[0]?.city??""}-{emp?.address?.[0]?.permanantAddress?.[0]?.zip??""}</p>
                 <p className="font-xs color-text-paragraph-2"></p>
                 <div className="card-2-bottom card-2-bottom-candidate mt-30">
-                  <div className="text-start"><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Figma</a><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Adobe XD</a><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">PSD</a><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">App</a><a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Digital</a>
+                  <div className="text-start">
+                    {emp?.careerandeducation?.[0]?.skills.map((skill,sk)=>(
+                      <a key={sk} className="btn btn-tags-sm mb-10 mr-5">{skill}</a>
+                    ))??""}
+                    
                   </div>
                 </div>
                 <div className="employers-info align-items-center justify-content-center mt-15">
                   <div className="row">
-                    <div className="col-6"><span className="d-flex align-items-center"><i className="fi-rr-marker mr-5 ml-0" /><span className="font-sm color-text-mutted">Chicago, US</span></span></div>
+                    <div className="col-6"><span className="d-flex align-items-center"><i className="fi-rr-marker mr-5 ml-0" /><span className="font-sm color-text-mutted">{emp?.address?.[0]?.permanantAddress?.[0]?.landmark??""},{emp?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></span></div>
                     <div className="col-6"><span className="d-flex justify-content-end align-items-center" /></div>
                   </div>
                 </div>

@@ -19,6 +19,7 @@ import Notificationfile from "./Employerpages/Notificationfile";
 import Candidates from "./Employerpages/Candidates";
 import Employeeslist from "./Employerpages/Employeeslist";
 import Notificationprofile from "./Employerpages/Notificationprofile";
+import Candidatedetails from "./Employerpages/Candidatedetails";
 // import Employeeslist from "./Employerpages/Employeeslist";
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
             <Route path="candidates" element={<Candidates/>} />
             <Route path="employeelist" element={<Employeeslist/>} />
             <Route  default path="verification/:id/:userId" element={<Notificationprofile/>} />
+            <Route   path="candidatedetails/:id" element={<Candidatedetails/>} />
             
           </Route>
           <Route path="*" element={<Notfound />} />

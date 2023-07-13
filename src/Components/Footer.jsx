@@ -8,7 +8,7 @@ export default function Footer() {
   <div className="container">
     <div className="row">
       <div className="footer-col-1 col-md-4 col-sm-12 ">
-        <Link to="/"><img className="footer-logo" alt="jobBox" src=".\assets\imgs\logo\craig-logo-dark.png" /></Link>
+        <Link to="/"><img className="footer-logo" alt="jobBox" src="\assets\imgs\logo\craig-logo-dark.png" /></Link>
         <div className="mt-20 mb-20 font-xs color-text-paragraph-2">JobBox is the heart of the design community and the best resource to discover and connect with designers and jobs worldwide.</div>
         <div className="footer-social"><a className="icon-socials icon-facebook" href="#" /><a className="icon-socials icon-twitter" href="#" /><a className="icon-socials icon-linkedin" href="#" /></div>
       </div>

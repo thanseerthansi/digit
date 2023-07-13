@@ -1,17 +1,29 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Axioscall from '../Commonpages/Axioscall';
 import { useEffect } from 'react';
+import moment from 'moment/moment';
+import { Simplecontext } from '../Commonpages/Simplecontext';
 
 export default function Notificationprofile() {
+  const {userdetail } = useContext(Simplecontext);
     const {id,userId}=useParams();
     const [userprofile,setuserprofile]=useState('')
-    console.log("userprofile in notificaton",userprofile)
-    console.log("iddddddddd",id)
-    console.log("userId",userId)
+    // console.log("userprofile in notificaton",userprofile)
+    // console.log("iddddddddd",id)
+    // console.log("userId",userId)
+      console.log("userdetails",userdetail)
+    const maxLength = userprofile ? Math.max(userprofile.lngRead.length, userprofile.lngWrite.length) : 0;
+const rows = Array.from({ length: maxLength }, (_, index) => (
+  <tr key={index}>
+    <td data-label="Read">{userprofile && index < userprofile.lngRead.length ? userprofile.lngRead[index] : ''}</td>
+    <td data-label="Write">{userprofile && index < userprofile.lngWrite.length ? userprofile.lngWrite[index] : ''}</td>
+  </tr>
+));
     useEffect(()=>{
       window.scrollTo(0,0)
         getUser()
+        notificationViewed()
     },[])
     const getUser=async()=>{
         try {
@@ -29,6 +41,34 @@ export default function Notificationprofile() {
             
         }
     }
+    const notificationViewed=async()=>{
+      try {
+        if (id){
+          let data= await Axioscall("put","notification",{id:id,is_viewed:true})
+          console.log("datanotificatio update",data)
+          if (data.status===200){
+            console.log("status,updated")
+          }
+        }
+       
+      } catch (error) {
+        
+      }
+    }
+    const verifynot=async(value)=>{
+      try {
+        let body={
+          userid:userId,
+          email:userdetail.email,
+          is_verified:value,
+          notificationid:id
+      }
+        let data =await Axioscall("post","employee/companyVerify",body)
+        console.log("verifydata",data)
+      } catch (error) {
+        
+      }
+    }
   return (
     <>
     <main className="main ">
@@ -39,126 +79,136 @@ export default function Notificationprofile() {
       <div className="col-lg-5 col-xl-5">
         <div className="card-box9 row">
           <div className="col-md-4">
-            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" className="rounded-circle9 avatar-xl img-thumbnail" alt="profile-image" />
+            <img src={userprofile?.profilePhoto??"https://bootdey.com/img/Content/avatar/avatar7.png"} className="rounded-circle9 avatar-xl img-thumbnail" alt="profile-image" />
           </div>
           <div className="col-md-8 mt-30">
-            <h4 className="mb-0">Nik G. Patel</h4>
-            <p className="text-muted">@webdesigner</p>
-            <p className="text-muted">ID:08INKL9507290001 </p>
+            <h4 className="mb-0">{userprofile?.firstName??""} {userprofile?.middleName??""} {userprofile?.lastName??""}</h4>
+            <p className="text-muted">@{userprofile?.careerandeducation?.[0]?.designation??""}</p>
+            <p className="text-muted">ID:{userprofile?.uniqueid??""} </p>
           </div>
           <div className=" mt-40 ">
-            <h5 className="font-13 text-uppercase h5-verify ">About Me :</h5>
+            {/* <h5 className="font-13 text-uppercase h5-verify ">About Me :</h5>
             <p className="text-muted font-13 mb-3 ">
               Hi I'm Johnathn Deo,has been the industry's standard dummy text ever since the
               1500s, when an unknown printer took a galley of type.
-            </p>
+            </p> */}
             <div className="class-verification ">
-              <table>
+              <table style={{width:"100%"}}>
                 <tbody>
                   <tr>
                     <td>Date of birth</td>
                     <td>:</td>
-                    <td className="td-verify">10/10/1998</td>
+                    <td className="td-verify">{userprofile?moment(userprofile.dob).format('d/mm/yyy'):""}</td>
                   </tr>
                   <tr>
                     <td>Email</td>
                     <td>:</td>
-                    <td className="td-verify">imdezcode@gmail.com</td>
+                    <td className="td-verify">{userprofile?.email??""}</td>
                   </tr>
                   <tr>
                     <td> Phone Number</td>
                     <td>:</td>
-                    <td className="td-verify">+9089987867</td>
+                    <td className="td-verify">{userprofile?.phone??""}</td>
                   </tr>
                   <tr>
                     <td> Permenent Address</td>
                     <td>:</td>
-                    <td className="td-verify">Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016</td>
+                    <td className="td-verify">{userprofile?.address?.[0]?.permanantAddress?.[0]?.line1??""} {userprofile?.address?.[0]?.permanantAddress?.[0]?.line2??""} {userprofile?.address?.[0]?.permanantAddress?.[0]?.landmark??""},{userprofile?.address?.[0]?.permanantAddress?.[0]?.city??""}-{userprofile?.address?.[0]?.permanantAddress?.[0]?.zip??""}</td>
                   </tr>
                   <tr>
                     <td> Current Address</td>
                     <td>:</td>
-                    <td className="td-verify">Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016</td>
+                    <td className="td-verify">{userprofile?.address?.[0]?.currentAddress?.[0]?.line1??""} {userprofile?.address?.[0]?.currentAddress?.[0]?.line2??""} {userprofile?.address?.[0]?.currentAddress?.[0]?.landmark??""} {userprofile?.address?.[0]?.currentAddress?.[0]?.city??""}-{userprofile?.address?.[0]?.currentAddress?.[0]?.zip??""}</td>
                   </tr>
                   <tr>
                     <td>Merital Status</td>
                     <td>:</td>
-                    <td className="td-verify">Married</td>
+                    <td className="td-verify">{userprofile?.maritalStatus??""}</td>
                   </tr>
                   <tr>
                     <td>Father's Name</td>
                     <td>:</td>
-                    <td className="td-verify">Rahul</td>
+                    <td className="td-verify">{userprofile?.fatherName??""}</td>
                   </tr>
                   <tr>
-                    <td>Father's Occupation</td>
+                    <td className='d-flex'>Father's Occupation</td>
                     <td>:</td>
-                    <td className="td-verify">Engineer</td>
+                    <td className="td-verify">sdf</td>
                   </tr>
                   <tr>
                     <td>Mother's Name</td>
                     <td>:</td>
-                    <td className="td-verify">Beena</td>
+                    <td className="td-verify">{userprofile?.motherName??""}</td>
                   </tr>
                   <tr>
                     <td>Mother's Occupation</td>
                     <td>:</td>
-                    <td className="td-verify">Doctor</td>
+                    <td className="td-verify">{userprofile?.motherOccupation??""}</td>
                   </tr>
                   <tr>
-                    <td className=" verification-tb-margin" colSpan={3}><h6>Brother Details</h6></td>
-                  </tr>
-                  <tr>
-                    <td>Name</td>
-                    <td>:</td>
-                    <td className="td-verify">Deepak</td>
-                  </tr>
-                  <tr>
-                    <td>Qualification</td>
-                    <td>:</td>
-                    <td className="td-verify">B-Tech</td>
-                  </tr>
-                  <tr>
-                    <td>Occuption</td>
-                    <td>:</td>
-                    <td className="td-verify">Designer</td>
-                  </tr>
-                  <tr>
-                    <td className=" verification-tb-margin" colSpan={3}><h6>Spouse Details</h6></td>
-                  </tr>
-                  <tr>
-                    <td>Name</td>
-                    <td>:</td>
-                    <td className="td-verify">Veena</td>
-                  </tr>
-                  <tr>
-                    <td>Qualification</td>
-                    <td>:</td>
-                    <td className="td-verify">MBBS</td>
-                  </tr>
-                  <tr>
-                    <td>Occuption</td>
-                    <td>:</td>
-                    <td className="td-verify">Doctor</td>
-                  </tr>
-                  <tr>
-                    <td className=" verification-tb-margin" colSpan={3}><h6>Child Details</h6></td>
-                  </tr>
-                  <tr>
-                    <td>Name</td>
-                    <td>:</td>
-                    <td className="td-verify">Hari</td>
-                  </tr>
-                  <tr>
-                    <td>Qualification</td>
-                    <td>:</td>
-                    <td className="td-verify">1 St Standerd</td>
-                  </tr>
-                  <tr>
-                    <td>Occuption</td>
-                    <td>:</td>
-                    <td className="td-verify">Nill</td>
-                  </tr>
+                  <td className=" verification-tb-margin" colSpan={3}><h6>Sibling Details</h6></td>
+                                </tr>
+                                {userprofile?.siblingsDetails?.length?userprofile.siblingsDetails.map((sibling,sk)=>(<>
+                                  <tr key={sk}>
+                                  <td className='d-flex'>Name</td>
+                                  <td>:</td>
+                                  <td className="td-verify">{sibling?.name??""}</td>
+                                </tr>
+                                <tr>
+                                  <td>Qualification</td>
+                                  <td>:</td>
+                                  <td className="td-verify">{sibling?.qualification??""}</td>
+                                </tr>
+                                <tr>
+                                  <td>Occuption</td>
+                                  <td>:</td>
+                                  <td className="td-verify">{sibling?.occupation??""}</td>
+                                </tr>
+                                </>)):"No Siblings Found"??""}
+                                
+                               
+                                <tr>
+                                
+                                  <td className=" verification-tb-margin" colSpan={3}><h6>Spouse Details</h6></td>
+                                </tr>
+                                {userprofile?.spouseDetails?.length?userprofile.spouseDetails.map((spouse,sk)=>(<>
+                                <tr key={sk}>
+                                  <td>Name</td>
+                                  <td>:</td>
+                                  <td className="td-verify">{spouse?.name??""}</td>
+                                </tr>
+                                <tr>
+                                  <td>Qualification</td>
+                                  <td>:</td>
+                                  <td className="td-verify">{spouse?.qualification??""}</td>
+                                </tr>
+                                <tr>
+                                  <td>Occuption</td>
+                                  <td>:</td>
+                                  <td className="td-verify">{spouse?.occupation??""}</td>
+                                </tr>
+                                </>)):"No Spouse Found"??""}
+                                <tr>
+                                  <td className=" verification-tb-margin" colSpan={3}><h6>Child Details</h6></td>
+                                </tr>
+                                {userprofile?.childDetails?.length?userprofile.childDetails.map((child,ck)=>(<>
+                                <tr>
+                                  <td>Name</td>
+                                  <td>:</td>
+                                  <td className="td-verify">{spouse?.name??""}</td>
+                                </tr>
+                                <tr>
+                                  <td>Qualification</td>
+                                  <td>:</td>
+                                  <td className="td-verify">{spouse?.qualification??""}</td>
+                                </tr>
+                                <tr>
+                                  <td>Occuption</td>
+                                  <td>:</td>
+                                  <td className="td-verify">{spouse?.occupation??""}</td>
+                                </tr>
+                                </>)):"No Child Found"??""}
+                             
                 </tbody>
               </table>
             </div>
@@ -222,7 +272,16 @@ export default function Notificationprofile() {
               <h5 className="mb-4 text-uppercase"><i className="mdi mdi-briefcase mr-1" />
                 Experience</h5>
               <ul className="list-unstyled timeline-sm">
-                <li className="timeline-sm-item">
+              {userprofile?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
+                  <li key={pk} className="timeline-sm-item">
+                  <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{ pcompany?.to?moment(pcompany.to).format('YY'):""??""}</span>
+                  <h6 className="mt-0 mb-1">{pcompany.name} / {pcompany.position}</h6>
+                  <p>{pcompany.email}</p>
+                  <p>{pcompany.address}</p>
+                  <p>{pcompany.jobDescription}</p>
+                </li>
+              ))??""}
+                {/* <li className="timeline-sm-item">
                   <span className="timeline-sm-date">2015 - 19</span>
                   <h5 className="mt-0 mb-1">Lead designer / Developer</h5>
                   <p>websitename.com</p>
@@ -248,13 +307,16 @@ export default function Notificationprofile() {
                     the same family. Their separate existence is a myth. For science
                     music sport etc, Europe uses the same vocabulary. The languages
                     only differ in their grammar their pronunciation.</p>
-                </li>
+                </li> */}
               </ul>
               <h5 className="mb-3 mt-4 text-uppercase "><i className="mdi mdi-cards-variant mr-1" />
                 SKILLS</h5>
               <div className="card-2-bottom card-2-bottom-candidate mt-30">
-                <div className="box-tags mt-30"><a className="btn btn-grey-small mr-10">Figma</a><a className="btn btn-grey-small mr-10">Adobe XD</a><a className="btn btn-grey-small mr-10">NextJS</a><a className="btn btn-grey-small mr-10">React</a><a className="btn btn-grey-small mr-10">App</a><a className="btn btn-grey-small mr-10">Digital</a><a className="btn btn-grey-small mr-10">NodeJS</a>
-                </div>
+              {userprofile?.careerandeducation?.[0]?.skills.map((caritm,crk)=>(
+                <a key={crk} className="btn btn-tags-sm mb-10 mr-5">{caritm}</a>
+              ))??""}
+                {/* <div className="box-tags mt-30"><a className="btn btn-grey-small mr-10">Figma</a><a className="btn btn-grey-small mr-10">Adobe XD</a><a className="btn btn-grey-small mr-10">NextJS</a><a className="btn btn-grey-small mr-10">React</a><a className="btn btn-grey-small mr-10">App</a><a className="btn btn-grey-small mr-10">Digital</a><a className="btn btn-grey-small mr-10">NodeJS</a> */}
+                {/* </div> */}
               </div>
               <h5 className="mb-3 mt-4 text-uppercase "><i className="mdi mdi-cards-variant mr-1" />
                 Education</h5>
@@ -270,34 +332,36 @@ export default function Notificationprofile() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td data-label="Cource">10th Board</td>
-                      <td data-label="Field/board">Kerala Board</td>
-                      <td data-label="Collage">Dummy School</td>
-                      <td data-label="Grade/Score">9.6</td>
-                      <td data-label="Year">03/31/2016</td>
-                    </tr>
-                    <tr>
-                      <td scope="row" data-label="Cource">12th Board</td>
-                      <td data-label="Field/board">Kerala Board</td>
-                      <td data-label="Collage">Dummy School</td>
-                      <td data-label="Grade/Score">6.8</td>
-                      <td data-label="Year">02/29/2016</td>
-                    </tr>
-                    <tr>
-                      <td scope="row" data-label="Cource">Bachelor’s</td>
-                      <td data-label="Field/board">Computer Science</td>
-                      <td data-label="Collage">Dummy Collage</td>
-                      <td data-label="Grade/Score">9.6</td>
-                      <td data-label="Year">02/29/2016</td>
-                    </tr>
-                    <tr>
-                      <td scope="row" data-label="Cource">Master’s</td>
-                      <td data-label="Field/board">Electronics</td>
-                      <td data-label="Collage">Dummy Collage</td>
-                      <td data-label="Grade/Score">8.9</td>
-                      <td data-label="Year">01/31/2016</td>
-                    </tr>
+                  <tr>
+                                <td data-label="Cource">10th Board</td>
+                                <td data-label="Field/board">{userprofile?.careerandeducation?.[0]?.tenth?.[0]?.board??""}</td>
+                                <td data-label="Collage">{userprofile?.careerandeducation?.[0]?.tenth?.[0]?.['school/university']??""}</td>
+                                <td data-label="Grade/Score">{userprofile?.careerandeducation?.[0]?.tenth?.[0]?.['garde/score']??""}</td>
+                                <td data-label="Year">{userprofile?.careerandeducation?.[0]?.tenth?.[0]?.year??""}</td>
+                              </tr>
+                              <tr>
+                                <td scope="row" data-label="Cource">12th Board</td>
+                                <td data-label="Field/board">{userprofile?.careerandeducation?.[0]?.twelth?.[0]?.board??""}</td>
+                                <td data-label="Collage">{userprofile?.careerandeducation?.[0]?.twelth?.[0]?.['school/university']??""}</td>
+                                <td data-label="Grade/Score">{userprofile?.careerandeducation?.[0]?.twelth?.[0]?.['garde/score']??""}</td>
+                                <td data-label="Year">{userprofile?.careerandeducation?.[0]?.twelth?.[0]?.year??""}</td>
+                              </tr>
+                              <tr>
+                                <td scope="row" data-label="Cource">Bachelor’s</td>
+                                <td data-label="Field/board">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.course??""}</td>
+                                <td data-label="Collage">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.collage??""}</td>
+                                <td data-label="Grade/Score">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.['garde/score']??""}</td>
+                                <td data-label="Year">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.year??""}</td>
+                              </tr>
+                              {userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?
+                              <tr>
+                                <td scope="row" data-label="Cource">Master’s</td>
+                                <td data-label="Field/board">{userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?.course??""}</td>
+                                <td data-label="Collage">{userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?.collage??""}</td>
+                                <td data-label="Grade/Score">{userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?.['garde/score']??""}</td>
+                                <td data-label="Year">{userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?.year??""}</td>
+                              </tr>
+                              :""??""}
                   </tbody>
                 </table>
               </div>
@@ -312,22 +376,7 @@ export default function Notificationprofile() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td data-label="Cource">Hindi</td>
-                      <td data-label="Field/board">Hindi</td>
-                    </tr>
-                    <tr>
-                      <td scope="row" data-label="Cource">English</td>
-                      <td data-label="Field/board">Englidh</td>
-                    </tr>
-                    <tr>
-                      <td scope="row" data-label="Cource">Malayalam</td>
-                      <td data-label="Field/board">Malayalam</td>
-                    </tr>
-                    <tr>
-                      <td scope="row" data-label="Cource">Arabic</td>
-                      <td data-label="Field/board">Arabic</td>
-                    </tr>
+                  {rows}
                   </tbody>
                 </table>
               </div>
@@ -338,10 +387,10 @@ export default function Notificationprofile() {
         </div> {/* end tab-content */}
         <div className="row " style={{float: 'right'}}>
           <div className="text-left col-md-5  col-6">
-            <button type="submit" className="btn btn-success waves-effect  mt-2"><i className="mdi mdi-content-save" /> Verify</button>
+            <button type="submit" onClick={()=>verifynot(true)} className="btn btn-success waves-effect  mt-2"><i className="mdi mdi-content-save" /> Verify</button>
           </div>
           <div className="text-right col-md-5 col-6 ">
-            <button type="submit" className="btn btn-danger waves-effect w mt-2"><i className="mdi mdi-content-save" /> Cancel</button>
+            <button type="submit" onClick={()=>verifynot(false)} className="btn btn-danger waves-effect w mt-2"><i className="mdi mdi-content-save" /> Cancel</button>
           </div>
         </div>
       </div> {/* end card-box*/}

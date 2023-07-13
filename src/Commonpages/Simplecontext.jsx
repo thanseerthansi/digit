@@ -48,21 +48,21 @@ export default function Simplecontextprovider({children}){
     async function getUser (){  
       try {
         let user = window.localStorage.getItem("graiduser")
-        console.log("usertoken",user)
+        // console.log("usertoken",user)
         if (window.localStorage.getItem('craig-token')){
             let datalist;
             var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
             if(decoded.id){
-                console.log("decodeid",decoded.id)
+                // console.log("decodeid",decoded.id)
                 datalist = decoded.id
             }
-            console.log("usertoken",user)
+            // console.log("usertoken",user)
             if(user==="employer"){
-              console.log("employerrrrrrrrrrrrrr")
+              // console.log("employerrrrrrrrrrrrrr")
                 let data = await Axioscall("get","company",{userid:datalist})
-                console.log("data",data)
+                // console.log("data",data)
                 if (data.status===200){
-                  console.log("datadocs",data.data.data)
+                  // console.log("datadocs",data.data.data)
                   if(data.data.data){
                     setuserdetail(data.data.data)
                     setemployeedata(data.data.data)
@@ -74,11 +74,11 @@ export default function Simplecontextprovider({children}){
                   }
                 }
             }else if(user==="employee"){
-              console.log("emplpyeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",datalist)
+              // console.log("emplpyeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",datalist)
                 let data = await Axioscall("get","employee",{id:datalist,page:1,limit:1})
-                console.log("data",data)
+                // console.log("data",data)
                 if (data.status===200){
-                  console.log("datadocs",data.data.data)
+                  // console.log("datadocs",data.data.data)
                   if(data.data.data){
                     setuserdetail(data.data.data.docs[0])
                     setemployeedata(data.data.data.docs[0])
@@ -89,10 +89,10 @@ export default function Simplecontextprovider({children}){
                   }
                 }
             }else{
-              console.log("elseeeeeeeeeeeeeeeeeeee")
+              // console.log("elseeeeeeeeeeeeeeeeeeee")
             }
             }
-           console.log("userdatain context",userdetail)
+          //  console.log("userdatain context",userdetail)
         
       } catch (error) {
         console.log("errorrr",error)

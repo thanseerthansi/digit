@@ -238,7 +238,7 @@ const Bannerhandler=async(ratio)=>{
                           <div className="card-2-bottom card-2-bottom-candidate mt-30">
                             <div className="text-start">
                               {userdetail?.careerandeducation?.[0]?.skills.map((caritm,crk)=>(
-                                <a key={caritm} className="btn btn-tags-sm mb-10 mr-5">{caritm}</a>
+                                <a key={crk} className="btn btn-tags-sm mb-10 mr-5">{caritm}</a>
                               ))??""}
                               
                               {/* <a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Adobe XD</a> */}
