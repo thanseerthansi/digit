@@ -5,11 +5,6 @@ import Axioscall from '../Commonpages/Axioscall';
 
 export default function Candidatedetails() {
     const {id}=useParams();
-    const [value,setvalue]=useState([
-        {id:3,data:"gdghf",option:[]},
-        {id:2,data:"gdghf",option:[]}
-    ])
-    console.log("vvvvvvvvvv",value)
     useEffect(()=>{
         bbb()
     },[])
@@ -27,23 +22,9 @@ export default function Candidatedetails() {
             
         }
     }
-    const bbb=()=>{
-
-        let a =["abcd","defg"]
-        let b =["zzzz","yyyyy"]
-        // setvalue([...value,{...value[0], option: a}])
-        updateOption(0, a);
-           
-    
-        // setemployeedata({...employeedata,user:{...employeedata.user,username:e.target.value}})
-    }
-    const updateOption = (index, newOption) => {
-        setvalue(prevValue => {
-          const updatedValue = [...prevValue];
-          updatedValue[index] = { ...updatedValue[index], option: newOption };
-          return updatedValue;
-        });
-      };
+  
+  
+      
   return (
     <>
     <main className="main">
