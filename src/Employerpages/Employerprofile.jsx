@@ -198,8 +198,8 @@ const verifyotp=async()=>{
                   </div>
                 </div>
                 <div className="mt-20 mb-20">
-                  <a className="link-red" href="#" onClick={() => {logouthandler();}}> Delete Account </a>
-                  {/* <button className="link-red" onClick={()}>Log Out</button> */}
+                  {/* <a className="link-red" href="#" onClick={() => {logouthandler();}}> Delete Account </a> */}
+                    
                 </div>
               </div>
               <div className="col-lg-9 col-md-8 col-sm-12 col-12 mb-50">

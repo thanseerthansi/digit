@@ -96,7 +96,7 @@ const Bannerhandler=async(ratio)=>{
             <div className="mt-10 mb-10">
                     <a href="#" onClick={()=>{logouthandler();}}> Log Out</a>
                   </div>
-            <div className="mt-20 mb-20"><a className="link-red" href="#"><i className="fa fa-paper-plane-o" />Delete Account</a></div>
+            {/* <div className="mt-20 mb-20"><a className="link-red" href="#"><i className="fa fa-paper-plane-o" />Delete Account</a></div> */}
           </div>
         </div>
         <div className="col-lg-10 col-md-12 col-sm-12 col-12 mb-50 ">
@@ -827,7 +827,7 @@ const Bannerhandler=async(ratio)=>{
             <h2 className="text-md-newsletter text-center">New Things Will Always<br /> Update Regularly</h2>
             <div className="box-form-newsletter mt-40">
               <form className="form-newsletter">
-                <input className="input-newsletter" type="text" defaultValue placeholder="Enter your email here" />
+                <input className="input-newsletter" type="text"value='' placeholder="Enter your email here" />
                 <button className="btn btn-default font-heading icon-send-letter">Subscribe</button>
               </form>
             </div>

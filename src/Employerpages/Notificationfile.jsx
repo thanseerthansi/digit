@@ -14,6 +14,7 @@ export default function Notificationfile() {
 
     }, [])
     // console.log("useruserdetail",userdetail)
+    console.log("notificationdata",notificationdata)
     const tokenhandler=()=>{
       let token = window.localStorage.getItem('craig-token')??""
       if(token){
@@ -53,15 +54,16 @@ export default function Notificationfile() {
             <h6 className="m-0">Recent</h6>
           </div>
           <div className="box-body p-0">
-            {notificationdata.filter(t=>t.message.is_verified===false).length?notificationdata.filter(t=>t.message.is_verified===false).map((newnot,nk)=>(
+            {notificationdata.filter(t=>t.is_viewed===false).length?notificationdata.filter(t=>t.is_viewedd===false).map((newnot,nk)=>(
             <div key={nk} className="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header">
               <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png"  alt=""/>
+                <img className="rounded-circle" src={newnot?.user?.profilePhoto??"https://bootdey.com/img/Content/avatar/avatar3.png"}  alt=""/>
               </div>
               <div className="font-weight-bold mr-3">
-                <a href="verification.html"><div className="text-truncate ">Request For Profile Verification</div>
-                  <div className="small">Income tax sops on the cards, The bias in VC funding, and other top news for you</div></a>
+              <Link to={`/verification/${newnot._id}/${newnot.user._id}`} className="text-truncate ">Request For Employee Verification</Link>
+                <div className="small">{newnot.user.firstName} {newnot.user.middleName} {newnot.user.lastName}  Worked from {newnot?.message?.from??""} to {newnot?.message?.to??"Present"} </div>
               </div>
+              
               
               <div className="font-weight-bold mr-3 ml-30 margin-left1">
                 <Link type="button" to={`/verification/${newnot._id}/${newnot.user._id}`} className="btn btn-outline-success btn-sm ">Verify</Link>
@@ -88,17 +90,17 @@ export default function Notificationfile() {
             <h6 className="m-0">Earlier</h6>
           </div>
           <div className="box-body p-0">
-          {notificationdata.filter(t=>t.message.is_verified===true).length?notificationdata.filter(t=>t.message.is_verified===true).map((newnot,nk)=>(
-            <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
+          {notificationdata.filter(t=>t.is_viewed===true).length?notificationdata.filter(t=>t.is_viewed===true).map((newnot,nk)=>(
+            <div key={nk} className="p-3 d-flex align-items-center border-bottom osahan-post-header">
               <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png"  alt=""/>
+                <img className="rounded-circle" src={newnot?.user?.profilePhoto??"https://bootdey.com/img/Content/avatar/avatar3.png"}  alt=""/>
               </div>
               <div className="font-weight-bold mr-3">
-                <div className="text-truncate ">Request For Profile Verification</div>
-                <div className="small">Income tax sops on the cards, The bias in VC funding, and other top news for you</div>
+                <Link to={`/verification/${newnot._id}/${newnot.user._id}`} className="text-truncate ">Request For Employee Verification</Link>
+                <div className="small">{newnot.user.firstName} {newnot.user.middleName} {newnot.user.lastName}  Worked from {newnot?.message?.from??""} to {newnot?.message?.to??"Present"} </div>
               </div>
               <div className="font-weight-bold mr-3 ml-30 margin-left1">
-                <button type="button" className="btn btn-outline-success btn-sm">Verify</button>
+              <Link type="button" to={`/verification/${newnot._id}/${newnot.user._id}`} className="btn btn-outline-success btn-sm ">{newnot.message.is_verified?"Verify":"View"}</Link>
               </div>
             </div>
             )):<div><p className='text-center'>No Earlier Notifications Found</p></div>}

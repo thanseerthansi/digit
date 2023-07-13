@@ -67,7 +67,7 @@ export default function Employeeprofupdate() {
   // console.log("companydaprecompanydatata",precompanydata)
   // console.log("companydata",companydata)
   // console.log("companyarray",companyarray)
-//   console.log("userdetail",userdetail)
+  // console.log("userdetail",userdetail)
     useEffect(() => {     
       window.scrollTo(0,0)
       getCompanydata()
@@ -104,7 +104,7 @@ export default function Employeeprofupdate() {
     let token = window.localStorage.getItem('craig-token')??""
     if(token){
       let data  = Decodetoken(token)
-      console.log("dataid",data)
+      // console.log("dataid",data)
       return data
     }
   }
@@ -226,12 +226,13 @@ export default function Employeeprofupdate() {
       }
      
       
-      console.log("datalistbefore",datalist)
+      // console.log("datalistbefore",datalist)
       let data = await Axioscall("put","employee/personal",datalist)
-      console.log("datapersonal",data)
+      // console.log("datapersonal",data)
       if(data.status===200){
         notify("Successfully Saved")
-        setWizard(2)     
+        setWizard(2) 
+        getUser()    
         tophandler(0,200)
       }
       setload(false)
@@ -257,13 +258,16 @@ export default function Employeeprofupdate() {
       if(Object.keys(currentaddressdata).length){
         datalist.currentAddress=[{...currentaddressdata}]
       }
-      console.log("form22222222222222222222222",datalist)
+      // console.log("form22222222222222222222222",datalist)
       let data = await Axioscall("put","employee/address",datalist)
-      console.log("dataaddress",data)
+      // console.log("dataaddress",data)
       if(data.status===200){
         setWizard(3)
         setload(false)
+        getUser()
+        
         tophandler(0,200)
+
       }
     } catch (error) {
       setload(false)
@@ -297,15 +301,15 @@ export default function Employeeprofupdate() {
       if(Object.keys(additionaldata).length){
         additional.push(additionaldata) 
       }
-      console.log("addtitional",additional)
+      // console.log("addtitional",additional)
       if (additional.length){
         datalist.additional=additional
       }
       if(selectedskills.length){
         let skills =[]
-        console.log("skills",selectedskills)
+        // console.log("skills",selectedskills)
         selectedskills.forEach(element => {
-          console.log("dataskils",element.value)
+          // console.log("dataskils",element.value)
           skills.push(element.value)
         });
         if (skills.length){
@@ -314,7 +318,7 @@ export default function Employeeprofupdate() {
       }
         // ...........................company data push to datalist
         let company = companyarray
-        console.log("companyjhbjjljlk",company)
+        // console.log("companyjhbjjljlk",company)
         if(Object.keys(companydata).length){
           company.push(companydata) 
         }
@@ -339,7 +343,8 @@ export default function Employeeprofupdate() {
         // console.log("data",datalist)
         let data = await Axioscall("put","employee/educationandcareer",datalist)
         if(data.status===200){
-          setWizard(4)      
+          notify("successfully updated")
+          setWizard(1)      
           tophandler(0,200)
           getUser()
         }
@@ -352,7 +357,7 @@ export default function Employeeprofupdate() {
   const zipcodeHandler=async(e,code)=>{
     setload(true)
     let data =await axios.get(`https://api.postalpincode.in/pincode/${code}`)
-    console.log("zipcode data",data.data[0].Status)
+    // console.log("zipcode data",data.data[0].Status)
     if(data.data[0].Status==='Error'){
       e.target.classList.add('is-invalid');
     }else{
@@ -448,12 +453,53 @@ export default function Employeeprofupdate() {
     try {
         let user = tokenhandler()
         let data =await Axioscall("get","employee/educationandcareer",{user:user})
-        console.log("careeeeeeeeeeeeeeeeeeeeeeervht",data.data.data)
+        // console.log("careeeeeeeeeeeeeeeeeeeeeeer",data.data.data)
         if(data.status===200){
-
+          let userdata = data.data.data
+          // setemployeedata3()
+          if (userdata.tenth.length){
+            settenthdata(userdata.tenth[0])
+          }
+          if (userdata.twelth.length){
+            settwelthdata(userdata.twelth[0])
+          }
+          if (userdata.bachelorDegree.length){
+            setbachlerdata(userdata.bachelorDegree[0])
+          }
+          if (userdata.masterDegree.length){
+            setmasterDegreedata(userdata.masterDegree[0])
+          }
+          if (userdata.additional.length){
+            setadditionalarray(userdata.additional)
+          }
+          if (userdata.designation){
+            setemployeedata3({...employeedata3,designation:userdata.designation})
+          }
+          if (userdata._id){
+            setemployeedata3({...employeedata3,id:userdata._id})
+          }
+          if(userdata.skills.length){
+            let skilldata = []
+            let opt=[...skilloptions]
+            // console.log("opt",opt)
+              userdata.skills.forEach((skill)=>{
+                // console.log("element",skill)
+                skilldata.push({ value: skill, label: skill })
+                opt.push({ value: skill, label: skill })
+              });
+              // console.log("skillsssssss",skilldata)
+              setskilloptions(opt)
+              setselectedskills(skilldata)
+          }
+          if(userdata.prevCompanies.length){
+            setprecompanyarray(userdata.prevCompanies)
+          }
+          if(userdata.otherproficency){
+            setemployeedata3({...employeedata3,otherproficency:userdata.otherproficency})
+          }
         }
     } catch (error) {
-        
+      console.log(error)
     }
   }
   return (
@@ -1088,6 +1134,7 @@ export default function Employeeprofupdate() {
                             isMulti
                             options={skilloptions}
                             placeholder={<div>Select Skills....</div>}
+                            value={selectedskills}
                             required
                             className=''
                             onChange={newcontent => {setselectedskills( newcontent ) }}
@@ -1146,11 +1193,11 @@ export default function Employeeprofupdate() {
                              </div>
                                {/* <hr/> */}
                              </React.Fragment>):null}
-                            <div className="form-group col-lg-6 ">
+                            <div className="form-group col-lg-6 mt-20">
                               <input type="text"  onChange={(e)=>setprecompanydata({...precompanydata,name:e.target.value})} value={precompanydata.name??""} className="form-control" placeholder=" Company Name" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide company name </Form.Control.Feedback>
                             </div>
-                            <div className="form-group col-lg-6  ">
+                            <div className="form-group col-lg-6  mt-20">
                               <input type="text" required={precompanydata.name} onChange={(e)=>setprecompanydata({...precompanydata,position:e.target.value})} value={precompanydata.position??""} className="form-control" placeholder=" Position" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide position </Form.Control.Feedback>
                             </div>
@@ -1225,7 +1272,7 @@ export default function Employeeprofupdate() {
                             </div>
                               {/* <hr/> */}
                             </React.Fragment>):null}
-                            <div className="form-group col-lg-6 ">
+                            <div className="form-group col-lg-6 mt-20">
                               <div className="text__center">
                                 <select onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata.name} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                   <option value="" hidden  >Company Name</option>
@@ -1236,7 +1283,7 @@ export default function Employeeprofupdate() {
                                 <Form.Control.Feedback type="invalid">Please provide Company </Form.Control.Feedback>
                               </div>
                             </div>
-                            <div className="form-group col-lg-6  ">
+                            <div className="form-group col-lg-6 mt-20 ">
                               <input type="text" required={companydata.name} onChange={(e)=>setcompanydata({...companydata,position:e.target.value})} value={companydata.position??""} className="form-control" placeholder=" Position" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide position </Form.Control.Feedback>
                             </div>

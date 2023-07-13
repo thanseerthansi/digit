@@ -1,19 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Axioscall from '../Commonpages/Axioscall';
 import { useEffect } from 'react';
 
 export default function Notificationprofile() {
     const {id,userId}=useParams();
+    const [userprofile,setuserprofile]=useState('')
+    console.log("userprofile in notificaton",userprofile)
     console.log("iddddddddd",id)
     console.log("userId",userId)
     useEffect(()=>{
+      window.scrollTo(0,0)
         getUser()
     },[])
     const getUser=async()=>{
         try {
-            let data = await Axioscall("get","employee",{id:userId})
-            console.log("userdata",data)
+          let body={
+            limit:1,
+            page:1,
+            user:userId
+          }
+          let data=await Axioscall("get","employee",body)
+            // console.log("notificationuserdata",data.data.data.docs)
+            if (data.status===200){
+                setuserprofile(data.data.data.docs[0])
+            }
         } catch (error) {
             
         }
