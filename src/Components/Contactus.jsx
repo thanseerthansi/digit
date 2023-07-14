@@ -3,10 +3,11 @@ import { Helmet } from 'react-helmet'
 import { Simplecontext } from '../Commonpages/Simplecontext'
 
 export default function Contactus() {
-  const {path} = useContext(Simplecontext)
+  const {path,loghandler} = useContext(Simplecontext)
     useEffect(() => {
         window.scrollTo(0,0)
         path()
+        loghandler()
       }, [])
   return (
     <>

@@ -13,6 +13,7 @@ export default function Employeeslist() {
   const [currentpage,setcurrentpage]=useState(1)
   const [fileterid,setfilterid]=useState('')
   useEffect(() => {
+    window.scrollTo(0,0)
     getCandidte()
   }, [])
   console.log("userid",userdetail)

@@ -12,7 +12,7 @@ export default function Simplecontextprovider({children}){
     const [userdetail,setuserdetail]=useState('')
     const [employeedata,setemployeedata]=useState('')
     // console.log("window.localStorage.getItem('craig-token')",window.localStorage.getItem('craig-token'))
-    // console.log("userdetails",userdetail)
+    console.log("userdetails",userdetail)
     useEffect(() => {
         path()
         getUser()
@@ -120,9 +120,22 @@ export default function Simplecontextprovider({children}){
         return decoded.id
       }
     }
+    function loghandler(){
+      let user = window.localStorage.getItem("graiduser")
+        let path = window.location.pathname
+        let userdata = userdetail
+              // console.log("windowuser",user)
+              // console.log("userdetail",userdata) 
+              // console.log("window.location.pathname",path)
+    
+        if(user==="employee" && !userdata && path !== "/employeeregister"){
+          console.log("no user.............................................................")
+          logouthandler()
+        }
+    }
 return (
     <Simplecontext.Provider value={{
-        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler,Decodetoken
+        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler,Decodetoken,loghandler
     }}>{children}</Simplecontext.Provider>
     )
 }

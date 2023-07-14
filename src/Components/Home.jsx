@@ -4,25 +4,13 @@ import { Link } from 'react-router-dom'
 import { Simplecontext } from '../Commonpages/Simplecontext';
 
 export default function Home() {
-  const { path,userdetail,logouthandler } = useContext(Simplecontext);
+  const { path,userdetail,logouthandler,loghandler} = useContext(Simplecontext);
   useEffect(() => {
     window.scrollTo(0,0)
     path()
     loghandler()
 }, [])
-const loghandler=()=>{
-  let user = window.localStorage.getItem("graiduser")
-    let path = window.location.pathname
-    let userdata = userdetail
-          console.log("windowuser",user)
-          console.log("userdetail",userdata) 
-          console.log("window.location.pathname",path)
 
-    if(user==="employee" && !userdata && path !== "/employeeregister"&& path !== "/"){
-      console.log("no user.............................................................")
-      logouthandler()
-    }
-}
   return (
     <>
     <main className="main">
@@ -76,6 +64,24 @@ const loghandler=()=>{
       </div>
     </div>
   </section>
+  <section className="section-box overflow-visible mt-80 mb-50">
+  <div className="container">
+    <div className="row parent00">
+      <div className="col-lg-6 col-sm-12">
+        <div className="content-job-inner">
+          <h2 className="text-52 wow animate__animated animate__fadeInUp">How it <span className="color-brand-2">Works</span> </h2>
+          <div className="mt-40  text-md-lh28 wow animate__animated animate__fadeInUp">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit at vero possimus aut dolore, minus, eligendi unde, commodi illum inventore nulla sequi labore repellat molestiae accusantium laboriosam? Maiores nihil ipsa delectus adipisci perspiciatis eaque quisquam eos voluptas labore est voluptatem aliquid, ea nulla facere! Maxime aliquid modi velit officiis nobis distinctio aperiam omnis nulla ipsam corrupti, fuga quo illum atque tempore numquam quisquam debitis assumenda? Sed fugiat consequuntur quisquam non iste, esse libero corporis, autem similique maxime reprehenderit quia! Adipisci enim ut ea veniam vero recusandae non provident aspernatur blanditiis hic facilis ipsa tenetur porro unde, quas rem sequi est?</div>
+        </div>
+      </div>
+      <div className="col-lg-6 col-sm-12">
+        <div className="box-image-job ">
+          <figure className="z-index-banner1 wow animate__animated animate__fadeIn"><img alt="jobBox" src="\assets\imgs\page\homepage1\img1 copy 2.png" /></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
   <section className="section-box overflow-visible mt-50 mb-50">
     <div className="container">
       <div className="row">

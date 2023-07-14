@@ -8,14 +8,17 @@ import { Simplecontext } from '../Commonpages/Simplecontext'
 import { Form } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { notify } from '../Commonpages/toast'
 export default function Hrlist() {
-  const {userdetail}=useContext(Simplecontext) 
+  const {userdetail,Check_Validation}=useContext(Simplecontext) 
   const [employeesdata,setemployeedata]=useState([])
   const [currentpage,setcurrentpage]=useState(1)
   const [fileterid,setfilterid]=useState('')
   const [isOpen, setIsOpen] = useState(false);
   const [validated,setValidated]=useState(false)
   const [hrdata,sethrdata]=useState('')
+  const [userid,setuserid]=useState('')
+  console.log("useeeeeeee",userid)
   useEffect(() => {
     getCandidte()
   }, [])
@@ -37,6 +40,31 @@ export default function Hrlist() {
     } catch (error) {
       console.log(error)
     }
+  }
+  const hrAssign=async()=>{
+    try {
+      let body={
+        user : userid,
+        company : window.localStorage.getItem("graiduserid"),
+        role:'hr',
+        
+    }
+    
+    let obj ={...hrdata,...body}
+    console.log("bodyyyyyyyyyy1",obj)
+    
+      let data = await Axioscall("post","employee/assign",obj)
+      console.log("data",data)
+      if(data.status===200){
+        notify("HR added Successfully")
+        getCandidte()
+        sethrdata('')
+        setIsOpen(false)
+      }
+    } catch (error) {
+      console.log(error) 
+    }
+  
   }
   return (
     <>
@@ -67,7 +95,11 @@ export default function Hrlist() {
           {employeesdata.length?employeesdata.map((emp,ek)=>(
             <div key={ek} className="col-xl-3 col-lg-4 col-md-6">
             <div className="card-grid-2 hover-up">
-            <div className='text-end mr-5 pt-5'><button onClick={()=>setIsOpen(true)} className='btn btn-tags-sm '>Create HR</button></div>
+              {emp?.user?.[0]?.isHr?<>
+                <div className='text-end mr-5 pt-5'><button onClick={()=>setuserid(emp?.user?.[0]?._id??"")&sethrdata({...hrdata,type : "remove"})&hrAssign()} className='btn btn-tags-sm '>Remove HR</button></div>
+              </>:
+                <div className='text-end mr-5 pt-5'><button onClick={()=>setIsOpen(true)&setuserid(emp?.user?.[0]?._id??"")&sethrdata({...hrdata,type : "assign"})} className='btn btn-tags-sm '>Create HR</button></div>
+              ??""}
               <div className="card-grid-2-image-left">
                 <div className="card-grid-2-image-rd online"><Link to={`/candidatedetails/${emp._id}`}>
                     <figure><img alt="jobBox" src={emp?.profilePhoto??`assets/imgs/page/candidates/user1.png`}  /></figure></Link></div>
@@ -133,11 +165,11 @@ export default function Hrlist() {
           <Modal.Title><h4>HR</h4></Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Regstersubmithandler,setValidated)} className="login-register text-start mt-20 pb-30" action="#">
+        <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,hrAssign,setValidated)} className="login-register text-start mt-20 pb-30" action="#">
        <div>
         <div className="form-group ">
           <div className="text__center">
-            <select value={hrdata?.hr??""}  onChange={(e)=>sethrdata({...hrdata,hr:e.target.value})} className="cs-select cs-skin-elastic cs-skin-elastic1 pl-10 form-control">
+            <select value={hrdata?.HR??""} required onChange={(e)=>sethrdata({...hrdata,HR:e.target.value})} className="cs-select cs-skin-elastic cs-skin-elastic1 pl-20 form-control">
               <option value=""  defaultValue="" disabled>Select an HR</option>
               {employeesdata.length?employeesdata.map((emp,ek)=>(
                 <option key={ek} value={emp._id}>{emp.firstName} {emp.middleName} {emp.lastName}</option>
@@ -158,7 +190,7 @@ export default function Hrlist() {
           <Form.Control.Feedback type="invalid">Provide Password</Form.Control.Feedback>
         </div>
         <div className="form-group">
-          <input value={hrdata?.repassword??""}  onChange={(e)=>sethrdata({...hrdata,repassword:e.target.value})}  className="form-control" id="input-1" type="password" required name="fullname" placeholder="re-password" />
+          <input value={hrdata?.repassword??""}  onChange={(e)=>sethrdata({...hrdata,repassword:e.target.value})} className={`form-control   ${hrdata.password?hrdata.password===hrdata.repassword ?'': 'is-invalid' :""}`} id="input-1" type="password" required name="fullname" placeholder="re-password" />
           <Form.Control.Feedback type="invalid">Password Not Match</Form.Control.Feedback>
         </div>
         

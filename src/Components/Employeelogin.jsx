@@ -34,9 +34,9 @@ export default function Employeelogin() {
       let datalist = {...formdata}
       datalist.role="employer"
       let data = await Axioscall("post","user/login",datalist)
-      console.log("data",data)
+      // console.log("data",data)
       if (data.status===200){
-        console.log("datadocs",data.data.data.token)
+        // console.log("datadocs",data.data.data.token)
           if(data.data.data.token){
             window.localStorage.setItem("craig-token",data.data.data.token)
             Decodetoken(data.data.data.token)
@@ -57,19 +57,26 @@ export default function Employeelogin() {
   
   }
   const Decodetoken =(token)=>{
-    console.log(token)
+    // console.log(token)
     var decoded = jwt_decode(token)
-    if(decoded.id){
-      console.log("decodeid",decoded.id)
-      Getuser(decoded.id)
+    if(decoded.role==='hr'){
+      if(decoded.company){
+        Getuser({id:decoded.company})
+      }
+    }else{
+      if(decoded.id){
+      // console.log("decodeid",decoded)
+      Getuser({userid:decoded.id})
     }
+    }
+    
   }
-  const Getuser =async(datalist)=>{
+  const Getuser =async(body)=>{
     try {
-        let data = await Axioscall("get","company",{userid:datalist})
+        let data = await Axioscall("get","company",body)
         // console.log("data",data)
         if (data.status===200){
-          console.log("datadocs",data.data.data)
+          // console.log("datadocs",data)
           if(data.data.data){
             setuserdetail(data.data.data)
             setemployeedata(data.data.data)
@@ -103,7 +110,7 @@ export default function Employeelogin() {
   }
   const getcraigcredintial=()=>{
     //window.localStorage.removeItem("craig-employercredintial")
-    console.log("window",JSON.parse(localStorage.getItem('craig-employercredintial')))
+    // console.log("window",JSON.parse(localStorage.getItem('craig-employercredintial')))
     let data = JSON.parse(localStorage.getItem('craig-employercredintial'))
     if (data){
       setformdata(data)
@@ -114,18 +121,6 @@ export default function Employeelogin() {
       <main className="main">
         <ToastContainer/>
         <div className="carousel-inner"></div>
-        {/* <div className="bubbles">
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-        </div> */}
         <section className="pt-50 login-register">
           <div className="container ">
             <div className=" login-register-cover cont-button">
@@ -190,9 +185,9 @@ export default function Employeelogin() {
                   </div>
                   <div className="text-muted text-center mt-3">
                     New in Digit?{" "}
-                    <Link to="employer-register">Create an account</Link>
+                    <Link to="/employer-register">Create an account</Link>
                     <br />
-                    <Link to="password-reset.html">Forgot password</Link>
+                    {/* <Link to="password-reset.html">Forgot password</Link> */}
                   </div>
                 </Form>
               </div>

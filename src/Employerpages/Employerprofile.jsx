@@ -526,7 +526,7 @@ const verifyotp=async()=>{
                       <input
                         className="input-newsletter"
                         type="text"
-                        value=""
+                        defaultValue=""
                         placeholder="Enter your email here"
                       />
                       <button className="btn btn-default font-heading icon-send-letter">

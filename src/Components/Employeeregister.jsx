@@ -384,6 +384,16 @@ export default function Employeeregister() {
     } catch (error) {    
     }
   }
+  const copyValue = (value) => {
+    navigator.clipboard.writeText(value)
+      .then(() => {
+        console.log('Value copied to clipboard:', value);
+        notify("Copied Uniqueid")
+      })
+      .catch((error) => {
+        console.error('Failed to copy value:', error);
+      });
+  };
   return (
     <>
     
@@ -1268,7 +1278,7 @@ export default function Employeeregister() {
                           </div>
                           <div className="profile-pils mt-20">
                             <span className="pils"><a href="candidate-profile.html" target="_blank"><i className="fa fa-eye" />View Profile</a></span>
-                            <span className="pils"><a href target="_blank"><i className="fa fa-paper-plane-o" /> Share Profile</a></span>
+                            <span className="pils"><a href onClick={()=>copyValue(userdetail.uniqueid)} target="_blank"><i className="fa fa-paper-plane-o" /> Share Profile</a></span>
                           </div>
                         </div> <br /><br />
                         <div className="row justify-content-center mt-130">

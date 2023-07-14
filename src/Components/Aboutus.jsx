@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom'
 import { Simplecontext } from '../Commonpages/Simplecontext'
 
 export default function Aboutus() {
-  const {path} = useContext(Simplecontext)
+  const {path,loghandler} = useContext(Simplecontext)
     useEffect(() => {
       window.scrollTo(0,0)
       path();
+      loghandler()
     }, [])
     
   return (
