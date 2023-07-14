@@ -4,10 +4,13 @@ import Axioscall from '../Commonpages/Axioscall'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { notify } from '../Commonpages/toast'
 
 export default function Candidates() {
   const [employeesdata,setemployeedata]=useState([])
   const [currentpage,setcurrentpage]=useState(1)
+  const [fileterid,setfilterid]=useState('')
+  console.log("employeedata",employeesdata)
   useEffect(() => {
     getCandidte()
   }, [])
@@ -17,15 +20,34 @@ export default function Candidates() {
       let body={
         limit:16,
         page:currentpage,
-        uniqueid:"",
+        uniqueid:fileterid,
+        role:"hr"
       }
       let data=await Axioscall("get","employee",body)
-      console.log("dataemployee",data.data.data.docs)
+      // console.log("dataemployee",data.data.data.docs)
       if (data.status===200){
         setemployeedata(data.data.data.docs)
       }
     } catch (error) {
       console.log(error)
+    }
+  }
+  const Addcompanyhandler=async(userid)=>{
+    try {
+      let body={
+        user : userid,
+        company : window.localStorage.getItem("graiduserid"),
+        type : "assign"
+    }
+    console.log("bodyyyyyyyy",body)
+      let data = await Axioscall("post","employee/assign",body)
+      console.log("data",data)
+      if(data.status===200){
+        notify("added Successfully")
+        getCandidte()
+      }
+    } catch (error) {
+      console.log(error) 
     }
   }
   return (
@@ -38,12 +60,12 @@ export default function Candidates() {
       <div className="banner-hero banner-company">
         <div className="block-banner text-center">
           <h3 className="wow animate__animated animate__fadeInUp">Browse Candidates</h3>
-          <div className="font-sm color-text-paragraph-2 mt-10 wow animate__animated animate__fadeInUp" data-wow-delay=".1s">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero repellendus magni, <br className="d-none d-xl-block" />atque delectus molestias quis?</div>
+          {/* <div className="font-sm color-text-paragraph-2 mt-10 wow animate__animated animate__fadeInUp" data-wow-delay=".1s">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero repellendus magni, <br className="d-none d-xl-block" />atque delectus molestias quis?</div> */}
           <div className="box-list-character">
             <div className="search-wrapper  col-md-6">
               <i className="search-icon fas fa-search mt-3" />
-              <input type="text" className="search" placeholder="Serch Here" />
-              <button className="search-button">Search</button>
+              <input type="text" className="search" value={fileterid} onChange={(e)=>setfilterid(e.target.value)}  placeholder="Serch by UniqueId" />
+              <button onClick={()=>getCandidte()} className="search-button">Search </button>
             </div>
           </div>
         </div>
@@ -85,10 +107,15 @@ export default function Candidates() {
         <div className="row">
           {employeesdata.length?employeesdata.map((emp,ek)=>(
             <div key={ek} className="col-xl-3 col-lg-4 col-md-6">
+              
             <div className="card-grid-2 hover-up">
+            <div className='text-end mr-5 pt-5'><button onClick={()=>Addcompanyhandler(emp.user[0]._id)} className='btn btn-tags-sm '>Add to Company</button></div>
               <div className="card-grid-2-image-left">
                 <div className="card-grid-2-image-rd online"><Link to={`/candidatedetails/${emp._id}`}>
-                    <figure><img alt="jobBox" src="assets/imgs/page/candidates/user1.png" /></figure></Link></div>
+                    <figure><img alt="jobBox" src={emp?.profilePhoto??`assets/imgs/page/candidates/user1.png`}  /></figure></Link>
+                    
+                    </div>
+                    
                 <div className="card-profile pt-10"><Link to={`/candidatedetails/${emp._id}`}>
                     <h5>{emp.firstName} {emp.middleName} {emp.lastName}</h5></Link><span className="font-xs color-text-mutted">{emp?.careerandeducation?.[0]?.designation??"designation"}</span>
                   <h6 className="card-id">ID:{emp.uniqueid}</h6>
@@ -110,8 +137,11 @@ export default function Candidates() {
                 <div className="employers-info align-items-center justify-content-center mt-15">
                   <div className="row">
                     <div className="col-6"><span className="d-flex align-items-center"><i className="fi-rr-marker mr-5 ml-0" /><span className="font-sm color-text-mutted">{emp?.address?.[0]?.permanantAddress?.[0]?.landmark??""},{emp?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></span></div>
-                    <div className="col-6"><span className="d-flex justify-content-end align-items-center" /></div>
+                    <div className="col-6"><span className="d-flex justify-content-end align-items-center" />
+                    </div>
+                    
                   </div>
+                  {/* <div className='text-end pt-10'><button className='btn btn-tags-sm '>Add to Company</button></div> */}
                 </div>
               </div>
             </div>
@@ -528,7 +558,7 @@ export default function Candidates() {
             <h2 className="text-md-newsletter text-center">New Things Will Always<br /> Update Regularly</h2>
             <div className="box-form-newsletter mt-40">
               <form className="form-newsletter">
-                <input className="input-newsletter" type="text" value="" placeholder="Enter your email here" />
+                <input className="input-newsletter" type="text" defaultValue="" placeholder="Enter your email here" />
                 <button className="btn btn-default font-heading icon-send-letter">Subscribe</button>
               </form>
             </div>

@@ -1007,10 +1007,29 @@ export default function Employeeregister() {
                         <div className="col-lg-12 col-md-12">
                           <select  value={employeedata3.designation}  onChange={(e)=>setemployeedata3({...employeedata3,designation:e.target.value})} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                             <option value="" defaultValue="" disabled  >Select Designation</option>
-                            <option value="FullStack Developer">FullStack Developer</option>
-                            <option value="Frontend Developer">Frontend Developer</option>
+                            <option value="Chief Executive Officer (CEO)">Chief Executive Officer (CEO)</option>
+                            <option value="Chief Technology Officer (CTO)">Chief Technology Officer (CTO)</option>
+                            <option value="Chief Financial Officer (CFO)">Chief Financial Officer (CFO)</option>
+                            <option value="Chief Operating Officer (COO)">Chief Operating Officer (COO)</option>
+                            <option value="Chief Marketing Officer (CMO)">Chief Marketing Officer (CMO)</option>
+                            <option value="HR">Human Resources (HR) Manager</option>
+                            <option value="Administrator">Administrator</option>
+                            <option value="Accountant">Accountant</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Supervisor">Supervisor</option>
+                            <option value="Engineer">Engineer</option>
+                            <option value="Developer">Developer</option>
+                            <option value="Designer">Designer</option>
+                            <option value="Analyst">Analyst</option>
+                            <option value="Programmer">Programmer</option>
+                            <option value="Full Stack Developer">Full Stack Developer</option>
                             <option value="Backend Developer">Backend Developer</option>
-                            <option value="Marketing">Marketing</option>
+                            <option value="Frontend Developer">Frontend Developer</option>
+                            <option value="Technician">Technician</option>
+                            <option value="Specialist">Specialist</option>
+                            <option value="Consultant">Consultant</option>
+                            <option value="Intern">Intern</option>
+                            <option value="Trainee">Trainee</option>
                           </select>
                           <Form.Control.Feedback type="invalid">Please provide Designation</Form.Control.Feedback>
                           </div>

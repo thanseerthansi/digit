@@ -67,7 +67,8 @@ export default function Simplecontextprovider({children}){
                     setuserdetail(data.data.data)
                     setemployeedata(data.data.data)
                     // console.log("datadaa.............",data.data.data.email)
-                    // window.localStorage.setItem("graiduseremail",data.data.data.email);
+                    window.localStorage.setItem("graiduseremail",data.data.data.email);
+                    window.localStorage.setItem("graiduserid",data.data.data._id);
                   }else{
                     // window.localStorage.setItem("graiduser", "employee");
                     // navigate('/employeeregister')
@@ -82,6 +83,8 @@ export default function Simplecontextprovider({children}){
                   if(data.data.data){
                     setuserdetail(data.data.data.docs[0])
                     setemployeedata(data.data.data.docs[0])
+                    window.localStorage.setItem("graiduseremail",data.data.data.docs[0].email);
+                    window.localStorage.setItem("graiduserid",data.data.data.docs[0]._id);
                   }else{
                     
                     // window.localStorage.setItem("graiduser", "employee");
@@ -100,10 +103,10 @@ export default function Simplecontextprovider({children}){
      
     }
     async function Filestackhandler(ratio,setvalue,value,keypair){
-      console.log("keypair",keypair)
+      // console.log("keypair",keypair)
       let data =await Filestack(ratio)
 
-      console.log("datafilestack",data)
+      // console.log("datafilestack",data)
       if (data){
         setvalue({...value,[keypair]:data})
       }

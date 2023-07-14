@@ -167,6 +167,8 @@ export default function Signin() {
             setemployeedata(data.data.data.docs[0])
             window.localStorage.setItem("graiduser", "employee");
             if (data.data.data.docs[0]){
+              window.localStorage.setItem("graiduseremail",data.data.data.docs[0].email);
+              window.localStorage.setItem("graiduserid",data.data.data.docs[0]._id);
               navigate('/employee-profile')
             }else{
               navigate('/employeeregister')

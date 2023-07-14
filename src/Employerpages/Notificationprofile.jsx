@@ -1,14 +1,16 @@
 import React, { useContext, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Axioscall from '../Commonpages/Axioscall';
 import { useEffect } from 'react';
 import moment from 'moment/moment';
 import { Simplecontext } from '../Commonpages/Simplecontext';
+import { notify } from '../Commonpages/toast';
 
 export default function Notificationprofile() {
   const {userdetail } = useContext(Simplecontext);
     const {id,userId}=useParams();
     const [userprofile,setuserprofile]=useState('')
+    const navigate = useNavigate();
     // console.log("userprofile in notificaton",userprofile)
     // console.log("iddddddddd",id)
     // console.log("userId",userId)
@@ -48,6 +50,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
           console.log("datanotificatio update",data)
           if (data.status===200){
             console.log("status,updated")
+            
           }
         }
        
@@ -65,6 +68,11 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
       }
         let data =await Axioscall("post","employee/companyVerify",body)
         console.log("verifydata",data)
+        if(data.status===200){
+          
+          notify("successfully Verified")
+          navigate("/notification")
+        }
       } catch (error) {
         
       }

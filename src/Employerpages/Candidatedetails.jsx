@@ -4,10 +4,11 @@ import { useParams } from 'react-router-dom'
 import Axioscall from '../Commonpages/Axioscall';
 import moment from 'moment';
 import QRCode from 'qrcode.react';
-import { BaseURL } from '../Commonpages/Baseurl';
+
 export default function Candidatedetails() {
     const {id}=useParams();
     const [userprofile,setuserprofile]=useState('')
+    // console.log("userprofile",userprofile)
     useEffect(()=>{
       getemployee()
       
@@ -19,7 +20,7 @@ export default function Candidatedetails() {
         <td data-label="Write">{userprofile && index < userprofile.lngWrite.length ? userprofile.lngWrite[index] : ''}</td>
       </tr>
     ));
-    console.log("iduserprofile",userprofile)
+    // console.log("iduserprofile",userprofile)
     const getemployee=async()=>{
         try {
             let body = {
@@ -29,9 +30,8 @@ export default function Candidatedetails() {
             }
             let data = await Axioscall("get","employee",body)
             // console.log("employeee data",data.data.data.docs[0])
-            if(data.data.data.docs[0]){
-              setuserprofile(data.data.data.docs[0])
-              
+            if(data){
+              setuserprofile(data.data.data.docs[0])              
             }
         } catch (error) {
             
@@ -72,14 +72,19 @@ export default function Candidatedetails() {
  
   const degreeHandler=()=>{
     let data= userprofile?.careerandeducation?.[0]??""
-    console.log("datahandler",data.bachelorDegree)
-    let rslt;
+    // console.log("datahandler",data.bachelorDegree)
+    let rslt=""
     if(data){
-      rslt = data.bachelorDegree.length?"Bachelor Degree":""
-      rslt = data.masterDegree.length?"Master Degree":""
-      // rslt = data.additional.length?"Bachelor Degree":""
-    }
-    return rslt
+      if(data.bachelorDegree.length){
+        rslt = "Bachelor Degree"
+      }
+      if(data.masterDegree.length){
+        console.log("master")
+        rslt = "Master Degree"
+      }
+      // console.log("reslt",rslt)
+      return rslt
+    } 
   }
 
   return (

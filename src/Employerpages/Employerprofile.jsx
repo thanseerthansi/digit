@@ -182,7 +182,7 @@ const verifyotp=async()=>{
                       </a>
                     </li>
                     <li>
-                    <Link className="btn btn-border people-icon mb-20" to="/employeelist" >
+                    <Link className="btn btn-border people-icon mb-20" to="/hrlist" >
                         HR
                       </Link>
                     </li>

@@ -284,18 +284,26 @@ export default function Employerregister() {
               <div className="text__center">
                 <select required onChange={(e)=>setcompanydata({...companydata,industryType:e.target.value})} value={companydata.industryType??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                   <option value="" defaultValue="" disabled>Industry Type</option>
-                  <option value="software-development">Software Development</option>
-                  <option value="web-development">Web Development</option>
-                  <option value="mobile-app-development">Mobile App Development</option>
-                  <option value="data-analytics">Data Analytics</option>
-                  <option value="cloud-computing">Cloud Computing</option>
-                  <option value="cybersecurity">Cybersecurity</option>
-                  <option value="artificial-intelligence">Artificial Intelligence</option>
-                  <option value="machine-learning">Machine Learning</option>
-                  <option value="networking-infrastructure">Networking and Infrastructure</option>
-                  <option value="database-management">Database Management</option>
-                  <option value="IT-consulting">IT Consulting</option>
-                  <option value="IT-support">IT Support and Services</option>
+                  <option value="automotive">Automotive</option>
+                  <option value="banking">Banking</option>
+                  <option value="construction">Construction</option>
+                  <option value="energy">Energy</option>
+                  <option value="entertainment">Entertainment</option>
+                  <option value="food">Food and Beverage</option>
+                  <option value="healthcare">Healthcare</option>
+                  <option value="informationtech">Information Technology</option>
+                  <option value="manufacturing">Manufacturing</option>
+                  <option value="retail">Retail</option>
+                  <option value="telecom">Telecommunications</option>
+                  <option value="transportation">Transportation</option>
+                  <option value="pharmaceutical">Pharmaceutical</option>
+                  <option value="finance">Finance</option>
+                  <option value="insurance">Insurance</option>
+                  <option value="consulting">Consulting</option>
+                  <option value="media">Media</option>
+                  <option value="education">Education</option>
+                  <option value="hospitality">Hospitality</option>
+                  <option value="real-estate">Real Estate</option>
 
                 </select>
                 <Form.Control.Feedback type="invalid">Please Select Industry Type</Form.Control.Feedback>

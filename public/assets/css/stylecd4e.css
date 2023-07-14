@@ -9961,7 +9961,7 @@ input[type=file]::file-selector-button:hover {
 }
 
 .content-page .card-grid-2 .card-block-info {
-  padding: 0px 20px 30px 20px;
+  padding: 0px 20px 10px 20px;
   position: relative;
 }
 .content-page .card-grid-2 .card-block-info .btn-dots-abs-right {

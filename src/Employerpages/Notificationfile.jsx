@@ -26,7 +26,7 @@ export default function Notificationfile() {
     const getNotification=async()=>{
       try {
         let body ={
-          // email:window.localStorage.getItem("graiduseremail"),
+          email:window.localStorage.getItem("graiduseremail"),
           page:1,
           limit:10
         }
@@ -54,7 +54,7 @@ export default function Notificationfile() {
             <h6 className="m-0">Recent</h6>
           </div>
           <div className="box-body p-0">
-            {notificationdata.filter(t=>t.is_viewed===false).length?notificationdata.filter(t=>t.is_viewedd===false).map((newnot,nk)=>(
+            {notificationdata.filter(t=>t.is_viewed===false).length?notificationdata.filter(t=>t.is_viewed===false).map((newnot,nk)=>(
             <div key={nk} className="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header">
               <div className="dropdown-list-image mr-3">
                 <img className="rounded-circle" src={newnot?.user?.profilePhoto??"https://bootdey.com/img/Content/avatar/avatar3.png"}  alt=""/>
