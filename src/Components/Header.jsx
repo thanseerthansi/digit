@@ -167,23 +167,70 @@ export default function Header() {
               <div className="mobile-menu-wrap mobile-header-border">
                 {/* mobile menu start*/}
                 <nav>
-                  <ul className="mobile-menu font-heading">
+                  <ul className="mobile-menu font-heading mt-40">
                     <li className="has-children">
                       <Link to="/">Home</Link>
                     </li>
                     <li className="has-children">
                       <Link to="/aboutus">About us</Link>
                     </li>
-                    <li className="has-children mb-3">
+                    <li className="has-children ">
                       <Link to="/employerlogin">Find candidates </Link>
                     </li>
                     <li className="has-children">
                       <Link to="/contactus">Contact us</Link>
                     </li>
+                    {windowuser==="employer"? <li className="has-children"><Link to="/candidates">Candidates</Link>
+                </li>:null}
+                {windowuser==="employer"?<>
+            
+          <li className="has-children"><Link   to="/notification">Notification</Link></li>
+        
+        </>:null}
+        {windowuser?windowuser==="employer"?<>
+        <li className="has-children"><Link  to="/employer-profile">Profile</Link></li>
+        </>:userdetail?<>
+        {pathvalue==="/employeeregister"?"":
+               <li className="has-children"><Link  to="/employee-profile">Profile</Link></li>
+              }   
+        </>:""
+        :<>
+        {pathvalue === "/Signin" || pathvalue === "/employerlogin" ? (
+                pathvalue === "/Signin" ? "" : 
+                (
+                  <li className="has-children">
+                    <Link
+                      
+                      to="/employer-register"
+                    >
+                      Register
+                    </Link>
+                  </li>
+                )
+              ) : (
+                <>
+                <li className="has-children">
+                  <Link
+                    
+                    to="/employerlogin"
+                  >
+                    Find &nbsp; Candidates
+                  </Link>
+                </li>
+                <li className="has-children">
+                  <Link
+                    
+                    to="Signin"
+                  >
+                    Sign in
+                  </Link>
+                </li></>
+              )}</>}
                   </ul>
+                  
                 </nav>
               </div>
-              <div className="site-copyright">Copyright 2023 © Digit.</div>
+              <div className="site-copyright text-bottom mt-40" >Copyright 2023 © Digit.</div>
             </div>
           </div>
         </div>
