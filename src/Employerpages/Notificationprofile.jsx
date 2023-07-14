@@ -12,7 +12,7 @@ export default function Notificationprofile() {
     // console.log("userprofile in notificaton",userprofile)
     // console.log("iddddddddd",id)
     // console.log("userId",userId)
-      console.log("userdetails",userdetail)
+      // console.log("userdetails",userdetail)
     const maxLength = userprofile ? Math.max(userprofile.lngRead.length, userprofile.lngWrite.length) : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
@@ -133,7 +133,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                   <tr>
                     <td className='d-flex'>Father's Occupation</td>
                     <td>:</td>
-                    <td className="td-verify">sdf</td>
+                    <td className="td-verify">{userprofile?.fatherOccupation??""}</td>
                   </tr>
                   <tr>
                     <td>Mother's Name</td>
@@ -192,20 +192,20 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                                   <td className=" verification-tb-margin" colSpan={3}><h6>Child Details</h6></td>
                                 </tr>
                                 {userprofile?.childDetails?.length?userprofile.childDetails.map((child,ck)=>(<>
-                                <tr>
+                                <tr key={ck}>
                                   <td>Name</td>
                                   <td>:</td>
-                                  <td className="td-verify">{spouse?.name??""}</td>
+                                  <td className="td-verify">{child?.name??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Qualification</td>
                                   <td>:</td>
-                                  <td className="td-verify">{spouse?.qualification??""}</td>
+                                  <td className="td-verify">{child?.qualification??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Occuption</td>
                                   <td>:</td>
-                                  <td className="td-verify">{spouse?.occupation??""}</td>
+                                  <td className="td-verify">{child?.occupation??""}</td>
                                 </tr>
                                 </>)):"No Child Found"??""}
                              

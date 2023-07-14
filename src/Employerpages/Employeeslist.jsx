@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Helmet } from 'react-helmet'
+import { Simplecontext } from '../Commonpages/Simplecontext';
 
 export default function Employeeslist() {
+  const {userdetail } = useContext(Simplecontext);
+  console.log("userdetails in employeelist",userdetail)
   return (
     <>
     <main className="main">

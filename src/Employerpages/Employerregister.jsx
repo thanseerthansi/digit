@@ -33,6 +33,7 @@ export default function Employerregister() {
     window.scrollTo(0,0)
   }, [])
   let regex = new RegExp(/(0|91)?[6-9][0-9]{9}/);
+  const numberRegex = /^[0-9]*$/;
 
   const notify = (msg) => toast.success(msg, {
     position: "top-left",

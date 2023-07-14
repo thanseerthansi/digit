@@ -11,13 +11,22 @@ import {getAuth,GoogleAuthProvider,signInWithPopup,FacebookAuthProvider,signInWi
 //     appId: "1:1049017199665:web:17936dc5f4b59b2c1bf910",
 //     measurementId: "G-57SWNPYWTH"
 //   };
+// const firebaseConfig = {
+//     apiKey: "AIzaSyD4BHjMCAX_iGhNDpn_bHxDjimUIyyE1MY",
+//     authDomain: "sample-2a68e.firebaseapp.com",
+//     projectId: "sample-2a68e",
+//     storageBucket: "sample-2a68e.appspot.com",
+//     messagingSenderId: "146010862421",
+//     appId: "1:146010862421:web:863561a1eeb6a2486975dc"
+//   };
 const firebaseConfig = {
-    apiKey: "AIzaSyD4BHjMCAX_iGhNDpn_bHxDjimUIyyE1MY",
-    authDomain: "sample-2a68e.firebaseapp.com",
-    projectId: "sample-2a68e",
-    storageBucket: "sample-2a68e.appspot.com",
-    messagingSenderId: "146010862421",
-    appId: "1:146010862421:web:863561a1eeb6a2486975dc"
+    apiKey: "AIzaSyCNNhS_4-AdlWJYssj1zFpAuSQw8h7oFOk",
+    authDomain: "fir-225df.firebaseapp.com",
+    projectId: "fir-225df",
+    storageBucket: "fir-225df.appspot.com",
+    messagingSenderId: "303773340936",
+    appId: "1:303773340936:web:ac53b983a92ffcfb2388bd",
+    measurementId: "G-2CD4J7HET4"
   };
 const app = initializeApp(firebaseConfig);
 export const auth=getAuth(app)

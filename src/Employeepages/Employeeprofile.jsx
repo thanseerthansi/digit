@@ -216,20 +216,20 @@ const Bannerhandler=async(ratio)=>{
                                   <td className=" verification-tb-margin" colSpan={3}><h6>Child Details</h6></td>
                                 </tr>
                                 {userdetail?.childDetails?.length?userdetail.childDetails.map((child,ck)=>(<>
-                                <tr>
+                                <tr key={ck}>
                                   <td>Name</td>
                                   <td>:</td>
-                                  <td className="td-verify">{spouse?.name??""}</td>
+                                  <td className="td-verify">{child?.name??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Qualification</td>
                                   <td>:</td>
-                                  <td className="td-verify">{spouse?.qualification??""}</td>
+                                  <td className="td-verify">{child?.qualification??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Occuption</td>
                                   <td>:</td>
-                                  <td className="td-verify">{spouse?.occupation??""}</td>
+                                  <td className="td-verify">{child?.occupation??""}</td>
                                 </tr>
                                 </>)):"No Child Found"??""}
                               </tbody>
@@ -306,7 +306,7 @@ const Bannerhandler=async(ratio)=>{
                           </div>    
                           <section className="left-section">
                             {/* <img src="assets/imgs/page/login-register/qr.png" className="is-circle6 profile-pic" /> */}
-                            <QRCode style={{height:"100px",width:"100px"}} value="assets/imgs/page/login-register/qr.png" />
+                            <QRCode style={{height:"100px",width:"100px"}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
                             <div className="profile-detail">
                               <p className="profile-name">CRAG CARD</p>
                               <span className="profile-summary">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""}</span>
@@ -838,19 +838,19 @@ const Bannerhandler=async(ratio)=>{
   </section>
 </main>
 <Helmet>
-<script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
-    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
-    <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/plugins/waypoints.js"></script>
-    <script src="assets/js/plugins/wow.js"></script>
-    <script src="assets/js/plugins/magnific-popup.js"></script>
-    <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
-    <script src="assets/js/plugins/select2.min.js"></script>
-    <script src="assets/js/plugins/isotope.js"></script>
-    <script src="assets/js/plugins/scrollup.js"></script>
-    <script src="assets/js/plugins/swiper-bundle.min.js"></script>
-    <script src="assets/js/main8c94.js?v=4.1"></script>
+<script src="/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="/assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/plugins/waypoints.js"></script>
+    <script src="/assets/js/plugins/wow.js"></script>
+    <script src="/assets/js/plugins/magnific-popup.js"></script>
+    <script src="/assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="/assets/js/plugins/select2.min.js"></script>
+    <script src="/assets/js/plugins/isotope.js"></script>
+    <script src="/assets/js/plugins/scrollup.js"></script>
+    <script src="/assets/js/plugins/swiper-bundle.min.js"></script>
+    <script src="/assets/js/main8c94.js?v=4.1"></script>
 </Helmet>
     </>
   )
