@@ -8,7 +8,7 @@ import QRCode from 'qrcode.react';
 export default function Candidatedetails() {
     const {id}=useParams();
     const [userprofile,setuserprofile]=useState('')
-    // console.log("userprofile",userprofile)
+    console.log("userprofile",userprofile)
     useEffect(()=>{
       getemployee()
       
@@ -47,6 +47,7 @@ export default function Candidatedetails() {
     if (exp.length){
       exp.forEach(comp => {     
         from.push(comp?.from??"");
+        if ( comp?.to && moment(comp.to, 'YYYY-MM-DD', true).isValid())
         to.push(comp?.to??moment().format('YYYY-MM-DD'));     
       });
     
@@ -296,7 +297,7 @@ export default function Candidatedetails() {
                                 <td data-label="Grade/Score">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.['garde/score']??""}</td>
                                 <td data-label="Year">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.year??""}</td>
                               </tr>
-                              {userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?
+                              {userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?.course?
                               <tr>
                                 <td scope="row" data-label="Cource">Master’s</td>
                                 <td data-label="Field/board">{userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?.course??""}</td>
@@ -336,7 +337,7 @@ export default function Candidatedetails() {
                         
                {userprofile?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
                           <div key={pk} className="item-timeline"> 
-                            <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{ pcompany?.to?moment(pcompany.to).format('YY'):""??""}</span></div>
+                            <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid()? moment(pcompany.to, 'YYYY-MM-DD').format('YY'): pcompany?.to ?? ''}</span></div>
                             <div className="timeline-info"> 
                               <h5 className="color-brand-1 mb-20">{pcompany.name}</h5>
                               <h6 className="color-text-paragraph-2 mb-15">{pcompany.position}</h6>

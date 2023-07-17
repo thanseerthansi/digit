@@ -12,7 +12,7 @@ export default function Simplecontextprovider({children}){
     const [userdetail,setuserdetail]=useState('')
     const [employeedata,setemployeedata]=useState('')
     // console.log("window.localStorage.getItem('craig-token')",window.localStorage.getItem('craig-token'))
-    console.log("userdetails",userdetail)
+    // console.log("userdetails",userdetail)
     useEffect(() => {
         path()
         getUser()
@@ -113,7 +113,7 @@ export default function Simplecontextprovider({children}){
       
     }
     function Decodetoken (token){
-      console.log(token)
+      // console.log(token)
       var decoded = jwt_decode(token)
       if(decoded.id){
         // console.log("decodeid",decoded.id)

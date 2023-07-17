@@ -18,6 +18,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
     <td data-label="Write">{userdetail && index < userdetail.lngWrite.length ? userdetail.lngWrite[index] : ''}</td>
   </tr>
 ));
+// console.log("userdetails",userdetail)
 const Bannerhandler=async(ratio)=>{
   try {
     // console.log("atio in function",ratio)
@@ -143,7 +144,7 @@ const Bannerhandler=async(ratio)=>{
                         <div className="card-block-info">
                           <div className="class-verification1">
                             {/* <p className="font-md color-text-paragraph-2 ">| Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero repellendus magni, atque delectus molestias quis?</p> */}
-                            <table>
+                            <table style={{width:"100%"}}>
                               <tbody>
                                 <tr>
                                   <td>Date of birth</td>
@@ -284,14 +285,14 @@ const Bannerhandler=async(ratio)=>{
                             <section>
                               <div id="circle-staticstic-demo" />
                             </section></div>
-                          <h5 className="f-18 mt-10">Experiance</h5>
+                          <h5 className="f-18 mt-10 text-center">Experience</h5>
                           <div className="sidebar-list-job88 text-imp">
                             <ul className="list-unstyled timeline-sm">
                               {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
                                  <li key={pk} className="timeline-sm-item">
-                                 <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{ pcompany?.to?moment(pcompany.to).format('YY'):""??""}</span>
-                                 <h6 className="mt-0 mb-1">{pcompany.name} / {pcompany.position}</h6>
-                                 <p>{pcompany.email}</p>
+                                 <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to,'YYYY-MM-DD', true).isValid()? moment(pcompany.to,'YYYY-MM-DD').format('YY'): ''}</span>
+                                 <h6 className="mt-0 mb-1">{pcompany.name} </h6>
+                                 <p>{pcompany.position}</p>
                                </li>
                               ))??""}
                              
@@ -311,7 +312,7 @@ const Bannerhandler=async(ratio)=>{
                             <h6 className="mb-3 mt-4 text-uppercase text-center "><i className="mdi mdi-cards-variant mr-1" />
                               LANGUAGE KNOWN</h6>
                             <div className="table-responsive mb-30">
-                              <table className="table table-borderless mb-0 text-center">
+                              <table className="table table-borderless mb-0 ">
                                 <thead className="t-head-verify">
                                   <tr>
                                     <th scope="col">Read</th>
@@ -357,7 +358,7 @@ const Bannerhandler=async(ratio)=>{
                          
                           {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
                           <div key={pk} className="item-timeline"> 
-                            <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{ pcompany?.to?moment(pcompany.to).format('yyy'):"Present"??""}</span></div>
+                            <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid()? moment(pcompany.to, 'YYYY-MM-DD').format('YY'):'Present'}</span></div>
                             <div className="timeline-info"> 
                               <h5 className="color-brand-1 mb-20">{pcompany?.name??""}</h5>
                               <h6 className="color-text-paragraph-2 mb-15">{pcompany.position}</h6>
@@ -412,7 +413,7 @@ const Bannerhandler=async(ratio)=>{
                                 <td data-label="Grade/Score">{userdetail?.careerandeducation?.[0]?.bachelorDegree?.[0]?.['garde/score']??""}</td>
                                 <td data-label="Year">{userdetail?.careerandeducation?.[0]?.bachelorDegree?.[0]?.year??""}</td>
                               </tr>
-                              {userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?
+                              {userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.course?
                               <tr>
                                 <td scope="row" data-label="Cource">Master’s</td>
                                 <td data-label="Field/board">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.course??""}</td>

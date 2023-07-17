@@ -145,7 +145,7 @@ export default function Header() {
                     className="text-link-bd-btom hover-up"
                     to="/employerlogin"
                   >
-                    Find &nbsp; Candidates
+                    For &nbsp; Employers
                   </Link>
                   <Link
                     className="btn btn-default btn-shadow ml-40 hover-up"
@@ -175,7 +175,7 @@ export default function Header() {
                       <Link to="/aboutus">About us</Link>
                     </li>
                     <li className="has-children ">
-                      <Link to="/employerlogin">Find candidates </Link>
+                      <Link to="/employerlogin">For Employers </Link>
                     </li>
                     <li className="has-children">
                       <Link to="/contactus">Contact us</Link>
@@ -214,7 +214,7 @@ export default function Header() {
                     
                     to="/employerlogin"
                   >
-                    Find &nbsp; Candidates
+                    For &nbsp; Employers
                   </Link>
                 </li>
                 <li className="has-children">

@@ -66,15 +66,39 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
           is_verified:value,
           notificationid:id
       }
+      console.log("body",body)
         let data =await Axioscall("post","employee/companyVerify",body)
         console.log("verifydata",data)
         if(data.status===200){
           
           notify("successfully Verified")
+          if(pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid()){
+
+          }else{
+            Addcompanyhandler()
+          }
           navigate("/notification")
         }
       } catch (error) {
         
+      }
+    }
+    const Addcompanyhandler=async()=>{
+      try {
+        let body={
+          user :userId,
+          company : window.localStorage.getItem("graiduserid"),
+          type : "assign"
+      }
+      console.log("bodyyyyyyyy",body)
+        let data = await Axioscall("post","employee/assign",body)
+        console.log("data",data)
+        if(data.status===200){
+          // notify("added Successfully")
+          // getCandidte()
+        }
+      } catch (error) {
+        console.log(error) 
       }
     }
   return (
@@ -282,7 +306,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
               <ul className="list-unstyled timeline-sm">
               {userprofile?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
                   <li key={pk} className="timeline-sm-item">
-                  <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{ pcompany?.to?moment(pcompany.to).format('YY'):""??""}</span>
+                  <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid()? moment(pcompany.to, 'YYYY-MM-DD').format('YY'): pcompany?.to ?? ''}</span>
                   <h6 className="mt-0 mb-1">{pcompany.name} / {pcompany.position}</h6>
                   <p>{pcompany.email}</p>
                   <p>{pcompany.address}</p>
@@ -361,7 +385,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                                 <td data-label="Grade/Score">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.['garde/score']??""}</td>
                                 <td data-label="Year">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.year??""}</td>
                               </tr>
-                              {userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?
+                              {userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?.course?
                               <tr>
                                 <td scope="row" data-label="Cource">Master’s</td>
                                 <td data-label="Field/board">{userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?.course??""}</td>

@@ -14,6 +14,7 @@ export default function Employeelogin() {
   const navigate = useNavigate()
   const [formdata,setformdata]=useState({username:"",password:""});
   const [Validated,setValidated]=useState(false)
+  const [load,setload]=useState(false)
   // console.log("data",formdata)
   useEffect(() => {
     getcraigcredintial()
@@ -31,6 +32,7 @@ export default function Employeelogin() {
 
   const LoginEmployer=async()=>{
     try {
+      setload(true)
       let datalist = {...formdata}
       datalist.role="employer"
       let data = await Axioscall("post","user/login",datalist)
@@ -48,10 +50,12 @@ export default function Employeelogin() {
       }else{
         notifyerror("invalid Username or password")
       }
+
     } catch (error) {
       console.log("errorr",error)
       notifyerror("Something went wong try again later")
     }
+    setload(false)
     // window.localStorage.setItem('graiduser','employer')
     // navigate('/')
   
@@ -120,6 +124,10 @@ export default function Employeelogin() {
     <>
       <main className="main">
         <ToastContainer/>
+        {load? 
+  <div className="spinner-container">
+    <div className="spinner" />
+  </div>:null}
         <div className="carousel-inner"></div>
         <section className="pt-50 login-register">
           <div className="container ">

@@ -244,13 +244,22 @@ export default function Employeeprofupdate() {
   
   const RegsterSecondform=async()=>{
     try {
-      
+      let method ="put"
       setload(true)
       let datalist ={...employeedata2}
       // user id push to datalist.at...........
+      
       if (datalist._id){
         // console.log("userid",userid)
         datalist.id=datalist._id
+      }else{
+        method="post"
+        let userid = tokenhandler()
+    
+        if (userid){
+          // console.log("userid",userid)
+          datalist.user=userid
+        }
       }
       if(Object.keys(addressdata).length){
         datalist.permanantAddress=[{...addressdata}]
@@ -259,7 +268,7 @@ export default function Employeeprofupdate() {
         datalist.currentAddress=[{...currentaddressdata}]
       }
       // console.log("form22222222222222222222222",datalist)
-      let data = await Axioscall("put","employee/address",datalist)
+      let data = await Axioscall(method,"employee/address",datalist)
       // console.log("dataaddress",data)
       if(data.status===200){
         setWizard(3)
@@ -276,13 +285,22 @@ export default function Employeeprofupdate() {
   }
   const RegsterThirdform=async()=>{
     try {
-      
+      let method ="put"
       setload(true)
       let datalist = {...employeedata3}
-      // user id push to datalist.at...........
+      // user id push to datalist.at.......
+      
       if (datalist._id){
         // console.log("userid",userid)
         datalist.id=datalist._id
+      }else{
+        method="post"
+        let userid = tokenhandler()
+    
+        if (userid){
+          // console.log("userid",userid)
+          datalist.user=userid
+        }
       }
       
       if(Object.keys(tenthdata).length){
@@ -341,7 +359,7 @@ export default function Employeeprofupdate() {
         }
 
         // console.log("data",datalist)
-        let data = await Axioscall("put","employee/educationandcareer",datalist)
+        let data = await Axioscall(method,"employee/educationandcareer",datalist)
         if(data.status===200){
           notify("successfully updated")
           setWizard(1)      
@@ -969,9 +987,25 @@ export default function Employeeprofupdate() {
                                 <div className="text__center">
                                   <select   onChange={(e)=>setbachlerdata({...bachlerdata,course:e.target.value})} value={bachlerdata.course??""}  className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value ="" defaultValue="" disabled  >Course</option>
-                                    <option value="Computer science">Computer science</option>
-                                    <option value="Electronics">Electronics</option>
-                                    <option value="Civil">Civil</option>
+                                    <option value="Computer Science Engineering">Computer Science Engineering</option>
+                                    <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                    <option value="Civil Engineering">Civil Engineering</option>
+                                    <option value="Electrical Engineering">Electrical Engineering</option>
+                                    <option value="MBBS (Bachelor of Medicine, Bachelor of Surgery)">MBBS (Bachelor of Medicine, Bachelor of Surgery)</option>
+                                    <option value="BDS (Bachelor of Dental Surgery)">BDS (Bachelor of Dental Surgery)</option>
+                                    <option value="BAMS (Bachelor of Ayurvedic Medicine and Surgery)">BAMS (Bachelor of Ayurvedic Medicine and Surgery)</option>
+                                    <option value="BPT (Bachelor of Physiotherapy)">BPT (Bachelor of Physiotherapy)</option>
+                                    <option value="BBA (Bachelor of Business Administration)">BBA (Bachelor of Business Administration)</option>
+                                    <option value="BCom (Bachelor of Commerce)">BCom (Bachelor of Commerce)</option>
+                                    <option value="BA (Bachelor of Arts)">BA (Bachelor of Arts)</option>
+                                    <option value="BSc (Bachelor of Science)">BSc (Bachelor of Science)</option>
+                                    <option value="Psychology">Psychology</option>
+                                    <option value="BCA (Bachelor of Computer Applications)">BCA (Bachelor of Computer Applications)</option>
+                                    <option value="BFA (Bachelor of Fine Arts)">BFA (Bachelor of Fine Arts)</option>
+                                    <option value="Animation">Animation and Multimedia courses</option>
+                                    <option value="LLB (Bachelor of Laws)">LLB (Bachelor of Laws)</option>
+                                    <option value="BEd (Bachelor of Education)">BEd (Bachelor of Education)</option>
                                   </select>
                                   <Form.Control.Feedback type="invalid">Please provide Course </Form.Control.Feedback>
                                 </div>
@@ -1009,9 +1043,38 @@ export default function Employeeprofupdate() {
                                 <div className="text__center">
                                   <select onChange={(e)=>setmasterDegreedata({...masterDegreedata,course:e.target.value})} value={masterDegreedata.course??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value="" defaultValue=""  >Course</option>
-                                    <option value="">Computer science</option>
-                                    <option value="">Electronics</option>
-                                    <option value="">Civil</option>
+                                    <option value="MBA (Master of Business Administration)">MBA (Master of Business Administration)</option>
+                                    <option value="MCA (Master of Computer Applications)">MCA (Master of Computer Applications)</option>
+                                    <option value="MCom (Master of Commerce)">MCom (Master of Commerce)</option>
+                                    <option value="MA (Master of Arts)">MA (Master of Arts)</option>
+                                    <option value="MSc (Master of Science)">MSc (Master of Science)</option>
+                                    <option value="MSW (Master of Social Work)">MSW (Master of Social Work)</option>
+                                    <option value="MTech (Master of Technology)">MTech (Master of Technology)</option>
+                                    <option value="MBA in Human Resource Management">MBA in Human Resource Management</option>
+                                    <option value="MBA in Marketing">MBA in Marketing</option>
+                                    <option value="MBA in Finance">MBA in Finance</option>
+                                    <option value="MBA in Information Technology">MBA in Information Technology</option>
+                                    <option value="MBA in Operations Management">MBA in Operations Management</option>
+                                    <option value="MBA in International Business">MBA in International Business</option>
+                                    <option value="MBA in Hospital Management">MBA in Hospital Management</option>
+                                    <option value="MBA in Education Management">MBA in Education Management</option>
+                                    <option value="MBA in Fashion Management">MBA in Fashion Management</option>
+                                    <option value="MBA in Event Management">MBA in Event Management</option>
+                                    <option value="MBA in Tourism Management">MBA in Tourism Management</option>
+                                    <option value="MBA in Hospitality Management">MBA in Hospitality Management</option>
+                                    <option value="MBA in Environmental Management">MBA in Environmental Management</option>
+                                    <option value="MBA in Entrepreneurship">MBA in Entrepreneurship</option>
+                                    <option value="MBA in Family Business Management">MBA in Family Business Management</option>
+                                    <option value="MBA in Agribusiness Management">MBA in Agribusiness Management</option>
+                                    <option value="Master of Science (Research)">Master of Science (Research)</option>
+                                    <option value="Master of Philosophy (MPhil)">Master of Philosophy (MPhil)</option>
+                                    <option value="Master of Public Administration (MPA)">Master of Public Administration (MPA)</option>
+                                    <option value="Master of Physical Education (MPED)">Master of Physical Education (MPED)</option>
+                                    <option value="Master of Physiotherapy (MPT)">Master of Physiotherapy (MPT)</option>
+                                    <option value="Master of Pharmacy (MPharma)">Master of Pharmacy (MPharma)</option>
+                                    <option value="Master of Architecture (MARCH)">Master of Architecture (MARCH)</option>
+                                    <option value="Master of Laws (LLM)">Master of Laws (LLM)</option>
+                                    <option value="Master of Design (M.Des)">Master of Design (M.Des)</option>
                                   </select>
                                   <Form.Control.Feedback type="invalid">Please provide Course </Form.Control.Feedback>
                                 </div>
@@ -1078,12 +1141,10 @@ export default function Employeeprofupdate() {
                               </React.Fragment>):null}
                               <div className="form-group col-lg-3 mt-10">
                                 <div className="text__center">
-                                  <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" defaultValue=""   >Course</option>
-                                    <option value="Computer science">Computer science</option>
-                                    <option value="Electronics">Electronics</option>
-                                    <option value="Civil">Civil</option>
-                                  </select>
+                                <input type="text" onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="form-control" placeholder=" college" id=" " />
+                                  {/* <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                                    
+                                  </select> */}
                                   <Form.Control.Feedback type="invalid">Please provide Course </Form.Control.Feedback>
                                 </div>
                               </div>
@@ -1119,10 +1180,29 @@ export default function Employeeprofupdate() {
                         <div className="col-lg-12 col-md-12">
                           <select  value={employeedata3.designation}  onChange={(e)=>setemployeedata3({...employeedata3,designation:e.target.value})} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                             <option value="" defaultValue="" disabled  >Select Designation</option>
-                            <option value="FullStack Developer">FullStack Developer</option>
-                            <option value="Frontend Developer">Frontend Developer</option>
+                            <option value="Chief Executive Officer (CEO)">Chief Executive Officer (CEO)</option>
+                            <option value="Chief Technology Officer (CTO)">Chief Technology Officer (CTO)</option>
+                            <option value="Chief Financial Officer (CFO)">Chief Financial Officer (CFO)</option>
+                            <option value="Chief Operating Officer (COO)">Chief Operating Officer (COO)</option>
+                            <option value="Chief Marketing Officer (CMO)">Chief Marketing Officer (CMO)</option>
+                            <option value="HR">Human Resources (HR) Manager</option>
+                            <option value="Administrator">Administrator</option>
+                            <option value="Accountant">Accountant</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Supervisor">Supervisor</option>
+                            <option value="Engineer">Engineer</option>
+                            <option value="Developer">Developer</option>
+                            <option value="Designer">Designer</option>
+                            <option value="Analyst">Analyst</option>
+                            <option value="Programmer">Programmer</option>
+                            <option value="Full Stack Developer">Full Stack Developer</option>
                             <option value="Backend Developer">Backend Developer</option>
-                            <option value="Marketing">Marketing</option>
+                            <option value="Frontend Developer">Frontend Developer</option>
+                            <option value="Technician">Technician</option>
+                            <option value="Specialist">Specialist</option>
+                            <option value="Consultant">Consultant</option>
+                            <option value="Intern">Intern</option>
+                            <option value="Trainee">Trainee</option>
                           </select>
                           <Form.Control.Feedback type="invalid">Please provide Designation</Form.Control.Feedback>
                           </div>

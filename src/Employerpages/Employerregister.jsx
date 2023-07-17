@@ -24,16 +24,17 @@ export default function Employerregister() {
   const [emailvalidationdata,setemailvalidationdata]=useState({otp:"",verifyemail:false})
   const inputemail = useRef(false);
   const [disablephone,setdisablephone]=useState(false)
-  
+  const numberRegex = /^\d+$/;
   // const inputphone = useRef(false);
   // const phoneInputRef = useRef(null);
-  console.log("certificate data",certificatedata)
-  console.log("phonevalidationdata ",phonevalidationdata)
+  // console.log("certificate data",certificatedata)
+  // console.log("phonevalidationdata ",phonevalidationdata)
   useEffect(() => {
     window.scrollTo(0,0)
+    // setload(false)
   }, [])
   let regex = new RegExp(/(0|91)?[6-9][0-9]{9}/);
-  const numberRegex = /^[0-9]*$/;
+  // const numberRegex = /^[0-9]*$/;
 
   const notify = (msg) => toast.success(msg, {
     position: "top-left",
@@ -70,18 +71,20 @@ export default function Employerregister() {
   
   const Regstersubmithandler= async ()=>{
     // e.preventDefault();
-    console.log("ok")
-    
+    // console.log("ok")
+    setload(true)
     try {
       let datalist = {...companydata}
-      if (!datalist.profileImage){
+      if (!datalist.profilePhoto){
         notifyerror("please add ProfileImage")
+        setload(false)
         return 
       }
-      if (!datalist.bannerImage){
-        notifyerror("please add bannerImage")
-        return 
-      }
+      // if (!datalist.bannerImage){
+      //   notifyerror("please add bannerImage")
+      //   setload(false)
+      //   return 
+      // }
       if (Object.keys(addressdata).length){
         datalist.address=[{...addressdata}]
       }
@@ -94,7 +97,7 @@ export default function Employerregister() {
         }
         
       }
-      console.log("datalist employer",datalist)
+      // console.log("datalist employer",datalist)
       datalist.role = "employer"
       datalist.status = "verified"
       if (  datalist.password != datalist.repassword)
@@ -103,10 +106,10 @@ export default function Employerregister() {
       }
       else
       {
-        console.log("---------------------------------------")
-        console.log( datalist )
+        // console.log("---------------------------------------")
+        // console.log( datalist )
         const data = await Axioscall("post","company/",datalist)
-        console.log( data)
+        // console.log( data)
         if (data.status === 200)
         {
           notify("Company Registered Successfully , Please Login Your Account")
@@ -116,16 +119,19 @@ export default function Employerregister() {
       // navigate("/employer-profile")
     } catch (error) {
       console.log("error",error)
+      setload(false)
     }
+    setload(false)
   }
   const zipcodeHandler=async(e,code)=>{
     setload(true)
     let data =await axios.get(`https://api.postalpincode.in/pincode/${code}`)
     console.log("zipcode data",data.data[0].Status)
-    if(data.data[0].Status==='Error'){
-      e.target.classList.add('is-invalid');
-    }else{
+    if(data.data[0].Status==='Success'){
+      
       e.target.classList.remove('is-invalid');
+    }else{
+      e.target.classList.add('is-invalid');
     }
     setload(false)
   }
@@ -190,6 +196,7 @@ export default function Employerregister() {
     setload(false)
   }
   const phoneotpverify=async()=>{
+    setload(true)
     try {
       
       let body={
@@ -211,6 +218,7 @@ export default function Employerregister() {
     } catch (error) {
       console.log(error)
     }
+    setload(false)
   }
   return (
     <>
@@ -267,17 +275,18 @@ export default function Employerregister() {
             </div>
             <div className="form-group mb-3 col-md-6">
               <label className="col-sm-12 font-sm color-text-mutted">Age of the company (Year)*</label>
-              <input className="form-control" id="input-3" onChange={(e)=>setcompanydata({...companydata,ageOfCompany:e.target.value})} value={companydata.ageOfCompany??""} type="number" required name="username" placeholder="Age of the company" />
+              <input required  className={`form-control ${companydata.ageOfCompany?numberRegex.test(companydata.ageOfCompany)?"":"is-invalid":""}` } type="text" pattern="[0-9]*" onChange={(e)=>setcompanydata({...companydata,ageOfCompany:e.target.value})} value={companydata.ageOfCompany??""} placeholder="01 - 234 567 89" />
+              {/* <input className="form-control" id="input-3" onChange={(e)=>setcompanydata({...companydata,ageOfCompany:e.target.value})} value={companydata.ageOfCompany??""} type="number" required name="username" placeholder="Age of the company" /> */}
               <Form.Control.Feedback type="invalid">Please provide Age of Company</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3 col-md-6">
               <label className="col-sm-12 font-sm color-text-mutted">Number Of Employees*</label> 
-              <input className="form-control" id="input-3" onChange={(e)=>setcompanydata({...companydata,noOfemployees:e.target.value})} value={companydata.noOfemployees??""} type="number" required name="username" placeholder="Number Of Employees" />
+              <input  className={`form-control ${companydata.noOfemployees?numberRegex.test(companydata.noOfemployees)?"":"is-invalid":""}` } id="input-3" onChange={(e)=>setcompanydata({...companydata,noOfemployees:e.target.value})} value={companydata.noOfemployees??""} type="text" required name="username" placeholder="Number Of Employees" />
               <Form.Control.Feedback type="invalid">Please provide Number of Employees</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3 col-md-6">
               <label className="col-sm-12 font-sm color-text-mutted">Number of Directors*</label>
-              <input className="form-control" id="input-3" onChange={(e)=>setcompanydata({...companydata,noOfdirectors:e.target.value})} value={companydata.noOfdirectors??""} type="number" required name="username" placeholder="Number of Directors" />
+              <input  className={`form-control ${companydata.noOfdirectors?numberRegex.test(companydata.noOfdirectors)?"":"is-invalid":""}` } id="input-3" onChange={(e)=>setcompanydata({...companydata,noOfdirectors:e.target.value})} value={companydata.noOfdirectors??""} type="text" required name="username" placeholder="Number of Directors" />
               <Form.Control.Feedback type="invalid">Please provide Number of Directors</Form.Control.Feedback>
             </div>
             <label className="dropdown col-lg-6 col-sm-12 mt-20">
@@ -314,18 +323,26 @@ export default function Employerregister() {
               <div className="text__center">
                 <select required onChange={(e)=>setcompanydata({...companydata,serviceProdvided:e.target.value})} value={companydata.serviceProdvided??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                   <option defaultValue="" value='' disabled> -- Service Provided -- </option>
-                  <option value="software-development">Software Development</option>
-                  <option value="web-development">Web Development</option>
-                  <option value="mobile-app-development">Mobile App Development</option>
-                  <option value="data-analytics">Data Analytics</option>
-                  <option value="cloud-computing">Cloud Computing</option>
-                  <option value="cybersecurity">Cybersecurity</option>
-                  <option value="artificial-intelligence">Artificial Intelligence</option>
-                  <option value="machine-learning">Machine Learning</option>
-                  <option value="networking-infrastructure">Networking and Infrastructure</option>
-                  <option value="database-management">Database Management</option>
-                  <option value="IT-consulting">IT Consulting</option>
-                  <option value="IT-support">IT Support and Services</option>
+                  <option value="automotive">Automotive</option>
+                  <option value="banking">Banking</option>
+                  <option value="construction">Construction</option>
+                  <option value="energy">Energy</option>
+                  <option value="entertainment">Entertainment</option>
+                  <option value="food">Food and Beverage</option>
+                  <option value="healthcare">Healthcare</option>
+                  <option value="informationtech">Information Technology</option>
+                  <option value="manufacturing">Manufacturing</option>
+                  <option value="retail">Retail</option>
+                  <option value="telecom">Telecommunications</option>
+                  <option value="transportation">Transportation</option>
+                  <option value="pharmaceutical">Pharmaceutical</option>
+                  <option value="finance">Finance</option>
+                  <option value="insurance">Insurance</option>
+                  <option value="consulting">Consulting</option>
+                  <option value="media">Media</option>
+                  <option value="education">Education</option>
+                  <option value="hospitality">Hospitality</option>
+                  <option value="real-estate">Real Estate</option>
                 </select>
                 <Form.Control.Feedback type="invalid">Please Select a Service Provided</Form.Control.Feedback>
               </div>
@@ -362,8 +379,8 @@ export default function Employerregister() {
             <div className="form-group col-lg-6 col-sm-12">
               <label className="font-sm color-text-mutted">Profile Image*</label> 
               <div className='imageselectorborder d-flex '>
-                <button onClick={()=>Filestackhandler("square",setcompanydata,companydata,'profileImage')}  type='button' className='imageselector'> Choose Image</button>
-                <p style={{overflow:"hidden"}}>&nbsp;{companydata.profileImage??<span>No file chosen</span>}</p>
+                <button onClick={()=>Filestackhandler("square",setcompanydata,companydata,'profilePhoto')}  type='button' className='imageselector'> Choose Image</button>
+                <p style={{overflow:"hidden"}}>&nbsp;{companydata.profilePhoto??<span>No file chosen</span>}</p>
               </div>
             {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'front_url')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
             </div>

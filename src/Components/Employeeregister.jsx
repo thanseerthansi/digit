@@ -9,7 +9,10 @@ import Axioscall from '../Commonpages/Axioscall';
 import { Form } from "react-bootstrap";
 import { Simplecontext } from "../Commonpages/Simplecontext";
 import axios from 'axios';
-
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css';
 const animatedComponents = makeAnimated();
 export default function Employeeregister() {
   const {Check_Validation,Decodetoken,getUser,userdetail}=useContext(Simplecontext)
@@ -53,6 +56,9 @@ export default function Employeeregister() {
     { value: 'Bootsrtap', label: 'Bootsrtap' },
     { value: 'HTML', label: 'HTML' }
   ])
+  const inputemail = useRef(false);
+  const [emailverify,setemailverify]=useState({otp:"",valid:false,modal:false})
+  const [phoneverify,setphoneverify]=useState({otp:"",valid:false,modal:false})
   // console.log("valuedata",employeedata)
   // console.log("carddata",carddata)
   // console.log("siblingdata",siblingdata)
@@ -65,8 +71,9 @@ export default function Employeeregister() {
   // console.log("selectedskills",selectedskills)
   // console.log("companydaprecompanydatata",precompanydata)
   // console.log("companydata",companydata)
-  // console.log("companyarray",companyarray)
-  console.log("userdetail",userdetail)
+  console.log("companyarray",companyarray)
+  console.log("precompanyarray",precompanyarray)
+  // console.log("userdetail",userdetail)
     useEffect(() => {     
       window.scrollTo(0,0)
       getCompanydata()
@@ -219,9 +226,9 @@ export default function Employeeregister() {
       }
      
       
-      console.log("datalistbefore",datalist)
+      // console.log("datalistbefore",datalist)
       let data = await Axioscall("post","employee/personal",datalist)
-      console.log("datapersonal",data)
+      // console.log("datapersonal",data)
       if(data.status===200){
         notify("Successfully Saved")
         setWizard(2)     
@@ -251,9 +258,9 @@ export default function Employeeregister() {
       if(Object.keys(currentaddressdata).length){
         datalist.currentAddress=[{...currentaddressdata}]
       }
-      console.log("form2",datalist)
+      // console.log("form2",datalist)
       let data = await Axioscall("post","employee/address",datalist)
-      console.log("dataaddress",data)
+      // console.log("dataaddress",data)
       if(data.status===200){
         setWizard(3)
         setload(false)
@@ -291,15 +298,15 @@ export default function Employeeregister() {
       if(Object.keys(additionaldata).length){
         additional.push(additionaldata) 
       }
-      console.log("addtitional",additional)
+      // console.log("addtitional",additional)
       if (additional.length){
         datalist.additional=additional
       }
       if(selectedskills.length){
         let skills =[]
-        console.log("skills",selectedskills)
+        // console.log("skills",selectedskills)
         selectedskills.forEach(element => {
-          console.log("dataskils",element.value)
+          // console.log("dataskils",element.value)
           skills.push(element.value)
         });
         if (skills.length){
@@ -308,22 +315,29 @@ export default function Employeeregister() {
       }
         // ...........................company data push to datalist
         let company = companyarray
-        console.log("companyjhbjjljlk",company)
+        // console.log("companyjhbjjljlk",company)
         if(Object.keys(companydata).length){
           company.push(companydata) 
         }
         if(company.length){
-          company.forEach(element=>         
+          company.forEach((element)=>  {     
+            // if(!element.to){
+            //   element.to="present"
+            // }
             element.is_craigcompany=true
-            )}
+          })}
         let precompany = precompanyarray
         if(Object.keys(precompanydata).length){
           precompany.push(precompanydata) 
         }
         if(precompany.length){
-          precompany.forEach(element=>         
+          precompany.forEach((element)=> {
+            
+            // if(!element.to){
+            //   element.to="present"
+            // }      
             element.is_craigcompany=false
-            )
+            });
             company=[...company,...precompany]
         }
         if(company.length){
@@ -346,11 +360,12 @@ export default function Employeeregister() {
   const zipcodeHandler=async(e,code)=>{
     setload(true)
     let data =await axios.get(`https://api.postalpincode.in/pincode/${code}`)
-    console.log("zipcode data",data.data[0].Status)
-    if(data.data[0].Status==='Error'){
-      e.target.classList.add('is-invalid');
-    }else{
+    // console.log("zipcode data",data)
+    if(data.data[0].Status==='Success'){
+      
       e.target.classList.remove('is-invalid');
+    }else{
+      e.target.classList.add('is-invalid');
     }
     setload(false)
   }
@@ -393,6 +408,97 @@ export default function Employeeregister() {
       .catch((error) => {
         console.error('Failed to copy value:', error);
       });
+  };
+  const emailVerification=async()=>{
+    try {
+      // setemailvalid(true)
+      // console.log("email",companydata.email)
+      setload(true)
+      let data = await Axioscall("post","company/sendcode",{email:employeedata.email})
+      console.log("dataemail",data)
+      if(data.status===200){
+        notify("check your mail for verification otp")
+        // setemailvalidationdata({...emailvalidationdata,verifynumber:true})
+        setemailverify({...emailverify,modal:true})
+      }else{
+        // notifyerror("Something Went wrong Sent again")
+      }
+      setload(false)
+    } catch (error) {
+      setload(false)
+      // notifyerror("Something Went wrong Sent again")
+    }
+ 
+  }
+  const emailotpverify=async()=>{
+    try {
+      
+      let body={
+        "email" : employeedata.email,
+        "otp" : emailverify.otp
+      }
+      // console.log("e",body)
+      let data = await Axioscall("post","company/verifycode",body)
+      console.log("data",data)
+      if(data.status===200){
+        inputemail.current.disabled=true
+        setemailverify({...emailverify,valid:true,modal:false})
+        // setemailvalid(true)
+        
+      }
+      else(
+        notifyerror(data.response.data.message )
+        // console.log("errordfghjkl",data.response.data.message )
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const phoneVerification=async()=>{
+    try {
+      setload(true)
+      let data =await Axioscall("post","otp/send-otp",{mobile:employeedata.phone})
+      console.log("daat",data)
+      if (data.status===200){
+        notify("check your phone for verification otp")
+        setphoneverify({...phoneverify,modal:true})
+      }
+      
+      // inputphone.current.disabled=true
+      
+    } catch (error) {
+      
+      notifyerror("try again")
+    }
+    setload(false)
+  }
+  const phoneotpverify=async()=>{
+    setload(true)
+    try {
+      
+      let body={
+        "mobile" : employeedata.phone,
+        "otp" : phoneverify.otp
+      }
+      // console.log("e",body)
+      let data = await Axioscall("post","otp/verify-otp",body)
+      console.log("data",data)
+      if(data.status===200){
+        // inputphone.current.disabled=true
+        setphoneverify({...phoneverify,valid:true,modal:false})
+      }
+      else(
+        notifyerror(data.response.data.message )
+        // console.log("errordfghjkl",data.response.data.message )
+      )
+    } catch (error) {
+      console.log(error)
+    }
+    setload(false)
+  }
+  const handlePhoneChange = (value) => {
+    // console.log("value",value)
+    setemployeedata({ ...employeedata, phone: value });
   };
   return (
     <>
@@ -458,18 +564,31 @@ export default function Employeeregister() {
                         </div>
                         
                         <div className="form-group mt-4 col-md-4 ">
+                        <label className="fieldlabels font-sm color-text-mutted">dob</label>
                         <input className="dob" required onChange={(e)=>setemployeedata({...employeedata,dob:e.target.value})} value={employeedata.dob??""} placeholder="Date of Birth" type="date"  id="date" />
                           <Form.Control.Feedback type="invalid">Please provide dob</Form.Control.Feedback>
                         </div>
-                        <div className="form-group col-md-4">
-                          <label className="form-label" htmlFor="input-2" />
-                          <input className="form-control"  id="input-2" type="email"  onChange={(e)=>setemployeedata({...employeedata,email:e.target.value})} value={employeedata.email??""} required name="emailaddress" placeholder="stevenjob@gmail.com" />
-                          <Form.Control.Feedback type="invalid">Please provide Valid email</Form.Control.Feedback>
+                        <div className="form-group mt-4 col-md-4">
+                        {/* <label className="fieldlabels  mt-1 font-sm color-text-mutted"></label> */}
+                          <label className="form-label " htmlFor="input-2" />
+                          <input className={`form-control mt-1 ${employeedata.email?emailverify.valid?'':'is-invalid':''}`}  ref={inputemail} id="input-2" type="email"  onBlur={()=>emailVerification()} onChange={(e)=>setemployeedata({...employeedata,email:e.target.value})} value={employeedata.email??""} required name="emailaddress" placeholder="stevenjob@gmail.com" />
+                          <Form.Control.Feedback type="invalid">Please Verify Your email</Form.Control.Feedback>
                         </div>
-                        <div className="form-group col-md-4 ">
+                        <div className="form-group mt-4 col-md-4 ">
                           <label className="form-label" htmlFor="input-2" />
-                          <input className="form-control" id="input-2" type="tel"required name="emailaddress" onChange={(e)=>setemployeedata({...employeedata,phone:e.target.value})} value={employeedata.phone??""} placeholder="Phone Number" />
-                          <Form.Control.Feedback type="invalid">Please provide Valid Phone Number</Form.Control.Feedback>
+                          {/* <input className="form-control mt-1"  id="input-2" type="tel"required name="emailaddress" onBlur={()=>phoneVerification()} onChange={(e)=>setemployeedata({...employeedata,phone:e.target.value})} value={employeedata.phone??""} placeholder="Phone Number" /> */}
+                          <PhoneInput
+                            international
+                            countryCallingCodeEditable={false}
+                            defaultCountry="IN"
+                            disabled={phoneverify.valid}
+                            value={employeedata.phone}
+                            onChange={handlePhoneChange}
+                            onBlur={()=>phoneVerification()}
+                            style={{ display:"flex",padding:'0px 0px 0px 6px'}}
+                            className={`form-control ${employeedata.phone? phoneverify.valid?'':'is-invalid':''}`}
+                            />
+                          <Form.Control.Feedback type="invalid">Please Verify Your Number</Form.Control.Feedback>
                         </div>
                         <h6 className="permenent-address education col-12 mb-2 ">Language Known</h6>
                         <div className=" col-lg-6 ">
@@ -495,9 +614,9 @@ export default function Employeeregister() {
                           <div className="text__center ">
                             <select required onChange={(e)=>setcarddata({...carddata,type:e.target.value})} value={carddata.type??""} className="cs-select form-control  cs-skin-elastic cs-skin-elastic1">
                               <option value="" defaultValue="" disabled  >ID Card Type</option>
-                              <option value ="drivingliscence" >Driving License</option>
-                              <option value="aadhaar" >Aadhar</option>
-                              <option value="passport" >Passport</option>
+                              <option value ="Driving License" >Driving License</option>
+                              <option value="Aadhar" >Aadhar</option>
+                              <option value="Passport" >Passport</option>
                             </select>
                             <Form.Control.Feedback  type="invalid">Please provide Id card type</Form.Control.Feedback>
                           </div>
@@ -507,7 +626,7 @@ export default function Employeeregister() {
                           {/* <input type="file" name="pic" accept="image/*" />  */}
                           <div className='imageselectorborder d-flex '>
                             <button onClick={()=>Filestackhandler("landscape",setcarddata,carddata,'frontUrl')} type='button' className='imageselector'> Choose Image</button>
-                            <p style={{overflow:"hidden"}}>&nbsp;{carddata.frontUrl}</p>
+                            <p style={{overflow:"hidden"}}>&nbsp;{carddata.frontUrl??<span>No file chosen</span>}</p>
                           </div>
                         </div>
                         <div className="form-group col-lg-4 col-sm-12">
@@ -522,9 +641,9 @@ export default function Employeeregister() {
                           <div className="text__center">
                             <select required onChange={(e)=>setaddressproof({...addressproof,type:e.target.value})} value={addressproof.type??""} className=" form-control cs-select cs-skin-elastic cs-skin-elastic1">
                               <option value="" defaultValue="" disabled  >Address Proof</option>
-                              <option value="Driving License">Driving License</option>
-                              <option value="Aadhar">Aadhar</option>
-                              <option value="Passport">Passport</option>
+                              <option disabled={carddata.type==="Driving License"} value="Driving License">Driving License </option>
+                              <option disabled={carddata.type==="Aadhar"} value="Aadhar">Aadhar </option>
+                              <option disabled={carddata.type === "Passport"} value="Passport">Passport</option>
                              
                             </select>
                             <Form.Control.Feedback type="invalid">Please provide Address Proof </Form.Control.Feedback>
@@ -731,7 +850,7 @@ export default function Employeeregister() {
                             <Form.Control.Feedback type="invalid">Please provide landmark </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mt-20">
-                            <input type="text" required onBlur={(e)=>zipcodeHandler(e,addressdata.zipcode)} onChange={(e)=>setaddressdata({...addressdata,zip:e.target.value})} value={addressdata.zip??""} className="form-control" placeholder="Zip Code" id="pZipcode" />
+                            <input type="text" required onBlur={(e)=>zipcodeHandler(e,addressdata.zip)} onChange={(e)=>setaddressdata({...addressdata,zip:e.target.value})} value={addressdata.zip??""} className="form-control" placeholder="Zip Code" id="pZipcode" />
                             <Form.Control.Feedback type="invalid">Please provide valid pincode </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-4 mt-20">
@@ -867,9 +986,25 @@ export default function Employeeregister() {
                                 <div className="text__center">
                                   <select   onChange={(e)=>setbachlerdata({...bachlerdata,course:e.target.value})} value={bachlerdata.course??""}  className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value ="" defaultValue="" disabled  >Course</option>
-                                    <option value="Computer science">Computer science</option>
-                                    <option value="Electronics">Electronics</option>
-                                    <option value="Civil">Civil</option>
+                                    <option value="Computer Science Engineering">Computer Science Engineering</option>
+                                    <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                    <option value="Civil Engineering">Civil Engineering</option>
+                                    <option value="Electrical Engineering">Electrical Engineering</option>
+                                    <option value="MBBS (Bachelor of Medicine, Bachelor of Surgery)">MBBS (Bachelor of Medicine, Bachelor of Surgery)</option>
+                                    <option value="BDS (Bachelor of Dental Surgery)">BDS (Bachelor of Dental Surgery)</option>
+                                    <option value="BAMS (Bachelor of Ayurvedic Medicine and Surgery)">BAMS (Bachelor of Ayurvedic Medicine and Surgery)</option>
+                                    <option value="BPT (Bachelor of Physiotherapy)">BPT (Bachelor of Physiotherapy)</option>
+                                    <option value="BBA (Bachelor of Business Administration)">BBA (Bachelor of Business Administration)</option>
+                                    <option value="BCom (Bachelor of Commerce)">BCom (Bachelor of Commerce)</option>
+                                    <option value="BA (Bachelor of Arts)">BA (Bachelor of Arts)</option>
+                                    <option value="BSc (Bachelor of Science)">BSc (Bachelor of Science)</option>
+                                    <option value="Psychology">Psychology</option>
+                                    <option value="BCA (Bachelor of Computer Applications)">BCA (Bachelor of Computer Applications)</option>
+                                    <option value="BFA (Bachelor of Fine Arts)">BFA (Bachelor of Fine Arts)</option>
+                                    <option value="Animation">Animation and Multimedia courses</option>
+                                    <option value="LLB (Bachelor of Laws)">LLB (Bachelor of Laws)</option>
+                                    <option value="BEd (Bachelor of Education)">BEd (Bachelor of Education)</option>
                                   </select>
                                   <Form.Control.Feedback type="invalid">Please provide Course </Form.Control.Feedback>
                                 </div>
@@ -907,9 +1042,39 @@ export default function Employeeregister() {
                                 <div className="text__center">
                                   <select onChange={(e)=>setmasterDegreedata({...masterDegreedata,course:e.target.value})} value={masterDegreedata.course??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value="" defaultValue=""  >Course</option>
-                                    <option value="">Computer science</option>
-                                    <option value="">Electronics</option>
-                                    <option value="">Civil</option>
+                                    <option value="MBA (Master of Business Administration)">MBA (Master of Business Administration)</option>
+                                    <option value="MCA (Master of Computer Applications)">MCA (Master of Computer Applications)</option>
+                                    <option value="MCom (Master of Commerce)">MCom (Master of Commerce)</option>
+                                    <option value="MA (Master of Arts)">MA (Master of Arts)</option>
+                                    <option value="MSc (Master of Science)">MSc (Master of Science)</option>
+                                    <option value="MSW (Master of Social Work)">MSW (Master of Social Work)</option>
+                                    <option value="MTech (Master of Technology)">MTech (Master of Technology)</option>
+                                    <option value="MBA in Human Resource Management">MBA in Human Resource Management</option>
+                                    <option value="MBA in Marketing">MBA in Marketing</option>
+                                    <option value="MBA in Finance">MBA in Finance</option>
+                                    <option value="MBA in Information Technology">MBA in Information Technology</option>
+                                    <option value="MBA in Operations Management">MBA in Operations Management</option>
+                                    <option value="MBA in International Business">MBA in International Business</option>
+                                    <option value="MBA in Hospital Management">MBA in Hospital Management</option>
+                                    <option value="MBA in Education Management">MBA in Education Management</option>
+                                    <option value="MBA in Fashion Management">MBA in Fashion Management</option>
+                                    <option value="MBA in Event Management">MBA in Event Management</option>
+                                    <option value="MBA in Tourism Management">MBA in Tourism Management</option>
+                                    <option value="MBA in Hospitality Management">MBA in Hospitality Management</option>
+                                    <option value="MBA in Environmental Management">MBA in Environmental Management</option>
+                                    <option value="MBA in Entrepreneurship">MBA in Entrepreneurship</option>
+                                    <option value="MBA in Family Business Management">MBA in Family Business Management</option>
+                                    <option value="MBA in Agribusiness Management">MBA in Agribusiness Management</option>
+                                    <option value="Master of Science (Research)">Master of Science (Research)</option>
+                                    <option value="Master of Philosophy (MPhil)">Master of Philosophy (MPhil)</option>
+                                    <option value="Master of Public Administration (MPA)">Master of Public Administration (MPA)</option>
+                                    <option value="Master of Physical Education (MPED)">Master of Physical Education (MPED)</option>
+                                    <option value="Master of Physiotherapy (MPT)">Master of Physiotherapy (MPT)</option>
+                                    <option value="Master of Pharmacy (MPharma)">Master of Pharmacy (MPharma)</option>
+                                    <option value="Master of Architecture (MARCH)">Master of Architecture (MARCH)</option>
+                                    <option value="Master of Laws (LLM)">Master of Laws (LLM)</option>
+                                    <option value="Master of Design (M.Des)">Master of Design (M.Des)</option>
+
                                   </select>
                                   <Form.Control.Feedback type="invalid">Please provide Course </Form.Control.Feedback>
                                 </div>
@@ -976,12 +1141,14 @@ export default function Employeeregister() {
                               </React.Fragment>):null}
                               <div className="form-group col-lg-3 mt-10">
                                 <div className="text__center">
-                                  <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                                <input type="text" onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="form-control" placeholder=" college" id=" " />
+
+                                  {/* <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value="" defaultValue=""   >Course</option>
                                     <option value="Computer science">Computer science</option>
                                     <option value="Electronics">Electronics</option>
                                     <option value="Civil">Civil</option>
-                                  </select>
+                                  </select> */}
                                   <Form.Control.Feedback type="invalid">Please provide Course </Form.Control.Feedback>
                                 </div>
                               </div>
@@ -1156,11 +1323,12 @@ export default function Employeeregister() {
                             <React.Fragment key={ck}>
                             <div className="form-group col-lg-6 ">
                               <div className="text__center">
-                                <select value={citm.name} disabled className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                              <input type="text"  value={citm.name} className="" disabled placeholder=" Position" id=" " />
+                                {/* <select value={citm?.name??""}  className="form-control cs-select cs-skin-elastic cs-skin-elastic1"> */}
                                   {/* <option value="" hidden  >Company Name</option>
                                   <option value="Company1">Company1</option>
                                   <option value="Company2">Company2</option> */}
-                                </select>
+                                {/* </select> */}
                               </div>
                             </div>
                             <div className="form-group col-lg-6  ">
@@ -1188,10 +1356,10 @@ export default function Employeeregister() {
                             </div>
                               {/* <hr/> */}
                             </React.Fragment>):null}
-                            <div className="form-group col-lg-6 ">
+                            <div className="form-group col-lg-6 mt-10">
                               <div className="text__center">
                                 <select onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata.name} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
-                                  <option value="" hidden  >Company Name</option>
+                                  <option value="" defaultValue="" disabled  >Company Name</option>
                                   {companyvalues.map((company,k)=>(
                                     <option key={k} value={company.name}>{company.name}</option>
                                   ))} 
@@ -1199,7 +1367,7 @@ export default function Employeeregister() {
                                 <Form.Control.Feedback type="invalid">Please provide Company </Form.Control.Feedback>
                               </div>
                             </div>
-                            <div className="form-group col-lg-6  ">
+                            <div className="form-group col-lg-6  mt-10">
                               <input type="text" required={companydata.name} onChange={(e)=>setcompanydata({...companydata,position:e.target.value})} value={companydata.position??""} className="form-control" placeholder=" Position" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide position </Form.Control.Feedback>
                             </div>
@@ -1270,7 +1438,7 @@ export default function Employeeregister() {
                                 <div className="profile-detail">
                                   <p className="profile-name">CRAG CARD</p>
                                   <span className="profile-summary">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""}</span>
-                                  <a className="profile-cv">ID:{userdetail.uniqueid}</a>
+                                  <a className="profile-cv">ID:{userdetail?.uniqueid??""}</a>
                                 </div>
                               </section>
                               <div className="front-smooth" />
@@ -1296,6 +1464,46 @@ export default function Employeeregister() {
         </div>
       </div>
     </div>
+    <Modal show={emailverify.modal} onHide={()=>setemailverify({...emailverify,modal:false})}>
+        <Modal.Header closeButton>
+          <Modal.Title><h4>Check your email for otp</h4></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <div className="form-group  mt-10">
+             <input onChange={(e)=>setemailverify({...emailverify,otp:e.target.value})}  className={`form-control mb-3`} id="input-5" type="otp"  name="otp" placeholder="otp" />
+             <Form.Control.Feedback type="invalid">not  match</Form.Control.Feedback>
+           </div>
+           <div className="form-group">
+           <button className="btn btn-brand-1 hover-up w-100" type="button" onClick={()=>emailotpverify()}  name="login">Submit OTP</button>
+         </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={()=>setemailverify({...emailverify,modal:false})}>
+            Close
+          </Button>
+          
+        </Modal.Footer>
+      </Modal>
+    <Modal show={phoneverify.modal} onHide={()=>setphoneverify({...emailverify,modal:false})}>
+        <Modal.Header closeButton>
+          <Modal.Title><h4>Check your message for otp</h4></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <div className="form-group  mt-10">
+             <input onChange={(e)=>setphoneverify({...phoneverify,otp:e.target.value})}  className={`form-control mb-3`} id="input-5" type="otp"  name="otp" placeholder="otp" />
+             <Form.Control.Feedback type="invalid">not  match</Form.Control.Feedback>
+           </div>
+           <div className="form-group">
+           <button className="btn btn-brand-1 hover-up w-100" type="button" onClick={()=>phoneotpverify()}  name="login">Submit OTP</button>
+         </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={()=>setphoneverify({...phoneverify,modal:false})}>
+            Close
+          </Button>
+          
+        </Modal.Footer>
+      </Modal>
   </section>
 </main>
 
