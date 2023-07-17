@@ -51,7 +51,12 @@ export default function Candidatedetails() {
         to.push(comp?.to??moment().format('YYYY-MM-DD'));     
       });
     
-    let newdateto = new Date(Math.max(...to.map(date => Date.parse(date)))).toISOString().slice(0, 10);
+    let newdateto = new Date
+    if (to.length){
+      newdateto =new Date(Math.max(...to.map(date => Date.parse(date))))?.toISOString()?.slice(0, 10)??"";
+    }
+    
+   
     let oldestDatefrom = new Date(Math.min(...from.map(date => Date.parse(date)))).toISOString().slice(0, 10);
     var newDateObj = new Date(newdateto);
     var oldDateObj = new Date(oldestDatefrom);

@@ -60,11 +60,15 @@ export default function Hrlist() {
         getCandidte()
         sethrdata('')
         setIsOpen(false)
+        Nulldata()
       }
     } catch (error) {
       console.log(error) 
     }
   
+  }
+  const Nulldata=()=>{
+    sethrdata('')
   }
   return (
     <>
@@ -98,7 +102,7 @@ export default function Hrlist() {
               {emp?.user?.[0]?.isHr?<>
                 <div className='text-end mr-5 pt-5'><button onClick={()=>setuserid(emp?.user?.[0]?._id??"")&sethrdata({...hrdata,type : "remove"})&hrAssign()} className='btn btn-tags-sm '>Remove HR</button></div>
               </>:
-                <div className='text-end mr-5 pt-5'><button onClick={()=>setIsOpen(true)&setuserid(emp?.user?.[0]?._id??"")&sethrdata({...hrdata,type : "assign"})} className='btn btn-tags-sm '>Create HR</button></div>
+                <div className='text-end mr-5 pt-5'><button onClick={()=>setIsOpen(true)&setuserid(emp?.user?.[0]?._id??"")&sethrdata({...hrdata,type : "assign"})&sethrdata({...hrdata,HR:emp._id })} className='btn btn-tags-sm '>Create HR</button></div>
               ??""}
               <div className="card-grid-2-image-left">
                 <div className="card-grid-2-image-rd online"><Link to={`/candidatedetails/${emp._id}`}>
@@ -160,7 +164,7 @@ export default function Hrlist() {
       </div>
     </div>
   </section>
-  <Modal show={isOpen} onHide={()=>setIsOpen(false)}>
+  <Modal show={isOpen} onHide={()=>setIsOpen(false)&Nulldata()}>
         <Modal.Header closeButton>
           <Modal.Title><h4>HR</h4></Modal.Title>
         </Modal.Header>
@@ -203,7 +207,7 @@ export default function Hrlist() {
       </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={()=>setIsOpen(false)}>
+          <Button variant="secondary" onClick={()=>setIsOpen(false)&Nulldata()}>
             Close
           </Button>
           

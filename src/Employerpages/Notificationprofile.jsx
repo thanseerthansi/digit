@@ -11,10 +11,10 @@ export default function Notificationprofile() {
     const {id,userId}=useParams();
     const [userprofile,setuserprofile]=useState('')
     const navigate = useNavigate();
-    // console.log("userprofile in notificaton",userprofile)
+    console.log("userprofile in notificaton",userprofile)
     // console.log("iddddddddd",id)
     // console.log("userId",userId)
-      // console.log("userdetails",userdetail)
+      console.log("userdetails",userdetail)
     const maxLength = userprofile ? Math.max(userprofile.lngRead.length, userprofile.lngWrite.length) : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
@@ -66,17 +66,26 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
           is_verified:value,
           notificationid:id
       }
-      console.log("body",body)
+      // console.log("body",body)
         let data =await Axioscall("post","employee/companyVerify",body)
-        console.log("verifydata",data)
+        // console.log("verifydata",data.status)
         if(data.status===200){
-          
-          notify("successfully Verified")
-          if(pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid()){
-
-          }else{
-            Addcompanyhandler()
+          try { 
+            userprofile.careerandeducation[0].prevCompanies.forEach((element) => {
+              if (element.email===window.localStorage.getItem("graiduseremail")){
+                // console.log("fascsdfwenfjsuio",element.to)
+                if(element?.to && moment(element.to, 'YYYY-MM-DD', true).isValid()){
+                  // console.log("sdftyasdin")
+                }else{
+                  // console.log("notttttttttttt")
+                  Addcompanyhandler()
+              }
+              }
+            });
+          } catch (error) {
+           console.log("erorrrorrr",error) 
           }
+          notify("successfully Verified")
           navigate("/notification")
         }
       } catch (error) {
@@ -84,22 +93,26 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
       }
     }
     const Addcompanyhandler=async()=>{
+      // console.log(".........................")
       try {
         let body={
-          user :userId,
+          user :userprofile.user[0]._id,
           company : window.localStorage.getItem("graiduserid"),
           type : "assign"
       }
-      console.log("bodyyyyyyyy",body)
+      // console.log("bodyyyyyyyy",body)
         let data = await Axioscall("post","employee/assign",body)
-        console.log("data",data)
+        console.log("dataaddcompany",data)
         if(data.status===200){
           // notify("added Successfully")
           // getCandidte()
+          console.log("getsuccess")
+          return
         }
       } catch (error) {
         console.log(error) 
       }
+      // return
     }
   return (
     <>

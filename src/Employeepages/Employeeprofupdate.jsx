@@ -19,23 +19,23 @@ export default function Employeeprofupdate() {
   const [employeedata2,setemployeedata2]=useState([])
   const [employeedata3,setemployeedata3]=useState([])
   const [carddata,setcarddata]=useState([])
-  const [addressproof,setaddressproof]=useState({})
+  const [addressproof,setaddressproof]=useState('')
   const [addressdata,setaddressdata]=useState([])
   const [currentaddressdata,setcurrentaddressdata]=useState([])
-  const [siblingdata,setsiblingdata]=useState({})
+  const [siblingdata,setsiblingdata]=useState('')
   const [siblingsarray,setsiblingsarray]=useState([])
-  const [childdata,setchilddata]=useState({})
+  const [childdata,setchilddata]=useState('')
   const [childsarray,setchildsarray]=useState([])
-  const [spousedata,setspousedata]=useState({})
+  const [spousedata,setspousedata]=useState('')
   const [tenthdata,settenthdata]=useState([])
   const [twelthdata,settwelthdata]=useState([])
   const [bachlerdata,setbachlerdata]=useState([])
   const [masterDegreedata,setmasterDegreedata]=useState([])
-  const [additionaldata,setadditionaldata]=useState({})
+  const [additionaldata,setadditionaldata]=useState('')
   const [additionalarray,setadditionalarray]=useState([])
-  const [precompanydata,setprecompanydata]=useState({})
+  const [precompanydata,setprecompanydata]=useState('')
   const [precompanyarray,setprecompanyarray]=useState([])
-  const [companydata,setcompanydata]=useState({})
+  const [companydata,setcompanydata]=useState('')
   const [companyarray,setcompanyarray]=useState([])
   const [validated,setValidated]=useState(false)
   const [validated2,setValidated2]=useState(false)
@@ -66,8 +66,10 @@ export default function Employeeprofupdate() {
   // console.log("selectedskills",selectedskills)
   // console.log("companydaprecompanydatata",precompanydata)
   // console.log("companydata",companydata)
-  // console.log("companyarray",companyarray)
+  console.log("prevcompanyarray",precompanyarray)
+  console.log("companyarray",companyarray)
   // console.log("userdetail",userdetail)
+  console.log("employeedata3",employeedata3)
     useEffect(() => {     
       window.scrollTo(0,0)
       getCompanydata()
@@ -471,9 +473,10 @@ export default function Employeeprofupdate() {
     try {
         let user = tokenhandler()
         let data =await Axioscall("get","employee/educationandcareer",{user:user})
-        // console.log("careeeeeeeeeeeeeeeeeeeeeeer",data.data.data)
+        console.log("careeeeeeeeeeeeeeeeeeeeeeer",data.data.data)
         if(data.status===200){
           let userdata = data.data.data
+          let employee = {}
           // setemployeedata3()
           if (userdata.tenth.length){
             settenthdata(userdata.tenth[0])
@@ -490,11 +493,15 @@ export default function Employeeprofupdate() {
           if (userdata.additional.length){
             setadditionalarray(userdata.additional)
           }
+          // console.log("designat",userdata.designation)
           if (userdata.designation){
-            setemployeedata3({...employeedata3,designation:userdata.designation})
+            console.log("userdata.designation",userdata.designation)
+            employee.designation=userdata.designation
+            // setemployeedata3({...employeedata3,desig:"HR"})
           }
           if (userdata._id){
-            setemployeedata3({...employeedata3,id:userdata._id})
+            // setemployeedata3({...employeedata3,id:userdata._id})
+            employee.id=userdata._id
           }
           if(userdata.skills.length){
             let skilldata = []
@@ -513,8 +520,11 @@ export default function Employeeprofupdate() {
             setprecompanyarray(userdata.prevCompanies)
           }
           if(userdata.otherproficency){
-            setemployeedata3({...employeedata3,otherproficency:userdata.otherproficency})
+            // setemployeedata3({...employeedata3,otherproficency:userdata.otherproficency})
+            employee.otherproficency=userdata.otherproficency
           }
+          // console.log("employyeeee",employee)
+          setemployeedata3(employee)
         }
     } catch (error) {
       console.log(error)
@@ -1178,7 +1188,7 @@ export default function Employeeprofupdate() {
                         </div>
                         <h6 className="mt-3 color-brand-1">Designation</h6>
                         <div className="col-lg-12 col-md-12">
-                          <select  value={employeedata3.designation}  onChange={(e)=>setemployeedata3({...employeedata3,designation:e.target.value})} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                          <select  value={employeedata3?.designation??""}  onChange={(e)=>setemployeedata3({...employeedata3,designation:e.target.value})} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                             <option value="" defaultValue="" disabled  >Select Designation</option>
                             <option value="Chief Executive Officer (CEO)">Chief Executive Officer (CEO)</option>
                             <option value="Chief Technology Officer (CTO)">Chief Technology Officer (CTO)</option>
