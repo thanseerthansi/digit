@@ -66,10 +66,10 @@ export default function Employeeprofupdate() {
   // console.log("selectedskills",selectedskills)
   // console.log("companydaprecompanydatata",precompanydata)
   // console.log("companydata",companydata)
-  console.log("prevcompanyarray",precompanyarray)
-  console.log("companyarray",companyarray)
+  // console.log("prevcompanyarray",precompanyarray)
+  // console.log("companyarray",companyarray)
   // console.log("userdetail",userdetail)
-  console.log("employeedata3",employeedata3)
+  // console.log("employeedata3",employeedata3)
     useEffect(() => {     
       window.scrollTo(0,0)
       getCompanydata()
@@ -175,6 +175,7 @@ export default function Employeeprofupdate() {
         return
       }
       //......................carddata push to datalist
+     
       if(Object.keys(carddata).length){
         if(carddata.frontUrl && carddata.backUrl){
           datalist.idcard=[{...carddata}]
@@ -304,23 +305,29 @@ export default function Employeeprofupdate() {
           datalist.user=userid
         }
       }
-      
-      if(Object.keys(tenthdata).length){
+      if(tenthdata){
+        if(Object.keys(tenthdata).length){
         datalist.tenth=[{...tenthdata}]
-      }
+      }}
+      if (twelthdata){
       if(Object.keys(twelthdata).length){
         datalist.twelth=[{...twelthdata}]
-      }
+      }}
+      if(bachlerdata){
       if(Object.keys(bachlerdata).length){
         datalist.bachelorDegree=[{...bachlerdata}]
-      }
+      }}
+      if(masterDegreedata){
       if(Object.keys(masterDegreedata).length){
         datalist.masterDegree=[{...masterDegreedata}]
-      }
+      }}
       let additional = additionalarray
-      if(Object.keys(additionaldata).length){
-        additional.push(additionaldata) 
+      if(additionaldata){
+        if(Object.keys(additionaldata).length){
+          additional.push(additionaldata) 
+        }
       }
+      
       // console.log("addtitional",additional)
       if (additional.length){
         datalist.additional=additional
@@ -339,17 +346,32 @@ export default function Employeeprofupdate() {
         // ...........................company data push to datalist
         let company = companyarray
         // console.log("companyjhbjjljlk",company)
-        if(Object.keys(companydata).length){
-          company.push(companydata) 
+        if(companydata){
+          if(companydata.course){
+            if(Object.keys(companydata).length){
+              company.push(companydata) 
+            }
+          }
+          
         }
+        
         if(company.length){
-          company.forEach(element=>         
+          company.forEach((element)=>{         
             element.is_craigcompany=true
+            element.is_verified=false
+          }
             )}
         let precompany = precompanyarray
-        if(Object.keys(precompanydata).length){
-          precompany.push(precompanydata) 
+
+        if(precompanydata){
+          if(precompanydata.course){
+            if(Object.keys(precompanydata).length){
+              precompany.push(precompanydata) 
+            }
+          }
+          
         }
+       
         if(precompany.length){
           precompany.forEach(element=>         
             element.is_craigcompany=false
@@ -1364,7 +1386,7 @@ export default function Employeeprofupdate() {
                             </React.Fragment>):null}
                             <div className="form-group col-lg-6 mt-20">
                               <div className="text__center">
-                                <select onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata.name} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                                <select onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata?.name??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                   <option value="" hidden  >Company Name</option>
                                   {companyvalues.map((company,k)=>(
                                     <option key={k} value={company.name}>{company.name}</option>

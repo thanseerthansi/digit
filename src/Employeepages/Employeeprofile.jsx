@@ -10,7 +10,7 @@ import { notify } from '../Commonpages/toast';
 
 export default function Employeeprofile() {
   const {logouthandler,userdetail,employeedata,getUser}=useContext(Simplecontext)
-  console.log("userdetail in employee profile",userdetail)
+  // console.log("userdetail in employee profile",userdetail)
   const maxLength = userdetail ? Math.max(userdetail.lngRead.length, userdetail.lngWrite.length) : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
@@ -292,6 +292,8 @@ const Bannerhandler=async(ratio)=>{
                                  <li key={pk} className="timeline-sm-item">
                                  <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to,'YYYY-MM-DD', true).isValid()? moment(pcompany.to,'YYYY-MM-DD').format('YY'): ''}</span>
                                  <h6 className="mt-0 mb-1">{pcompany.name} </h6>
+                                 {pcompany.is_verified?
+                                 <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:''}
                                  <p>{pcompany.position}</p>
                                </li>
                               ))??""}
@@ -359,8 +361,12 @@ const Bannerhandler=async(ratio)=>{
                           {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
                           <div key={pk} className="item-timeline"> 
                             <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid()? moment(pcompany.to, 'YYYY-MM-DD').format('YY'):'Present'}</span></div>
+
                             <div className="timeline-info"> 
-                              <h5 className="color-brand-1 mb-20">{pcompany?.name??""}</h5>
+                              <h5 className="color-brand-1 mb-10">{pcompany?.name??""}</h5>
+                              {pcompany.is_verified?
+                                 <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:''}
+                              
                               <h6 className="color-text-paragraph-2 mb-15">{pcompany.position}</h6>
                               <p className="color-text-paragraph-2 mb-15">company mail:{pcompany.email}</p>
                               <p className="color-text-paragraph-2 mb-15">Company Phone&nbsp;:{pcompany.phone}</p>

@@ -10,11 +10,12 @@ export default function Notificationprofile() {
   const {userdetail } = useContext(Simplecontext);
     const {id,userId}=useParams();
     const [userprofile,setuserprofile]=useState('')
+    const [load,setload]=useState(false)
     const navigate = useNavigate();
-    console.log("userprofile in notificaton",userprofile)
+    // console.log("userprofile in notificaton",userprofile)
     // console.log("iddddddddd",id)
     // console.log("userId",userId)
-      console.log("userdetails",userdetail)
+      // console.log("userdetails",userdetail)
     const maxLength = userprofile ? Math.max(userprofile.lngRead.length, userprofile.lngWrite.length) : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
@@ -49,24 +50,22 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
           let data= await Axioscall("put","notification",{id:id,is_viewed:true})
           console.log("datanotificatio update",data)
           if (data.status===200){
-            console.log("status,updated")
-            
+            console.log("status,updated")          
           }
         }
-       
       } catch (error) {
-        
+        console.log(error)
       }
     }
     const verifynot=async(value)=>{
       try {
         let body={
-          userid:userId,
+          userid:userprofile.user[0]._id,
           email:userdetail.email,
           is_verified:value,
           notificationid:id
       }
-      // console.log("body",body)
+      console.log("body",body)
         let data =await Axioscall("post","employee/companyVerify",body)
         // console.log("verifydata",data.status)
         if(data.status===200){
@@ -94,6 +93,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
     }
     const Addcompanyhandler=async()=>{
       // console.log(".........................")
+        setload(true)
       try {
         let body={
           user :userprofile.user[0]._id,
@@ -112,6 +112,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
       } catch (error) {
         console.log(error) 
       }
+      setload(false)
       // return
     }
   return (
@@ -119,6 +120,10 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
     <main className="main ">
   <div className="carousel-inner">
   </div>
+  {load? 
+  <div className="spinner-container">
+    <div className="spinner" />
+  </div>:null}
   <div className="container mt-60 mb-100 verification-cover pb-40">
     <div className="row">
       <div className="col-lg-5 col-xl-5">

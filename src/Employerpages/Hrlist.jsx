@@ -16,9 +16,10 @@ export default function Hrlist() {
   const [fileterid,setfilterid]=useState('')
   const [isOpen, setIsOpen] = useState(false);
   const [validated,setValidated]=useState(false)
+  const [load,setload]=useState(false)
   const [hrdata,sethrdata]=useState('')
   const [userid,setuserid]=useState('')
-  console.log("useeeeeeee",userid)
+  // console.log("hrdata",hrdata)
   useEffect(() => {
     getCandidte()
   }, [])
@@ -33,7 +34,7 @@ export default function Hrlist() {
         company_id:window.localStorage.getItem("graiduserid")
       }
       let data=await Axioscall("get","employee",body)
-      console.log("dataemployee",data.data.data.docs)
+      // console.log("dataemployee",data.data.data.docs)
       if (data.status===200){
         setemployeedata(data.data.data.docs)
       }
@@ -42,6 +43,9 @@ export default function Hrlist() {
     }
   }
   const hrAssign=async()=>{
+   
+    let msg ="HR added Successfully"
+    setload(true)
     try {
       let body={
         user : userid,
@@ -49,14 +53,18 @@ export default function Hrlist() {
         role:'hr',
         
     }
-    
+    if(hrdata.type==="assign"){
+
+    }else{
+      msg ="HR Removed Successfully"
+      body.type="remove"
+    }
     let obj ={...hrdata,...body}
-    console.log("bodyyyyyyyyyy1",obj)
-    
+    // console.log("bodyyyyyyyyyy1",obj)
       let data = await Axioscall("post","employee/assign",obj)
-      console.log("data",data)
+      // console.log("data",data)
       if(data.status===200){
-        notify("HR added Successfully")
+        notify(msg)
         getCandidte()
         sethrdata('')
         setIsOpen(false)
@@ -65,7 +73,7 @@ export default function Hrlist() {
     } catch (error) {
       console.log(error) 
     }
-  
+    setload(false)
   }
   const Nulldata=()=>{
     sethrdata('')
@@ -75,6 +83,10 @@ export default function Hrlist() {
     <main className="main">
   <div className="carousel-inner">
   </div>
+  {load? 
+  <div className="spinner-container">
+    <div className="spinner" />
+  </div>:null}
   <section className="section-box-2">
     <div className="container">
       <div className="banner-hero banner-company">
@@ -100,9 +112,9 @@ export default function Hrlist() {
             <div key={ek} className="col-xl-3 col-lg-4 col-md-6">
             <div className="card-grid-2 hover-up">
               {emp?.user?.[0]?.isHr?<>
-                <div className='text-end mr-5 pt-5'><button onClick={()=>setuserid(emp?.user?.[0]?._id??"")&sethrdata({...hrdata,type : "remove"})&hrAssign()} className='btn btn-tags-sm '>Remove HR</button></div>
+                <div className='text-end mr-5 pt-5'><button onClick={()=>setuserid(emp?.user?.[0]?._id??"")&hrAssign()} className='btn btn-tags-sm '>Remove HR</button></div>
               </>:
-                <div className='text-end mr-5 pt-5'><button onClick={()=>setIsOpen(true)&setuserid(emp?.user?.[0]?._id??"")&sethrdata({...hrdata,type : "assign"})&sethrdata({...hrdata,HR:emp._id })} className='btn btn-tags-sm '>Create HR</button></div>
+                <div className='text-end mr-5 pt-5'><button onClick={()=>{setIsOpen(true)&setuserid(emp?.user?.[0]?._id??"") & sethrdata({...hrdata,HR:emp._id,type:"assign" })}} className='btn btn-tags-sm '>Create HR</button></div>
               ??""}
               <div className="card-grid-2-image-left">
                 <div className="card-grid-2-image-rd online"><Link to={`/candidatedetails/${emp._id}`}>

@@ -13,6 +13,7 @@ export default function Candidates() {
   console.log("employeedata",employeesdata)
   useEffect(() => {
     getCandidte()
+    window.scrollTo(0,0)
   }, [])
   
   const getCandidte=async()=>{

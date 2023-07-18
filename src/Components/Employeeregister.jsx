@@ -13,6 +13,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
+import { Link } from 'react-router-dom';
 const animatedComponents = makeAnimated();
 export default function Employeeregister() {
   const {Check_Validation,Decodetoken,getUser,userdetail}=useContext(Simplecontext)
@@ -71,8 +72,8 @@ export default function Employeeregister() {
   // console.log("selectedskills",selectedskills)
   // console.log("companydaprecompanydatata",precompanydata)
   // console.log("companydata",companydata)
-  console.log("companyarray",companyarray)
-  console.log("precompanyarray",precompanyarray)
+  // console.log("companyarray",companyarray)
+  // console.log("precompanyarray",precompanyarray)
   // console.log("userdetail",userdetail)
     useEffect(() => {     
       window.scrollTo(0,0)
@@ -218,9 +219,12 @@ export default function Employeeregister() {
         datalist.spouseDetails=[{...spousedata}]
       }
       let arraychild = childsarray
-      if(Object.keys(childdata).length){
-        arraychild.push(childdata) 
+      if(childdata){
+        if(Object.keys(childdata).length){
+          arraychild.push(childdata) 
+        }
       }
+      
       if (arraychild.length){
         datalist.childDetails=arraychild
       }
@@ -228,11 +232,16 @@ export default function Employeeregister() {
       
       // console.log("datalistbefore",datalist)
       let data = await Axioscall("post","employee/personal",datalist)
-      // console.log("datapersonal",data)
+      console.log("datapersonal",data)
       if(data.status===200){
         notify("Successfully Saved")
         setWizard(2)     
         tophandler(0,200)
+      }else{
+        if(data.message==="Request failed with status code 409"){
+          notifyerror(data.response.data.message)
+          inputemail.current.disabled=false
+        }
       }
       setload(false)
     } catch (error) {
@@ -281,23 +290,34 @@ export default function Employeeregister() {
         // console.log("userid",userid)
         datalist.user=userid
       }
+      if(tenthdata){
+        if(Object.keys(tenthdata).length){
+          datalist.tenth=[{...tenthdata}]
+        }
+      }
+      if(twelthdata){
+        if(Object.keys(twelthdata).length){
+          datalist.twelth=[{...twelthdata}]
+        }
+      }
+      if(bachlerdata){
+        if(Object.keys(bachlerdata).length){
+          datalist.bachelorDegree=[{...bachlerdata}]
+        } 
+      }
+      if(masterDegreedata){
+        if(Object.keys(masterDegreedata).length){
+          datalist.masterDegree=[{...masterDegreedata}]
+        }
+      }
       
-      if(Object.keys(tenthdata).length){
-        datalist.tenth=[{...tenthdata}]
-      }
-      if(Object.keys(twelthdata).length){
-        datalist.twelth=[{...twelthdata}]
-      }
-      if(Object.keys(bachlerdata).length){
-        datalist.bachelorDegree=[{...bachlerdata}]
-      }
-      if(Object.keys(masterDegreedata).length){
-        datalist.masterDegree=[{...masterDegreedata}]
-      }
       let additional = additionalarray
-      if(Object.keys(additionaldata).length){
-        additional.push(additionaldata) 
+      if(additionaldata){
+        if(Object.keys(additionaldata).length){
+          additional.push(additionaldata) 
+        }
       }
+      
       // console.log("addtitional",additional)
       if (additional.length){
         datalist.additional=additional
@@ -316,20 +336,28 @@ export default function Employeeregister() {
         // ...........................company data push to datalist
         let company = companyarray
         // console.log("companyjhbjjljlk",company)
-        if(Object.keys(companydata).length){
-          company.push(companydata) 
+        if(companydata){
+          if(Object.keys(companydata).length){
+            company.push(companydata) 
+          }
         }
+        
         if(company.length){
           company.forEach((element)=>  {     
             // if(!element.to){
             //   element.to="present"
             // }
+            element.is_verified=false
             element.is_craigcompany=true
           })}
+
         let precompany = precompanyarray
-        if(Object.keys(precompanydata).length){
-          precompany.push(precompanydata) 
+        if(precompany){
+          if(Object.keys(precompanydata).length){
+            precompany.push(precompanydata) 
+          }
         }
+        
         if(precompany.length){
           precompany.forEach((element)=> {
             
@@ -415,7 +443,7 @@ export default function Employeeregister() {
       // console.log("email",companydata.email)
       setload(true)
       let data = await Axioscall("post","company/sendcode",{email:employeedata.email})
-      console.log("dataemail",data)
+      // console.log("dataemail",data)
       if(data.status===200){
         notify("check your mail for verification otp")
         // setemailvalidationdata({...emailvalidationdata,verifynumber:true})
@@ -439,7 +467,7 @@ export default function Employeeregister() {
       }
       // console.log("e",body)
       let data = await Axioscall("post","company/verifycode",body)
-      console.log("data",data)
+      // console.log("data",data)
       if(data.status===200){
         inputemail.current.disabled=true
         setemailverify({...emailverify,valid:true,modal:false})
@@ -458,7 +486,7 @@ export default function Employeeregister() {
     try {
       setload(true)
       let data =await Axioscall("post","otp/send-otp",{mobile:employeedata.phone})
-      console.log("daat",data)
+      // console.log("daat",data)
       if (data.status===200){
         notify("check your phone for verification otp")
         setphoneverify({...phoneverify,modal:true})
@@ -1182,7 +1210,7 @@ export default function Employeeregister() {
                         </div>
                         <h6 className="mt-3 color-brand-1">Designation</h6>
                         <div className="col-lg-12 col-md-12">
-                          <select  value={employeedata3.designation}  onChange={(e)=>setemployeedata3({...employeedata3,designation:e.target.value})} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                          <select  value={employeedata3?.designation??""}  onChange={(e)=>setemployeedata3({...employeedata3,designation:e.target.value})} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                             <option value="" defaultValue="" disabled  >Select Designation</option>
                             <option value="Chief Executive Officer (CEO)">Chief Executive Officer (CEO)</option>
                             <option value="Chief Technology Officer (CTO)">Chief Technology Officer (CTO)</option>
@@ -1358,7 +1386,7 @@ export default function Employeeregister() {
                             </React.Fragment>):null}
                             <div className="form-group col-lg-6 mt-10">
                               <div className="text__center">
-                                <select onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata.name} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                                <select onChange={(e)=>setcompanydata({...companydata,name:e.target.value})} value={companydata?.name??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                   <option value="" defaultValue="" disabled  >Company Name</option>
                                   {companyvalues.map((company,k)=>(
                                     <option key={k} value={company.name}>{company.name}</option>
@@ -1406,7 +1434,7 @@ export default function Employeeregister() {
                         <div className="row">
                           <h6 className=" form-t mb-3 mt-3 col-12">Any other Proficiancy</h6>
                           <div className="form-group col-lg-12 ">
-                            <textarea onChange={(e)=>setemployeedata3({...employeedata3,otherproficency:e.target.value})}  value={employeedata.otherproficency??''} type="text" className="form-control text-area11" placeholder="Message" id=" "  />
+                            <textarea onChange={(e)=>setemployeedata3({...employeedata3,otherproficency:e.target.value})}  value={employeedata3.otherproficency??''} type="text" className="form-control text-area11" placeholder="Message" id=" "  />
                             <Form.Control.Feedback type="invalid">Please provide otherproficency </Form.Control.Feedback>
                           </div>
                         </div>
@@ -1445,7 +1473,7 @@ export default function Employeeregister() {
                             </div>
                           </div>
                           <div className="profile-pils mt-20">
-                            <span className="pils"><a href="candidate-profile.html" target="_blank"><i className="fa fa-eye" />View Profile</a></span>
+                            <span className="pils"><Link to="/employee-profile" target="_blank"><i className="fa fa-eye" />View Profile</Link></span>
                             <span className="pils"><a href onClick={()=>copyValue(userdetail.uniqueid)} target="_blank"><i className="fa fa-paper-plane-o" /> Share Profile</a></span>
                           </div>
                         </div> <br /><br />
