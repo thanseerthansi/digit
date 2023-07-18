@@ -59,6 +59,10 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
     }
     const verifynot=async(value)=>{
       try {
+        let msg= "Successfully Verified"
+        if(value===false){
+          msg ="Canceled"
+        }
         let body={
           userid:userprofile.user[0]._id,
           email:userdetail.email,
@@ -77,14 +81,17 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                   // console.log("sdftyasdin")
                 }else{
                   // console.log("notttttttttttt")
-                  Addcompanyhandler()
+                  if(value===true){
+                    Addcompanyhandler()
+                  }
+
               }
               }
             });
           } catch (error) {
            console.log("erorrrorrr",error) 
           }
-          notify("successfully Verified")
+          notify(msg)
           navigate("/notification")
         }
       } catch (error) {
