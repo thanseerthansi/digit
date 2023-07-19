@@ -24,13 +24,14 @@ export default function Signin() {
   const [expandForm, setExpandForm] = useState(false);
   const [added_otp, setadded_otp] = useState("");
   const [load,setload]=useState(false)
-
+  const [logindata,setlogindata]=useState({email:'',firstName:"",lastName:""})
+  console.log("logindata",logindata)
   useEffect(() => {
     Getusernumber()
     window.scrollTo(0, 0);
     path();
   }, []);
-
+  
   const notify = (msg) => toast.success(msg, {
     position: "top-left",
     theme: "dark",
@@ -44,11 +45,16 @@ export default function Signin() {
     // console.log("handler")
     const data = await signInWithGoogle();
     console.log("dsf", data);
+    let emp ={}
     if (data._tokenResponse) {
-      console.log("email",data._tokenResponse.email)
-      
+      // console.log("email",data._tokenResponse.email)
+      emp.email=data._tokenResponse.email
+      emp.firstName=data._tokenResponse.firstName
+      emp.lastName=data._tokenResponse.lastName
+
+      // console.log("emp,,,,,",emp)
       if(data._tokenResponse.email){
-        Checkuserhandler(data._tokenResponse.email)
+        Checkuserhandler(data._tokenResponse.email,emp)
       }
     }else{
       notifyerror("Something went wrong")
@@ -65,24 +71,7 @@ export default function Signin() {
     // Checkuserhandler(data)
     
   };
-  // const requestOTP = (e) => {
-  //   e.preventDefault();
-  //   if (phoneNumber.length >= 12) {
-  //     // console.log("Enter");
-  //     setExpandForm(true);
-  //     generateRecaptcha();
-  //     const appVerifier = window.recaptchaVerifier;
-  //     console.log("APP VERIFIER", appVerifier);
-  //     signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-  //       .then((confirmationResult) => {
-  //         console.log(confirmationResult);
-  //         window.confirmationResult = confirmationResult;
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   }
-  // };
+ 
   const generateRecaptcha = () => {
     if (!window.recaptchaVerifier) {     
       window.recaptchaVerifier = new RecaptchaVerifier(
@@ -92,40 +81,22 @@ export default function Signin() {
         },
         auth
       );
-      console.log("enters recapth inside")
+      // console.log("enters recapth inside")
     }
-    console.log("enters recapth")
+    // console.log("enters recapth")
     window.recaptchaVerifier.render();  
   };
-  // const verifyOTP = (e) => {
-  //   console.log(added_otp);
-  //   let confirmationResult = window.confirmationResult;
-  //   confirmationResult
-  //     .confirm(added_otp)
-  //     .then((result) => {
-  //       console.log("Success");
-  //       console.log(result.user.phoneNumber);
-  //       if (result.user.phoneNumber){
-  //          Checkuserhandler(result.user.phoneNumber)
-  //       }else{
-  //         notifyerror("wrong OTP")
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       notifyerror("wrong OTP")
-  //     });
-  // };
+ 
   // crud functions start................................................................
-  const Checkuserhandler=async(result)=>{
-    console.log("result",result)
+  const Checkuserhandler=async(result,emp)=>{
+    // console.log("result",result)
     try {
       const data = await Axioscall("post","user/login",{username:result,role:"employee"})
-      console.log("dataafter",data)
+      // console.log("dataafter",data)
         if(data.status===200){
           if(data.data.data.token){
             window.localStorage.setItem("craig-token",data.data.data.token)
-            Decodetoken(data.data.data.token)
+            Decodetoken(data.data.data.token,emp)
           }
       }else{
         console.log(data)
@@ -135,11 +106,11 @@ export default function Signin() {
       console.log("error",error)
     }
   }
-  const Decodetoken =(token)=>{
+  const Decodetoken =(token,emp)=>{
     console.log(token)
     var decoded = jwt_decode(token)
     if(decoded.id){
-      Getuser(decoded.id)
+      Getuser(decoded.id,emp)
     }
   }
   const Rememberhandler=(e)=>{
@@ -155,7 +126,7 @@ export default function Signin() {
       setPhoneNumber(data)
     }
   }
-  const Getuser =async(datalist)=>{
+  const Getuser =async(datalist,emp)=>{
     try {
       console.log("id:::::",datalist)
         let data = await Axioscall("get","employee",{id:datalist})
@@ -171,7 +142,7 @@ export default function Signin() {
               window.localStorage.setItem("graiduserid",data.data.data.docs[0]._id);
               navigate('/employee-profile')
             }else{
-              navigate('/employeeregister')
+              navigate('/employeeregister',{ state: emp })
             }
             
           }else{

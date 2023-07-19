@@ -13,7 +13,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 const animatedComponents = makeAnimated();
 export default function Employeeregister() {
   const {Check_Validation,Decodetoken,getUser,userdetail}=useContext(Simplecontext)
@@ -60,7 +60,10 @@ export default function Employeeregister() {
   const inputemail = useRef(false);
   const [emailverify,setemailverify]=useState({otp:"",valid:false,modal:false})
   const [phoneverify,setphoneverify]=useState({otp:"",valid:false,modal:false})
-  // console.log("valuedata",employeedata)
+  const location = useLocation();
+  const obj = location.state || {};
+  
+  // console.log("employeedata",employeedata)
   // console.log("carddata",carddata)
   // console.log("siblingdata",siblingdata)
   // console.log("siblingarray",siblingsarray)
@@ -75,10 +78,13 @@ export default function Employeeregister() {
   // console.log("companyarray",companyarray)
   // console.log("precompanyarray",precompanyarray)
   // console.log("userdetail",userdetail)
+  
     useEffect(() => {     
       window.scrollTo(0,0)
       getCompanydata()
       tokenhandler()
+      googleHandler()
+      // setemployeedata({...employeedata,maritalStatus:"single"})
     }, [])
     useEffect(() => {
       return () => {
@@ -88,6 +94,17 @@ export default function Employeeregister() {
         }
       };
     }, []);
+    const googleHandler=()=>{
+      console.log("objlocation",obj)
+      
+      if (obj.email){
+        setemailverify({...emailverify,valid:true})
+        setemployeedata({...employeedata,email:obj.email,lastName:obj.lastName,firstName:obj.firstName,maritalStatus:"single"})
+      }else{
+        setemployeedata({...employeedata,maritalStatus:"single"})
+      }
+      
+    }
     const tophandler=(f,t)=>{
         window.scrollTo(f,t)
     }
@@ -388,10 +405,13 @@ export default function Employeeregister() {
   const zipcodeHandler=async(e,code)=>{
     setload(true)
     let data =await axios.get(`https://api.postalpincode.in/pincode/${code}`)
-    // console.log("zipcode data",data)
+    console.log("zipcode data",data)
     if(data.data[0].Status==='Success'){
       
       e.target.classList.remove('is-invalid');
+      console.log(data.data[0].PostOffice[0])
+      let place = data.data[0].PostOffice[0]
+      setaddressdata({...addressdata,city:place.Name,state:place.State,country:place.Country})
     }else{
       e.target.classList.add('is-invalid');
     }
@@ -439,7 +459,9 @@ export default function Employeeregister() {
   };
   const emailVerification=async()=>{
     try {
-      // setemailvalid(true)
+      if(employeedata.email!=obj.email){
+        setemailverify({...emailverify,valid:false})
+         // setemailvalid(true)
       // console.log("email",companydata.email)
       setload(true)
       let data = await Axioscall("post","company/sendcode",{email:employeedata.email})
@@ -452,6 +474,10 @@ export default function Employeeregister() {
         // notifyerror("Something Went wrong Sent again")
       }
       setload(false)
+        
+      }
+      
+     
     } catch (error) {
       setload(false)
       // notifyerror("Something Went wrong Sent again")
@@ -696,7 +722,7 @@ export default function Employeeregister() {
                         <div className="col-12 row mt-3 mb-20">
                           <label className="col-lg-4 col-sm-6">Marital status</label>
                           <p className="col-lg-2 col-sm-2 mari">
-                            <input onChange={()=>setemployeedata({...employeedata,maritalStatus:"single"})} checked={employeedata.maritalStatus==="single"?true:false}  type="radio" id="test1" name="radio-group"  />
+                            <input onChange={()=>setemployeedata({...employeedata,maritalStatus:"single"})} checked={employeedata.maritalStatus==="single"?true:false}   type="radio" id="test1" name="radio-group"  />
                             <label htmlFor="test1">Single</label>
                           </p>
                           <p className="col-lg-2 col-sm-2 mari">
@@ -777,6 +803,7 @@ export default function Employeeregister() {
                           <button onClick={()=>pushhandler(siblingdata,setsiblingdata,siblingsarray,setsiblingsarray)} className="col-lg-2 button-form1" type="button" id="btnAdd" value="+">Add</button>
                           <button onClick={()=>removeHandler(siblingsarray,setsiblingsarray)}  className="col-lg-2 button-form2" type="button"  value="-">Remove</button>
                         </div>
+                        {employeedata.maritalStatus==="married"?<>
                         <h6 className="permenent-address mb-3 col-12 form-t">Spouse details</h6>
                         <div className="form-group col-lg-3">
                           <div className="text__center">
@@ -787,6 +814,7 @@ export default function Employeeregister() {
                             </select>
                           </div>
                         </div>
+                        
                         <div className="form-group col-lg-3">
                           <input type="text" required={spousedata.type}  onChange={(e)=>setspousedata({...spousedata,name:e.target.value})} value={spousedata.name??""} className="form-control" placeholder="Name" id=" " />
                           <Form.Control.Feedback type="invalid">Please provide Spouse name </Form.Control.Feedback>
@@ -846,7 +874,7 @@ export default function Employeeregister() {
                           <button onClick={()=>pushhandler(childdata,setchilddata,childsarray,setchildsarray)}  className="col-lg-2 button-form1" type="button" id="btnAdd" value="+">Add</button>
                           <button onClick={()=>removeHandler(childsarray,setchildsarray)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
                         </div>
-                       
+                        </>:""}
                       </div>
                       
                        <input type="submit" name="next" onClick={()=>tophandler(0,500)} className="pr-button  action-button" defaultValue="Next" />
@@ -954,9 +982,23 @@ export default function Employeeregister() {
                                 <div className="text__center">
                                   <select required onChange={(e)=>settenthdata({...tenthdata,board:e.target.value})} value={tenthdata.board??""} className="cs-select form-control cs-skin-elastic cs-skin-elastic1">
                                     <option value="" defaultValue="" disabled  >Board</option>
-                                    <option value="Kerala Board">Kerala Board</option>
-                                    <option value="CBSC">CBSE</option>
-                                    <option value="Karnataka Board">Karnataka Board</option>
+                                    <option value="Kerala">Kerala Board</option>
+                                    <option value="CBSE">CBSE</option>
+                                    <option value="Karnataka">Karnataka Board</option>
+                                    <option value="ICSE">Indian Certificate of Secondary Education (ICSE)</option>
+                                    <option value="UPMSP">Uttar Pradesh Madhyamik Shiksha Parishad (UPMSP)</option>
+                                    <option value="MSBSHSE">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
+                                    <option value="TNBSE">Tamil Nadu State Board of Secondary Education (TNBSE)</option>
+                                    <option value="KSEEB">Karnataka Secondary Education Examination Board (KSEEB)</option>
+                                    <option value="WBBSE">West Bengal Board of Secondary Education (WBBSE)</option>
+                                    <option value="GSEB">Gujarat Secondary and Higher Secondary Education Board (GSEB)</option>
+                                    <option value="RBSE">Rajasthan Board of Secondary Education (RBSE)</option>
+                                    <option value="PSEB">Punjab School Education Board (PSEB)</option>
+                                    <option value="HPBOSE">Himachal Pradesh Board of School Education (HPBOSE)</option>
+                                    <option value="CGBSE">Chhattisgarh Board of Secondary Education (CGBSE)</option>
+                                    <option value="BSE Odisha">Board of Secondary Education, Odisha (BSE Odisha)</option>
+                                    <option value="BSEAP">Andhra Pradesh Board of Secondary Education (BSEAP)</option>
+                                    <option value="TSBIE">Telangana State Board of Intermediate Education (TSBIE)</option>
                                   </select>
                                   <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
                                 </div>
@@ -986,7 +1028,23 @@ export default function Employeeregister() {
                                     <option value="" hidden  >Board</option>
                                     <option value="Kerala Board">Kerala Board</option>
                                     <option value="CBSC" >CBSE</option>
-                                    <option value="Karnataka Board" >Karnataka Board</option>
+                                    <option value="Karnataka Board" >Karnataka Board</option> <option value="Kerala">Kerala Board</option>
+                                    <option value="CBSE">CBSE</option>
+                                    <option value="Karnataka">Karnataka Board</option>
+                                    <option value="ICSE">Indian Certificate of Secondary Education (ICSE)</option>
+                                    <option value="UPMSP">Uttar Pradesh Madhyamik Shiksha Parishad (UPMSP)</option>
+                                    <option value="MSBSHSE">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
+                                    <option value="TNBSE">Tamil Nadu State Board of Secondary Education (TNBSE)</option>
+                                    <option value="KSEEB">Karnataka Secondary Education Examination Board (KSEEB)</option>
+                                    <option value="WBBSE">West Bengal Board of Secondary Education (WBBSE)</option>
+                                    <option value="GSEB">Gujarat Secondary and Higher Secondary Education Board (GSEB)</option>
+                                    <option value="RBSE">Rajasthan Board of Secondary Education (RBSE)</option>
+                                    <option value="PSEB">Punjab School Education Board (PSEB)</option>
+                                    <option value="HPBOSE">Himachal Pradesh Board of School Education (HPBOSE)</option>
+                                    <option value="CGBSE">Chhattisgarh Board of Secondary Education (CGBSE)</option>
+                                    <option value="BSE Odisha">Board of Secondary Education, Odisha (BSE Odisha)</option>
+                                    <option value="BSEAP">Andhra Pradesh Board of Secondary Education (BSEAP)</option>
+                                    <option value="TSBIE">Telangana State Board of Intermediate Education (TSBIE)</option>
                                   </select>
                                   <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
                                 </div>
@@ -1263,7 +1321,7 @@ export default function Employeeregister() {
                             <div className="mt-40"> <span className="card-info font-sm color-text-paragraph-2">You can add up to 15 skills</span></div>
                           </div> */}
                         </div>
-                        <h6 className="permenent-address mb-3">Career</h6>
+                        <h6 className="permenent-address mb-3">Career Experience</h6>
                         <div className="property-fields__ro ">
                           <div id="property-fields__row-2" className="property-fields__ro row">
                             <h6 className="permenent-address form-t mb-3 col-12">Company</h6>

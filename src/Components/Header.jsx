@@ -38,7 +38,7 @@ export default function Header() {
       const currentPosition = window.pageYOffset;
       setScrollPosition(currentPosition);
     };
-
+    path()
     window.addEventListener("scroll", handleScroll);
 
     mobileHeaderActive();
@@ -121,16 +121,17 @@ export default function Header() {
               {pathvalue === "/Signin" || pathvalue === "/employerlogin" ? (
                 pathvalue === "/Signin" ? (
                   <div className="block-signin" style={{width:"180px"}}>
-                    {/* <Link
-                      className="btn btn-default btn-shadow ml-40 hover-up"
+                    <Link
+                     className="btn btn-default btn-shadow ml-40 hover-up"
                       to="/employeeregister"
                     >
                       Register
-                    </Link> */}
+                    </Link>
                   </div>
                 ) : 
-                (
+                (pathvalue!="/employer-register"?
                   <div className="block-signin">
+                    
                     <Link
                       className="btn btn-default btn-shadow ml-40 hover-up"
                       to="/employer-register"
@@ -138,7 +139,7 @@ export default function Header() {
                       Register
                     </Link>
                   </div>
-                )
+                :"")
               ) : (
                 <div className="block-signin block-signin1">
                   <Link
@@ -174,9 +175,9 @@ export default function Header() {
                     <li className="has-children">
                       <Link to="/aboutus">About us</Link>
                     </li>
-                    <li className="has-children ">
+                    {/* <li className="has-children ">
                       <Link to="/employerlogin">For Employers </Link>
-                    </li>
+                    </li> */}
                     <li className="has-children">
                       <Link to="/contactus">Contact us</Link>
                     </li>
@@ -230,7 +231,7 @@ export default function Header() {
                   
                 </nav>
               </div>
-              <div className="site-copyright text-bottom mt-40" >Copyright 2023 © Digit.</div>
+              <div className="site-copyright text-bottom mt-40" >Copyright 2023 © Craig.</div>
             </div>
           </div>
         </div>

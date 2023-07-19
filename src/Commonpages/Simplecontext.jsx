@@ -53,7 +53,7 @@ export default function Simplecontextprovider({children}){
             let datalist;
             var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
             if(decoded.id){
-                // console.log("decodeid",decoded.id)
+                console.log("decodeid",decoded.id)
                 datalist = decoded.id
             }
             // console.log("usertoken",user)
@@ -70,12 +70,14 @@ export default function Simplecontextprovider({children}){
                     window.localStorage.setItem("graiduseremail",data.data.data.email);
                     window.localStorage.setItem("graiduserid",data.data.data._id);
                   }else{
+                    // console.log("gfuibjn")
                     // window.localStorage.setItem("graiduser", "employee");
-                    // navigate('/employeeregister')
+                    logouthandler()
+                    
                   }
                 }
             }else if(user==="employee"){
-              // console.log("emplpyeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",datalist)
+              console.log("emplpyeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",datalist)
                 let data = await Axioscall("get","employee",{id:datalist,page:1,limit:1})
                 // console.log("data",data)
                 if (data.status===200){
@@ -88,12 +90,14 @@ export default function Simplecontextprovider({children}){
                   }else{
                     
                     // window.localStorage.setItem("graiduser", "employee");
-                    // navigate('/employeeregister')
+                    logouthandler()
                   }
                 }
             }else{
               // console.log("elseeeeeeeeeeeeeeeeeeee")
             }
+             }else{
+              navigate('/')
             }
           //  console.log("userdatain context",userdetail)
         

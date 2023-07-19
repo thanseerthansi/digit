@@ -399,11 +399,15 @@ export default function Employeeprofupdate() {
   const zipcodeHandler=async(e,code)=>{
     setload(true)
     let data =await axios.get(`https://api.postalpincode.in/pincode/${code}`)
-    // console.log("zipcode data",data.data[0].Status)
-    if(data.data[0].Status==='Error'){
-      e.target.classList.add('is-invalid');
-    }else{
+    // console.log("zipcode data",data)
+    if(data.data[0].Status==='Success'){
+      
       e.target.classList.remove('is-invalid');
+      console.log(data.data[0].PostOffice[0])
+      let place = data.data[0].PostOffice[0]
+      setaddressdata({...addressdata,city:place.Name,state:place.State,country:place.Country})
+    }else{
+      e.target.classList.add('is-invalid');
     }
     setload(false)
   }
@@ -782,6 +786,7 @@ export default function Employeeprofupdate() {
                           <button onClick={()=>pushhandler(siblingdata,setsiblingdata,siblingsarray,setsiblingsarray)} className="col-lg-2 button-form1" type="button" id="btnAdd" value="+">Add</button>
                           <button onClick={()=>removeHandler(siblingsarray,setsiblingsarray)}  className="col-lg-2 button-form2" type="button"  value="-">Remove</button>
                         </div>
+                        {employeedata.maritalStatus==="married"?<>
                         <h6 className="permenent-address mb-3 col-12 form-t">Spouse details</h6>
                         <div className="form-group col-lg-3">
                           <div className="text__center">
@@ -851,7 +856,7 @@ export default function Employeeprofupdate() {
                           <button onClick={()=>pushhandler(childdata,setchilddata,childsarray,setchildsarray)}  className="col-lg-2 button-form1" type="button" id="btnAdd" value="+">Add</button>
                           <button onClick={()=>removeHandler(childsarray,setchildsarray)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
                         </div>
-                       
+                       </>:""}
                       </div>
                       
                        <input type="submit" name="next" onClick={()=>tophandler(0,500)} className="pr-button  action-button" defaultValue="Next" />
@@ -883,7 +888,7 @@ export default function Employeeprofupdate() {
                             <Form.Control.Feedback type="invalid">Please provide landmark </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mt-20">
-                            <input type="text" required onBlur={(e)=>zipcodeHandler(e,addressdata.zipcode)} onChange={(e)=>setaddressdata({...addressdata,zip:e.target.value})} value={addressdata.zip??""} className="form-control" placeholder="Zip Code" id="pZipcode" />
+                            <input type="text" required onBlur={(e)=>zipcodeHandler(e,addressdata.zip)} onChange={(e)=>setaddressdata({...addressdata,zip:e.target.value})} value={addressdata.zip??""} className="form-control" placeholder="Zip Code" id="pZipcode" />
                             <Form.Control.Feedback type="invalid">Please provide valid pincode </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-4 mt-20">
@@ -959,9 +964,23 @@ export default function Employeeprofupdate() {
                                 <div className="text__center">
                                   <select required onChange={(e)=>settenthdata({...tenthdata,board:e.target.value})} value={tenthdata.board??""} className="cs-select form-control cs-skin-elastic cs-skin-elastic1">
                                     <option value="" defaultValue="" disabled  >Board</option>
-                                    <option value="Kerala Board">Kerala Board</option>
-                                    <option value="CBSC">CBSE</option>
-                                    <option value="Karnataka Board">Karnataka Board</option>
+                                    <option value="Kerala">Kerala Board</option>
+                                    <option value="CBSE">CBSE</option>
+                                    <option value="Karnataka">Karnataka Board</option>
+                                    <option value="ICSE">Indian Certificate of Secondary Education (ICSE)</option>
+                                    <option value="UPMSP">Uttar Pradesh Madhyamik Shiksha Parishad (UPMSP)</option>
+                                    <option value="MSBSHSE">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
+                                    <option value="TNBSE">Tamil Nadu State Board of Secondary Education (TNBSE)</option>
+                                    <option value="KSEEB">Karnataka Secondary Education Examination Board (KSEEB)</option>
+                                    <option value="WBBSE">West Bengal Board of Secondary Education (WBBSE)</option>
+                                    <option value="GSEB">Gujarat Secondary and Higher Secondary Education Board (GSEB)</option>
+                                    <option value="RBSE">Rajasthan Board of Secondary Education (RBSE)</option>
+                                    <option value="PSEB">Punjab School Education Board (PSEB)</option>
+                                    <option value="HPBOSE">Himachal Pradesh Board of School Education (HPBOSE)</option>
+                                    <option value="CGBSE">Chhattisgarh Board of Secondary Education (CGBSE)</option>
+                                    <option value="BSE Odisha">Board of Secondary Education, Odisha (BSE Odisha)</option>
+                                    <option value="BSEAP">Andhra Pradesh Board of Secondary Education (BSEAP)</option>
+                                    <option value="TSBIE">Telangana State Board of Intermediate Education (TSBIE)</option>
                                   </select>
                                   <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
                                 </div>
@@ -989,9 +1008,23 @@ export default function Employeeprofupdate() {
                                 <div className="text__center">
                                   <select required onChange={(e)=>settwelthdata({...twelthdata,board:e.target.value})} value={twelthdata.board??""}  className=" form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value="" hidden  >Board</option>
-                                    <option value="Kerala Board">Kerala Board</option>
-                                    <option value="CBSC" >CBSE</option>
-                                    <option value="Karnataka Board" >Karnataka Board</option>
+                                    <option value="Kerala">Kerala Board</option>
+                                    <option value="CBSE">CBSE</option>
+                                    <option value="Karnataka">Karnataka Board</option>
+                                    <option value="ICSE">Indian Certificate of Secondary Education (ICSE)</option>
+                                    <option value="UPMSP">Uttar Pradesh Madhyamik Shiksha Parishad (UPMSP)</option>
+                                    <option value="MSBSHSE">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
+                                    <option value="TNBSE">Tamil Nadu State Board of Secondary Education (TNBSE)</option>
+                                    <option value="KSEEB">Karnataka Secondary Education Examination Board (KSEEB)</option>
+                                    <option value="WBBSE">West Bengal Board of Secondary Education (WBBSE)</option>
+                                    <option value="GSEB">Gujarat Secondary and Higher Secondary Education Board (GSEB)</option>
+                                    <option value="RBSE">Rajasthan Board of Secondary Education (RBSE)</option>
+                                    <option value="PSEB">Punjab School Education Board (PSEB)</option>
+                                    <option value="HPBOSE">Himachal Pradesh Board of School Education (HPBOSE)</option>
+                                    <option value="CGBSE">Chhattisgarh Board of Secondary Education (CGBSE)</option>
+                                    <option value="BSE Odisha">Board of Secondary Education, Odisha (BSE Odisha)</option>
+                                    <option value="BSEAP">Andhra Pradesh Board of Secondary Education (BSEAP)</option>
+                                    <option value="TSBIE">Telangana State Board of Intermediate Education (TSBIE)</option>
                                   </select>
                                   <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
                                 </div>
@@ -1264,7 +1297,7 @@ export default function Employeeprofupdate() {
                             <div className="mt-40"> <span className="card-info font-sm color-text-paragraph-2">You can add up to 15 skills</span></div>
                           </div> */}
                         </div>
-                        <h6 className="permenent-address mb-3">Career</h6>
+                        <h6 className="permenent-address mb-3">Career Experience</h6>
                         <div className="property-fields__ro ">
                           <div id="property-fields__row-2" className="property-fields__ro row">
                             <h6 className="permenent-address form-t mb-3 col-12">Company</h6>

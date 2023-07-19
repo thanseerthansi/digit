@@ -192,7 +192,7 @@ export default function Employeelogin() {
                     </button>
                   </div>
                   <div className="text-muted text-center mt-3">
-                    New in Digit?{" "}
+                    New in Craig?{" "}
                     <Link to="/employer-register">Create an account</Link>
                     <br />
                     {/* <Link to="password-reset.html">Forgot password</Link> */}

@@ -89,14 +89,14 @@ export default function Employerregister() {
         datalist.address=[{...addressdata}]
       }
       
-      if(Object.keys(certificatedata).length){
-        if (certificatedata.front_url&&certificatedata.back_url){
-          datalist.certificate = [{...certificatedata , name : companydata.address_proof_type}]
-        }else{
-          notifyerror("please add Certificte images")
-        }
+      // if(Object.keys(certificatedata).length){
+      //   if (certificatedata.front_url&&certificatedata.back_url){
+      //     datalist.certificate = [{...certificatedata , name : companydata.address_proof_type}]
+      //   }else{
+      //     notifyerror("please add Certificte images")
+      //   }
         
-      }
+      // }
       // console.log("datalist employer",datalist)
       datalist.role = "employer"
       datalist.status = "verified"
@@ -350,7 +350,7 @@ export default function Employerregister() {
             </label>
             <label className="dropdown col-lg-12 col-sm-12 mt-15">
               <div className="text__center">
-                <select required onChange={(e)=>setcompanydata({...companydata,address_proof_type:e.target.value})}  value={companydata.address_proof_type??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                <select  onChange={(e)=>setcompanydata({...companydata,address_proof_type:e.target.value})}  value={companydata.address_proof_type??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                   <option value="" defaultValue="" disabled>Government Approved Certificate</option>
                   <option value="MOA">MOA</option>
                   <option value="Incorporation Certificate">Incorporation Certificate</option>
