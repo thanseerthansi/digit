@@ -105,7 +105,7 @@ export default function Candidatedetails() {
         <div className="image-compay"><img style={{ height:"85px" , width:"85px"}} src={userprofile?.profilePhoto??"/assets/imgs/page/candidates/candidate-profile copy1.png"} alt="jobbox" /></div>
         <div className="row mt-10">
           <div className="col-lg-8 col-md-12">
-            <h5 className="f-18">{userprofile?.firstName??""} {userprofile?.middleName??""} {userprofile?.lastName??""}<span className="card-location font-regular ml-20">New York, US</span></h5>
+            <h5 className="f-18">{userprofile?.firstName??""} {userprofile?.middleName??""} {userprofile?.lastName??""}<span className="card-location font-regular ml-20">{userprofile?userprofile.address[0].city:""},{userprofile?userprofile.address[0].country:""}</span></h5>
             <h6 className="f-18 u-color">Unique ID : <span>{userprofile?.uniqueid??""}</span></h6>
             <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userprofile?.careerandeducation?.[0]?.designation??""}</p>
             {/* <div className="mt-10 mb-15"><img className="ml-30" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div> */}

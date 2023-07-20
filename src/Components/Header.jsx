@@ -67,8 +67,8 @@ export default function Header() {
                 <Link className="d-flex" to="/">
                   <img
                     alt="jobBox"
-                    src="\assets\imgs\logo\craig-logo-dark.png"
-                    height={30}
+                    src="\assets\imgs\logo\logo_craig-11.png"
+                    height={60}
                   />
                 </Link>
               </div>
@@ -85,7 +85,7 @@ export default function Header() {
                   <li className="has-children">
                     <Link to="/contactus">Contact us</Link>
                   </li>
-                  {windowuser==="employer"? <li className="has-children"><Link to="/candidates">Candidates</Link>
+                  {windowuser==="employer"? <li className="has-children"><Link to="/candidates">Find Candidates</Link>
                 </li>:null}
                 </ul>
               </nav>
@@ -181,7 +181,7 @@ export default function Header() {
                     <li className="has-children">
                       <Link to="/contactus">Contact us</Link>
                     </li>
-                    {windowuser==="employer"? <li className="has-children"><Link to="/candidates">Candidates</Link>
+                    {windowuser==="employer"? <li className="has-children"><Link to="/candidates">Find Candidates</Link>
                 </li>:null}
                 {windowuser==="employer"?<>
             

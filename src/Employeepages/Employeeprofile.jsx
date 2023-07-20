@@ -448,7 +448,7 @@ const Bannerhandler=async(ratio)=>{
               <div className="tab-pane fade" id="tab-my-jobs" role="tabpanel" aria-labelledby="tab-my-jobs">
                 <h3 className="mt-0 mb-15 color-brand-1">Update Profile</h3><a className="font-md color-text-paragraph-2" href="#">Update your profile</a>
                
-                <Employeeprofupdate/>
+                <Employeeprofupdate value={1}/>
               </div>
             </div>
           </div>

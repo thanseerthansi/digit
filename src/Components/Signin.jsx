@@ -44,7 +44,7 @@ export default function Signin() {
   const googlesigninhandler = async () => {
     // console.log("handler")
     const data = await signInWithGoogle();
-    console.log("dsf", data);
+    // console.log("dsf", data);
     let emp ={}
     if (data._tokenResponse) {
       // console.log("email",data._tokenResponse.email)
@@ -54,7 +54,7 @@ export default function Signin() {
 
       // console.log("emp,,,,,",emp)
       if(data._tokenResponse.email){
-        Checkuserhandler(data._tokenResponse.email,emp)
+        Checkuserhandler(data._tokenResponse.email,emp,"email")
       }
     }else{
       notifyerror("Something went wrong")
@@ -88,10 +88,10 @@ export default function Signin() {
   };
  
   // crud functions start................................................................
-  const Checkuserhandler=async(result,emp)=>{
+  const Checkuserhandler=async(result,emp,type)=>{
     // console.log("result",result)
     try {
-      const data = await Axioscall("post","user/login",{username:result,role:"employee"})
+      const data = await Axioscall("post","user/login",{username:result,role:"employee",type:type})
       // console.log("dataafter",data)
         if(data.status===200){
           if(data.data.data.token){
@@ -109,9 +109,15 @@ export default function Signin() {
   const Decodetoken =(token,emp)=>{
     console.log(token)
     var decoded = jwt_decode(token)
-    if(decoded.id){
-      Getuser(decoded.id,emp)
+    if(decoded.completion===3){
+      if(decoded.id){
+        console.log("decode",decoded)
+        Getuser(decoded.id,emp)
+      }
+    }else{
+      navigate('/employeeregister',{ state: emp })
     }
+   
   }
   const Rememberhandler=(e)=>{
     if (e){
@@ -189,7 +195,7 @@ const verifyOTP=async()=>{
     console.log("data",data)
     if(data.status===200){
       // inputphone.current.disabled=true
-      Checkuserhandler(phoneNumber)
+      Checkuserhandler(phoneNumber,"","phone")
       // setdisablephone(true)
       // setphonevalid(true)
     }
