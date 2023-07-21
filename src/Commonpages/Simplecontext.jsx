@@ -5,7 +5,6 @@ import jwt_decode from "jwt-decode";
 import Filestack from "./Filestack";
 export const Simplecontext = createContext();
 
-
 export default function Simplecontextprovider({children}){
     const navigate= useNavigate();
     const [pathvalue,setpathvalue]=useState('')
@@ -116,6 +115,7 @@ export default function Simplecontextprovider({children}){
       }
       
     }
+    
     function Decodetoken (token){
       // console.log(token)
       var decoded = jwt_decode(token)

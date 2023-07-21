@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Simplecontext } from '../Commonpages/Simplecontext'
 import { Helmet } from 'react-helmet'
 import moment from 'moment';
@@ -8,9 +8,12 @@ import Axioscall from '../Commonpages/Axioscall';
 import Employeeprofupdate from './Employeeprofupdate';
 import { notify } from '../Commonpages/toast';
 
+import domtoimage from 'dom-to-image';
+
 export default function Employeeprofile() {
   const {logouthandler,userdetail,employeedata,getUser}=useContext(Simplecontext)
   // console.log("userdetail in employee profile",userdetail)
+  const [shareview,setshareview]=useState(true)
   const maxLength = userdetail ? Math.max(userdetail.lngRead.length, userdetail.lngWrite.length) : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
@@ -65,7 +68,20 @@ const Bannerhandler=async(ratio)=>{
       });
   };
 
-
+  const downloadHtmlAsImage = (elementId) => {
+    const htmlContent = document.getElementById(elementId);
+    domtoimage.toPng(htmlContent,{ useCORS: true,scale:3 })
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = 'image.png';
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((error) => {
+        console.error('Error while converting HTML to image:', error);
+      });
+  };
+ 
   return (
     <>
       <main className="main">
@@ -116,11 +132,13 @@ const Bannerhandler=async(ratio)=>{
           <div className="box-nav-tabs nav-tavs-profile mb-5">
             
             <ul className="nav" role="tablist">
-              <li><a className="btn btn-border aboutus-icon mb-20 active" href="#tab-my-profile" data-bs-toggle="tab" role="tab" aria-controls="tab-my-profile" aria-selected="true">My Profile</a></li>
-              <li><a className="btn btn-border recruitment-icon mb-20" href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Update Profile</a></li>
+              <li><a className="btn btn-border aboutus-icon mb-20 active" onClick={()=>setshareview(true)} href="#tab-my-profile" data-bs-toggle="tab" role="tab" aria-controls="tab-my-profile" aria-selected="true">My Profile</a></li>
+              <li><a className="btn btn-border recruitment-icon mb-20" onClick={()=>setshareview(false)} href="#tab-my-jobs"  data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Update Profile</a></li>
             </ul>
             <div className="border-bottom pt-10 pb-10" />
-            <div className="mt-20 mb-20"><a href='#' onClick={()=>copyValue(userdetail?.uniqueid??"")}>Share Profile</a></div>
+            {shareview?
+            <div className="mt-20 mb-20"><a href='#' onClick={()=>downloadHtmlAsImage('htmlContent1')}>Share Profile</a></div>
+            :""}
             <div className="mt-10 mb-10">
                     <a href="#" onClick={()=>{logouthandler();}}> Log Out</a>
                   </div>
@@ -329,12 +347,12 @@ const Bannerhandler=async(ratio)=>{
                           </div>
                         </div>
                       </div>
-                      <div className="theme--dark88">
+                      <div id="htmlContent1"  className="theme--dark88">
                         <div id="container" className="container88">
                           <div className="header">
                             <div className="logo" />
                           </div>    
-                          <section id="myContainer" className="left-section">
+                          <section id="htmlContent1"  className="left-section">
                             {/* <img src="assets/imgs/page/login-register/qr.png" className="is-circle6 profile-pic" /> */}
                             <QRCode style={{height:"100px",width:"100px"}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
                             <div className="profile-detail">

@@ -28,7 +28,7 @@ export default function Employerregister() {
   // const inputphone = useRef(false);
   // const phoneInputRef = useRef(null);
   // console.log("certificate data",certificatedata)
-  // console.log("phonevalidationdata ",phonevalidationdata)
+  // console.log("addressdata ",addressdata)
   useEffect(() => {
     window.scrollTo(0,0)
     // setload(false)
@@ -48,9 +48,9 @@ export default function Employerregister() {
   const navigate  = useNavigate();
  
   const Filestackhandler=async(ratio,setvalue,value,keypair)=>{
-    console.log("keypair",keypair)
+    // console.log("keypair",keypair)
     let data =await Filestack(ratio)
-    console.log("datafilestack",data)
+    // console.log("datafilestack",data)
     if (data){
       setvalue({...value,[keypair]:data})
     }
@@ -85,9 +85,10 @@ export default function Employerregister() {
       //   setload(false)
       //   return 
       // }
-      if (Object.keys(addressdata).length){
-        datalist.address=[{...addressdata}]
-      }
+      // console.log("dataaaaaaa",addressdata)
+      // if (Object.keys(addressdata).length){
+      //   datalist.address=[{...addressdata}]
+      // }
       
       // if(Object.keys(certificatedata).length){
       //   if (certificatedata.front_url&&certificatedata.back_url){
@@ -99,7 +100,7 @@ export default function Employerregister() {
       // }
       // console.log("datalist employer",datalist)
       datalist.role = "employer"
-      datalist.status = "verified"
+      datalist.status = "pending"
       if (  datalist.password != datalist.repassword)
       {
         notifyerror("Password Mismatch")
@@ -130,6 +131,8 @@ export default function Employerregister() {
     if(data.data[0].Status==='Success'){
       
       e.target.classList.remove('is-invalid');
+      let place = data.data[0].PostOffice[0]
+      setaddressdata({...addressdata,city:place.Name,state:place.State,country:place.Country})
     }else{
       e.target.classList.add('is-invalid');
     }

@@ -14,14 +14,20 @@ export default function Employerprofile() {
   const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
   // console.log("userdetailin profile",userdetail)
-  console.log("employeedata profile",employeedata)
+  // console.log("employeedata profile",employeedata)
+  const [certificatedata,setcertificatedata]=useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [load,setload]=useState(false)
+  const [notcomplete,setnotcomplete]=useState(false)
+  const [photomodal,setphotomodal]=useState({modal:false,data:""})
   const [emailotp,setemailotp]=useState('')
   const numberRegex = /^\d+$/;
   // const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0,0)
+    if(userdetail?.certificate?.length===0??""){
+      setnotcomplete(true)
+    }
   }, [])
   
  const Employeeupdate=async()=>{
@@ -33,6 +39,13 @@ export default function Employerprofile() {
     if (employeedata._id){
       datalist.id=employeedata._id   
     }
+    if(employeedata.status==="rejected"){
+      datalist.status="pending"
+    }
+    if(Object.keys(certificatedata).length){
+      if (certificatedata.front_url&&certificatedata.back_url){
+        datalist.certificate = [{...certificatedata , name : employeedata.address_proof_type}]
+      }}
     let data = await Axioscall("put","company",datalist)
     // console.log(" response",data)
     if(data.status===200){
@@ -410,6 +423,33 @@ const verifyotp=async()=>{
                               Please provide No of Directors
                             </Form.Control.Feedback>
                           </div>
+                          <label className="dropdown col-lg-12 col-sm-12 mt-15">
+              <div className="text__center">
+                <select  onChange={(e)=>setemployeedata({...employeedata,address_proof_type:e.target.value})}   value={employeedata.address_proof_type??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                  <option value="" defaultValue="" disabled>Government Approved Certificate</option>
+                  <option value="MOA">MOA</option>
+                  <option value="Incorporation Certificate">Incorporation Certificate</option>
+                  <option value="Panchayath Certificate">Panchayath Certificate</option>
+                </select>
+              <Form.Control.Feedback type="invalid">Please Select Certificate type</Form.Control.Feedback>
+              </div>
+            </label>
+            <div className="form-group col-lg-6 col-sm-12">
+              <label className="font-sm color-text-mutted">Certificate Front side*</label> 
+              <div className='imageselectorborder d-flex '>
+                <button onClick={()=>Filestackhandler("landscape",setcertificatedata,certificatedata,'front_url')}  type='button' className='imageselector'> Choose Image</button>
+                <p onClick={()=>setphotomodal({...photomodal,modal:true,data:certificatedata.front_url})} style={{overflow:"hidden"}}>&nbsp;{certificatedata.front_url??<span>No file chosen</span>}</p>
+              </div>
+            {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'front_url')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
+            </div>
+            <div className="form-group col-lg-6 col-sm-12">
+              <label className="font-sm color-text-mutted">Certificate Back side*</label> 
+              <div className='imageselectorborder d-flex '>
+              <button onClick={()=>Filestackhandler("landscape",setcertificatedata,certificatedata,'back_url')}  type='button' className='imageselector'> Choose Image</button>
+                <p  onClick={()=>setphotomodal({...photomodal,modal:true,data:certificatedata.back_url})} style={{overflow:"hidden"}}>&nbsp;{certificatedata.back_url??<span>No file chosen</span>}</p>
+              </div>
+              {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'backurl')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
+            </div>
                           <h6 className="permenent-address mb-3"> Address</h6>
                           <div className="form-group mb-3">
                             <label className="font-sm color-text-mutted mb-10">Address Line 1</label>
@@ -587,6 +627,59 @@ const verifyotp=async()=>{
           </Button>
           
         </Modal.Footer>
+      </Modal>
+      <Modal show={notcomplete} onHide={()=>setnotcomplete(false)}>
+        <Modal.Header closeButton>
+          {/* <Modal.Title><h4>Check your email for otp</h4></Modal.Title> */}
+        </Modal.Header>
+        <Modal.Body>
+        <p>Your Profile is Incomplete  Complete Your Profile....</p>
+        <div className="text-end mt-4">
+        {/* <a className="btn btn-border recruitment-icon mb-20" href="#tab-saved-jobs"  data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" >
+                        Complete Profile
+                      </a> */}
+                     
+                      {/* <div className="box-nav-tabs nav-tavs-profile mb-5">
+                  <ul className="nav" role="tablist">
+                    
+                    <li>
+                      <a className="btn btn-border recruitment-icon mb-20" onClick={()=>setphotomodal({...photomodal,modal:false})} href="#tab-saved-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">
+                        Complete Profile
+                      </a>
+                    </li>
+                  </ul>
+              </div>   */}
+          {/* <Button className="text-center" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Complete </Button> */}
+          </div>
+        
+        </Modal.Body>
+        {/* <Modal.Footer> */}
+          {/* <Button variant="secondary" onClick={()=>setnotcomplete(false)}>
+            Close
+          </Button> */}
+          
+        {/* </Modal.Footer> */}
+      </Modal>
+      <Modal show={photomodal.modal} onHide={()=>setphotomodal({...photomodal,modal:false})}>
+        <Modal.Header closeButton>
+          {/* <Modal.Title><h4>Check your email for otp</h4></Modal.Title> */}
+        </Modal.Header>
+        <Modal.Body>
+        {/* <p> Image Not Found</p>??<p> Im age Not Found</p> */}
+        {photomodal.data?
+        <img
+                src={photomodal.data?photomodal?.data:""??""}
+                // style={{ width:"1116px",height:"308px"}}
+                alt="jobbox"
+              />
+              :<p> Image Not Found</p>}
+        </Modal.Body>
+        {/* <Modal.Footer> */}
+          {/* <Button variant="secondary" onClick={()=>setnotcomplete(false)}>
+            Close
+          </Button> */}
+          
+        {/* </Modal.Footer> */}
       </Modal>
         </section>
       </main>

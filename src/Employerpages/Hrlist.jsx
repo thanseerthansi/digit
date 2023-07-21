@@ -12,7 +12,7 @@ import { notify } from '../Commonpages/toast'
 export default function Hrlist() {
   const {userdetail,Check_Validation}=useContext(Simplecontext) 
   const [employeesdata,setemployeedata]=useState([])
-  const [currentpage,setcurrentpage]=useState(1)
+  const [currentpage,setcurrentpage]=useState({total:0,next:"",prev:"",current:1})
   const [fileterid,setfilterid]=useState('')
   const [isOpen, setIsOpen] = useState(false);
   const [validated,setValidated]=useState(false)
@@ -22,13 +22,14 @@ export default function Hrlist() {
   // console.log("hrdata",hrdata)
   useEffect(() => {
     getCandidte()
+    window.scrollTo(0,0)
   }, [])
   
-  const getCandidte=async()=>{
+  const getCandidte=async(page)=>{
     try {
       let body={
         limit:16,
-        page:currentpage,
+        page:page?page:currentpage.current,
         uniqueid:fileterid,
         designation:"HR",
         company_id:window.localStorage.getItem("graiduserid")
@@ -36,6 +37,8 @@ export default function Hrlist() {
       let data=await Axioscall("get","employee",body)
       // console.log("dataemployee",data.data.data.docs)
       if (data.status===200){
+        let datapage = data.data.data
+        setcurrentpage({...currentpage,total:datapage.totalDocs,next:datapage.hasNextPage,prev:datapage.hasPrevPage})
         setemployeedata(data.data.data.docs)
       }
     } catch (error) {
@@ -146,16 +149,17 @@ export default function Hrlist() {
               </div>
             </div>
           </div>
-          )):<div><p>No Employees Found</p></div>}
+          )):<div><p>No HR Found in Your Company</p></div>}
         </div>
       </div>
+      {currentpage.total>1?
       <div className="paginations ">
         <ul className="pager">
-          <li><button className="pager-prev border-0" onClick={()=>currentpage>1?setcurrentpage(currentpage-1):''} /></li>
-          <li><a className="pager-number active" >{currentpage}</a></li>
-          <li><button className="pager-next border-0" onClick={()=>employeesdata?.hasNextPage?setcurrentpage(currentpage+1):''??""} /></li>
+          <li><button className="pager-prev border-0" onClick={()=>currentpage?.prev?setcurrentpage(currentpage.current-1)&getCandidte(currentpage.current-1):''??""} /></li>
+          <li><a className="pager-number active" >{currentpage.current}</a></li>
+          <li><button className="pager-next border-0" onClick={()=>currentpage?.next?setcurrentpage(currentpage.current+1)&getCandidte(currentpage.current+1):''??""} /></li>
         </ul>
-      </div>
+      </div>:""}
     </div>
   </section>
   <section className="section-box mt-50 mb-20">

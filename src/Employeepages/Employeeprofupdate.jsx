@@ -15,8 +15,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
-
-
+import domtoimage from 'dom-to-image';
 const animatedComponents = makeAnimated();
 export default function Employeeprofupdate(value) {
   
@@ -68,22 +67,6 @@ export default function Employeeprofupdate(value) {
   const inputemail = useRef(false);
   const [emailverify,setemailverify]=useState({otp:"",valid:false,modal:false})
   const [phoneverify,setphoneverify]=useState({otp:"",valid:false,modal:false})
-  // console.log("valuedata",employeedata)
-  // console.log("carddata",carddata)
-  // console.log("siblingdata",siblingdata)
-  // console.log("siblingarray",siblingsarray)
-  // console.log("childdata",childdata)
-//   console.log("childsarray",childsarray)
-//   console.log("addressproof",addressproof)
-//   console.log("currentaddressdata",currentaddressdata)
-  // console.log("masterDegreedata",masterDegreedata)
-  // console.log("selectedskills",selectedskills)
-  // console.log("companydaprecompanydatata",precompanydata)
-  // console.log("companydata",companydata)
-  // console.log("prevcompanyarray",precompanyarray)
-  // console.log("companyarray",companyarray)
-  // console.log("userdetail",userdetail)
-  // console.log("employeedata3",employeedata3)
     useEffect(() => {     
       window.scrollTo(0,0)
       getCompanydata()
@@ -94,7 +77,7 @@ export default function Employeeprofupdate(value) {
       googleHandler()
       setWizard(value.value)
     //   setload(false)
-    // console.log("obj",obj)
+    
     if(!Object.keys(obj).length){
       setemailverify({...emailverify,valid:true})
       setphoneverify({...phoneverify,valid:true})
@@ -102,12 +85,12 @@ export default function Employeeprofupdate(value) {
      }, [])
     useEffect(() => {
       return () => {
-        // Clean up the abort controller on component unmount
         if (abortControllerRef.current) {
           abortControllerRef.current.abort();
         }
       };
     }, []);
+    // console.log("precompanydata",precompanydata)
     const tophandler=(f,t)=>{
         window.scrollTo(f,t)
     }
@@ -121,16 +104,26 @@ export default function Employeeprofupdate(value) {
       }else{
         setemployeedata({...employeedata,maritalStatus:"single"})
       }
-      
-      
     }
+    const downloadHtmlAsImage = (elementId) => {
+      const htmlContent = document.getElementById(elementId);
+      domtoimage.toPng(htmlContent,{ useCORS: true,scale:3 })
+        .then((dataUrl) => {
+          const link = document.createElement('a');
+          link.download = 'image.png';
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch((error) => {
+          console.error('Error while converting HTML to image:', error);
+        });
+    };
   const getCompanydata=async()=>{
     try {
       let data=await Axioscall('get',"company")
       if (data.status===200){
         // console.log("datalogcompany",data.data.data)
         setcompanyvalues(data.data.data.docs)
-
       }
     } catch (error) {
       console.log(error)
@@ -144,8 +137,6 @@ export default function Employeeprofupdate(value) {
       return data
     }
   }
-  
-  // console.log("skilloptions",skilloptions)
   const customStyles = {
     control: (provided) => ({
       ...provided,
@@ -211,10 +202,10 @@ export default function Employeeprofupdate(value) {
   }
   const CompanydataHandler=(e)=>{
     let company = companyvalues.filter(t=>t.name===e)
-    console.log("company dataaaa",company)
+    // console.log("company dataaaa",company)
     if(company.length){
       
-      setprecompanydata({...precompanydata,phone:company[0].phone,email:company[0].email,address:company[0].address[0].line1+ company[0].address[0].line2 + company[0].address[0].city +company[0].address[0].state +company[0].address[0].country})
+      setprecompanydata({...precompanydata,name:e,phone:company[0].phone,email:company[0].email,address:company[0].address[0].line1+ company[0].address[0].line2 + company[0].address[0].city +company[0].address[0].state +company[0].address[0].country})
     }
   }
   const registerEmployee=async()=>{
@@ -307,14 +298,14 @@ export default function Employeeprofupdate(value) {
       
       // console.log("datalistbefore",datalist)
       let data = await Axioscall(method,"employee/personal",datalist)
-      console.log("datapersonal",data)
+      // console.log("datapersonal",data)  
       if(data.status===200){
         notify("Successfully Saved")
         setWizard(2) 
         getUser()    
         tophandler(0,200)
       }else{
-        console.log("dublicate  ")
+        // console.log("dublicate  ")
         if(data.message==="Request failed with status code 409"){
           notifyerror(data.response.data.message)
           inputemail.current.disabled=false
@@ -375,20 +366,19 @@ export default function Employeeprofupdate(value) {
       setload(true)
       let datalist = {...employeedata3}
       // user id push to datalist.at.......
-      
       if (datalist._id){
         // console.log("userid",userid)
         datalist.id=datalist._id
       }else{
         method="post"
-        msg ="successfully Registered"
         let userid = tokenhandler()
-    
+        msg ="successfully Registered"
         if (userid){
           // console.log("userid",userid)
           datalist.user=userid
         }
       }
+      
       if(tenthdata){
         if(Object.keys(tenthdata).length){
         datalist.tenth=[{...tenthdata}]
@@ -448,12 +438,9 @@ export default function Employeeprofupdate(value) {
         let precompany = precompanyarray
 
         if(precompanydata){
-          if(precompanydata.course){
             if(Object.keys(precompanydata).length){
               precompany.push(precompanydata) 
-            }
-          }
-          
+            } 
         }
        
         if(precompany.length){
@@ -466,7 +453,7 @@ export default function Employeeprofupdate(value) {
           datalist.prevCompanies=company
         }
 
-        // console.log("data",datalist)
+        console.log("data",datalist)
         let data = await Axioscall(method,"employee/educationandcareer",datalist)
         if(data.status===200){
           notify(msg)
@@ -487,7 +474,7 @@ export default function Employeeprofupdate(value) {
     if(data.data[0].Status==='Success'){
       
       e.target.classList.remove('is-invalid');
-      console.log(data.data[0].PostOffice[0])
+      // console.log(data.data[0].PostOffice[0])
       let place = data.data[0].PostOffice[0]
       setaddressdata({...addressdata,city:place.Name,state:place.State,country:place.Country})
     }else{
@@ -752,6 +739,7 @@ export default function Employeeprofupdate(value) {
     // console.log("value",value)
     setemployeedata({ ...employeedata, phone: value });
   };
+
   return (
     <> 
     <link href="/assets/css/stylecd4e.css?version=4.1" rel="stylesheet"></link>
@@ -1561,7 +1549,7 @@ export default function Employeeprofupdate(value) {
                             {othercompany?
                                 <input type="text"  onChange={(e)=>setprecompanydata({...precompanydata,name:e.target.value})} value={precompanydata.name??""} className="form-control" placeholder=" Company Name" id=" " />
                                 :
-                                <select onChange={(e)=>setprecompanydata({...precompanydata,name:e.target.value})&CompanydataHandler(e.target.value)} value={precompanydata?.name??""} className="form-control  cs-skin-elastic cs-skin-elastic1">
+                                <select onChange={(e)=>CompanydataHandler(e.target.value)} value={precompanydata?.name??""} className="form-control  cs-skin-elastic cs-skin-elastic1">
                                   <option value="" defaultValue="" disabled  >Select Company</option>
                                   {companyvalues.map((company,k)=>(
                                     <option key={k} value={company.name}>{company.name}</option>  
@@ -1638,17 +1626,17 @@ export default function Employeeprofupdate(value) {
                         </div> <br /><br />
                         <h2 className="purple-text text-center mb-20"><strong>SUCCESS </strong></h2> <br />
                         <div className="row justify-content-center">
-                          <div className="theme--dark">
+                          <div id="htmlContent" className="theme--dark">
                             <div id="container" className="container99 container98">
                               <div className="header">
                                 <div className="logo" />
                               </div>    
-                              <section className="left-section">
+                              <section  className="left-section">
                                 <img src="assets/imgs/page/login-register/qr.png" className="is-circle6 profile-pic" />
                                 <div className="profile-detail">
                                   <p className="profile-name">CRAG CARD</p>
                                   <span className="profile-summary">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""}</span>
-                                  <a className="profile-cv">ID:{userdetail.uniqueid}</a>
+                                  <a className="profile-cv">ID:{userdetail?.uniqueid??""}</a>
                                 </div>
                               </section>
                               <div className="front-smooth" />
@@ -1656,7 +1644,7 @@ export default function Employeeprofupdate(value) {
                           </div>
                           <div className="profile-pils mt-20">
                             <span className="pils"><a href="candidate-profile.html" target="_blank"><i className="fa fa-eye" />View Profile</a></span>
-                            <span className="pils"><a href target="_blank"><i className="fa fa-paper-plane-o" /> Share Profile</a></span>
+                            <span className="pils"><a href  onClick={()=>downloadHtmlAsImage('htmlContent')} target="_blank"><i className="fa fa-paper-plane-o" /> Share Profile</a></span>
                           </div>
                         </div> <br /><br />
                         <div className="row justify-content-center mt-130">
