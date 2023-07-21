@@ -1253,7 +1253,7 @@ export default function Employeeprofupdate(value) {
                               <h6 className="permenent-address mb-3 col-12 form-t">Bachelor’s Degree</h6>
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
-                                  <select   onChange={(e)=>setbachlerdata({...bachlerdata,course:e.target.value})} value={bachlerdata.course??""}  className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                                  <select  required onChange={(e)=>setbachlerdata({...bachlerdata,course:e.target.value})} value={bachlerdata.course??""}  className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value ="" defaultValue="" disabled  >Course</option>
                                     <option value="Computer Science Engineering">Computer Science Engineering</option>
                                     <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
