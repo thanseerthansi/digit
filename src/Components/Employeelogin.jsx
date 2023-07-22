@@ -38,7 +38,7 @@ export default function Employeelogin() {
       let data = await Axioscall("post","user/login",datalist)
       // console.log("data",data)
       if (data.status===200){
-        // console.log("datadocs",data.data.data.token)
+        console.log("datadocs",data.data.data.token)
           if(data.data.data.token){
             window.localStorage.setItem("craig-token",data.data.data.token)
             Decodetoken(data.data.data.token)
@@ -63,6 +63,7 @@ export default function Employeelogin() {
   const Decodetoken =(token)=>{
     // console.log(token)
     var decoded = jwt_decode(token)
+    console.log("decode",decoded)
     if(decoded.role==='hr'){
       if(decoded.company){
         Getuser({id:decoded.company})

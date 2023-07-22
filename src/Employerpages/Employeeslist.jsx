@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Simplecontext } from '../Commonpages/Simplecontext'
 import { notify } from '../Commonpages/toast'
-
+import jwt_decode from "jwt-decode";
 export default function Employeeslist() {
   const {userdetail}=useContext(Simplecontext) 
   const [employeesdata,setemployeedata]=useState([])
@@ -17,20 +17,39 @@ export default function Employeeslist() {
     getCandidte()
   }, [])
   // console.log("userid",userdetail)
+  function Decodetoken (){
+    // console.log(token)
+    var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
+    if(decoded){
+      // console.log("decodeid",decoded)
+      return decoded
+    }
+  }
   const getCandidte=async(page)=>{
+    
     try {
+      let tok = Decodetoken()
       let body={
         limit:16,
         page:page?page:currentpage.current,
-        uniqueid:fileterid,
-        company_id:window.localStorage.getItem("graiduserid")
+        role:'hr',
+        hr:Decodetoken().assignedHr
       }
-      let data=await Axioscall("get","employee",body)
+      if(tok.role!='hr'){
+        body ={
+          limit:16,
+          page:page?page:currentpage.current,
+          uniqueid:fileterid,
+          company:window.localStorage.getItem("graiduserid"),
+          role:'employer',
+        }
+      }
+      let data=await Axioscall("get","employee/companyemployees",body)
       console.log("dataemployee",data.data.data.docs)
       if (data.status===200){
         let datapage = data.data.data
           setcurrentpage({...currentpage,total:datapage.totalDocs,next:datapage.hasNextPage,prev:datapage.hasPrevPage})
-        setemployeedata(data.data.data.docs)
+        setemployeedata(data.data.data.docs[0].employees)
       }
     } catch (error) {
       console.log(error)
@@ -43,7 +62,7 @@ export default function Employeeslist() {
         company : window.localStorage.getItem("graiduserid"),
         type : "remove"
     }
-    console.log("bodyyyyyyyy",body)
+    // console.log("bodyyyyyyyy",body)
       let data = await Axioscall("post","employee/assign",body)
       console.log("data",data)
       if(data.status===200){

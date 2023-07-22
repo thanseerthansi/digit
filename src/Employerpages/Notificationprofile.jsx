@@ -4,7 +4,7 @@ import Axioscall from '../Commonpages/Axioscall';
 import { useEffect } from 'react';
 import moment from 'moment/moment';
 import { Simplecontext } from '../Commonpages/Simplecontext';
-import { notify } from '../Commonpages/toast';
+import { notify, notifyerror } from '../Commonpages/toast';
 
 export default function Notificationprofile() {
   const {userdetail } = useContext(Simplecontext);
@@ -12,10 +12,10 @@ export default function Notificationprofile() {
     const [userprofile,setuserprofile]=useState('')
     const [load,setload]=useState(false)
     const navigate = useNavigate();
-    // console.log("userprofile in notificaton",userprofile)
+    console.log("userprofile in notificaton",userprofile)
     // console.log("iddddddddd",id)
-    // console.log("userId",userId)
-      // console.log("userdetails",userdetail)
+    console.log("userdetail",userdetail)
+      console.log("userdetails",userdetail)
     const maxLength = userprofile ? Math.max(userprofile.lngRead.length, userprofile.lngWrite.length) : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
@@ -48,7 +48,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
       try {
         if (id){
           let data= await Axioscall("put","notification",{id:id,is_viewed:true})
-          console.log("datanotificatio update",data)
+          // console.log("datanotificatio update",data)
           if (data.status===200){
             console.log("status,updated")          
           }
@@ -59,41 +59,47 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
     }
     const verifynot=async(value)=>{
       try {
-        let msg= "Successfully Verified"
-        if(value===false){
-          msg ="Canceled"
-        }
-        let body={
-          userid:userprofile.user[0]._id,
-          email:userdetail.email,
-          is_verified:value,
-          notificationid:id
-      }
-      console.log("body",body)
-        let data =await Axioscall("post","employee/companyVerify",body)
-        // console.log("verifydata",data.status)
-        if(data.status===200){
-          try { 
-            userprofile.careerandeducation[0].prevCompanies.forEach((element) => {
-              if (element.email===window.localStorage.getItem("graiduseremail")){
-                // console.log("fascsdfwenfjsuio",element.to)
-                if(element?.to && moment(element.to, 'YYYY-MM-DD', true).isValid()){
-                  // console.log("sdftyasdin")
-                }else{
-                  // console.log("notttttttttttt")
-                  if(value===true){
-                    Addcompanyhandler()
-                  }
-
-              }
-              }
-            });
-          } catch (error) {
-           console.log("erorrrorrr",error) 
+        if(userdetail.status==="verified"){
+          let msg= "Successfully Verified"
+          if(value===false){
+            msg ="Canceled"
           }
-          notify(msg)
-          navigate("/notification")
+          let body={
+            userid:userprofile.user[0]._id,
+            email:userdetail.email,
+            is_verified:value,
+            notificationid:id
         }
+        console.log("body",body)
+          let data =await Axioscall("post","employee/companyVerify",body)
+          // console.log("verifydata",data.status)
+          if(data.status===200){
+            try { 
+              userprofile.careerandeducation[0].prevCompanies.forEach((element) => {
+                if (element.email===window.localStorage.getItem("graiduseremail")){
+                  // console.log("fascsdfwenfjsuio",element.to)
+                  if(element?.to && moment(element.to, 'YYYY-MM-DD', true).isValid()){
+                    // console.log("sdftyasdin")
+                  }else{
+                    // console.log("notttttttttttt")
+                    if(value===true){
+                      
+                      Addcompanyhandler()
+                    }
+  
+                }
+                }
+              });
+            } catch (error) {
+             console.log("erorrrorrr",error) 
+            }
+            notify(msg)
+            navigate("/notification")
+          }
+        }else{
+          notifyerror("Your Profile is not Verified")
+        }
+       
       } catch (error) {
         
       }
@@ -109,7 +115,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
       }
       // console.log("bodyyyyyyyy",body)
         let data = await Axioscall("post","employee/assign",body)
-        console.log("dataaddcompany",data)
+        // console.log("dataaddcompany",data)
         if(data.status===200){
           // notify("added Successfully")
           // getCandidte()
@@ -138,8 +144,11 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
           <div className="col-md-4">
             <img src={userprofile?.profilePhoto??"https://bootdey.com/img/Content/avatar/avatar7.png"} className="rounded-circle9 avatar-xl img-thumbnail" alt="profile-image" />
           </div>
-          <div className="col-md-8 mt-30">
+          <div className="col-md-8 mt-5">
             <h4 className="mb-0">{userprofile?.firstName??""} {userprofile?.middleName??""} {userprofile?.lastName??""}</h4>
+            {userprofile.is_verified?
+            <div className=""><img className="ml-3" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
+            :null}
             <p className="text-muted">@{userprofile?.careerandeducation?.[0]?.designation??""}</p>
             <p className="text-muted">ID:{userprofile?.uniqueid??""} </p>
           </div>
@@ -333,6 +342,9 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                   <li key={pk} className="timeline-sm-item">
                   <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid()? moment(pcompany.to, 'YYYY-MM-DD').format('YY'): pcompany?.to ?? ''}</span>
                   <h6 className="mt-0 mb-1">{pcompany.name} / {pcompany.position}</h6>
+                  {pcompany.is_verified?
+                    <div className=""><img className="ml-3" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
+                    :null}
                   <p>{pcompany.email}</p>
                   <p>{pcompany.address}</p>
                   <p>{pcompany.jobDescription}</p>

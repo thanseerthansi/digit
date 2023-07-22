@@ -8,7 +8,7 @@ import QRCode from 'qrcode.react';
 export default function Candidatedetails() {
     const {id}=useParams();
     const [userprofile,setuserprofile]=useState('')
-    console.log("userprofile",userprofile)
+    // console.log("userprofile",userprofile)
     useEffect(()=>{
       getemployee()
       
@@ -106,6 +106,9 @@ export default function Candidatedetails() {
         <div className="row mt-10">
           <div className="col-lg-8 col-md-12">
             <h5 className="f-18">{userprofile?.firstName??""} {userprofile?.middleName??""} {userprofile?.lastName??""}<span className="card-location font-regular ml-20">{userprofile?userprofile.address[0].city:""},{userprofile?userprofile.address[0].country:""}</span></h5>
+            {userprofile.is_verified?
+                    <div className=""><img className="ml-3" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
+                    :null}
             <h6 className="f-18 u-color">Unique ID : <span>{userprofile?.uniqueid??""}</span></h6>
             <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userprofile?.careerandeducation?.[0]?.designation??""}</p>
             {/* <div className="mt-10 mb-15"><img className="ml-30" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div> */}
@@ -345,6 +348,9 @@ export default function Candidatedetails() {
                             <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid()? moment(pcompany.to, 'YYYY-MM-DD').format('YY'): pcompany?.to ?? ''}</span></div>
                             <div className="timeline-info"> 
                               <h5 className="color-brand-1 mb-20">{pcompany.name}</h5>
+                              {pcompany.is_verified?
+                            <div className=""><img className="ml-3" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
+                            :null}
                               <h6 className="color-text-paragraph-2 mb-15">{pcompany.position}</h6>
                               <p className="color-text-paragraph-2 mb-15">company mail: {pcompany.email}</p>
                               <p className="color-text-paragraph-2 mb-15">Company Phone&nbsp;: {pcompany.phone}</p>

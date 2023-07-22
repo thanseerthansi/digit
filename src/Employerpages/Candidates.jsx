@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Helmet } from 'react-helmet'
 import Axioscall from '../Commonpages/Axioscall'
 import { useEffect } from 'react'
@@ -6,17 +6,25 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { notify } from '../Commonpages/toast'
 import { uniqueId } from 'filestack-js'
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { Form } from "react-bootstrap";
+import { Simplecontext } from '../Commonpages/Simplecontext'
 
 export default function Candidates() {
+  const {userdetail,Check_Validation,Decodeall}=useContext(Simplecontext) 
   const [employeesdata,setemployeedata]=useState([])
   const [currentpage,setcurrentpage]=useState({total:0,next:"",prev:"",current:1})
   const [fileterid,setfilterid]=useState('')
-  // console.log("employeedata",employeesdata)
+  const [isOpen,setIsOpen]=useState(false)
+  const [hrdata,sethrdata]=useState('')
+  const [validated,setValidated]=useState(false)
+  console.log("employeedata",employeesdata)
   useEffect(() => {
     window.scrollTo(0,0)
     // getCandidte()
   }, [])
-  console.log("currrreetee",currentpage)
+  console.log("hrdata",hrdata)
   const getCandidte=async(page)=>{ 
     try {
       if(fileterid){
@@ -27,7 +35,7 @@ export default function Candidates() {
           role:"hr"
         }
         let data=await Axioscall("get","employee",body)
-        console.log("dataemployee",data.data.data)
+        // console.log("dataemployee",data.data.data)
         if (data.status===200){
           let datapage = data.data.data
           setcurrentpage({...currentpage,total:datapage.totalDocs,next:datapage.hasNextPage,prev:datapage.hasPrevPage})
@@ -39,12 +47,34 @@ export default function Candidates() {
       console.log(error)
     }
   }
-  const Addcompanyhandler=async(userid)=>{
+  const Addcompanyhandler=async(userid,emp)=>{
     try {
+     
       let body={
         user : userid,
         company : window.localStorage.getItem("graiduserid"),
-        type : "assign"
+        type : "assign",
+        role: "employee"
+    }
+    // console.log("decode...............",Decodeall())
+    if(Decodeall().role==='hr'){
+      body={
+        user : userid,
+        hr:Decodeall().assignedHr,
+        company : window.localStorage.getItem("graiduserid"),
+        type : "assign",
+        role: "employee"
+    }
+    } 
+    if(!emp){
+      body={
+        user : hrdata.HR,
+        company : window.localStorage.getItem("graiduserid"),
+        type : "assign",
+        role: "hr",
+        username:hrdata.username,
+        password:hrdata.password    
+    }    
     }
     console.log("bodyyyyyyyy",body)
       let data = await Axioscall("post","employee/assign",body)
@@ -52,9 +82,23 @@ export default function Candidates() {
       if(data.status===200){
         notify("added Successfully")
         getCandidte()
+        if(!emp){}
+        setIsOpen(false)
       }
     } catch (error) {
       console.log(error) 
+    }
+  }
+  const Nulldata=()=>{
+    sethrdata('')
+  }
+  const checkEmployee=(userid,designation)=>{
+    // console.log("designation",designation)
+    if(designation==="HR"){
+      sethrdata({...hrdata,HR:userid})
+      setIsOpen(true)
+    }else{
+      Addcompanyhandler(userid,"employee")
     }
   }
   return (
@@ -116,7 +160,7 @@ export default function Candidates() {
             <div key={ek} className="col-xl-3 col-lg-4 col-md-6">
               
             <div className="card-grid-2 hover-up">
-            <div className='text-end mr-5 pt-5'><button onClick={()=>Addcompanyhandler(emp.user[0]._id)} className='btn btn-tags-sm '>Add to Company</button></div>
+            <div className='text-end mr-5 pt-5'><button onClick={()=>checkEmployee(emp._id,emp.careerandeducation[0].designation)} className='btn btn-tags-sm '>Add to Company</button></div>
               <div className="card-grid-2-image-left">
                 <div className="card-grid-2-image-rd online"><Link to={`/candidatedetails/${emp._id}`}>
                     <figure><img alt="jobBox" src={emp?.profilePhoto??`assets/imgs/page/candidates/user1.png`}  /></figure></Link>
@@ -185,6 +229,55 @@ export default function Candidates() {
       </div>
     </div>
   </section>
+  <Modal show={isOpen} onHide={()=>setIsOpen(false)&Nulldata()}>
+        <Modal.Header closeButton>
+          <Modal.Title><h4>HR</h4></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Addcompanyhandler,setValidated)} className="login-register text-start mt-20 pb-30" action="#">
+       <div>
+        <div className="form-group ">
+          <div className="text__center">
+            <select value={hrdata?.HR??""} disabled required onChange={(e)=>sethrdata({...hrdata,HR:e.target.value})} className="cs-select cs-skin-elastic cs-skin-elastic1 pl-20 form-control">
+              <option value=""  defaultValue="" disabled>Select an HR</option>
+              {employeesdata.length?employeesdata.map((emp,ek)=>(
+                <option key={ek} value={emp._id}>{emp.firstName} {emp.middleName} {emp.lastName}</option>
+              )):""}
+              
+              {/* <option value>Shibin</option>
+              <option value>Rahul</option> */}
+            </select>
+            <Form.Control.Feedback type="invalid">Select an HR</Form.Control.Feedback>
+          </div>
+        </div>
+        <div className="form-group mb-3">
+          <input  value={hrdata?.username??""}  onChange={(e)=>sethrdata({...hrdata,username:e.target.value})}  className="form-control" id="input-1" type="tel" required name="fullname" placeholder="User Name/Mail id" />
+          <Form.Control.Feedback type="invalid">Provide Username /Mail</Form.Control.Feedback>
+        </div>
+        <div className="form-group mb-3">
+          <input  value={hrdata?.password??""}  onChange={(e)=>sethrdata({...hrdata,password:e.target.value})}  className="form-control" id="input-1" type="password" required name="fullname" placeholder="Password" />
+          <Form.Control.Feedback type="invalid">Provide Password</Form.Control.Feedback>
+        </div>
+        <div className="form-group">
+          <input value={hrdata?.repassword??""}  onChange={(e)=>sethrdata({...hrdata,repassword:e.target.value})} className={`form-control   ${hrdata.password?hrdata.password===hrdata.repassword ?'': 'is-invalid' :""}`} id="input-1" type="password" required name="fullname" placeholder="re-password" />
+          <Form.Control.Feedback type="invalid">Password Not Match</Form.Control.Feedback>
+        </div>
+        
+        <div className="form-group mt-10">
+          <button className="btn btn-brand-1 hover-up w-100 " href="index-employee.html" type="submit" name="login">Continue</button>
+        </div>
+        
+      </div>
+
+      </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={()=>setIsOpen(false)&Nulldata()}>
+            Close
+          </Button>
+          
+        </Modal.Footer>
+      </Modal>
 </main>
     <Helmet>
     <script src="https://kit.fontawesome.com/065c1878aa.js" crossorigin="anonymous"></script>

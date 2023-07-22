@@ -91,12 +91,17 @@ export default function Employeeprofupdate(value) {
       };
     }, []);
     // console.log("precompanydata",precompanydata)
+    // console.log("precompanydaprecompany arrayta",precompanyarray)
+    // console.log("setemployeedata2",employeedata2)
+    // console.log("currentaddressdata",currentaddressdata)
+    // console.log("conmpanydaata2",employeedata2)
+    console.log("userdetailuserdetailuserdetail",userdetail)
     const tophandler=(f,t)=>{
         window.scrollTo(f,t)
     }
     
-    const googleHandler=()=>{
-      console.log("objlocation",obj)
+    const googleHandler=()=>{   
+      // console.log("objlocation",obj)
       
       if (obj.email){
         setemailverify({...emailverify,valid:true})
@@ -192,7 +197,7 @@ export default function Employeeprofupdate(value) {
     )
   }
   const PresentcompanyHandler=(e)=>{
-    console.log("comapny handler",e)
+    // console.log("comapny handler",e)
     if(e.target.checked){
       setpresentcompany(true)
       setprecompanydata({...precompanydata,to:"Present"})
@@ -205,12 +210,13 @@ export default function Employeeprofupdate(value) {
     // console.log("company dataaaa",company)
     if(company.length){
       
-      setprecompanydata({...precompanydata,name:e,phone:company[0].phone,email:company[0].email,address:company[0].address[0].line1+ company[0].address[0].line2 + company[0].address[0].city +company[0].address[0].state +company[0].address[0].country})
+      setprecompanydata({...precompanydata,name:e,phone:company[0].phone,email:company[0].email,address:company[0].address[0].line1+""+ company[0].address[0].line2+""+ company[0].address[0].city+"" +company[0].address[0].state+"" +company[0].address[0].country,is_craigcompany:true})
     }
   }
   const registerEmployee=async()=>{
     // e.preventDefault();
     let method ="put"
+    let msg ="Successfully updated"
     try {
       setload(true)
       let datalist ={...employeedata}
@@ -221,6 +227,7 @@ export default function Employeeprofupdate(value) {
         datalist.id=datalist._id
       }else{
         method="post"
+         msg ="Successfully Saved"
         let userid = tokenhandler()
     
         if (userid){
@@ -300,7 +307,7 @@ export default function Employeeprofupdate(value) {
       let data = await Axioscall(method,"employee/personal",datalist)
       // console.log("datapersonal",data)  
       if(data.status===200){
-        notify("Successfully Saved")
+        notify(msg)
         setWizard(2) 
         getUser()    
         tophandler(0,200)
@@ -325,9 +332,9 @@ export default function Employeeprofupdate(value) {
       let datalist ={...employeedata2}
       // user id push to datalist.at...........
       
-      if (datalist._id){
+      if (datalist.id){
         // console.log("userid",userid)
-        datalist.id=datalist._id
+        
       }else{
         method="post"
         let userid = tokenhandler()
@@ -344,8 +351,9 @@ export default function Employeeprofupdate(value) {
         datalist.currentAddress=[{...currentaddressdata}]
       }
       // console.log("form22222222222222222222222",datalist)
+      // console.log("form22222222222222222222222method",method)
       let data = await Axioscall(method,"employee/address",datalist)
-      // console.log("dataaddress",data)
+      console.log("dataaddress",data)
       if(data.status===200){
         setWizard(3)
         setload(false)
@@ -366,9 +374,9 @@ export default function Employeeprofupdate(value) {
       setload(true)
       let datalist = {...employeedata3}
       // user id push to datalist.at.......
-      if (datalist._id){
+      if (datalist.id){
         // console.log("userid",userid)
-        datalist.id=datalist._id
+        // datalist.id=datalist._id
       }else{
         method="post"
         let userid = tokenhandler()
@@ -432,7 +440,9 @@ export default function Employeeprofupdate(value) {
         if(company.length){
           company.forEach((element)=>{         
             element.is_craigcompany=true
-            element.is_verified=false
+            if(!element.is_verified){
+              element.is_verified=false
+            }
           }
             )}
         let precompany = precompanyarray
@@ -444,8 +454,12 @@ export default function Employeeprofupdate(value) {
         }
        
         if(precompany.length){
-          precompany.forEach(element=>         
-            element.is_craigcompany=false
+          precompany.forEach((element)=>{         
+          
+            if(!element.is_verified){
+              element.is_verified=false
+            }
+          }
             )
             company=[...company,...precompany]
         }
@@ -453,11 +467,16 @@ export default function Employeeprofupdate(value) {
           datalist.prevCompanies=company
         }
 
-        console.log("data",datalist)
+        // console.log("datalist 3rd form 333333333333333",datalist)
+        // console.log("datalist 3rd form 333333333333333 method",method)
         let data = await Axioscall(method,"employee/educationandcareer",datalist)
         if(data.status===200){
           notify(msg)
-          setWizard(4)      
+          if(method ==="put"){
+            setWizard(1)
+          }else{
+            setWizard(4) 
+          }     
           tophandler(0,200)
           getUser()
         }
@@ -556,6 +575,7 @@ export default function Employeeprofupdate(value) {
         if(data.status===200){
           if(data.data.data!=null){
             let userdata = data.data.data
+            let datalist={}
             if(userdata.permanantAddress.length){
                 setaddressdata(userdata.permanantAddress[0])
             }
@@ -563,8 +583,14 @@ export default function Employeeprofupdate(value) {
                 setcurrentaddressdata(userdata.currentAddress[0])
             }
             if(userdata._id){
-                setemployeedata2({...employeedata,id:userdata._id})
+                // setemployeedata2({...employeedata,id:userdata._id})
+                datalist.id=userdata._id
             }
+            if(userdata.isCurrentsame){
+              datalist.isCurrentsame=userdata.isCurrentsame
+            }
+            // console.log("daaaaaaaaaadddreessss",datalist)
+            setemployeedata2(datalist)
           }else{
             
           }
@@ -601,7 +627,7 @@ export default function Employeeprofupdate(value) {
             }
             // console.log("designat",userdata.designation)
             if (userdata.designation){
-              console.log("userdata.designation",userdata.designation)
+              // console.log("userdata.designation",userdata.designation)
               employee.designation=userdata.designation
               // setemployeedata3({...employeedata3,desig:"HR"})
             }
@@ -645,7 +671,7 @@ export default function Employeeprofupdate(value) {
       if(employeedata.email!=obj.email){
         setemailverify({...emailverify,valid:false})
          // setemailvalid(true)
-      console.log("email",obj.email)
+      // console.log("email",obj.email)
       setload(true)
       let data = await Axioscall("post","company/sendcode",{email:employeedata.email})
       // console.log("dataemail",data)
@@ -721,7 +747,7 @@ export default function Employeeprofupdate(value) {
       }
       // console.log("e",body)
       let data = await Axioscall("post","otp/verify-otp",body)
-      console.log("data",data)
+      // console.log("data",data)
       if(data.status===200){
         // inputphone.current.disabled=true
         setphoneverify({...phoneverify,valid:true,modal:false})
@@ -739,7 +765,19 @@ export default function Employeeprofupdate(value) {
     // console.log("value",value)
     setemployeedata({ ...employeedata, phone: value });
   };
-
+  const phonenumberCheck=async()=>{
+    try {
+      let data = await Axioscall("post","employee/validatenumber",{phone:employeedata.phone})
+      // console.log("phone verify",data)
+      if(data.status===200){
+        phoneVerification()
+      }else{
+        notifyerror(data.response.data.message)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <> 
     <link href="/assets/css/stylecd4e.css?version=4.1" rel="stylesheet"></link>
@@ -818,7 +856,7 @@ export default function Employeeprofupdate(value) {
                             disabled={phoneverify.valid}
                             value={employeedata.phone}
                             onChange={handlePhoneChange}
-                            onBlur={()=>phoneVerification()}
+                            onBlur={()=>phonenumberCheck()}
                             style={{ display:"flex",padding:'0px 0px 0px 6px'}}
                             className={`form-control ${employeedata.phone? phoneverify.valid?'':'is-invalid':''}`}
                             />
@@ -1108,7 +1146,7 @@ export default function Employeeprofupdate(value) {
                           </div>
                           <h6 className='mt-20'>Current Address</h6>
                           <div className="form-group col-lg-1 col-md-1 col-xl-1 col-sm-2 ">
-                            <input className="check "  onChange={(e)=>addressHandler(e)} type="checkbox" /> 
+                            <input className="check " checked={employeedata2?.isCurrentsame??false}  onChange={(e)=>addressHandler(e)} type="checkbox" /> 
                            
                           </div>
                           <div className="form-group col-lg-11 col-md-11 col-xl-11 col-sm-8 p-address ">
@@ -1537,7 +1575,11 @@ export default function Employeeprofupdate(value) {
                              </div>
                              <div className="form-group col-lg-6 mt-20">
                                <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
+                               {citm.to==="Present"?
+                               <input type="text"  disabled value={citm.to} className="" placeholder=" To" id=" " />
+                               :
                                <input type="date"  disabled value={citm.to} className="" placeholder=" To" id=" " />
+                                }
                              </div>
                                {/* <hr/> */}
                              </React.Fragment>):null}
@@ -1547,7 +1589,7 @@ export default function Employeeprofupdate(value) {
                               </div>
                             <div className="form-group col-lg-6  ">
                             {othercompany?
-                                <input type="text"  onChange={(e)=>setprecompanydata({...precompanydata,name:e.target.value})} value={precompanydata.name??""} className="form-control" placeholder=" Company Name" id=" " />
+                                <input type="text"  onChange={(e)=>setprecompanydata({...precompanydata,name:e.target.value,is_craigcompany:false})} value={precompanydata.name??""} className="form-control" placeholder=" Company Name" id=" " />
                                 :
                                 <select onChange={(e)=>CompanydataHandler(e.target.value)} value={precompanydata?.name??""} className="form-control  cs-skin-elastic cs-skin-elastic1">
                                   <option value="" defaultValue="" disabled  >Select Company</option>
@@ -1580,7 +1622,7 @@ export default function Employeeprofupdate(value) {
                               <Form.Control.Feedback type="invalid">Please provide Job Description </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-12 mt-10 d-flex">
-                              <input className="check " onChange={(e)=>PresentcompanyHandler(e)}  type="checkbox"  />
+                              <input className="check "  onChange={(e)=>PresentcompanyHandler(e)}  type="checkbox"  />
                               <label className='mt-15 pl-10 '  >Present Company</label> 
                               </div>
                             <div className="form-group col-lg-6 mt- ">

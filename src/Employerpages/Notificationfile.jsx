@@ -14,7 +14,7 @@ export default function Notificationfile() {
 
     }, [])
     // console.log("useruserdetail",userdetail)
-    console.log("notificationdata",notificationdata)
+    // console.log("notificationdata",notificationdata)
     const tokenhandler=()=>{
       let token = window.localStorage.getItem('craig-token')??""
       if(token){
@@ -49,6 +49,7 @@ export default function Notificationfile() {
     <div className="row  mt-80">
       <div className="col-lg-9 right margin-top notification-content">
         <h3 className="m-b-50 heading-line mb-40">Notifications</h3>
+        
         <div className="box shadow-sm rounded bg-white mb-3">
           <div className="box-title border-bottom p-3">
             <h6 className="m-0">Recent</h6>
@@ -85,6 +86,8 @@ export default function Notificationfile() {
             </div> */}
           </div>
         </div>
+       
+        {notificationdata.filter(t=>t.is_viewed===true).length?
         <div className="box shadow-sm rounded bg-white mb-3">
           <div className="box-title border-bottom p-3">
             <h6 className="m-0">Earlier</h6>
@@ -104,70 +107,10 @@ export default function Notificationfile() {
               </div>
             </div>
             )):<div><p className='text-center'>No Earlier Notifications Found</p></div>}
-            {/* <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
-              <div className="dropdown-list-image mr-3"><img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png"  alt=""/></div>
-              <div className="font-weight-bold mr-3">
-                <div className="text-truncate">DAILY RUNDOWN: SATURDAY</div>
-                <div className="small">Pellentesque semper ex diam, at tristique ipsum varius sed. Pellentesque non </div>
-                <div className="small text-success"><i className="fa fa-check-circle" /> Verified</div>
-              </div>
-            </div>
-            <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
-              <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar2.png"  alt=""/>
-              </div>
-              <div className="font-weight-bold mr-3">
-                <div className="mb-2"><span className="font-weight-normal">Congratulate Gurdeep Singh Osahan (iamgurdeeposahan)</span> for 5 years </div>
-                <div className="small text-success1"><i className="fa-sharp fa-solid fa-circle-xmark" />Not Verified</div>
-              </div>
-            </div>
-            <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
-              <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar4.png"  alt=""/>
-              </div>
-              <div className="font-weight-bold mr-3">
-                <div>
-                  <span className="font-weight-normal">Congratulate Mnadeep singh (iamgurdeeposahan)</span> for 4 years 
-                  <div className="small text-success"><i className="fa fa-check-circle" /> Verified</div>
-                </div>
-              </div>
-            </div>
-            <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
-              <div className="dropdown-list-image mr-3 d-flex align-items-center bg-success justify-content-center rounded-circle text-white">M</div>
-              <div className="font-weight-bold mr-3">
-                <div className="text-truncate">DAILY RUNDOWN: MONDAY</div>
-                <div className="small">Nunc purus metus, aliquam vitae venenatis sit amet, porta non est.</div>
-                <div className="small text-success"><i className="fa fa-check-circle" /> Verified</div>
-              </div>
-            </div>
-            <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
-              <div className="dropdown-list-image mr-3"><img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png"  alt=""/></div>
-              <div className="font-weight-bold mr-3">
-                <div className="text-truncate">DAILY RUNDOWN: SATURDAY</div>
-                <div className="small">Pellentesque semper ex diam, at tristique ipsum varius sed. Pellentesque non metus </div>
-              </div>
-            </div>
-            <div className="p-3 d-flex align-items-center border-bottom osahan-post-header">
-              <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png"  alt=""/>
-              </div>
-              <div className="font-weight-bold mr-3">
-                <div className="mb-2"><span className="font-weight-normal">Congratulate Gurdeep Singh Osahan (iamgurdeeposahan)</span> for 5 years.</div>
-              </div>
-            </div>
-            <div className="p-3 d-flex align-items-center osahan-post-header">
-              <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar2.png"  alt=""/>
-              </div>
-              <div className="font-weight-bold mr-3">
-                <div>
-                  <span className="font-weight-normal">Congratulate Mnadeep singh (iamgurdeeposahan)</span> for 4 years .
-                  <div className="small text-success"><i className="fa fa-check-circle" /> Verified</div>
-                </div>
-              </div>
-            </div> */}
+            
           </div>
         </div>
+        :""}
       </div>
     </div>
   </div>

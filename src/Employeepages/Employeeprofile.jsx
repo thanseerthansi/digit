@@ -167,7 +167,7 @@ const Bannerhandler=async(ratio)=>{
                                 <tr>
                                   <td>Date of birth</td>
                                   <td>:</td>
-                                  <td className="td-verify">{userdetail?.dob?moment(userdetail.dob).format("YYYY-MM-DD"):"f"??"no"}</td>
+                                  <td className="td-verify">{userdetail?.dob?moment(userdetail.dob).format("YYYY-MM-DD"):""??"no"}</td>
                                 </tr>
                                 <tr>
                                   <td>Email</td>

@@ -11,7 +11,7 @@ export default function Simplecontextprovider({children}){
     const [userdetail,setuserdetail]=useState('')
     const [employeedata,setemployeedata]=useState('')
     // console.log("window.localStorage.getItem('craig-token')",window.localStorage.getItem('craig-token'))
-    // console.log("userdetails",userdetail)
+    console.log("userdetails",userdetail)
     useEffect(() => {
         path()
         getUser()
@@ -27,6 +27,7 @@ export default function Simplecontextprovider({children}){
     const logouthandler = () => {
         // console.log("entered logout");
         window.localStorage.removeItem("graiduser");
+        window.localStorage.removeItem("craig-token");
         return navigate("/");
       }; 
     const Check_Validation = (event,fun_name,setstate)=>{
@@ -47,21 +48,25 @@ export default function Simplecontextprovider({children}){
     async function getUser (){  
       try {
         let user = window.localStorage.getItem("graiduser")
-        // console.log("usertoken",user)
+        console.log("usertokeuuuuuuuuuuuuuuuseeeeeeeeeerrrrrrrrrrn",user)
         if (window.localStorage.getItem('craig-token')){
             let datalist;
             var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
-            if(decoded.id){
+            console.log("tokkkkkkkkkkenm",decoded)
+            if(decoded.role==="hr"){
+              datalist=decoded.company
+            }else{
+              if(decoded.id){
                 console.log("decodeid",decoded.id)
                 datalist = decoded.id
             }
-            // console.log("usertoken",user)
+            }
             if(user==="employer"){
-              // console.log("employerrrrrrrrrrrrrr")
+              console.log("employerrrrrrrrrrrrrr")
                 let data = await Axioscall("get","company",{userid:datalist})
-                // console.log("data",data)
+                console.log("dataaaaaaaaaaaaaaaaa",data)
                 if (data.status===200){
-                  // console.log("datadocs",data.data.data)
+                  console.log("datadocs",data.data.data)
                   if(data.data.data){
                     setuserdetail(data.data.data)
                     setemployeedata(data.data.data)
@@ -124,6 +129,14 @@ export default function Simplecontextprovider({children}){
         return decoded.id
       }
     }
+    function Decodeall (){
+      // console.log(token)
+      var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
+      if(decoded){
+        // console.log("decodeid",decoded)
+        return decoded
+      }
+    }
     function loghandler(){
       let user = window.localStorage.getItem("graiduser")
         let path = window.location.pathname
@@ -133,13 +146,13 @@ export default function Simplecontextprovider({children}){
               // console.log("window.location.pathname",path)
     
         if(user==="employee" && !userdata && path !== "/employeeregister"){
-          console.log("no user.............................................................")
+          // console.log("no user.............................................................")
           logouthandler()
         }
     }
 return (
     <Simplecontext.Provider value={{
-        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler,Decodetoken,loghandler
+        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler,Decodetoken,loghandler,Decodeall
     }}>{children}</Simplecontext.Provider>
     )
 }

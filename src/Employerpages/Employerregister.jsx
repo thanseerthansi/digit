@@ -86,9 +86,9 @@ export default function Employerregister() {
       //   return 
       // }
       // console.log("dataaaaaaa",addressdata)
-      // if (Object.keys(addressdata).length){
-      //   datalist.address=[{...addressdata}]
-      // }
+      if (Object.keys(addressdata).length){
+        datalist.address=[{...addressdata}]
+      }
       
       // if(Object.keys(certificatedata).length){
       //   if (certificatedata.front_url&&certificatedata.back_url){
@@ -180,6 +180,7 @@ export default function Employerregister() {
       console.log(error)
     }
   }
+  
   const phoneVerification=async()=>{
     try {
       setload(true)
@@ -198,6 +199,7 @@ export default function Employerregister() {
     }
     setload(false)
   }
+
   const phoneotpverify=async()=>{
     setload(true)
     try {

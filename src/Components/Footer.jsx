@@ -35,7 +35,7 @@ export default function Footer() {
           {/* <li><Link to="employee-register.html">Register</Link></li>
           <li><Link to="#">Candidate Register</Link></li>
           <li><Link to="#">Profile</Link></li> */}
-          {windowuser==="employer"? <li className="has-children"><Link to="/candidates">Candidates</Link>
+          {windowuser==="employer"? <li className="has-children"><Link to="/candidates">Find Candidates</Link>
                 </li>:null}
                 {windowuser==="employer"?<>
             

@@ -9,15 +9,17 @@ import { notify, notifyerror } from "../Commonpages/toast";
 import Filestack from "../Commonpages/Filestack";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 export default function Employerprofile() {
   const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
-  // console.log("userdetailin profile",userdetail)
+  console.log("userdetailin profile",userdetail)
   // console.log("employeedata profile",employeedata)
   const [certificatedata,setcertificatedata]=useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [load,setload]=useState(false)
+  const [addressdata,setaddressdata]=useState([]);
   const [notcomplete,setnotcomplete]=useState(false)
   const [photomodal,setphotomodal]=useState({modal:false,data:""})
   const [emailotp,setemailotp]=useState('')
@@ -25,6 +27,9 @@ export default function Employerprofile() {
   // const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0,0)
+    if(userdetail?.status==="rejected"??""){
+      setnotcomplete(true)
+    }
     if(userdetail?.certificate?.length===0??""){
       setnotcomplete(true)
     }
@@ -81,6 +86,21 @@ export default function Employerprofile() {
   }
   
  }
+ const zipcodeHandler=async(e,code)=>{
+  setload(true)
+  let data =await axios.get(`https://api.postalpincode.in/pincode/${code}`)
+  console.log("zipcode data",data.data[0].Status)
+  if(data.data[0].Status==='Success'){
+    
+    e.target.classList.remove('is-invalid');
+    let place = data.data[0].PostOffice[0]
+    setemployeedata({...employeedata,address:[{...employeedata.address[0],city:place.Name,state:place.State,country:place.Country}]})
+    // setaddressdata({...addressdata,city:place.Name,state:place.State,country:place.Country})
+  }else{
+    e.target.classList.add('is-invalid');
+  }
+  setload(false)
+}
 const ConfirmmailSend=async()=>{
   try {
     // setemailvalid(true)
@@ -127,6 +147,14 @@ const verifyotp=async()=>{
   }
 
 }
+function Decodetoken (){
+  // console.log(token)
+  var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
+  if(decoded){
+    console.log("decodeid",decoded)
+    return decoded
+  }
+}
   return (
     <>
       <main className="main">
@@ -159,9 +187,12 @@ const verifyotp=async()=>{
                   <h5 className="f-18">
                     {userdetail?userdetail.user.username:""}
                     <span className="card-location font-regular ml-20">
-                      {userdetail?userdetail.address[0].city:""},{userdetail?userdetail.address[0].country:""}
+                      {userdetail?userdetail?.address?.[0]?.city??"":""},{userdetail?userdetail?.address?.[0]?.country??"":""}
                     </span>
                   </h5>
+                  {userdetail.status==="verified"?
+                    <div className=""><img className="ml-3" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
+                    :null}
                   <p className="mt-0 font-md color-text-paragraph-2 mb-15">
                     {userdetail?userdetail?.name??"":""}
                   </p>
@@ -453,28 +484,28 @@ const verifyotp=async()=>{
                           <h6 className="permenent-address mb-3"> Address</h6>
                           <div className="form-group mb-3">
                             <label className="font-sm color-text-mutted mb-10">Address Line 1</label>
-                            <input required type="text" className="form-control" placeholder="Address Line 1"   value={employeedata?.address?.[0]?.line1??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,line1:e.target.value}]})} id="pAddressLine1" />
+                            <input required type="text" className="form-control" placeholder="Address Line 1"   value={employeedata?.address?.[0]?.line1??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address[0],line1:e.target.value}]})} id="pAddressLine1" />
                             <Form.Control.Feedback type="invalid">
                               Please provide address
                             </Form.Control.Feedback>
                           </div>
                           <div className="form-group mb-3">
                             <label className="font-sm color-text-mutted mb-10">Address Line 2</label>
-                            <input required type="text" className="form-control" placeholder="Address Line 2"  value={employeedata?.address?.[0]?.line2??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,line2:e.target.value}]})} id="pAddressLine2" />
+                            <input required type="text" className="form-control" placeholder="Address Line 2"  value={employeedata?.address?.[0]?.line2??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address[0],line2:e.target.value}]})} id="pAddressLine2" />
                             <Form.Control.Feedback type="invalid">
                               Please provide address 
                             </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-md-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">Landmark</label>
-                            <input type="text" className="form-control" placeholder="Landmark" id="pLandmark"  value={employeedata?.address?.[0]?.landmark??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,landmark:e.target.value}]})}/>
+                            <input type="text" className="form-control" placeholder="Landmark" id="pLandmark"  value={employeedata?.address?.[0]?.landmark??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address[0],landmark:e.target.value}]})}/>
                             <Form.Control.Feedback type="invalid">
                               Please provide landmark
                             </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-md-6 mb-3 ">
                             <label className="font-sm color-text-mutted mb-10">Zip Code</label>
-                            <input required type="text" className="form-control" placeholder="Zip Code"  value={employeedata?.address?.[0]?.zipcode??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,zipcode:e.target.value}]})} id="pZipcode" />
+                            <input required type="text" className="form-control" onBlur={(e)=>zipcodeHandler(e,employeedata?.address?.[0]?.zipcode??"")} placeholder="Zip Code"  value={employeedata?.address?.[0]?.zipcode??""??""} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address[0],zipcode:e.target.value}]})} id="pZipcode" />
                             <Form.Control.Feedback type="invalid">
                               Please provide Zipcode
                             </Form.Control.Feedback>
@@ -488,7 +519,7 @@ const verifyotp=async()=>{
                           </div>
                           <div className="form-group col-md-4 mb-3">
                             <label className="font-sm color-text-mutted mb-10">State</label>
-                            <input required type="text" className="form-control" placeholder="State" id="pState" value={employeedata?.address?.[0].state??''} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,state:e.target.value}]})}/>
+                            <input required type="text" className="form-control" placeholder="State" id="pState" value={employeedata?.address?.[0]?.state??''} onChange={(e)=>setemployeedata({...employeedata,address:[{...employeedata.address,state:e.target.value}]})}/>
                             <Form.Control.Feedback type="invalid">
                               Please provide state
                             </Form.Control.Feedback>
@@ -633,7 +664,13 @@ const verifyotp=async()=>{
           {/* <Modal.Title><h4>Check your email for otp</h4></Modal.Title> */}
         </Modal.Header>
         <Modal.Body>
-        <p>Your Profile is Incomplete  Complete Your Profile....</p>
+          {userdetail?.status==="rejected"?
+          <p>Your Profile is Rejected  due to "{userdetail?.rejectedReason??""}" Update Your Profile Again..</p>
+          : userdetail?.certificate?.length===0?
+            <p>Your Profile is Incomplete  Complete Your Profile....</p>
+            :""??""
+          }
+          
         <div className="text-end mt-4">
         {/* <a className="btn btn-border recruitment-icon mb-20" href="#tab-saved-jobs"  data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" >
                         Complete Profile

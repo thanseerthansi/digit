@@ -9253,10 +9253,10 @@ input[type=file]::file-selector-button:hover {
   margin-bottom: 20px;
 }
 .content-single h3, .content-single h4, .content-single h5 {
-  margin-top: 20px;
+  /* margin-top: 20px; */
   color: #4F5E64;
   font-weight: bold;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 .content-single ul {
   
