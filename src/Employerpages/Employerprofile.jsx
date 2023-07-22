@@ -14,7 +14,7 @@ import jwt_decode from "jwt-decode";
 export default function Employerprofile() {
   const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
-  console.log("userdetailin profile",userdetail)
+  // console.log("userdetailin profile",userdetail)
   // console.log("employeedata profile",employeedata)
   const [certificatedata,setcertificatedata]=useState([]);
   const [isOpen, setIsOpen] = useState(false);
