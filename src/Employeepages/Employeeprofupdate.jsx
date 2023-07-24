@@ -10,12 +10,13 @@ import { Form } from "react-bootstrap";
 import { Simplecontext } from "../Commonpages/Simplecontext";
 import axios from 'axios';
 import moment from 'moment';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import domtoimage from 'dom-to-image';
+import QRCode from 'qrcode.react';
 const animatedComponents = makeAnimated();
 export default function Employeeprofupdate(value) {
   
@@ -285,9 +286,14 @@ export default function Employeeprofupdate(value) {
       }
       //......................siblingsdata add to siblingarray and push to datalist
       let arraysibling = siblingsarray
-      if(Object.keys(siblingdata).length){
-        arraysibling.push(siblingdata) 
+      if(siblingdata){
+        if(siblingdata.type){
+          if(Object.keys(siblingdata).length){
+            arraysibling.push(siblingdata) 
+          }
+        }
       }
+      
       if (arraysibling.length){
         datalist.siblingsDetails=arraysibling
       }
@@ -295,6 +301,7 @@ export default function Employeeprofupdate(value) {
         datalist.spouseDetails=[{...spousedata}]
       }
       let arraychild = childsarray
+
       if(Object.keys(childdata).length){
         arraychild.push(childdata) 
       }
@@ -1673,19 +1680,20 @@ export default function Employeeprofupdate(value) {
                               <div className="header">
                                 <div className="logo" />
                               </div>    
-                              <section  className="left-section">
-                                <img src="assets/imgs/page/login-register/qr.png" className="is-circle6 profile-pic" />
-                                <div className="profile-detail">
-                                  <p className="profile-name">CRAG CARD</p>
-                                  <span className="profile-summary">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""}</span>
-                                  <a className="profile-cv">ID:{userdetail?.uniqueid??""}</a>
-                                </div>
-                              </section>
+                              <section id="htmlContent1"  className="left-section">
+                            {/* <img src="assets/imgs/page/login-register/qr.png" className="is-circle6 profile-pic" /> */}
+                            <QRCode style={{height:"100px",width:"100px"}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
+                            <div className="profile-detail">
+                              <p className="profile-name">CRAG CARD</p>
+                              <span className="profile-summary">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""}</span>
+                              <a className="profile-cv">ID:{userdetail?.uniqueid??""}</a>
+                            </div>
+                          </section>
                               <div className="front-smooth" />
                             </div>
                           </div>
                           <div className="profile-pils mt-20">
-                            <span className="pils"><a href="candidate-profile.html" target="_blank"><i className="fa fa-eye" />View Profile</a></span>
+                            <span className="pils"><Link to="/employee-profile" target="_blank"><i className="fa fa-eye" />View Profile</Link></span>
                             <span className="pils"><a href  onClick={()=>downloadHtmlAsImage('htmlContent')} target="_blank"><i className="fa fa-paper-plane-o" /> Share Profile</a></span>
                           </div>
                         </div> <br /><br />

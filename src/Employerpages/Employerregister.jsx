@@ -58,7 +58,7 @@ export default function Employerregister() {
   }
 
   const handlePhoneChange = (value) => {
-    console.log("value",value)
+    // console.log("value",value)
     setcompanydata({ ...companydata, phone: value });
   };
   // const ImageFilestachHandler = async (ratio,value)=> {
@@ -90,14 +90,12 @@ export default function Employerregister() {
         datalist.address=[{...addressdata}]
       }
       
-      // if(Object.keys(certificatedata).length){
-      //   if (certificatedata.front_url&&certificatedata.back_url){
-      //     datalist.certificate = [{...certificatedata , name : companydata.address_proof_type}]
-      //   }else{
-      //     notifyerror("please add Certificte images")
-      //   }
+      if(Object.keys(certificatedata).length){
+        if (certificatedata.front_url&&certificatedata.back_url){
+          datalist.certificate = [{...certificatedata , name : companydata.address_proof_type}]
+        }
         
-      // }
+      }
       // console.log("datalist employer",datalist)
       datalist.role = "employer"
       datalist.status = "pending"

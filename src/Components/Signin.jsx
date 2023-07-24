@@ -113,8 +113,10 @@ export default function Signin() {
       if(decoded.id){
         console.log("decode",decoded)
         Getuser(decoded.id,emp)
+        window.localStorage.setItem("graiduser", "employee");
       }
     }else{
+      window.localStorage.setItem("graiduser", "employee");
       navigate('/employeeregister',{ state: emp })
     }
    

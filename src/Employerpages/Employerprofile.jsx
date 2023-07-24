@@ -12,7 +12,7 @@ import Modal from 'react-bootstrap/Modal';
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 export default function Employerprofile() {
-  const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler}=useContext(Simplecontext) 
+  const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler,Decodeall}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
   // console.log("userdetailin profile",userdetail)
   // console.log("employeedata profile",employeedata)
@@ -25,6 +25,7 @@ export default function Employerprofile() {
   const [emailotp,setemailotp]=useState('')
   const numberRegex = /^\d+$/;
   // const navigate = useNavigate();
+  // console.log("wwwwwwwwwwwwwwwuser",window.localStorage.getItem('graiduser'))
   useEffect(() => {
     window.scrollTo(0,0)
     if(userdetail?.status==="rejected"??""){
@@ -225,11 +226,13 @@ function Decodetoken (){
                         Update Profile
                       </a>
                     </li>
+                    {Decodeall().role==='hr'?"":
                     <li>
                     <Link className="btn btn-border people-icon mb-20" to="/hrlist" >
                         HR
                       </Link>
                     </li>
+                      }
                     <li>
                       <Link className="btn btn-border peoples-icon mb-20" to="/employeelist" >
                         Employees

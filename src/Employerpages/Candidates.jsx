@@ -4,7 +4,7 @@ import Axioscall from '../Commonpages/Axioscall'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { notify } from '../Commonpages/toast'
+import { notify, notifyerror } from '../Commonpages/toast'
 import { uniqueId } from 'filestack-js'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -19,12 +19,13 @@ export default function Candidates() {
   const [isOpen,setIsOpen]=useState(false)
   const [hrdata,sethrdata]=useState('')
   const [validated,setValidated]=useState(false)
-  console.log("employeedata",employeesdata)
+  // console.log("employeedata",employeesdata)
+  
   useEffect(() => {
     window.scrollTo(0,0)
     // getCandidte()
   }, [])
-  console.log("hrdata",hrdata)
+  // console.log("hrdata",hrdata)
   const getCandidte=async(page)=>{ 
     try {
       if(fileterid){
@@ -38,7 +39,7 @@ export default function Candidates() {
         // console.log("dataemployee",data.data.data)
         if (data.status===200){
           let datapage = data.data.data
-          setcurrentpage({...currentpage,total:datapage.totalDocs,next:datapage.hasNextPage,prev:datapage.hasPrevPage})
+          setcurrentpage({...currentpage,total:datapage.totalPages,next:datapage.hasNextPage,prev:datapage.hasPrevPage})
           setemployeedata(data.data.data.docs)
         }
       }
@@ -76,14 +77,16 @@ export default function Candidates() {
         password:hrdata.password    
     }    
     }
-    console.log("bodyyyyyyyy",body)
+    // console.log("bodyyyyyyyy",body)
       let data = await Axioscall("post","employee/assign",body)
-      console.log("data",data)
+      // console.log("data",data)
       if(data.status===200){
         notify("added Successfully")
         getCandidte()
         if(!emp){}
         setIsOpen(false)
+      }else{
+        notifyerror(data.response.data.message)
       }
     } catch (error) {
       console.log(error) 
@@ -156,11 +159,11 @@ export default function Candidates() {
           </div>
         </div> */}
         <div className="row">
-          {fileterid?employeesdata.length?employeesdata.map((emp,ek)=>(
+          {employeesdata.length?employeesdata.map((emp,ek)=>(
             <div key={ek} className="col-xl-3 col-lg-4 col-md-6">
               
             <div className="card-grid-2 hover-up">
-            <div className='text-end mr-5 pt-5'><button onClick={()=>checkEmployee(emp._id,emp.careerandeducation[0].designation)} className='btn btn-tags-sm '>Add to Company</button></div>
+            <div className='text-end mr-5 pt-5'><button onClick={()=>checkEmployee(emp.user[0]._id,emp.careerandeducation[0].designation)} className='btn btn-tags-sm '>Add to Company</button></div>
               <div className="card-grid-2-image-left">
                 <div className="card-grid-2-image-rd online"><Link to={`/candidatedetails/${emp._id}`}>
                     <figure><img alt="jobBox" src={emp?.profilePhoto??`assets/imgs/page/candidates/user1.png`}  /></figure></Link>
@@ -179,10 +182,10 @@ export default function Candidates() {
                 <p className="font-xs color-text-paragraph-2"></p>
                 <div className="card-2-bottom card-2-bottom-candidate mt-30">
                   <div className="text-start">
-                    {emp?.careerandeducation?.[0]?.skills.map((skill,sk)=>(
+                    {emp?.careerandeducation?.[0]?.skills.slice(0, 4).map((skill,sk)=>(
                       <a key={sk} className="btn btn-tags-sm mb-10 mr-5">{skill}</a>
                     ))??""}
-                    
+
                   </div>
                 </div>
                 <div className="employers-info align-items-center justify-content-center mt-15">
@@ -197,8 +200,8 @@ export default function Candidates() {
               </div>
             </div>
           </div>
-          )):<div><p>No Employees Found with provided Id</p></div>:""}
-          
+          )):<div><p>No Employees Found </p></div>}
+
         </div>
       </div>
       {currentpage.total>1?

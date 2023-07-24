@@ -7,11 +7,19 @@ import { Link } from 'react-router-dom'
 import { Simplecontext } from '../Commonpages/Simplecontext'
 import { notify } from '../Commonpages/toast'
 import jwt_decode from "jwt-decode";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { Form } from "react-bootstrap";
 export default function Employeeslist() {
-  const {userdetail}=useContext(Simplecontext) 
+  const {userdetail,Decodeall,Check_Validation}=useContext(Simplecontext) 
   const [employeesdata,setemployeedata]=useState([])
   const [fileterid,setfilterid]=useState('')
   const [currentpage,setcurrentpage]=useState({total:0,next:"",prev:"",current:1})
+  const [isOpen,setIsOpen]=useState(false)
+  const [hrdata,sethrdata]=useState('')
+  const [validated,setValidated]=useState(false)
+  // console.log("employeesdata",employeesdata)
+  // console.log("hrdaraaaaaa",hrdata)
   useEffect(() => {
     window.scrollTo(0,0)
     getCandidte()
@@ -45,26 +53,43 @@ export default function Employeeslist() {
         }
       }
       let data=await Axioscall("get","employee/companyemployees",body)
-      console.log("dataemployee",data.data.data.docs)
+      // console.log("dataemployee",data.data.data.docs)
       if (data.status===200){
         let datapage = data.data.data
-          setcurrentpage({...currentpage,total:datapage.totalDocs,next:datapage.hasNextPage,prev:datapage.hasPrevPage})
-        setemployeedata(data.data.data.docs[0].employees)
+          setcurrentpage({...currentpage,total:datapage.totalPages,next:datapage.hasNextPage,prev:datapage.hasPrevPage})
+          setemployeedata(data.data.data.docs)
+        // if (Decodeall().role==='employer'){
+        //  let cemp = data.data.data.docs.filter(t=>t.hr===null)
+        // //  console.log("cccccceeeemp",cemp)
+        //   setemployeedata(cemp[0].employees)
+        // }else{
+        //   setemployeedata(data.data.data.docs[0].employees)
+        // }
       }
     } catch (error) {
       console.log(error)
     }
   }
-  const Addcompanyhandler=async(userid)=>{
+  const Addcompanyhandler=async(userid,hrid)=>{
     try {
+      // console.log("ddddddddddddcoded",Decodeall().role)
       let body={
         user : userid,
         company : window.localStorage.getItem("graiduserid"),
-        type : "remove"
+        type : "remove",
+        hr:hrid
+    }
+    if(Decodeall().role ==='hr'){
+      body={
+        user : userid,
+        company : window.localStorage.getItem("graiduserid"),
+        type : "remove",
+        hr:Decodeall().assignedHr
+      }
     }
     // console.log("bodyyyyyyyy",body)
       let data = await Axioscall("post","employee/assign",body)
-      console.log("data",data)
+      // console.log("data",data)
       if(data.status===200){
         notify("removed Successfully")
         getCandidte()
@@ -72,6 +97,28 @@ export default function Employeeslist() {
     } catch (error) {
       console.log(error) 
     }
+  }
+  const AssigntoHr=async()=>{
+    try {
+      let body={
+        company : window.localStorage.getItem("graiduserid"),
+        hr:hrdata.HR,
+        user:hrdata.id,
+        type:"changehr"
+      }
+      let data = await Axioscall("post","employee/assign",body)
+      // console.log("dataasssignhr",data)
+      if(data.status===200){
+        notify("Added Successfully")
+        getCandidte()
+        setIsOpen(false)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const Nulldata=()=>{
+    sethrdata('')
   }
   return (
     <>
@@ -127,27 +174,39 @@ export default function Employeeslist() {
             </div>
           </div>
         </div> */}
-        <div className="row">
-          {employeesdata.length?employeesdata.map((emp,ek)=>(
+        
+        {employeesdata.filter(t=>t.employees.length!=0).length?employeesdata.length?employeesdata.map((employeearr,emk)=>(
+          
+        <div key={emk} className="row">
+          {employeearr.employees.length?<>
+          <h4 className='mb-20 mt-10'>{employeearr?.hr?.firstName??"Company"}</h4>
+          {employeearr.employees.length?employeearr.employees.map((emp,ek)=>(
             <div key={ek} className="col-xl-3 col-lg-4 col-md-6">
             <div className="card-grid-2 hover-up">
-            <div className='text-end mr-5 pt-5'><button onClick={()=>Addcompanyhandler(emp.user[0]._id)} className='btn btn-tags-sm '>Remove From Company</button></div>
+              <div className={employeearr.hr?'':'d-flex'}>
+               
+                {employeearr.hr?"":
+            <div className='text-end ml-5 mr-5 pt-5'><button onClick={()=>setIsOpen(true)&sethrdata({...hrdata,id:emp._id,username:emp.firstName})} className='btn btn-tags-sm '>Assign to HR</button></div>
+            }
+              <div className='text-end  mr-5 pt-5'><button onClick={()=>Addcompanyhandler(emp._id,employeearr.hr?._id??"")} className='btn btn-tags-sm '>Remove From Company</button></div>
+              </div>
+            
               <div className="card-grid-2-image-left">
                 <div className="card-grid-2-image-rd online"><Link to={`/candidatedetails/${emp._id}`}>
                     <figure><img alt="jobBox" src={emp?.profilePhoto??`assets/imgs/page/candidates/user1.png`} /></figure></Link></div>
                 <div className="card-profile pt-10"><Link to={`/candidatedetails/${emp._id}`}>
-                    <h5>{emp.firstName} {emp.middleName} {emp.lastName}</h5></Link><span className="font-xs color-text-mutted">{emp?.careerandeducation?.[0]?.designation??"designation"}</span>
+                    <h5>{emp.firstName} {emp.middleName} {emp.lastName}</h5></Link><span className="font-xs color-text-mutted">{emp?.careerandeducation?.designation??"designation"}</span>
                   <h6 className="card-id">ID:{emp.uniqueid}</h6>
                   {/* <div className="rate-reviews-small pt-5"><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span className="ml-10 color-text-mutted font-xs">(65)</span></div> */}
                 </div>
               </div>
               <div className="card-block-info">
-                <p className="font-xs color-text-paragraph-2">{emp?.address?.[0]?.permanantAddress?.[0]?.line1??""} {emp?.address?.[0]?.permanantAddress?.[0]?.line2??""}</p>
-                <p className="font-xs color-text-paragraph-2">{emp?.address?.[0]?.permanantAddress?.[0]?.city??""}-{emp?.address?.[0]?.permanantAddress?.[0]?.zip??""}</p>
+                <p className="font-xs color-text-paragraph-2">{emp?.address?.permanantAddress?.[0]?.line1??""} {emp?.address?.permanantAddress?.[0]?.line2??""}</p>
+                <p className="font-xs color-text-paragraph-2">{emp?.address?.permanantAddress?.[0]?.city??""}-{emp?.address?.permanantAddress?.[0]?.zip??""}</p>
                 <p className="font-xs color-text-paragraph-2"></p>
                 <div className="card-2-bottom card-2-bottom-candidate mt-30">
                   <div className="text-start">
-                    {emp?.careerandeducation?.[0]?.skills.map((skill,sk)=>(
+                    {emp?.careerandeducation?.skills.slice(0, 4).map((skill,sk)=>(
                       <a key={sk} className="btn btn-tags-sm mb-10 mr-5">{skill}</a>
                     ))??""}
                     
@@ -155,17 +214,18 @@ export default function Employeeslist() {
                 </div>
                 <div className="employers-info align-items-center justify-content-center mt-15">
                   <div className="row">
-                    <div className="col-6"><span className="d-flex align-items-center"><i className="fi-rr-marker mr-5 ml-0" /><span className="font-sm color-text-mutted">{emp?.address?.[0]?.permanantAddress?.[0]?.landmark??""},{emp?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></span></div>
+                    <div className="col-6"><span className="d-flex align-items-center"><i className="fi-rr-marker mr-5 ml-0" /><span className="font-sm color-text-mutted">{emp?.address?.permanantAddress?.[0]?.landmark??""},{emp?.address?.permanantAddress?.[0]?.country??""}</span></span></div>
                     <div className="col-6"><span className="d-flex justify-content-end align-items-center" /></div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          )):<div><p>No Employees Found In Your Company</p></div>}
-          
+          )):<div><p>No Employees Found Under {employeearr?.hr?.firstName??"Company"}</p></div>}
+          </>:""}
           
         </div>
+        )):<div><p>No Employees Found In Your Company</p></div>:<div><p>No Employees Found In Your Company</p></div>}
       </div>
       {currentpage.total>1?
       <div className="paginations ">
@@ -194,6 +254,50 @@ export default function Employeeslist() {
         </div>
       </div>
     </div>
+    <Modal show={isOpen} onHide={()=>setIsOpen(false)&Nulldata()}>
+        <Modal.Header closeButton>
+          <Modal.Title><h4>Employee Assign</h4></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,AssigntoHr,setValidated)} className="login-register text-start mt-20 pb-30" action="#">
+       <div>
+        <div className="form-group ">
+          <div className="text__center">
+            <select value={hrdata?.HR??""}  required onChange={(e)=>sethrdata({...hrdata,HR:e.target.value})} className="cs-select cs-skin-elastic cs-skin-elastic1 pl-20 form-control">
+              <option value=""  defaultValue="" disabled>Select an HR</option>
+              {employeesdata.length?employeesdata.map((emp,ek)=>(<>
+              {emp.hr? <option key={ek} value={emp.hr._id}>{emp.hr.firstName} {emp.hr.middleName} {emp.hr.lastName}</option>:null}
+              </>
+               
+              )):""}
+              
+              {/* <option value>Shibin</option>
+              <option value>Rahul</option> */}
+            </select>
+            <Form.Control.Feedback type="invalid">Select an HR</Form.Control.Feedback>
+          </div>
+        </div>
+        <div className="form-group mb-3">
+          <input  value={hrdata?.username??""} disabled onChange={(e)=>sethrdata({...hrdata,username:e.target.value})}  className="form-control" id="input-1" type="tel" required name="fullname" placeholder="User Name" />
+          <Form.Control.Feedback type="invalid">Provide Employee</Form.Control.Feedback>
+        </div>
+        
+        
+        <div className="form-group mt-10">
+          <button className="btn btn-brand-1 hover-up w-100 " href="index-employee.html" type="submit" name="login">Continue</button>
+        </div>
+        
+      </div>
+
+      </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={()=>setIsOpen(false)&Nulldata()}>
+            Close
+          </Button>
+          
+        </Modal.Footer>
+      </Modal>
   </section>
 </main>
     <Helmet>

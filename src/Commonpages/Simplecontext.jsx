@@ -47,26 +47,31 @@ export default function Simplecontextprovider({children}){
     }
     async function getUser (){  
       try {
+        let datalist;
+        let body;
         let user = window.localStorage.getItem("graiduser")
-        console.log("usertokeuuuuuuuuuuuuuuuseeeeeeeeeerrrrrrrrrrn",user)
+        // console.log("usertokeuuuuuuuuuuuuuuuseeeeeeeeeerrrrrrrrrrn",user)
         if (window.localStorage.getItem('craig-token')){
-            let datalist;
+            
             var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
-            console.log("tokkkkkkkkkkenm",decoded)
+            // console.log("tokkkkkkkkkkenm",decoded)
             if(decoded.role==="hr"){
               datalist=decoded.company
+              body ={id:datalist}
             }else{
               if(decoded.id){
-                console.log("decodeid",decoded.id)
+                // console.log("decodeid",decoded.id)
                 datalist = decoded.id
+                body ={userid:datalist}
             }
             }
             if(user==="employer"){
-              console.log("employerrrrrrrrrrrrrr")
-                let data = await Axioscall("get","company",{userid:datalist})
-                console.log("dataaaaaaaaaaaaaaaaa",data)
+              // console.log("employerrrrrrrrrrrrrr")
+              try {
+                let data = await Axioscall("get","company",body)
+                // console.log("dataaaaaaaaaaaaaaaaa",data)
                 if (data.status===200){
-                  console.log("datadocs",data.data.data)
+                  // console.log("datadocs of empployer ",data.data.data)
                   if(data.data.data){
                     setuserdetail(data.data.data)
                     setemployeedata(data.data.data)
@@ -80,8 +85,12 @@ export default function Simplecontextprovider({children}){
                     
                   }
                 }
+              } catch (error) {
+                console.log(error)
+              }
+                
             }else if(user==="employee"){
-              console.log("emplpyeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",datalist)
+              // console.log("emplpyeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",datalist)
                 let data = await Axioscall("get","employee",{id:datalist,page:1,limit:1})
                 // console.log("data",data)
                 if (data.status===200){

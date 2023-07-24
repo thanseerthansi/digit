@@ -5,17 +5,24 @@ import { useEffect } from 'react';
 import moment from 'moment/moment';
 import { Simplecontext } from '../Commonpages/Simplecontext';
 import { notify, notifyerror } from '../Commonpages/toast';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { Form } from "react-bootstrap";
 
 export default function Notificationprofile() {
-  const {userdetail } = useContext(Simplecontext);
+  const {userdetail,Decodeall,Check_Validation } = useContext(Simplecontext);
     const {id,userId}=useParams();
     const [userprofile,setuserprofile]=useState('')
     const [load,setload]=useState(false)
     const navigate = useNavigate();
-    console.log("userprofile in notificaton",userprofile)
-    // console.log("iddddddddd",id)
-    console.log("userdetail",userdetail)
-      console.log("userdetails",userdetail)
+    const [isOpen,setIsOpen]=useState(false)
+    const [hrdata,sethrdata]=useState('')
+    const [validated,setValidated]=useState(false)
+    // console.log("userprofile in notificaton",userprofile)
+    // console.log("Decodeall()",Decodeall())
+    // console.log("hrdaaraa",hrdata)
+    // console.log("userdetail",userdetail)
+    //   console.log("userdetails",userdetail)
     const maxLength = userprofile ? Math.max(userprofile.lngRead.length, userprofile.lngWrite.length) : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
@@ -50,14 +57,14 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
           let data= await Axioscall("put","notification",{id:id,is_viewed:true})
           // console.log("datanotificatio update",data)
           if (data.status===200){
-            console.log("status,updated")          
+            // console.log("status,updated")          
           }
         }
       } catch (error) {
         console.log(error)
       }
     }
-    const verifynot=async(value)=>{
+    const verifynot=async(value,emp)=>{
       try {
         if(userdetail.status==="verified"){
           let msg= "Successfully Verified"
@@ -70,9 +77,9 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
             is_verified:value,
             notificationid:id
         }
-        console.log("body",body)
+        // console.log("body",body)
           let data =await Axioscall("post","employee/companyVerify",body)
-          // console.log("verifydata",data.status)
+          // let data ={status:200}
           if(data.status===200){
             try { 
               userprofile.careerandeducation[0].prevCompanies.forEach((element) => {
@@ -83,8 +90,10 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                   }else{
                     // console.log("notttttttttttt")
                     if(value===true){
+                      if(emp){
+                        // Addcompanyhandler(emp)
+                      }
                       
-                      Addcompanyhandler()
                     }
   
                 }
@@ -104,22 +113,45 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
         
       }
     }
-    const Addcompanyhandler=async()=>{
+    const Addcompanyhandler=async(emp)=>{
       // console.log(".........................")
         setload(true)
       try {
-        let body={
-          user :userprofile.user[0]._id,
-          company : window.localStorage.getItem("graiduserid"),
-          type : "assign"
-      }
+      
+      let body={
+        user : userprofile.user[0]._id,
+        company : window.localStorage.getItem("graiduserid"),
+        type : "assign",
+        role: "employee"
+    }
+    // console.log("decode...............",Decodeall())
+    if(Decodeall().role==='hr'){
+      body={
+        user :userprofile.user[0]._id,
+        hr:Decodeall().assignedHr,
+        company : window.localStorage.getItem("graiduserid"),
+        type : "assign",
+        role: "employee"
+    }
+    } 
+    if(!emp){
+      body={
+        user : hrdata.HR,
+        company : window.localStorage.getItem("graiduserid"),
+        type : "assign",
+        role: "hr",
+        username:hrdata.username,
+        password:hrdata.password    
+    }    
+    }
       // console.log("bodyyyyyyyy",body)
         let data = await Axioscall("post","employee/assign",body)
         // console.log("dataaddcompany",data)
         if(data.status===200){
           // notify("added Successfully")
           // getCandidte()
-          console.log("getsuccess")
+          // console.log("getsuccess")
+          verifynot()
           return
         }
       } catch (error) {
@@ -127,6 +159,21 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
       }
       setload(false)
       // return
+    }
+
+    const Nulldata=()=>{
+      sethrdata('')
+    }
+    const checkEmployee=(userid,designation,value)=>{
+      // console.log("designation",designation)
+      if(designation==="HR"){
+        // console.log(",....................hr")
+        sethrdata({...hrdata,HR:userid})
+        setIsOpen(true)
+        
+      }else{
+        verifynot(value,"employee")
+      }
     }
   return (
     <>
@@ -456,7 +503,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
         </div> {/* end tab-content */}
         <div className="row " style={{float: 'right'}}>
           <div className="text-left col-md-5  col-6">
-            <button type="submit" onClick={()=>verifynot(true)} className="btn btn-success waves-effect  mt-2"><i className="mdi mdi-content-save" /> Verify</button>
+            <button type="submit" onClick={()=>checkEmployee(userprofile.user[0]._id,userprofile.careerandeducation[0].designation,true)} className="btn btn-success waves-effect  mt-2"><i className="mdi mdi-content-save" /> Verify</button>
           </div>
           <div className="text-right col-md-5 col-6 ">
             <button type="submit" onClick={()=>verifynot(false)} className="btn btn-danger waves-effect w mt-2"><i className="mdi mdi-content-save" /> Cancel</button>
@@ -465,6 +512,55 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
       </div> {/* end card-box*/}
     </div> {/* end col */}
   </div>
+  <Modal show={isOpen} onHide={()=>setIsOpen(false)&Nulldata()}>
+        <Modal.Header closeButton>
+          <Modal.Title><h4>HR</h4></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Addcompanyhandler,setValidated)} className="login-register text-start mt-20 pb-30" action="#">
+       <div>
+        <div className="form-group ">
+          <div className="text__center mb-20">
+            {/* <select value={hrdata?.HR??""} disabled required onChange={(e)=>sethrdata({...hrdata,HR:e.target.value})} className="cs-select cs-skin-elastic cs-skin-elastic1 pl-20 form-control">
+              <option value=""  defaultValue="" disabled>Select an HR</option>
+              {userprofile.length?userprofile.map((emp,ek)=>(
+                <option key={ek} value={emp._id}>{emp.firstName} {emp.middleName} {emp.lastName}</option>
+              )):""}
+              
+             
+            </select> */}
+            <input  value={userprofile?.firstName??""} disabled required   className="form-control" id="input-1" type="text"  name="fullname" placeholder="User Name/Mail id" />
+            <Form.Control.Feedback type="invalid">Select an HR</Form.Control.Feedback>
+          </div>
+        </div>
+        <div className="form-group mb-3">
+          <input  value={hrdata?.username??""}  onChange={(e)=>sethrdata({...hrdata,username:e.target.value})}  className="form-control" id="input-1" type="tel" required name="fullname" placeholder="User Name/Mail id" />
+          <Form.Control.Feedback type="invalid">Provide Username /Mail</Form.Control.Feedback>
+        </div>
+        <div className="form-group mb-3">
+          <input  value={hrdata?.password??""}  onChange={(e)=>sethrdata({...hrdata,password:e.target.value})}  className="form-control" id="input-1" type="password" required name="fullname" placeholder="Password" />
+          <Form.Control.Feedback type="invalid">Provide Password</Form.Control.Feedback>
+        </div>
+        <div className="form-group">
+          <input value={hrdata?.repassword??""}  onChange={(e)=>sethrdata({...hrdata,repassword:e.target.value})} className={`form-control   ${hrdata.password?hrdata.password===hrdata.repassword ?'': 'is-invalid' :""}`} id="input-1" type="password" required name="fullname" placeholder="re-password" />
+          <Form.Control.Feedback type="invalid">Password Not Match</Form.Control.Feedback>
+        </div>
+        
+        <div className="form-group mt-10">
+          <button className="btn btn-brand-1 hover-up w-100 " href="index-employee.html" type="submit" name="login">Continue</button>
+        </div>
+        
+      </div>
+
+      </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={()=>setIsOpen(false)&Nulldata()}>
+            Close
+          </Button>
+          
+        </Modal.Footer>
+      </Modal>
 </main>
 
     </>

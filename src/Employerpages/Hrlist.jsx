@@ -35,23 +35,23 @@ export default function Hrlist() {
         company_id:window.localStorage.getItem("graiduserid")
       }
       let data=await Axioscall("get","employee",body)
-      // console.log("dataemployee",data.data.data.docs)
+      // console.log("dataemployee",data.data)
       if (data.status===200){
         let datapage = data.data.data
-        setcurrentpage({...currentpage,total:datapage.totalDocs,next:datapage.hasNextPage,prev:datapage.hasPrevPage})
+        setcurrentpage({...currentpage,total:datapage.totalPages,next:datapage.hasNextPage,prev:datapage.hasPrevPage})
         setemployeedata(data.data.data.docs)
       }
     } catch (error) {
       console.log(error)
     }
   }
-  const hrAssign=async()=>{
+  const hrAssign=async(user)=>{
    
     let msg ="HR added Successfully"
     setload(true)
     try {
       let body={
-        user : userid,
+        user : userid?userid:user,
         company : window.localStorage.getItem("graiduserid"),
         role:'hr',
         
@@ -115,7 +115,7 @@ export default function Hrlist() {
             <div key={ek} className="col-xl-3 col-lg-4 col-md-6">
             <div className="card-grid-2 hover-up">
               {emp?.user?.[0]?.isHr?<>
-                <div className='text-end mr-5 pt-5'><button onClick={()=>setuserid(emp?.user?.[0]?._id??"")&hrAssign()} className='btn btn-tags-sm '>Remove HR</button></div>
+                <div className='text-end mr-5 pt-5'><button onClick={()=>setuserid(emp?._id??"")&hrAssign(emp?._id??"")} className='btn btn-tags-sm '>Remove HR</button></div>
               </>:
                 <div className='text-end mr-5 pt-5'><button onClick={()=>{setIsOpen(true)&setuserid(emp?.user?.[0]?._id??"") & sethrdata({...hrdata,HR:emp._id,type:"assign" })}} className='btn btn-tags-sm '>Create HR</button></div>
               ??""}
@@ -134,7 +134,7 @@ export default function Hrlist() {
                 <p className="font-xs color-text-paragraph-2"></p>
                 <div className="card-2-bottom card-2-bottom-candidate mt-30">
                   <div className="text-start">
-                    {emp?.careerandeducation?.[0]?.skills.map((skill,sk)=>(
+                    {emp?.careerandeducation?.[0]?.skills.slice(0, 4).map((skill,sk)=>(
                       <a key={sk} className="btn btn-tags-sm mb-10 mr-5">{skill}</a>
                     ))??""}
                     
