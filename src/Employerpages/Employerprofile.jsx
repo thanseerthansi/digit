@@ -90,7 +90,7 @@ export default function Employerprofile() {
  const zipcodeHandler=async(e,code)=>{
   setload(true)
   let data =await axios.get(`https://api.postalpincode.in/pincode/${code}`)
-  console.log("zipcode data",data.data[0].Status)
+  // console.log("zipcode data",data.data[0].Status)
   if(data.data[0].Status==='Success'){
     
     e.target.classList.remove('is-invalid');

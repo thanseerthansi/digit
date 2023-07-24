@@ -10,7 +10,7 @@ export default function Employeeregister() {
   },[])
   const tokencompletion=()=>{
     var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
-    console.log("decccccccccccc",decoded)    
+    // console.log("decccccccccccc",decoded)    
       if(decoded.completion===3){
         setWizard(1)
       }else{

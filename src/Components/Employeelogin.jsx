@@ -85,7 +85,7 @@ export default function Employeelogin() {
           if(data.data.data){
             setuserdetail(data.data.data)
             setemployeedata(data.data.data)
-            window.localStorage.setItem("graiduser", "employer");
+            window.localStorage.setItem("graiduser","employer");
             // console.log("datauseremila",data.data.data.email)
             window.localStorage.setItem("graiduseremail",data.data.data.email);
             window.localStorage.setItem("graiduserid",data.data.data._id);

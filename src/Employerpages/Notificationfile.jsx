@@ -19,7 +19,7 @@ export default function Notificationfile() {
       let token = window.localStorage.getItem('craig-token')??""
       if(token){
         let data  = Decodetoken(token)
-        console.log("dataid",data)
+        // console.log("dataid",data)
         return data
       }
     }
@@ -30,10 +30,10 @@ export default function Notificationfile() {
           page:1,
           limit:10
         }
-        console.log("body notify",body)
+        // console.log("body notify",body)
         let data = await Axioscall("get","notification",body)
         if (data.status===200){
-          console.log("notification_data",data)
+          // console.log("n/otification_data",data)
           setnotificationdata(data.data.data.docs)
         }
       } catch (error) {
