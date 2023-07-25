@@ -11,7 +11,7 @@ export default function Simplecontextprovider({children}){
     const [userdetail,setuserdetail]=useState('')
     const [employeedata,setemployeedata]=useState('')
     // console.log("window.localStorage.getItem('craig-token')",window.localStorage.getItem('craig-token'))
-    console.log("userdetails",userdetail)
+    // console.log("userdetails",userdetail)
     useEffect(() => {
         path()
         getUser()
@@ -28,6 +28,8 @@ export default function Simplecontextprovider({children}){
         // console.log("entered logout");
         window.localStorage.removeItem("graiduser");
         window.localStorage.removeItem("craig-token");
+        window.localStorage.removeItem("graiduseremail");
+        window.localStorage.removeItem("graiduserid");
         return navigate("/");
       }; 
     const Check_Validation = (event,fun_name,setstate)=>{

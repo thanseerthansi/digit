@@ -96,7 +96,7 @@ export default function Employeeprofupdate(value) {
     // console.log("setemployeedata2",employeedata2)
     // console.log("currentaddressdata",currentaddressdata)
     // console.log("conmpanydaata2",employeedata2)
-    console.log("userdetailuserdetailuserdetail",userdetail)
+    // console.log("userdetailuserdetailuserdetail",userdetail)
     const tophandler=(f,t)=>{
         window.scrollTo(f,t)
     }
@@ -341,11 +341,11 @@ export default function Employeeprofupdate(value) {
       
       if (datalist.id){
         // console.log("userid",userid)
-        
+       
       }else{
         method="post"
         let userid = tokenhandler()
-    
+        
         if (userid){
           // console.log("userid",userid)
           datalist.user=userid
@@ -384,6 +384,11 @@ export default function Employeeprofupdate(value) {
       if (datalist.id){
         // console.log("userid",userid)
         // datalist.id=datalist._id
+        let userid=tokenhandler()
+        if (userid){
+          // console.log("userid",userid)
+          datalist.user=userid
+        }
       }else{
         method="post"
         let userid = tokenhandler()
@@ -441,6 +446,7 @@ export default function Employeeprofupdate(value) {
               company.push(companydata) 
             }
           }
+          setprecompanydata('')
           
         }
         
@@ -1609,7 +1615,7 @@ export default function Employeeprofupdate(value) {
                               <Form.Control.Feedback type="invalid">Please provide company name </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6 ">
-                              <input type="text" required={precompanydata.name} onChange={(e)=>setprecompanydata({...precompanydata,position:e.target.value})} value={precompanydata.position??""} className="form-control" placeholder=" Position" id=" " />
+                              <input type="text" required={precompanydata.name} onChange={(e)=>setprecompanydata({...precompanydata,position:e.target.value,isnew:true})} value={precompanydata.position??""} className="form-control" placeholder=" Position" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide position </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6 mt-20">
