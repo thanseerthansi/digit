@@ -14,8 +14,8 @@ import jwt_decode from "jwt-decode";
 export default function Employerprofile() {
   const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler,Decodeall}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
-  // console.log("userdetailin profile",userdetail)
-  // console.log("employeedata profile",employeedata)
+  console.log("userdetailin profile",userdetail)
+  console.log("employeedata profile",employeedata)
   const [certificatedata,setcertificatedata]=useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [load,setload]=useState(false)
@@ -363,7 +363,7 @@ function Decodetoken (){
                         <div className="col-lg-12 col-md-12 row ">
                           <div className="form-group col-lg-6 mb-3">
                             <label className="font-sm color-text-mutted mb-10">Company Name *</label>
-                            <input required value={employeedata?.user?.username??""} onChange={(e)=>setemployeedata({...employeedata,user:{...employeedata.user,username:e.target.value}})} className="form-control" type="text" placeholder="Company Name" />
+                            <input required value={employeedata?.name??""} onChange={(e)=>setemployeedata({...employeedata,name:e.target.value})} className="form-control" type="text" placeholder="Company Name" />
                             <Form.Control.Feedback type="invalid">Please provide a Company Name</Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
