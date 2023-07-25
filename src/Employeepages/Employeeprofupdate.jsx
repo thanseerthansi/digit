@@ -65,6 +65,7 @@ export default function Employeeprofupdate(value) {
   ])
   const location = useLocation();
   const obj = location.state || {};
+  // console.log("ooooooooooobbbbbbbbbbbjjjjjj/",obj)
   const inputemail = useRef(false);
   const [emailverify,setemailverify]=useState({otp:"",valid:false,modal:false})
   const [phoneverify,setphoneverify]=useState({otp:"",valid:false,modal:false})
@@ -81,7 +82,13 @@ export default function Employeeprofupdate(value) {
     
     if(!Object.keys(obj).length){
       setemailverify({...emailverify,valid:true})
-      // setphoneverify({...phoneverify,valid:true})
+      
+      
+      // 
+    }else{
+      if(obj.phone){
+        setphoneverify({...phoneverify,valid:true})
+      }
     }
      }, [])
     useEffect(() => {
@@ -102,13 +109,13 @@ export default function Employeeprofupdate(value) {
     }
     
     const googleHandler=()=>{   
-      // console.log("objlocation",obj)
+      console.log("objlocation",obj)
       
       if (obj.email){
         setemailverify({...emailverify,valid:true})
         setemployeedata({...employeedata,email:obj.email,lastName:obj.lastName,firstName:obj.firstName,maritalStatus:"single"})
       }else{
-        setemployeedata({...employeedata,maritalStatus:"single"})
+        setemployeedata({...employeedata,phone:obj.phone,maritalStatus:"single"})
       }
     }
     const downloadHtmlAsImage = (elementId) => {

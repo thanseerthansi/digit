@@ -25,7 +25,7 @@ export default function Signin() {
   const [added_otp, setadded_otp] = useState("");
   const [load,setload]=useState(false)
   const [logindata,setlogindata]=useState({email:'',firstName:"",lastName:""})
-  console.log("logindata",logindata)
+  // console.log("logindata",logindata)
   useEffect(() => {
     Getusernumber()
     window.scrollTo(0, 0);
@@ -47,7 +47,7 @@ export default function Signin() {
     // console.log("dsf", data);
     let emp ={}
     if (data._tokenResponse) {
-      // console.log("email",data._tokenResponse.email)
+      // console.log("email",data._tokenResponse)
       emp.email=data._tokenResponse.email
       emp.firstName=data._tokenResponse.firstName
       emp.lastName=data._tokenResponse.lastName
@@ -62,12 +62,12 @@ export default function Signin() {
   };
   const facebookhandler = async () => {
     const data = await signInWithFacebook();
-    console.log("datafacebook", data);
+    // console.log("datafacebook", data);
   };
   const emailhandler = async () => {
     // console.log("odk");
     const data = await signInEmail();
-    console.log("datafacebook", data);
+    // console.log("datafacebook", data);
     // Checkuserhandler(data)
     
   };
@@ -89,7 +89,7 @@ export default function Signin() {
  
   // crud functions start................................................................
   const Checkuserhandler=async(result,emp,type)=>{
-    // console.log("result",result)
+    // console.log("emppppppppppppppppppp",emp)
     try {
       const data = await Axioscall("post","user/login",{username:result,role:"employee",type:type})
       // console.log("dataafter",data)
@@ -194,10 +194,10 @@ const verifyOTP=async()=>{
     }
     // console.log("e",body)
     let data = await Axioscall("post","otp/verify-otp",body)
-    console.log("data",data)
+    // console.log("data",data)
     if(data.status===200){
       // inputphone.current.disabled=true
-      Checkuserhandler(phoneNumber,"","phone")
+      Checkuserhandler(phoneNumber,{phone:phoneNumber},"phone")
       // setdisablephone(true)
       // setphonevalid(true)
     }
