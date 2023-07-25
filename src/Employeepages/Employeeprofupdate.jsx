@@ -81,7 +81,7 @@ export default function Employeeprofupdate(value) {
     
     if(!Object.keys(obj).length){
       setemailverify({...emailverify,valid:true})
-      setphoneverify({...phoneverify,valid:true})
+      // setphoneverify({...phoneverify,valid:true})
     }
      }, [])
     useEffect(() => {
