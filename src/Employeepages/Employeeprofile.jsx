@@ -21,6 +21,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
     <td data-label="Write">{userdetail && index < userdetail.lngWrite.length ? userdetail.lngWrite[index] : ''}</td>
   </tr>
 ));
+
 // console.log("userdetails",userdetail)
 const Bannerhandler=async(ratio)=>{
   try {
@@ -100,7 +101,7 @@ const Bannerhandler=async(ratio)=>{
           </div>
         <div className="row mt-10">
           <div className="col-lg-8 col-md-12">
-            <h5 className="f-18">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.landmark??""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></h5><br />
+            <h5 className="f-18">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.state??""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></h5><br />
             <h5 className="f-18 u-color">Unique ID : <span>{userdetail?.uniqueid??""}</span></h5>
             <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation??""}</p>
             {/* <div className="rate-reviews-small pt-5"><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span className="ml-10 color-text-mutted font-xs">(65)</span></div> */}
@@ -311,7 +312,7 @@ const Bannerhandler=async(ratio)=>{
                                  <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to,'YYYY-MM-DD', true).isValid()? moment(pcompany.to,'YYYY-MM-DD').format('YY'): ''}</span>
                                  <h6 className="mt-0 mb-1">{pcompany.name} </h6>
                                  {pcompany.is_verified?
-                                 <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:''}
+                                 <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:<div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\grey.png" alt="jobbox" /></div>}
                                  <p>{pcompany.position}</p>
                                </li>
                               ))??""}
@@ -347,24 +348,54 @@ const Bannerhandler=async(ratio)=>{
                           </div>
                         </div>
                       </div>
-                      <div id="htmlContent1"  className="theme--dark88">
+                      <div className="content-wrapper11">
+                      <div className="tilt">
+                        <div className="credit-card">
+                          <div className="credit-card__front" style={{backgroundImage: 'url(assets/imgs/template/visa-bg.jpg)'}}>    
+                            <div className="circle circle-1" />
+                            <div className="circle circle-2" />
+                            <div className="logo">
+                              <img src="\assets\imgs\logo\logo_craig-10.png" />
+                            </div>
+                            <div className="VISA">
+                              {/* <img src="assets/imgs/page/login-register/qr.png" /> */}
+                              <QRCode style={{height:"100px",width:"100px",backgroundColor:"white",padding:'6px'}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
+                            </div>
+                            <div className="card-expiry-group">
+                              <label htmlFor="card-expiry">Unique ID</label>
+                              <h5 className="card-number">{userdetail?.uniqueid??""}</h5>
+                            </div>
+                            <div className="card-name-group">
+                              <label htmlFor="card-name">NAME</label>
+                              <h6 className="card-number">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""} </h6>
+                            </div>
+                          </div>
+                        </div>
+                      </div>{/* tilt */}
+                    </div>       
+
+                      {/* <div id="htmlContent1"  className="theme--dark88">
                         <div id="container" className="container88">
                           <div className="header">
                             <div className="logo" />
                           </div>    
                           <section id="htmlContent1"  className="left-section">
-                            {/* <img src="assets/imgs/page/login-register/qr.png" className="is-circle6 profile-pic" /> */}
+                        
                             <QRCode style={{height:"100px",width:"100px"}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
                             <div className="profile-detail">
-                              <p className="profile-name">CRAG CARD</p>
+                              <p className="profile-name">CRAIGCARD</p>
                               <span className="profile-summary">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""}</span>
                               <a className="profile-cv">ID:{userdetail?.uniqueid??""}</a>
                             </div>
+                            
                           </section>
+                       
                           <div className="front-smooth" />
                         </div>
-                      </div>
+                      </div> */}
+                    
                     </div>
+                    
                   </div>
                 </div>
                 <div className="panel-white mb-30">
@@ -383,7 +414,7 @@ const Bannerhandler=async(ratio)=>{
                             <div className="timeline-info"> 
                               <h5 className="color-brand-1 mb-10">{pcompany?.name??""}</h5>
                               {pcompany.is_verified?
-                                 <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:''}
+                                 <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:<div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\grey.png" alt="jobbox" /></div>}
                               
                               <h6 className="color-text-paragraph-2 mb-15">{pcompany.position}</h6>
                               <p className="color-text-paragraph-2 mb-15">company mail:{pcompany.email}</p>
@@ -410,7 +441,7 @@ const Bannerhandler=async(ratio)=>{
                               <tr>
                                 <th scope="col">Cource</th>
                                 <th scope="col">Field/board</th>
-                                <th scope="col">Collage</th>
+                                <th scope="col">College</th>
                                 <th scope="col">Grade/Score</th>
                                 <th scope="col">Year</th>
                               </tr>
@@ -430,6 +461,7 @@ const Bannerhandler=async(ratio)=>{
                                 <td data-label="Grade/Score">{userdetail?.careerandeducation?.[0]?.twelth?.[0]?.['garde/score']??""}</td>
                                 <td data-label="Year">{userdetail?.careerandeducation?.[0]?.twelth?.[0]?.year??""}</td>
                               </tr>
+                              {userdetail?.careerandeducation?.[0]?.bachelorDegree?.[0]?.course?
                               <tr>
                                 <td scope="row" data-label="Cource">Bachelor’s</td>
                                 <td data-label="Field/board">{userdetail?.careerandeducation?.[0]?.bachelorDegree?.[0]?.course??""}</td>
@@ -437,6 +469,7 @@ const Bannerhandler=async(ratio)=>{
                                 <td data-label="Grade/Score">{userdetail?.careerandeducation?.[0]?.bachelorDegree?.[0]?.['garde/score']??""}</td>
                                 <td data-label="Year">{userdetail?.careerandeducation?.[0]?.bachelorDegree?.[0]?.year??""}</td>
                               </tr>
+                              :""??""}
                               {userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.course?
                               <tr>
                                 <td scope="row" data-label="Cource">Master’s</td>

@@ -14,8 +14,8 @@ import jwt_decode from "jwt-decode";
 export default function Employerprofile() {
   const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler,Decodeall}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
-  console.log("userdetailin profile",userdetail)
-  console.log("employeedata profile",employeedata)
+  // console.log("userdetailin profile",userdetail)
+  // console.log("employeedata profile",employeedata)
   const [certificatedata,setcertificatedata]=useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [load,setload]=useState(false)
@@ -670,7 +670,7 @@ function Decodetoken (){
           {userdetail?.status==="rejected"?
           <p>Your Profile is Rejected  due to "{userdetail?.rejectedReason??""}" Update Your Profile Again..</p>
           : userdetail?.certificate?.length===0?
-            <p>Your Profile is Incomplete  Complete Your Profile....</p>
+            <p>Your Profile is Incomplete  Upload Certificates to complete ....</p>
             :""??""
           }
           

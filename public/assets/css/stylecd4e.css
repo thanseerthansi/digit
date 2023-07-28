@@ -12279,3 +12279,285 @@ margin-left: 300px!important;
       padding: 10px;
     }
   }
+   /* crag card start */
+
+
+   @media only screen and (max-width: 500px) {
+    .tilt {
+      width: 250px !important;
+      height: 180px !important;
+      margin-bottom: 40px !important;
+      
+    }
+    .credit-card{
+      width: 250px !important;
+      height: 180px !important;
+      
+    }
+    .credit-card__front h6{
+      font-size: .90rem !important;
+    }
+    .credit-card__front h5{
+      font-size: 0.85rem !important;
+    }
+    .credit-card__front .logo{
+      width: 150px !important;
+      top:23px !important;
+    }
+    .credit-card__front .logo img{
+      width: 90px !important;
+      
+    }
+    .credit-card__front .VISA{
+      width: 50px !important;
+      right: 30px !important;
+    }
+    .credit-card__front .VISA img{
+      width: 50x !important;
+      height: 50px !important;
+      
+    }
+    .card-name-group {
+      position: absolute;
+      left: 25px;
+      bottom: 20px !important;
+    }
+  .card-expiry-group {
+    position: absolute;
+    left: 25px;
+    bottom: 70px !important;
+  }
+  
+  .card-expiry {
+    position: relative;
+    font-size: 1rem !important;
+    width: 50px !important;
+  }
+  
+  .tilt label {
+    color: #DDD;
+ 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 9px !important;
+    display: block;
+    line-height: 0.675;
+  }
+  }
+  .content-wrapper {
+    position: relative;
+    top: 60%;
+    transform: translateY(-50%);
+  }
+  
+  .tilt {
+    width: 380px;
+    height: 250px;
+    margin: 0 auto;
+    perspective: 1000px;
+  }
+  
+  .credit-card {
+    border-radius: 10px;
+    width: 380px;
+    height: 250px;
+    margin: 0 auto;
+    position: relative;
+    transition: all .3s;
+    transform-style: preserve-3d;
+    box-shadow: 0 1px 0 #F6A440,
+                0 3px 0 -1px #F6A440,
+                0 4px 0 -2px #F6A440,
+                0 30px 50px -10px rgba(0,0,0,.2);
+  }
+  
+  
+  .credit-card__front .VISA {
+    width: 120px;
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    pointer-events: none;
+  }
+  .credit-card__front .logo {
+    width: 140px;
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    pointer-events: none;
+  }
+  .credit-card__front .VISA img{
+    width: 100px;
+    height: 100px;
+  }
+  .credit-card__front .logo img{
+    width: 140px;
+    
+  }
+  
+  .credit-card__back .VISA {
+    width: 75px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    pointer-events: none;
+  }
+  
+  .circle {
+    width: 1300px;
+    height: 1300px;
+    
+    border-radius: 100%;
+    position: absolute;
+  }
+  
+  .circle-1 {
+    left: -50%;
+    top: -1100px;
+    box-shadow: 1px 1px 100px rgba(255,255,255,.1), 
+                -1px 1px 0 rgba(255,255,255,.1);
+  }
+  
+  .circle-2 {
+    left: -180%;
+    bottom: -1100px;
+    background: transparent;
+    box-shadow: 1px 1px 100px rgba(0,0,0,.15), 
+                -1px -1px 0 rgba(255,255,255,.3);
+  }
+  
+  .tilt label {
+    color: #DDD;
+ 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 13px;
+    display: block;
+    line-height: 0.675;
+  }
+  
+ .credit-card__front h5 {
+    
+
+   -webkit-font-smoothing: antialiased;
+   border: none;
+    color: #f0f0f0;
+    font-size: 1.25rem;
+     transition: all .1s;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    
+   
+  }
+  .credit-card__front h6 {
+
+   -webkit-font-smoothing: antialiased;
+    border: none;
+    color: #f0f0f0;
+    font-size: 1.15rem;
+    transition: all .1s;
+    letter-spacing: 1px;
+   
+  }
+  
+  .card-number {
+    width: 345px;
+    right: 20px;
+    left: 20px;
+    top: 36%;
+  }
+  
+  .card-expiry-group {
+    position: absolute;
+    left: 25px;
+    bottom: 100px;
+  }
+  
+  .card-expiry {
+    position: relative;
+    font-size: 1.375rem;
+    width: 70px;
+  }
+  
+  .card-name-group {
+    position: absolute;
+    left: 25px;
+    bottom: 40px;
+  }
+  
+  .card-name {
+    position: relative;
+    width: 300px;
+    font-size: 1.25rem;
+  }
+  
+  
+  
+  .credit-card__front,
+  .credit-card__back {
+    background-image:
+    radial-gradient(
+      circle at top center,
+      #370180,
+      #8241A9
+    );
+    
+    border-radius: 10px;
+    overflow: hidden;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    
+    backface-visibility: hidden;
+    transform:rotateY(0deg)
+  }
+  
+  
+  .credit-card__back {
+    transform: rotateY(-180deg); 
+  }
+  
+  
+  .stripe {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 45px;
+    top: 30px;
+    background: linear-gradient(to right, #444, #555, #222);
+  }
+  
+  .white-box {
+    position: absolute;
+    left: 20px;
+    width: 360px;
+    height: 35px;
+    top: 100px;
+    background: #fff;
+    border-radius: 3px;
+  }
+  
+  .card-cvv-group {
+    position: absolute;
+    right: 30px;
+    top: 88px;
+    text-align: right;
+    width: 120px;
+  }
+  
+  .card-cvv {
+    margin: 0;
+    font-size: 1.125rem;
+    height: 38px;
+    text-shadow: none;
+    color: #444;
+    position: relative;
+    width: 100%;
+    text-align: right;
+    
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+ 

@@ -11,6 +11,7 @@ export default function Candidatedetails() {
     // console.log("userprofile",userprofile)
     useEffect(()=>{
       getemployee()
+      window.scrollTo(0,200)
       
     },[])
     const maxLength = userprofile ? Math.max(userprofile.lngRead.length, userprofile.lngWrite.length) : 0;
@@ -108,7 +109,7 @@ export default function Candidatedetails() {
             <h5 className="f-18">{userprofile?.firstName??""} {userprofile?.middleName??""} {userprofile?.lastName??""}<span className="card-location font-regular ml-20">{userprofile?userprofile.address[0].city:""},{userprofile?userprofile.address[0].country:""}</span></h5>
             {userprofile.is_verified?
                     <div className=""><img className="ml-3" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
-                    :null}
+                    :<div className=""><img className="ml-3" src="\assets\imgs\page\candidates\grey.png" alt="jobbox" /></div>}
             <h6 className="f-18 u-color">Unique ID : <span>{userprofile?.uniqueid??""}</span></h6>
             <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userprofile?.careerandeducation?.[0]?.designation??""}</p>
             {/* <div className="mt-10 mb-15"><img className="ml-30" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div> */}
@@ -133,8 +134,8 @@ export default function Candidatedetails() {
       </div>
       <div className="box-nav-tabs mt-40 mb-5">
         <ul className="nav" role="tablist">
-          <li><a className="btn btn-border aboutus-icon mr-15 mb-5 active" href="#tab-short-bio" data-bs-toggle="tab" role="tab" aria-controls="tab-short-bio" aria-selected="true">Short Bio</a></li>
-          <li><a className="btn btn-border recruitment-icon mr-15 mb-5" href="#tab-skills" data-bs-toggle="tab" role="tab" aria-controls="tab-skills" aria-selected="false">Career</a></li>
+          <li><a className="btn btn-border recruitment-icon mr-15 mb-5 active" href="#tab-skills" data-bs-toggle="tab" role="tab" aria-controls="tab-skills" aria-selected="true">Career</a></li>
+          <li><a className="btn btn-border aboutus-icon mr-15 mb-5 " href="#tab-short-bio" data-bs-toggle="tab" role="tab" aria-controls="tab-short-bio" aria-selected="false">Short Bio</a></li>
         </ul>
       </div>
       <div className="border-bottom pt-10 pb-10" />
@@ -146,7 +147,7 @@ export default function Candidatedetails() {
         <div className="col-lg-8 col-md-12 col-sm-12 col-12">
           <div className="content-single">
             <div className="tab-content">
-              <div className="tab-pane fade show active mb-80" id="tab-short-bio" role="tabpanel" aria-labelledby="tab-short-bio">
+              <div className="tab-pane fade  mb-80" id="tab-short-bio" role="tabpanel" aria-labelledby="tab-short-bio">
                 <h4>About </h4>
                 {/* <p>Hello there! My name is Alan Walker. I am a graphic designer, and I’m very passionate and dedicated to my work. With 20 years experience as a professional a graphic designer, I have acquired the skills and knowledge necessary to make your project a success.</p> */}
                 <div className="class-verification1">
@@ -278,7 +279,7 @@ export default function Candidatedetails() {
                           <tr>
                             <th scope="col">Cource</th>
                             <th scope="col">Field/board</th>
-                            <th scope="col">Collage</th>
+                            <th scope="col">College</th>
                             <th scope="col">Grade/Score</th>
                             <th scope="col">Year</th>
                           </tr>
@@ -298,6 +299,7 @@ export default function Candidatedetails() {
                                 <td data-label="Grade/Score">{userprofile?.careerandeducation?.[0]?.twelth?.[0]?.['garde/score']??""}</td>
                                 <td data-label="Year">{userprofile?.careerandeducation?.[0]?.twelth?.[0]?.year??""}</td>
                               </tr>
+                              {userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.course?
                               <tr>
                                 <td scope="row" data-label="Cource">Bachelor’s</td>
                                 <td data-label="Field/board">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.course??""}</td>
@@ -305,6 +307,7 @@ export default function Candidatedetails() {
                                 <td data-label="Grade/Score">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.['garde/score']??""}</td>
                                 <td data-label="Year">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.year??""}</td>
                               </tr>
+                              :""??""}
                               {userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?.course?
                               <tr>
                                 <td scope="row" data-label="Cource">Master’s</td>
@@ -334,7 +337,7 @@ export default function Candidatedetails() {
                   </div>
                 </div>
               </div>
-              <div className="tab-pane fade" id="tab-skills" role="tabpanel" aria-labelledby="tab-skills">
+              <div className="tab-pane show active fade" id="tab-skills" role="tabpanel" aria-labelledby="tab-skills">
                 <div className="panel-white mb-30">
                   <div className="box-padding">
                     <div className="row mt-30">
@@ -350,7 +353,7 @@ export default function Candidatedetails() {
                               <h5 className="color-brand-1 mb-20">{pcompany.name}</h5>
                               {pcompany.is_verified?
                             <div className=""><img className="ml-3" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
-                            :null}
+                            :<div className=""><img className="ml-3" src="\assets\imgs\page\candidates\grey.png" alt="jobbox" /></div>}
                               <h6 className="color-text-paragraph-2 mb-15">{pcompany.position}</h6>
                               <p className="color-text-paragraph-2 mb-15">company mail: {pcompany.email}</p>
                               <p className="color-text-paragraph-2 mb-15">Company Phone&nbsp;: {pcompany.phone}</p>
@@ -465,7 +468,7 @@ export default function Candidatedetails() {
               <section className="left-section">
               <QRCode style={{height:"100px",width:"100px"}} value={`${window.location.origin}/candidatedetails/${userprofile?._id??""}`} />
                 <div className="profile-detail">
-                  <p className="profile-name">CRAG CARD</p>
+                  <p className="profile-name">CRAIGCARD</p>
                   <span className="profile-summary">{userprofile?.firstName??""} {userprofile?.middleName??""} {userprofile?.lastName??""} </span>
                   <a className="profile-cv">ID:{userprofile?.uniqueid??""}</a>
                 </div>

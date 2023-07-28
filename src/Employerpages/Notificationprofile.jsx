@@ -195,16 +195,12 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
             <h4 className="mb-0">{userprofile?.firstName??""} {userprofile?.middleName??""} {userprofile?.lastName??""}</h4>
             {userprofile.is_verified?
             <div className=""><img className="ml-3" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
-            :null}
+            :<div className=""><img className="ml-3" src="\assets\imgs\page\candidates\grey.png" alt="jobbox" /></div>}
             <p className="text-muted">@{userprofile?.careerandeducation?.[0]?.designation??""}</p>
             <p className="text-muted">ID:{userprofile?.uniqueid??""} </p>
           </div>
           <div className=" mt-40 ">
-            {/* <h5 className="font-13 text-uppercase h5-verify ">About Me :</h5>
-            <p className="text-muted font-13 mb-3 ">
-              Hi I'm Johnathn Deo,has been the industry's standard dummy text ever since the
-              1500s, when an unknown printer took a galley of type.
-            </p> */}
+            
             <div className="class-verification ">
               <table style={{width:"100%"}}>
                 <tbody>
@@ -327,56 +323,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
             </div>
           </div>
         </div> {/* end card-box */}
-        {/* <div class="card-box9 text-center">
-                  <h4 class="header-title">Skills</h4>
-                  <p class="mb-3">Everyone realizes why a new common language would be desirable</p>
-      
-                  <div class="pt-1 font-verification">
-                      <h6 class="text-uppercase mt-0">HTML5 </h6>
-                      <div class="progress progress-sm m-0">
-                          <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
-                              <span class="sr-only">90% Complete</span>
-                          </div>
-                      </div>
-                  </div>
-      
-                  <div class="mt-2 pt-1">
-                      <h6 class="text-uppercase">PHP </h6>
-                      <div class="progress progress-sm m-0">
-                          <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100" style="width: 67%">
-                              <span class="sr-only">67% Complete</span>
-                          </div>
-                      </div>
-                  </div>
-      
-                  <div class="mt-2 pt-1">
-                      <h6 class="text-uppercase">WordPress </h6>
-                      <div class="progress progress-sm m-0">
-                          <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100" style="width: 48%">
-                              <span class="sr-only">48% Complete</span>
-                          </div>
-                      </div>
-                  </div>
-      
-                  <div class="mt-2 pt-1">
-                      <h6 class="text-uppercase">Laravel </h6>
-                      <div class="progress progress-sm m-0">
-                          <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 95%">
-                              <span class="sr-only">95% Complete</span>
-                          </div>
-                      </div>
-                  </div>
-      
-                  <div class="mt-2 pt-1">
-                      <h6 class="text-uppercase">ReactJs</h6>
-                      <div class="progress progress-sm m-0">
-                          <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%">
-                              <span class="sr-only">72% Complete</span>
-                          </div>
-                      </div>
-                  </div>
-      
-              </div> end card-box */}
+        
       </div> {/* end col*/}
       <div className="col-lg-7 col-xl-7">
         <div className="card-box9">
@@ -391,39 +338,13 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                   <h6 className="mt-0 mb-1">{pcompany.name} / {pcompany.position}</h6>
                   {pcompany.is_verified?
                     <div className=""><img className="ml-3" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
-                    :null}
+                    :<div className=""><img className="ml-3" src="\assets\imgs\page\candidates\grey.png" alt="jobbox" /></div>}
                   <p>{pcompany.email}</p>
                   <p>{pcompany.address}</p>
                   <p>{pcompany.jobDescription}</p>
                 </li>
               ))??""}
-                {/* <li className="timeline-sm-item">
-                  <span className="timeline-sm-date">2015 - 19</span>
-                  <h5 className="mt-0 mb-1">Lead designer / Developer</h5>
-                  <p>websitename.com</p>
-                  <p className="text-muted mt-2">Everyone realizes why a new common language
-                    would be desirable: one could refuse to pay expensive translators.
-                    To achieve this, it would be necessary to have uniform grammar,
-                    pronunciation and more common words.</p>
-                </li>
-                <li className="timeline-sm-item">
-                  <span className="timeline-sm-date">2012 - 15</span>
-                  <h5 className="mt-0 mb-1">Senior Graphic Designer</h5>
-                  <p>Software Inc.</p>
-                  <p className="text-muted mt-2">If several languages coalesce, the grammar
-                    of the resulting language is more simple and regular than that of
-                    the individual languages. The new common language will be more
-                    simple and regular than the existing European languages.</p>
-                </li>
-                <li className="timeline-sm-item">
-                  <span className="timeline-sm-date">2010 - 12</span>
-                  <h5 className="mt-0 mb-1">Graphic Designer</h5>
-                  <p>Coderthemes LLP</p>
-                  <p className="text-muted mt-2 mb-0">The European languages are members of
-                    the same family. Their separate existence is a myth. For science
-                    music sport etc, Europe uses the same vocabulary. The languages
-                    only differ in their grammar their pronunciation.</p>
-                </li> */}
+              
               </ul>
               <h5 className="mb-3 mt-4 text-uppercase "><i className="mdi mdi-cards-variant mr-1" />
                 SKILLS</h5>
@@ -442,7 +363,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                     <tr>
                       <th scope="col">Cource</th>
                       <th scope="col">Field/board</th>
-                      <th scope="col">Collage</th>
+                      <th scope="col">College</th>
                       <th scope="col">Grade/Score</th>
                       <th scope="col">Year</th>
                     </tr>
@@ -462,6 +383,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                                 <td data-label="Grade/Score">{userprofile?.careerandeducation?.[0]?.twelth?.[0]?.['garde/score']??""}</td>
                                 <td data-label="Year">{userprofile?.careerandeducation?.[0]?.twelth?.[0]?.year??""}</td>
                               </tr>
+                              {userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.course?
                               <tr>
                                 <td scope="row" data-label="Cource">Bachelor’s</td>
                                 <td data-label="Field/board">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.course??""}</td>
@@ -469,6 +391,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                                 <td data-label="Grade/Score">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.['garde/score']??""}</td>
                                 <td data-label="Year">{userprofile?.careerandeducation?.[0]?.bachelorDegree?.[0]?.year??""}</td>
                               </tr>
+                              :""??""}
                               {userprofile?.careerandeducation?.[0]?.masterDegree?.[0]?.course?
                               <tr>
                                 <td scope="row" data-label="Cource">Master’s</td>

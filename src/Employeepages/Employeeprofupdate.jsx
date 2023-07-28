@@ -49,6 +49,7 @@ export default function Employeeprofupdate(value) {
   const [validated3,setValidated3]=useState(false)
   const [wizard,setWizard]=useState(1)
   const [load,setload]=useState(false)
+  const [windowcompany,setwindowcompany]=useState(true)
   const [presentcompany,setpresentcompany]=useState(false)
   const [othercompany,setothercompany]=useState(false)
   const [companyvalues,setcompanyvalues]=useState([])
@@ -65,10 +66,11 @@ export default function Employeeprofupdate(value) {
   ])
   const location = useLocation();
   const obj = location.state || {};
-  // console.log("ooooooooooobbbbbbbbbbbjjjjjj/",obj)
   const inputemail = useRef(false);
   const [emailverify,setemailverify]=useState({otp:"",valid:false,modal:false})
   const [phoneverify,setphoneverify]=useState({otp:"",valid:false,modal:false})
+  const presentcompanylist = precompanyarray.filter(t=>t.to==="Present")??[]
+
     useEffect(() => {     
       window.scrollTo(0,0)
       getCompanydata()
@@ -78,19 +80,22 @@ export default function Employeeprofupdate(value) {
       getCarreer()
       googleHandler()
       setWizard(value.value)
-    //   setload(false)
     
     if(!Object.keys(obj).length){
       setemailverify({...emailverify,valid:true})
-      
-      
-      // 
     }else{
       if(obj.phone){
         setphoneverify({...phoneverify,valid:true})
       }
     }
      }, [])
+     useEffect(()=>{
+      // console.log(value)
+      if(window.location.pathname==='/employeeregister'){
+        setWizard(value.value)
+      }
+      // 
+     },[value])
     useEffect(() => {
       return () => {
         if (abortControllerRef.current) {
@@ -98,19 +103,10 @@ export default function Employeeprofupdate(value) {
         }
       };
     }, []);
-    // console.log("precompanydata",precompanydata)
-    // console.log("precompanydaprecompany arrayta",precompanyarray)
-    // console.log("setemployeedata2",employeedata2)
-    // console.log("currentaddressdata",currentaddressdata)
-    // console.log("conmpanydaata2",employeedata2)
-    // console.log("userdetailuserdetailuserdetail",userdetail)
     const tophandler=(f,t)=>{
         window.scrollTo(f,t)
-    }
-    
-    const googleHandler=()=>{   
-      console.log("objlocation",obj)
-      
+    }   
+    const googleHandler=()=>{       
       if (obj.email){
         setemailverify({...emailverify,valid:true})
         setemployeedata({...employeedata,email:obj.email,lastName:obj.lastName,firstName:obj.firstName,maritalStatus:"single"})
@@ -135,7 +131,6 @@ export default function Employeeprofupdate(value) {
     try {
       let data=await Axioscall('get',"company")
       if (data.status===200){
-        // console.log("datalogcompany",data.data.data)
         setcompanyvalues(data.data.data.docs)
       }
     } catch (error) {
@@ -174,18 +169,26 @@ export default function Employeeprofupdate(value) {
     
   }
   const pushhandler=(arraydata,setarraydata,listdata,setlistdata)=>{
-    // console.log("data",arraydata)
-    if (Object.keys(arraydata).length){
-      setlistdata([...listdata,arraydata])
-      setarraydata({})
-    }else{
-      notifyerror("no dataa added")
+   
+      if (Object.keys(arraydata).length){
+        if(arraydata.name){
+          setlistdata([...listdata,arraydata])
+          setarraydata({})
+        }else{
+          notifyerror("Provide all Company Data")
+        }
+      }else{
+        notifyerror("no dataa added")
+      
     }
   }
-  const removeHandler=(listdata,setlistdata)=>{
+  const removeHandler=(listdata,setlistdata)=>{   
     if(listdata){
       setlistdata(prevArray => prevArray.slice(0, prevArray.length - 1));
-      // setlistdata(data)
+    }else{
+      if(!window.location.pathname==='/employeeregister'){
+        setlistdata(prevArray => prevArray.slice(0, prevArray.length - 1));
+      }
     }
   }
   const addressHandler=(e)=>{
@@ -197,7 +200,6 @@ export default function Employeeprofupdate(value) {
     }
   }
   const companyHandler=(e)=>{
-    // console.log("comapny handler",e)
     if(e.target.checked){
       setothercompany(true)
     }else(
@@ -205,41 +207,39 @@ export default function Employeeprofupdate(value) {
     )
   }
   const PresentcompanyHandler=(e)=>{
-    // console.log("comapny handler",e)
     if(e.target.checked){
-      setpresentcompany(true)
-      setprecompanydata({...precompanydata,to:"Present"})
+      if(presentcompanylist.length){
+        setpresentcompany(false)
+        notifyerror("Cannot Add 2 Present Company")
+      }else{
+        setpresentcompany(true)
+        setprecompanydata({...precompanydata,to:"Present"})
+      }
+     
     }else(
       setpresentcompany(false)
     )
   }
   const CompanydataHandler=(e)=>{
     let company = companyvalues.filter(t=>t.name===e)
-    // console.log("company dataaaa",company)
     if(company.length){
       
       setprecompanydata({...precompanydata,name:e,phone:company[0].phone,email:company[0].email,address:company[0].address[0].line1+""+ company[0].address[0].line2+""+ company[0].address[0].city+"" +company[0].address[0].state+"" +company[0].address[0].country,is_craigcompany:true})
     }
   }
   const registerEmployee=async()=>{
-    // e.preventDefault();
     let method ="put"
     let msg ="Successfully updated"
     try {
       setload(true)
       let datalist ={...employeedata}
-      // user id push to datalist.at...........
-    //   let userid = tokenhandler()
       if (datalist._id){
-        // console.log("userid",userid)
         datalist.id=datalist._id
       }else{
         method="post"
          msg ="Successfully Saved"
         let userid = tokenhandler()
-    
         if (userid){
-          // console.log("userid",userid)
           datalist.user=userid
         }
       }
@@ -283,12 +283,10 @@ export default function Employeeprofupdate(value) {
       if(!Array.isArray(datalist.lngRead)){
       
         let readdata = datalist.lngRead.split(',')
-        // console.log("lngread",readdata)
         datalist.lngRead=readdata
       }
       if(!Array.isArray(datalist.lngWrite)){
         let readdata = datalist.lngWrite.split(',')
-        // console.log("lngread",readdata)
         datalist.lngWrite=readdata
       }
       //......................siblingsdata add to siblingarray and push to datalist
@@ -315,18 +313,13 @@ export default function Employeeprofupdate(value) {
       if (arraychild.length){
         datalist.childDetails=arraychild
       }
-     
-      
-      // console.log("datalistbefore",datalist)
-      let data = await Axioscall(method,"employee/personal",datalist)
-      // console.log("datapersonal",data)  
+      let data = await Axioscall(method,"employee/personal",datalist) 
       if(data.status===200){
         notify(msg)
         setWizard(2) 
         getUser()    
         tophandler(0,200)
       }else{
-        // console.log("dublicate  ")
         if(data.message==="Request failed with status code 409"){
           notifyerror(data.response.data.message)
           inputemail.current.disabled=false
@@ -347,14 +340,12 @@ export default function Employeeprofupdate(value) {
       // user id push to datalist.at...........
       
       if (datalist.id){
-        // console.log("userid",userid)
-       
+      
       }else{
         method="post"
         let userid = tokenhandler()
         
         if (userid){
-          // console.log("userid",userid)
           datalist.user=userid
         }
       }
@@ -364,10 +355,7 @@ export default function Employeeprofupdate(value) {
       if(Object.keys(currentaddressdata).length){
         datalist.currentAddress=[{...currentaddressdata}]
       }
-      // console.log("form22222222222222222222222",datalist)
-      // console.log("form22222222222222222222222method",method)
       let data = await Axioscall(method,"employee/address",datalist)
-      console.log("dataaddress",data)
       if(data.status===200){
         setWizard(3)
         setload(false)
@@ -387,13 +375,9 @@ export default function Employeeprofupdate(value) {
       let msg ="successfully updated"
       setload(true)
       let datalist = {...employeedata3}
-      // user id push to datalist.at.......
       if (datalist.id){
-        // console.log("userid",userid)
-        // datalist.id=datalist._id
         let userid=tokenhandler()
         if (userid){
-          // console.log("userid",userid)
           datalist.user=userid
         }
       }else{
@@ -401,7 +385,6 @@ export default function Employeeprofupdate(value) {
         let userid = tokenhandler()
         msg ="successfully Registered"
         if (userid){
-          // console.log("userid",userid)
           datalist.user=userid
         }
       }
@@ -428,16 +411,12 @@ export default function Employeeprofupdate(value) {
           additional.push(additionaldata) 
         }
       }
-      
-      // console.log("addtitional",additional)
       if (additional.length){
         datalist.additional=additional
       }
       if(selectedskills.length){
         let skills =[]
-        // console.log("skills",selectedskills)
         selectedskills.forEach(element => {
-          // console.log("dataskils",element.value)
           skills.push(element.value)
         });
         if (skills.length){
@@ -446,7 +425,6 @@ export default function Employeeprofupdate(value) {
       }
         // ...........................company data push to datalist
         let company = companyarray
-        // console.log("companyjhbjjljlk",company)
         if(companydata){
           if(companydata.course){
             if(Object.keys(companydata).length){
@@ -466,29 +444,21 @@ export default function Employeeprofupdate(value) {
           }
             )}
         let precompany = precompanyarray
-
         if(precompanydata){
             if(Object.keys(precompanydata).length){
               precompany.push(precompanydata) 
-            } 
-        }
-       
+            }}   
         if(precompany.length){
           precompany.forEach((element)=>{         
           
             if(!element.is_verified){
               element.is_verified=false
-            }
-          }
-            )
+            }})
             company=[...company,...precompany]
         }
         if(company.length){
           datalist.prevCompanies=company
         }
-
-        // console.log("datalist 3rd form 333333333333333",datalist)
-        // console.log("datalist 3rd form 333333333333333 method",method)
         let data = await Axioscall(method,"employee/educationandcareer",datalist)
         if(data.status===200){
           notify(msg)
@@ -509,11 +479,8 @@ export default function Employeeprofupdate(value) {
   const zipcodeHandler=async(e,code)=>{
     setload(true)
     let data =await axios.get(`https://api.postalpincode.in/pincode/${code}`)
-    // console.log("zipcode data",data)
-    if(data.data[0].Status==='Success'){
-      
+    if(data.data[0].Status==='Success'){  
       e.target.classList.remove('is-invalid');
-      // console.log(data.data[0].PostOffice[0])
       let place = data.data[0].PostOffice[0]
       setaddressdata({...addressdata,city:place.Name,state:place.State,country:place.Country})
     }else{
@@ -538,16 +505,13 @@ export default function Employeeprofupdate(value) {
         },
         signal: abortController.signal // Assign the AbortSignal to the request
       }).then(res=>{
-        // console.log("ok",res.data)
         if(res.data){
-          // console.log("datapresent")
           let opt=[]        
           res.data.forEach(data => {
             opt.push({ value: data, label: data })
           });
           setskilloptions(opt)
-        }  }
-      )    
+        }  })    
     } catch (error) {    
     }
   }
@@ -555,14 +519,12 @@ export default function Employeeprofupdate(value) {
     try {
         let user = tokenhandler()
         let data =await Axioscall("get","employee/personal",{user:user})
-        // console.log("personaldara",data)
         if (data.status===200){
           if (data.data.data!=null){
             let userdata =data.data.data
             if(userdata.dob){
                 userdata.dob = moment(userdata.dob).format("YYYY-MM-DD")
             }
-            // console.log("addressproof",userdata.addressproof)
             if(userdata.addressproof.length){
                 setaddressproof(userdata.addressproof[0])
             }
@@ -578,6 +540,9 @@ export default function Employeeprofupdate(value) {
             if(userdata.childDetails.length){
                 setchildsarray(userdata.childDetails)
             }
+            if(userdata.phone){
+                setphoneverify({...phoneverify,valid:true})    
+            }
             setemployeedata(userdata)
           }
            
@@ -591,7 +556,6 @@ export default function Employeeprofupdate(value) {
     try {
         let user = tokenhandler()
         let data =await Axioscall("get","employee/address",{user:user})
-        // console.log("addressdataaaaaaaaaaaa",data.data.data)
         if(data.status===200){
           if(data.data.data!=null){
             let userdata = data.data.data
@@ -603,13 +567,11 @@ export default function Employeeprofupdate(value) {
                 setcurrentaddressdata(userdata.currentAddress[0])
             }
             if(userdata._id){
-                // setemployeedata2({...employeedata,id:userdata._id})
                 datalist.id=userdata._id
             }
             if(userdata.isCurrentsame){
               datalist.isCurrentsame=userdata.isCurrentsame
             }
-            // console.log("daaaaaaaaaadddreessss",datalist)
             setemployeedata2(datalist)
           }else{
             
@@ -668,8 +630,11 @@ export default function Employeeprofupdate(value) {
                 setskilloptions(opt)
                 setselectedskills(skilldata)
             }
+            setprecompanydata('')
             if(userdata.prevCompanies.length){
               setprecompanyarray(userdata.prevCompanies)
+              setcompanydata('')
+              setwindowcompany(false)
             }
             if(userdata.otherproficency){
               // setemployeedata3({...employeedata3,otherproficency:userdata.otherproficency})
@@ -821,9 +786,9 @@ export default function Employeeprofupdate(value) {
                   {/* <Form  noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Regstersubmithandler,setValidated)}   className="reg-form contact10 " > */}
                     {/* progressbar */}
                     <ul id="progressbar">
-                      <li className="active" id="account"><strong>Personal</strong></li>
-                      <li id="personal" className={wizard===1?'':'active'}><strong>Address</strong></li>
-                      <li id="payment"  className={wizard===2||wizard===1?'':'active'}><strong>Education&amp; Career</strong></li>
+                      <li className="active" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(1) :""} id="account"><strong>Personal</strong></li>
+                      <li id="personal" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(2) :""} className={wizard===1?'':'active'}><strong>Address</strong></li>
+                      <li id="payment" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(3) :""} className={wizard===2||wizard===1?'':'active'}><strong>Education&amp; Career</strong></li>
                       <li id="confirm"  className={wizard===4?'active':''}><strong>Finish</strong></li>
                     </ul>
                     <div className="progress">
@@ -882,12 +847,7 @@ export default function Employeeprofupdate(value) {
                             />
                           <Form.Control.Feedback type="invalid">Please Verify Your Number</Form.Control.Feedback>
                         </div>
-                        {/* <div className="form-group col-md-4 ">
-                          <label className="form-label" htmlFor="input-2" />
-                          <input className="form-control" id="input-2" type="tel"required name="emailaddress" onChange={(e)=>setemployeedata({...employeedata,phone:e.target.value})} value={employeedata.phone??""} placeholder="Phone Number" />
-                          
-                          <Form.Control.Feedback type="invalid">Please provide Valid Phone Number</Form.Control.Feedback>
-                        </div> */}
+                       
                         <h6 className="permenent-address education col-12 mb-2 ">Language Known</h6>
                         <div className=" col-lg-6 ">
                           <label className="fieldlabels font-sm color-text-mutted">Read*</label>
@@ -1121,8 +1081,9 @@ export default function Employeeprofupdate(value) {
                       </div>
                       
                        <input type="submit" name="next" onClick={()=>tophandler(0,500)} className="pr-button  action-button" defaultValue="Next" />
-                      
+                        
                     </fieldset>
+                    {/* {validated?<p className='text-danger text-end'>Please Provide  All  Mandatory Fields </p>:""} */}
                     </Form>
                     :null}
                     {wizard===2?
@@ -1311,7 +1272,7 @@ export default function Employeeprofupdate(value) {
                               <h6 className="permenent-address mb-3 col-12 form-t">Bachelor’s Degree</h6>
                               <div className="form-group col-lg-3 ">
                                 <div className="text__center">
-                                  <select  required onChange={(e)=>setbachlerdata({...bachlerdata,course:e.target.value})} value={bachlerdata.course??""}  className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                                  <select   onChange={(e)=>setbachlerdata({...bachlerdata,course:e.target.value})} value={bachlerdata.course??""}  className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                     <option value ="" defaultValue="" disabled  >Course</option>
                                     <option value="Computer Science Engineering">Computer Science Engineering</option>
                                     <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
@@ -1339,16 +1300,7 @@ export default function Employeeprofupdate(value) {
                               <div className="form-group col-lg-3  ">
                               <input type="text" required={bachlerdata.course} onChange={(e)=>setbachlerdata({...bachlerdata,collage:e.target.value})} value={bachlerdata.collage??""} className="form-control" placeholder=" College" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide College </Form.Control.Feedback>
-                                {/* <div className="text__center">
-                                  <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
-                                  <select required onChange={(e)=>setbachlerdata({...bachlerdata,collage:e.target.value})} value={bachlerdata.collage??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden  >Collage</option>
-                                    <option value="">Dummy collage1</option>
-                                    <option value="">Dummy collage2</option>
-                                    <option value="">Dummy collage3</option>
-                                  </select>
-                                  
-                                </div> */}
+                               
                               </div>
                               <div className="form-group col-lg-3 ">
                                 <input type="text" required={bachlerdata.course}  onChange={(e)=>setbachlerdata({...bachlerdata,"garde/score":e.target.value})} value={bachlerdata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
@@ -1408,15 +1360,7 @@ export default function Employeeprofupdate(value) {
                               <div className="form-group col-lg-3  ">
                               <input type="text" required={masterDegreedata.course} onChange={(e)=>setmasterDegreedata({...masterDegreedata,collage:e.target.value})} value={masterDegreedata.collage??""} className="form-control" placeholder=" College" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide College </Form.Control.Feedback>
-                                {/* <div className="text__center">
-                                  <select onChange={(e)=>setmasterDegreedata({...masterDegreedata,collage:e.target.value})} value={masterDegreedata.collage??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden  >Collage</option>
-                                    <option value="">Dummy collage1</option>
-                                    <option value="">Dummy collage2</option>
-                                    <option value="">Dummy collage3</option>
-                                  </select>
-                                  <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
-                                </div> */}
+                                
                               </div>
                               <div className="form-group col-lg-3 ">
                                 <input type="text" required={masterDegreedata.course}  onChange={(e)=>setmasterDegreedata({...masterDegreedata,"garde/score":e.target.value})} value={masterDegreedata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
@@ -1438,23 +1382,13 @@ export default function Employeeprofupdate(value) {
                                <div className="form-group col-lg-3 mt-10">
                                 <div className="text__center">
                                 <input  disabled  value={aitm.course??""} type="text" className="" placeholder=" course" id=" " />
-                                  {/* <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden  >Course</option>
-                                    <option value="">Computer science</option>
-                                    <option value="">Electronics</option>
-                                    <option value="">Civil</option>
-                                  </select> */}
+                                  
                                 </div>
                               </div>
                               <div className="form-group col-lg-3  mt-10">
                                 <div className="text__center">
                                 <input  disabled  value={aitm.collage??""} type="text" className="" placeholder=" collage" id=" " />
-                                  {/* <select  onChange={(e)=>setadditionaldata({...additionaldata,collage:e.target.value})} value={additionaldata.collage??""} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden  >Collage</option>
-                                    <option value="">Dummy collage1</option>
-                                    <option value="">Dummy collage2</option>
-                                    <option value="">Dummy collage3</option>
-                                  </select> */}
+                                 
                                 </div>
                               </div>
                               <div className="form-group col-lg-3 mt-10">
@@ -1468,24 +1402,14 @@ export default function Employeeprofupdate(value) {
                               <div className="form-group col-lg-3 mt-10">
                                 <div className="text__center">
                                 <input type="text" onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="form-control" placeholder=" college" id=" " />
-                                  {/* <select onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
-                                    
-                                  </select> */}
+                                  
                                   <Form.Control.Feedback type="invalid">Please provide Course </Form.Control.Feedback>
                                 </div>
                               </div>
                               <div className="form-group col-lg-3 mt-10 ">
                               <input type="text" required={additionaldata.course} onChange={(e)=>setadditionaldata({...additionaldata,collage:e.target.value})} value={additionaldata.collage??""} className="form-control" placeholder=" college" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide college </Form.Control.Feedback>
-                                {/* <div className="text__center">
-                                  <select  onChange={(e)=>setadditionaldata({...additionaldata,collage:e.target.value})} value={additionaldata.collage??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
-                                    <option value="" hidden  >Collage</option>
-                                    <option value="">Dummy collage1</option>
-                                    <option value="">Dummy collage2</option>
-                                    <option value="">Dummy collage3</option>
-                                  </select>
-                                  <Form.Control.Feedback type="invalid">Please provide Board </Form.Control.Feedback>
-                                </div> */}
+                              
                               </div>
                               <div className="form-group col-lg-3 mt-10">
                                 <input type="text" required={additionaldata.course} onChange={(e)=>setadditionaldata({...additionaldata,"garde/score":e.target.value})} value={additionaldata["garde/score"]??""} className="form-control" placeholder=" Grade/Score" id=" " />
@@ -1508,7 +1432,7 @@ export default function Employeeprofupdate(value) {
                             <option value="" defaultValue="" disabled  >Select Designation</option>
                             <option value="Chief Executive Officer (CEO)">Chief Executive Officer (CEO)</option>
                             <option value="Chief Technology Officer (CTO)">Chief Technology Officer (CTO)</option>
-                            <option value="Chief Financial Officer (CFO)">Chief Financial Officer (CFO)</option>
+                            <option value="Chief Financial Officer (CFO)">Chief  Financial Officer (CFO)</option>
                             <option value="Chief Operating Officer (COO)">Chief Operating Officer (COO)</option>
                             <option value="Chief Marketing Officer (CMO)">Chief Marketing Officer (CMO)</option>
                             <option value="HR">Human Resources (HR) Manager</option>
@@ -1541,22 +1465,13 @@ export default function Employeeprofupdate(value) {
                             options={skilloptions}
                             placeholder={<div>Select Skills....</div>}
                             value={selectedskills}
-                            required
                             className=''
                             onChange={newcontent => {setselectedskills( newcontent ) }}
                             onInputChange={(value)=>skillapicall(value)} 
                             // styles={customStyles}
                           />
                           <Form.Control.Feedback type="invalid">Please provide Skills </Form.Control.Feedback>
-                          {/* <div className="box-skills">
-                            <div className="form-contact">
-                              <div className="form-group">
-                                <input className="form-control search-icon" type="text" defaultValue placeholder="E.g. Angular, Laravel..." />
-                              </div>
-                            </div>
-                            <div className="box-tags mt-30"><a className="btn btn-grey-small mr-10">Figma<span className="close-icon" /></a><a className="btn btn-grey-small mr-10">Adobe XD<span className="close-icon" /></a><a className="btn btn-grey-small mr-10">NextJS<span className="close-icon" /></a><a className="btn btn-grey-small mr-10">React<span className="close-icon" /></a><a className="btn btn-grey-small mr-10">App<span className="close-icon" /></a><a className="btn btn-grey-small mr-10">Digital<span className="close-icon" /></a><a className="btn btn-grey-small mr-10">NodeJS<span className="close-icon" /></a></div>
-                            <div className="mt-40"> <span className="card-info font-sm color-text-paragraph-2">You can add up to 15 skills</span></div>
-                          </div> */}
+
                         </div>
                         <h6 className="permenent-address mb-3">Career Experience</h6>
                         <div className="property-fields__ro ">
@@ -1567,11 +1482,7 @@ export default function Employeeprofupdate(value) {
                              <div className="form-group col-lg-6 mt-20">
                                <div className="text__center">
                                <input type="text"  value={citm.name} className="" disabled placeholder=" Position" id=" " />
-                                 {/* <select value={citm.name} disabled className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
-                                   <option value="" hidden  >Company Name</option>
-                                   <option value="Company1">Company1</option>
-                                   <option value="Company2">Company2</option>
-                                 </select> */}
+                                 
                                </div>
                              </div>
                              <div className="form-group col-lg-6 mt-20 ">
@@ -1601,8 +1512,9 @@ export default function Employeeprofupdate(value) {
                                <input type="date"  disabled value={citm.to} className="" placeholder=" To" id=" " />
                                 }
                              </div>
-                               {/* <hr/> */}
+                     
                              </React.Fragment>):null}
+                             {windowcompany?<>
                              <div className="form-group col-lg-12 mt-20 d-flex">
                               <input className="check " onChange={(e)=>companyHandler(e)}  type="checkbox"  />
                               <label className='mt-15 pl-10 '  >Other Company</label> 
@@ -1642,7 +1554,7 @@ export default function Employeeprofupdate(value) {
                               <Form.Control.Feedback type="invalid">Please provide Job Description </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-12 mt-10 d-flex">
-                              <input className="check "  onChange={(e)=>PresentcompanyHandler(e)}  type="checkbox"  />
+                              <input className="check " checked={presentcompany}  onChange={(e)=>PresentcompanyHandler(e)}  type="checkbox"  />
                               <label className='mt-15 pl-10 '  >Present Company</label> 
                               </div>
                             <div className="form-group col-lg-6 mt- ">
@@ -1656,10 +1568,11 @@ export default function Employeeprofupdate(value) {
                               <input type="date"  onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className="form-control" placeholder=" To" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide to date </Form.Control.Feedback>
                             </div>}
+                            </>:""}
                           </div>
                           <div className="line-item-property__actions col-12 row mt-3 mb-3">
-                          <button onClick={()=>pushhandler(precompanydata,setprecompanydata,precompanyarray,setprecompanyarray)}  className="col-lg-2 button-form1" type="button"  value="+">Add</button>
-                          <button onClick={()=>removeHandler(precompanyarray,setprecompanyarray)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
+                          <button onClick={()=>windowcompany?pushhandler(precompanydata,setprecompanydata,precompanyarray,setprecompanyarray):setwindowcompany(true)}  className="col-lg-2 button-form1" type="button"  value="+">Add</button>
+                          <button onClick={()=>precompanydata?setprecompanydata(''):windowcompany?setwindowcompany(false): removeHandler(precompanyarray,setprecompanyarray)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
                           </div>
                         </div>
                         
@@ -1688,23 +1601,50 @@ export default function Employeeprofupdate(value) {
                         </div> <br /><br />
                         <h2 className="purple-text text-center mb-20"><strong>SUCCESS </strong></h2> <br />
                         <div className="row justify-content-center">
-                          <div id="htmlContent" className="theme--dark">
+                       <div className="content-wrapper11">
+  <div className="tilt">
+    <div className="credit-card">
+      <div className="credit-card__front" style={{backgroundImage: 'url(assets/imgs/template/visa-bg.jpg)'}}>    
+        <div className="circle circle-1" />
+        <div className="circle circle-2" />
+        <div className="logo">
+          <img src="\assets\imgs\logo\logo_craig-10.png" />
+        </div>
+        <div className="VISA">
+          {/* <img src="assets/imgs/page/login-register/qr.png" /> */}
+          <QRCode style={{height:"100px",width:"100px",backgroundColor:"white",padding:'6px'}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
+        </div>
+        <div className="card-expiry-group">
+          <label htmlFor="card-expiry">Unique ID</label>
+          <h5 className="card-number">{userdetail?.uniqueid??""}</h5>
+        </div>
+        <div className="card-name-group">
+          <label htmlFor="card-name">NAME</label>
+          <h6 className="card-number">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""} </h6>
+        </div>
+      </div>
+    </div>
+  </div>{/* tilt */}
+</div>
+
+                          {/* <div id="htmlContent" className="theme--dark">
                             <div id="container" className="container99 container98">
                               <div className="header">
                                 <div className="logo" />
                               </div>    
                               <section id="htmlContent1"  className="left-section">
-                            {/* <img src="assets/imgs/page/login-register/qr.png" className="is-circle6 profile-pic" /> */}
                             <QRCode style={{height:"100px",width:"100px"}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
                             <div className="profile-detail">
-                              <p className="profile-name">CRAG CARD</p>
+                              <p className="profile-name">CRAIGCARD</p>
                               <span className="profile-summary">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""}</span>
                               <a className="profile-cv">ID:{userdetail?.uniqueid??""}</a>
                             </div>
                           </section>
+                          
+                         
                               <div className="front-smooth" />
                             </div>
-                          </div>
+                          </div> */}
                           <div className="profile-pils mt-20">
                             <span className="pils"><Link to="/employee-profile" target="_blank"><i className="fa fa-eye" />View Profile</Link></span>
                             <span className="pils"><a href  onClick={()=>downloadHtmlAsImage('htmlContent')} target="_blank"><i className="fa fa-paper-plane-o" /> Share Profile</a></span>

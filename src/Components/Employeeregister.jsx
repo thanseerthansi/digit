@@ -9,18 +9,16 @@ export default function Employeeregister() {
     tokencompletion()
   },[])
   const tokencompletion=()=>{
-    var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
-    // console.log("decccccccccccc",decoded)    
+    var decoded = jwt_decode(window.localStorage.getItem('craig-token'))    
       if(decoded.completion===3){
         setWizard(1)
       }else{
-        // console.log("coooooooooooded",decoded.completion+1)
         setWizard(decoded.completion+1)
-      }
+      }  
   }
   return (
     <div className='container'>
-      <Employeeprofupdate value={1}/>
+      <Employeeprofupdate value={wizard}/>
 
     </div>
   )

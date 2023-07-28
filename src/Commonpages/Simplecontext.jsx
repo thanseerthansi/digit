@@ -16,7 +16,7 @@ export default function Simplecontextprovider({children}){
         path()
         getUser()
         // logouthandler()
-        
+      
         
       }, [])
     const path =()=>{
@@ -96,8 +96,8 @@ export default function Simplecontextprovider({children}){
                 let data = await Axioscall("get","employee",{id:datalist,page:1,limit:1})
                 // console.log("data",data)
                 if (data.status===200){
-                  // console.log("datadocs",data.data.data)
-                  if(data.data.data){
+                  // console.log("datadocs",data.data.data.docs)
+                  if(data.data.data.docs.length){
                     setuserdetail(data.data.data.docs[0])
                     setemployeedata(data.data.data.docs[0])
                     window.localStorage.setItem("graiduseremail",data.data.data.docs[0].email);
@@ -159,8 +159,16 @@ export default function Simplecontextprovider({children}){
         if(user==="employee" && !userdata && path !== "/employeeregister"){
           // console.log("no user.............................................................")
           logouthandler()
+        }else{
+          if(userdetail){
+            if(userdetail.careerandeducation.length===0 || userdetail.address.length===0){
+              logouthandler()
+            }
+          }
+          
         }
     }
+   
 return (
     <Simplecontext.Provider value={{
         path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler,Decodetoken,loghandler,Decodeall
