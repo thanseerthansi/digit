@@ -193,7 +193,7 @@ function Decodetoken (){
                   </h5>
                   {userdetail.status==="verified"?
                     <div className=""><img className="ml-3" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
-                    :null}
+                    :<div className=""><img className="ml-3" src="\assets\imgs\page\candidates\grey.png" alt="jobbox" /></div>}
                   <p className="mt-0 font-md color-text-paragraph-2 mb-15">
                     {userdetail?userdetail?.name??"":""}
                   </p>
