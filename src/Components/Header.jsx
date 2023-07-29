@@ -62,7 +62,6 @@ export default function Header() {
         <div className="container">
           <div className="main-header">
             <div className="header-left">
-            {/* <div className="header-logo"><Link className="d-flex" to="index.html"><h3 className="header-text">CRAIG</h3></Link></div> */}
               <div className="header-logo">
                 <Link className="d-flex" to="/">
                   <img
@@ -96,9 +95,6 @@ export default function Header() {
               </div>
             </div>
             {windowuser==="employer"?<>
-            {/* <div class="header-right">
-            <div class="block-signin"><Link className="btn btn-default2 btn-shadow ml-40 " to="/notification"><i className="fa-sharp fa-solid fa-bell notification-bell"></i></Link></div>
-          </div> */}
           <div className="header-right">
           <div className="block-signin"><Link className="btn btn-default2 btn-shadow ml-40 "  to="/notification"><i className="fa-sharp fa-solid fa-bell notification-bell"></i></Link></div>
         </div>
@@ -175,9 +171,6 @@ export default function Header() {
                     <li className="has-children">
                       <Link to="/aboutus">About us</Link>
                     </li>
-                    {/* <li className="has-children ">
-                      <Link to="/employerlogin">For Employers </Link>
-                    </li> */}
                     <li className="has-children">
                       <Link to="/contactus">Contact us</Link>
                     </li>

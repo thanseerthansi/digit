@@ -18,11 +18,6 @@ export default function Notificationprofile() {
     const [isOpen,setIsOpen]=useState(false)
     const [hrdata,sethrdata]=useState('')
     const [validated,setValidated]=useState(false)
-    // console.log("userprofile in notificaton",userprofile)
-    // console.log("Decodeall()",Decodeall())
-    // console.log("hrdaaraa",hrdata)
-    // console.log("userdetail",userdetail)
-    //   console.log("userdetails",userdetail)
     const maxLength = userprofile ? Math.max(userprofile.lngRead.length, userprofile.lngWrite.length) : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
@@ -43,21 +38,17 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
             user:userId
           }
           let data=await Axioscall("get","employee",body)
-            // console.log("notificationuserdata",data.data.data.docs)
             if (data.status===200){
                 setuserprofile(data.data.data.docs[0])
             }
-        } catch (error) {
-            
+        } catch (error) {           
         }
     }
     const notificationViewed=async()=>{
       try {
         if (id){
           let data= await Axioscall("put","notification",{id:id,is_viewed:true})
-          // console.log("datanotificatio update",data)
-          if (data.status===200){
-            // console.log("status,updated")          
+          if (data.status===200){        
           }
         }
       } catch (error) {
@@ -77,25 +68,17 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
             is_verified:value,
             notificationid:id
         }
-        // console.log("body",body)
           let data =await Axioscall("post","employee/companyVerify",body)
-          // let data ={status:200}
           if(data.status===200){
             try { 
               userprofile.careerandeducation[0].prevCompanies.forEach((element) => {
                 if (element.email===window.localStorage.getItem("graiduseremail")){
-                  // console.log("fascsdfwenfjsuio",element.to)
                   if(element?.to && moment(element.to, 'YYYY-MM-DD', true).isValid()){
-                    // console.log("sdftyasdin")
                   }else{
-                    // console.log("notttttttttttt")
                     if(value===true){
                       if(emp){
-                        // Addcompanyhandler(emp)
-                      }
-                      
+                      }                    
                     }
-  
                 }
                 }
               });
@@ -114,17 +97,14 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
       }
     }
     const Addcompanyhandler=async(emp)=>{
-      // console.log(".........................")
         setload(true)
-      try {
-      
+      try { 
       let body={
         user : userprofile.user[0]._id,
         company : window.localStorage.getItem("graiduserid"),
         type : "assign",
         role: "employee"
     }
-    // console.log("decode...............",Decodeall())
     if(Decodeall().role==='hr'){
       body={
         user :userprofile.user[0]._id,
@@ -144,13 +124,8 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
         password:hrdata.password    
     }    
     }
-      // console.log("bodyyyyyyyy",body)
         let data = await Axioscall("post","employee/assign",body)
-        // console.log("dataaddcompany",data)
         if(data.status===200){
-          // notify("added Successfully")
-          // getCandidte()
-          // console.log("getsuccess")
           verifynot()
           return
         }
@@ -158,19 +133,15 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
         console.log(error) 
       }
       setload(false)
-      // return
     }
 
     const Nulldata=()=>{
       sethrdata('')
     }
     const checkEmployee=(userid,designation,value)=>{
-      // console.log("designation",designation)
       if(designation==="HR"){
-        // console.log(",....................hr")
         sethrdata({...hrdata,HR:userid})
-        setIsOpen(true)
-        
+        setIsOpen(true)       
       }else{
         verifynot(value,"employee")
       }
@@ -274,10 +245,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                                   <td className="td-verify">{sibling?.occupation??""}</td>
                                 </tr>
                                 </>)):"No Siblings Found"??""}
-                                
-                               
                                 <tr>
-                                
                                   <td className=" verification-tb-margin" colSpan={3}><h6>Spouse Details</h6></td>
                                 </tr>
                                 {userprofile?.spouseDetails?.length?userprofile.spouseDetails.map((spouse,sk)=>(<>
@@ -322,8 +290,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
               </table>
             </div>
           </div>
-        </div> {/* end card-box */}
-        
+        </div> {/* end card-box */}        
       </div> {/* end col*/}
       <div className="col-lg-7 col-xl-7">
         <div className="card-box9">
@@ -352,8 +319,6 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
               {userprofile?.careerandeducation?.[0]?.skills.map((caritm,crk)=>(
                 <a key={crk} className="btn btn-tags-sm mb-10 mr-5">{caritm}</a>
               ))??""}
-                {/* <div className="box-tags mt-30"><a className="btn btn-grey-small mr-10">Figma</a><a className="btn btn-grey-small mr-10">Adobe XD</a><a className="btn btn-grey-small mr-10">NextJS</a><a className="btn btn-grey-small mr-10">React</a><a className="btn btn-grey-small mr-10">App</a><a className="btn btn-grey-small mr-10">Digital</a><a className="btn btn-grey-small mr-10">NodeJS</a> */}
-                {/* </div> */}
               </div>
               <h5 className="mb-3 mt-4 text-uppercase "><i className="mdi mdi-cards-variant mr-1" />
                 Education</h5>
@@ -444,14 +409,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
        <div>
         <div className="form-group ">
           <div className="text__center mb-20">
-            {/* <select value={hrdata?.HR??""} disabled required onChange={(e)=>sethrdata({...hrdata,HR:e.target.value})} className="cs-select cs-skin-elastic cs-skin-elastic1 pl-20 form-control">
-              <option value=""  defaultValue="" disabled>Select an HR</option>
-              {userprofile.length?userprofile.map((emp,ek)=>(
-                <option key={ek} value={emp._id}>{emp.firstName} {emp.middleName} {emp.lastName}</option>
-              )):""}
-              
-             
-            </select> */}
+          
             <input  value={userprofile?.firstName??""} disabled required   className="form-control" id="input-1" type="text"  name="fullname" placeholder="User Name/Mail id" />
             <Form.Control.Feedback type="invalid">Select an HR</Form.Control.Feedback>
           </div>

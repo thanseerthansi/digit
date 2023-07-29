@@ -6,18 +6,6 @@ export default function Forgetpassword() {
     <main className="main">
   <div className="carousel-inner">
   </div>
-  {/* <div className="bubbles">
-    <div className="bubble" />
-    <div className="bubble" />
-    <div className="bubble" />
-    <div className="bubble" />
-    <div className="bubble" />
-    <div className="bubble" />
-    <div className="bubble" />
-    <div className="bubble" />
-    <div className="bubble" />
-    <div className="bubble" />
-  </div> */}
   <section className="pt-50 login-register">
     <div className="container "> 
       <div className=" login-register-cover cont-button">

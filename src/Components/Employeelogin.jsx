@@ -15,7 +15,6 @@ export default function Employeelogin() {
   const [formdata,setformdata]=useState({username:"",password:""});
   const [Validated,setValidated]=useState(false)
   const [load,setload]=useState(false)
-  // console.log("data",formdata)
   useEffect(() => {
     getcraigcredintial()
     window.scrollTo(0, 0);
@@ -36,15 +35,12 @@ export default function Employeelogin() {
       let datalist = {...formdata}
       datalist.role="employer"
       let data = await Axioscall("post","user/login",datalist)
-      // console.log("data",data)
       if (data.status===200){
         console.log("datadocs",data.data.data.token)
           if(data.data.data.token){
             window.localStorage.setItem("craig-token",data.data.data.token)
             Decodetoken(data.data.data.token)
           }else{
-            // window.localStorage.setItem("graiduser", "employer");
-            // navigate('/employeeregister')
             notifyerror("invalid Username or password")
           }
       }else{
@@ -56,12 +52,8 @@ export default function Employeelogin() {
       notifyerror("Something went wong try again later")
     }
     setload(false)
-    // window.localStorage.setItem('graiduser','employer')
-    // navigate('/')
-  
   }
   const Decodetoken =(token)=>{
-    // console.log(token)
     var decoded = jwt_decode(token)
     console.log("decode",decoded)
     if(decoded.role==='hr'){
@@ -70,29 +62,22 @@ export default function Employeelogin() {
       }
     }else{
       if(decoded.id){
-      // console.log("decodeid",decoded)
       Getuser({userid:decoded.id})
     }
-    }
-    
+    }   
   }
   const Getuser =async(body)=>{
     try {
         let data = await Axioscall("get","company",body)
-        // console.log("data",data)
         if (data.status===200){
-          // console.log("datadocs",data)
           if(data.data.data){
             setuserdetail(data.data.data)
             setemployeedata(data.data.data)
             window.localStorage.setItem("graiduser","employer");
-            // console.log("datauseremila",data.data.data.email)
             window.localStorage.setItem("graiduseremail",data.data.data.email);
             window.localStorage.setItem("graiduserid",data.data.data._id);
             navigate('/employer-profile')
           }else{
-            // window.localStorage.setItem("graiduser", "employee");
-            // navigate('/employeeregister')
             console.log("something went wrong")
           }
         }
@@ -114,8 +99,6 @@ export default function Employeelogin() {
     }    
   }
   const getcraigcredintial=()=>{
-    //window.localStorage.removeItem("craig-employercredintial")
-    // console.log("window",JSON.parse(localStorage.getItem('craig-employercredintial')))
     let data = JSON.parse(localStorage.getItem('craig-employercredintial'))
     if (data){
       setformdata(data)

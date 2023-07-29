@@ -25,7 +25,6 @@ export default function Signin() {
   const [added_otp, setadded_otp] = useState("");
   const [load,setload]=useState(false)
   const [logindata,setlogindata]=useState({email:'',firstName:"",lastName:""})
-  // console.log("logindata",logindata)
   useEffect(() => {
     Getusernumber()
     window.scrollTo(0, 0);
@@ -42,17 +41,12 @@ export default function Signin() {
     });
 
   const googlesigninhandler = async () => {
-    // console.log("handler")
     const data = await signInWithGoogle();
-    // console.log("dsf", data);
     let emp ={}
     if (data._tokenResponse) {
-      // console.log("email",data._tokenResponse)
       emp.email=data._tokenResponse.email
       emp.firstName=data._tokenResponse.firstName
       emp.lastName=data._tokenResponse.lastName
-
-      // console.log("emp,,,,,",emp)
       if(data._tokenResponse.email){
         Checkuserhandler(data._tokenResponse.email,emp,"email")
       }
@@ -62,13 +56,9 @@ export default function Signin() {
   };
   const facebookhandler = async () => {
     const data = await signInWithFacebook();
-    // console.log("datafacebook", data);
   };
   const emailhandler = async () => {
-    // console.log("odk");
     const data = await signInEmail();
-    // console.log("datafacebook", data);
-    // Checkuserhandler(data)
     
   };
  
@@ -81,18 +71,14 @@ export default function Signin() {
         },
         auth
       );
-      // console.log("enters recapth inside")
     }
-    // console.log("enters recapth")
     window.recaptchaVerifier.render();  
   };
  
   // crud functions start................................................................
   const Checkuserhandler=async(result,emp,type)=>{
-    // console.log("emppppppppppppppppppp",emp)
     try {
       const data = await Axioscall("post","user/login",{username:result,role:"employee",type:type})
-      // console.log("dataafter",data)
         if(data.status===200){
           if(data.data.data.token){
             window.localStorage.setItem("craig-token",data.data.data.token)
@@ -168,16 +154,11 @@ const requestOTP=async(e)=>{
     setload(true)
     
     let data =await Axioscall("post","otp/send-otp",{mobile:phoneNumber})
-    // console.log("daat",data)
     if (data.status===200){
       setExpandForm(true);
       generateRecaptcha();
-      notify("check your phone for verification otp")
-      
-    }
-    
-    // inputphone.current.disabled=true
-    
+      notify("check your phone for verification otp") 
+    }    
   } catch (error) {
     
     notifyerror("try again")
@@ -192,18 +173,12 @@ const verifyOTP=async()=>{
       "mobile" : phoneNumber,
       "otp" : added_otp
     }
-    // console.log("e",body)
     let data = await Axioscall("post","otp/verify-otp",body)
-    // console.log("data",data)
     if(data.status===200){
-      // inputphone.current.disabled=true
       Checkuserhandler(phoneNumber,{phone:phoneNumber},"phone")
-      // setdisablephone(true)
-      // setphonevalid(true)
     }
     else(
       notifyerror(data.response.data.message )
-      // console.log("errordfghjkl",data.response.data.message )
     )
   } catch (error) {
     console.log(error)
@@ -219,18 +194,6 @@ const verifyOTP=async()=>{
             <div className="spinner-container">
                         <div className="spinner " />
                       </div>:null}
-        {/* <div className="bubbles">
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-          <div className="bubble" />
-        </div> */}
         <section className="pt-20 login-register">
           <div className="container ">
             <div className=" login-register-cover cont-button">
@@ -240,9 +203,6 @@ const verifyOTP=async()=>{
                   <h3 className="mt-10 mb-5 text-brand-1 font-log">
                     Create an Account or Log in
                   </h3>
-                  {/* <p className="font-sm text-muted mb-30">
-                    Access to all features. No credit card required.
-                  </p> */}
                   <button
                     onClick={googlesigninhandler}
                     className="btn social-login hover-up mb-20"

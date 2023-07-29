@@ -90,7 +90,6 @@ export default function Employeeprofupdate(value) {
     }
      }, [])
      useEffect(()=>{
-      // console.log(value)
       if(window.location.pathname==='/employeeregister'){
         setWizard(value.value)
       }
@@ -141,7 +140,6 @@ export default function Employeeprofupdate(value) {
     let token = window.localStorage.getItem('craig-token')??""
     if(token){
       let data  = Decodetoken(token)
-      // console.log("dataid",data)
       return data
     }
   }
@@ -160,9 +158,7 @@ export default function Employeeprofupdate(value) {
     }),
   };
   const Filestackhandler=async(ratio,setvalue,value,keypair)=>{
-    // console.log("keypair",keypair)
     let data =await Filestack(ratio)
-    // console.log("datafilestack",data)
     if (data){
       setvalue({...value,[keypair]:data})
     }
@@ -586,12 +582,10 @@ export default function Employeeprofupdate(value) {
     try {
         let user = tokenhandler()
         let data =await Axioscall("get","employee/educationandcareer",{user:user})
-        // console.log("careeeeeeeeeeeeeeeeeeeeeeer",data.data.data)
         if(data.status===200){
           if(data.data.data!=null){
             let userdata = data.data.data
             let employee = {}
-            // setemployeedata3()
             if (userdata.tenth.length){
               settenthdata(userdata.tenth[0])
             }
@@ -607,26 +601,19 @@ export default function Employeeprofupdate(value) {
             if (userdata.additional.length){
               setadditionalarray(userdata.additional)
             }
-            // console.log("designat",userdata.designation)
             if (userdata.designation){
-              // console.log("userdata.designation",userdata.designation)
               employee.designation=userdata.designation
-              // setemployeedata3({...employeedata3,desig:"HR"})
             }
             if (userdata._id){
-              // setemployeedata3({...employeedata3,id:userdata._id})
               employee.id=userdata._id
             }
             if(userdata.skills.length){
               let skilldata = []
               let opt=[...skilloptions]
-              // console.log("opt",opt)
                 userdata.skills.forEach((skill)=>{
-                  // console.log("element",skill)
                   skilldata.push({ value: skill, label: skill })
                   opt.push({ value: skill, label: skill })
                 });
-                // console.log("skillsssssss",skilldata)
                 setskilloptions(opt)
                 setselectedskills(skilldata)
             }
@@ -637,10 +624,8 @@ export default function Employeeprofupdate(value) {
               setwindowcompany(false)
             }
             if(userdata.otherproficency){
-              // setemployeedata3({...employeedata3,otherproficency:userdata.otherproficency})
               employee.otherproficency=userdata.otherproficency
             }
-            // console.log("employyeeee",employee)
             setemployeedata3(employee)
           }else{
             
@@ -655,17 +640,12 @@ export default function Employeeprofupdate(value) {
     try {
       if(employeedata.email!=obj.email){
         setemailverify({...emailverify,valid:false})
-         // setemailvalid(true)
-      // console.log("email",obj.email)
       setload(true)
       let data = await Axioscall("post","company/sendcode",{email:employeedata.email})
-      // console.log("dataemail",data)
       if(data.status===200){
         notify("check your mail for verification otp")
-        // setemailvalidationdata({...emailvalidationdata,verifynumber:true})
         setemailverify({...emailverify,valid:false,modal:true})
       }else{
-        // notifyerror("Something Went wrong Sent again")
       }
       setload(false)
         
@@ -676,7 +656,6 @@ export default function Employeeprofupdate(value) {
      
     } catch (error) {
       setload(false)
-      // notifyerror("Something Went wrong Sent again")
     }
  
   }
@@ -687,18 +666,13 @@ export default function Employeeprofupdate(value) {
         "email" : employeedata.email,
         "otp" : emailverify.otp
       }
-      // console.log("e",body)
       let data = await Axioscall("post","company/verifycode",body)
-      // console.log("data",data)
       if(data.status===200){
         inputemail.current.disabled=true
-        setemailverify({...emailverify,valid:true,modal:false})
-        // setemailvalid(true)
-        
+        setemailverify({...emailverify,valid:true,modal:false})        
       }
       else(
         notifyerror(data.response.data.message )
-        // console.log("errordfghjkl",data.response.data.message )
       )
     } catch (error) {
       console.log(error)
@@ -708,14 +682,10 @@ export default function Employeeprofupdate(value) {
     try {
       setload(true)
       let data =await Axioscall("post","otp/send-otp",{mobile:employeedata.phone})
-      // console.log("daat",data)
       if (data.status===200){
         notify("check your phone for verification otp")
         setphoneverify({...phoneverify,modal:true})
-      }
-      
-      // inputphone.current.disabled=true
-      
+      }      
     } catch (error) {
       
       notifyerror("try again")
@@ -730,16 +700,12 @@ export default function Employeeprofupdate(value) {
         "mobile" : employeedata.phone,
         "otp" : phoneverify.otp
       }
-      // console.log("e",body)
       let data = await Axioscall("post","otp/verify-otp",body)
-      // console.log("data",data)
       if(data.status===200){
-        // inputphone.current.disabled=true
         setphoneverify({...phoneverify,valid:true,modal:false})
       }
       else(
         notifyerror(data.response.data.message )
-        // console.log("errordfghjkl",data.response.data.message )
       )
     } catch (error) {
       console.log(error)
@@ -747,13 +713,11 @@ export default function Employeeprofupdate(value) {
     setload(false)
   }
   const handlePhoneChange = (value) => {
-    // console.log("value",value)
     setemployeedata({ ...employeedata, phone: value });
   };
   const phonenumberCheck=async()=>{
     try {
       let data = await Axioscall("post","employee/validatenumber",{phone:employeedata.phone})
-      // console.log("phone verify",data)
       if(data.status===200){
         phoneVerification()
       }else{
@@ -783,8 +747,7 @@ export default function Employeeprofupdate(value) {
             <div className="row justify-content-center">
               <div className="col-11 col-sm-12 col-md-12 col-lg-9 col-xl-12 text-center p-0 mt-3 mb-2">
                 <div className="card3 px-0 pt-4 pb-0 mt-3 mb-3">
-                  {/* <Form  noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Regstersubmithandler,setValidated)}   className="reg-form contact10 " > */}
-                    {/* progressbar */}
+\                    {/* progressbar */}
                     <ul id="progressbar">
                       <li className="active" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(1) :""} id="account"><strong>Personal</strong></li>
                       <li id="personal" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(2) :""} className={wizard===1?'':'active'}><strong>Address</strong></li>
@@ -826,14 +789,12 @@ export default function Employeeprofupdate(value) {
                           <Form.Control.Feedback type="invalid">Please provide dob</Form.Control.Feedback>
                         </div>
                         <div className="form-group mt-4 col-md-4">
-                        {/* <label className="fieldlabels  mt-1 font-sm color-text-mutted"></label> */}
                           <label className="form-label " htmlFor="input-2" />
                           <input className={`form-control mt-1 ${employeedata.email?emailverify.valid?'':'is-invalid':''}`}  ref={inputemail} id="input-2" type="email"  onBlur={()=>emailVerification()} onChange={(e)=>setemployeedata({...employeedata,email:e.target.value})} value={employeedata.email??""} required name="emailaddress" placeholder="stevenjob@gmail.com" />
                           <Form.Control.Feedback type="invalid">Please Verify Your email</Form.Control.Feedback>
                         </div>
                         <div className="form-group mt-4 col-md-4 ">
                           <label className="form-label" htmlFor="input-2" />
-                          {/* <input className="form-control mt-1"  id="input-2" type="tel"required name="emailaddress" onBlur={()=>phoneVerification()} onChange={(e)=>setemployeedata({...employeedata,phone:e.target.value})} value={employeedata.phone??""} placeholder="Phone Number" /> */}
                           <PhoneInput
                             international
                             countryCallingCodeEditable={false}
@@ -861,7 +822,6 @@ export default function Employeeprofupdate(value) {
                         </div>
                         <div className="col-md-12 mb-3">
                           <label className="col-sm-12 font-sm color-text-mutted">Upload Your Photo*</label> 
-                          {/* <input type="file" onClick={(e)=>Filestackhandler(e)} name="pic" accept="image/*" />  */}
                           <div className='imageselectorborder d-flex'>
                             <button onClick={()=>Filestackhandler("square",setemployeedata,employeedata,'profilePhoto')}  type='button' className='imageselector'> Choose Image</button>
                             <p style={{overflow:"hidden"}}>&nbsp;{employeedata.profilePhoto??<span>No file chosen</span>}</p>
@@ -881,7 +841,6 @@ export default function Employeeprofupdate(value) {
                         </label>
                         <div className="form-group col-lg-4 col-sm-12">
                           <label className="col-sm-12 font-sm color-text-mutted">Upload ID card front Side*</label>
-                          {/* <input type="file" name="pic" accept="image/*" />  */}
                           <div className='imageselectorborder d-flex '>
                             <button onClick={()=>Filestackhandler("landscape",setcarddata,carddata,'frontUrl')} type='button' className='imageselector'> Choose Image</button>
                             <p style={{overflow:"hidden"}}>&nbsp;{carddata.frontUrl??<span>No file chosen</span>}</p>
@@ -889,7 +848,6 @@ export default function Employeeprofupdate(value) {
                         </div>
                         <div className="form-group col-lg-4 col-sm-12">
                           <label className="col-sm-12 font-sm color-text-mutted">Upload ID card Back Side*</label> 
-                          {/* <input type="file" name="pic" accept="image/*" />  */}
                           <div className='imageselectorborder d-flex '>
                             <button onClick={()=>Filestackhandler("landscape",setcarddata,carddata,'backUrl')} type='button' className='imageselector'> Choose Image</button>
                             <p style={{overflow:"hidden"}}>&nbsp;{carddata.backUrl??<span>No file chosen</span>}</p>
@@ -909,7 +867,6 @@ export default function Employeeprofupdate(value) {
                         </label>
                         <div className="form-group col-lg-4 col-sm-12">
                           <label className="col-sm-12 font-sm color-text-mutted">Upload Address Proof Front Side*</label> 
-                          {/* <input type="file" name="pic" accept="image/*" />  */}
                           <div className='imageselectorborder d-flex '>
                             <button onClick={()=>Filestackhandler("landscape",setaddressproof,addressproof,'frontUrl')} type='button' className='imageselector'> Choose Image</button>
                             <p style={{overflow:"hidden"}}>&nbsp;{addressproof.frontUrl??<span>No file chosen</span>}</p>
@@ -917,7 +874,6 @@ export default function Employeeprofupdate(value) {
                         </div>
                         <div className="form-group col-lg-4 col-sm-12 font-sm color-text-mutted">
                           <label className="col-sm-12">Upload Address Proof Back Side*</label> 
-                          {/* <input type="file" name="pic" accept="image/*" />  */}
                           <div className='imageselectorborder d-flex '>
                             <button onClick={()=>Filestackhandler("landscape",setaddressproof,addressproof,'backUrl')} type='button' className='imageselector'> Choose Image</button>
                             <p style={{overflow:"hidden"}}>&nbsp;{addressproof.backUrl??<span>No file chosen</span>}</p>
@@ -962,11 +918,6 @@ export default function Employeeprofupdate(value) {
                              <div key={k} className="form-group col-lg-3">
                              <div className="text__center">
                              <input type="text"  disabled value={itm.type}  className="" placeholder="Name" id=" " />
-                             {/* <select disabled value={itm.type} className="cs-select cs-skin-elastic cs-skin-elastic1">
-                               <option hidden  >Select</option>
-                               <option value="brother">Brother</option>
-                               <option value="sister">Sister</option>
-                             </select> */}
                            </div>
                          </div>
                          <div className="form-group col-lg-3">
@@ -1083,7 +1034,6 @@ export default function Employeeprofupdate(value) {
                        <input type="submit" name="next" onClick={()=>tophandler(0,500)} className="pr-button  action-button" defaultValue="Next" />
                         
                     </fieldset>
-                    {/* {validated?<p className='text-danger text-end'>Please Provide  All  Mandatory Fields </p>:""} */}
                     </Form>
                     :null}
                     {wizard===2?
@@ -1530,7 +1480,6 @@ export default function Employeeprofupdate(value) {
                                   ))} 
                                 </select>
                                 }
-                              {/* <input type="text"  onChange={(e)=>setprecompanydata({...precompanydata,name:e.target.value})} value={precompanydata.name??""} className="form-control" placeholder=" Company Name" id=" " /> */}
                               <Form.Control.Feedback type="invalid">Please provide company name </Form.Control.Feedback>
                             </div>
                             <div className="form-group col-lg-6 ">
@@ -1586,7 +1535,6 @@ export default function Employeeprofupdate(value) {
                       </div>
                       <input type="submit" name="next" onClick={()=>tophandler(0,500)} className="pr-button next action-button"   defaultValue="Submit" /> 
                       <input type="button" name="previous" onClick={()=>setWizard(2)} className="pr-button  action-button-prev" defaultValue="Previous" />
-                      {/* <button onClick={(e)=>registerEmployee(e)} > click</button> */}
                     </fieldset>
                     </Form>
                     :null}
@@ -1611,7 +1559,6 @@ export default function Employeeprofupdate(value) {
           <img src="\assets\imgs\logo\logo_craig-10.png" />
         </div>
         <div className="VISA">
-          {/* <img src="assets/imgs/page/login-register/qr.png" /> */}
           <QRCode style={{height:"100px",width:"100px",backgroundColor:"white",padding:'6px'}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
         </div>
         <div className="card-expiry-group">
@@ -1626,25 +1573,6 @@ export default function Employeeprofupdate(value) {
     </div>
   </div>{/* tilt */}
 </div>
-
-                          {/* <div id="htmlContent" className="theme--dark">
-                            <div id="container" className="container99 container98">
-                              <div className="header">
-                                <div className="logo" />
-                              </div>    
-                              <section id="htmlContent1"  className="left-section">
-                            <QRCode style={{height:"100px",width:"100px"}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
-                            <div className="profile-detail">
-                              <p className="profile-name">CRAIGCARD</p>
-                              <span className="profile-summary">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""}</span>
-                              <a className="profile-cv">ID:{userdetail?.uniqueid??""}</a>
-                            </div>
-                          </section>
-                          
-                         
-                              <div className="front-smooth" />
-                            </div>
-                          </div> */}
                           <div className="profile-pils mt-20">
                             <span className="pils"><Link to="/employee-profile" target="_blank"><i className="fa fa-eye" />View Profile</Link></span>
                             <span className="pils"><a href  onClick={()=>downloadHtmlAsImage('htmlContent')} target="_blank"><i className="fa fa-paper-plane-o" /> Share Profile</a></span>

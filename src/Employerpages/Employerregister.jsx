@@ -25,17 +25,10 @@ export default function Employerregister() {
   const inputemail = useRef(false);
   const [disablephone,setdisablephone]=useState(false)
   const numberRegex = /^\d+$/;
-  // const inputphone = useRef(false);
-  // const phoneInputRef = useRef(null);
-  // console.log("certificate data",certificatedata)
-  // console.log("addressdata ",addressdata)
   useEffect(() => {
     window.scrollTo(0,0)
-    // setload(false)
   }, [])
   let regex = new RegExp(/(0|91)?[6-9][0-9]{9}/);
-  // const numberRegex = /^[0-9]*$/;
-
   const notify = (msg) => toast.success(msg, {
     position: "top-left",
     theme: "dark",
@@ -48,30 +41,16 @@ export default function Employerregister() {
   const navigate  = useNavigate();
  
   const Filestackhandler=async(ratio,setvalue,value,keypair)=>{
-    // console.log("keypair",keypair)
     let data =await Filestack(ratio)
-    // console.log("datafilestack",data)
     if (data){
       setvalue({...value,[keypair]:data})
-    }
-    
+    }  
   }
 
   const handlePhoneChange = (value) => {
-    // console.log("value",value)
     setcompanydata({ ...companydata, phone: value });
   };
-  // const ImageFilestachHandler = async (ratio,value)=> {
-  //   let data =await Filestack(ratio)
-  //   if (data){
-  //     setcompanydata({...companydata, [value] :data})
-  //   }
-  // }
-  
-  
   const Regstersubmithandler= async ()=>{
-    // e.preventDefault();
-    // console.log("ok")
     setload(true)
     try {
       let datalist = {...companydata}
@@ -80,12 +59,6 @@ export default function Employerregister() {
         setload(false)
         return 
       }
-      // if (!datalist.bannerImage){
-      //   notifyerror("please add bannerImage")
-      //   setload(false)
-      //   return 
-      // }
-      // console.log("dataaaaaaa",addressdata)
       if (Object.keys(addressdata).length){
         datalist.address=[{...addressdata}]
       }
@@ -93,10 +66,8 @@ export default function Employerregister() {
       if(Object.keys(certificatedata).length){
         if (certificatedata.front_url&&certificatedata.back_url){
           datalist.certificate = [{...certificatedata , name : companydata.address_proof_type}]
-        }
-        
+        }    
       }
-      // console.log("datalist employer",datalist)
       datalist.role = "employer"
       datalist.status = "pending"
       if (  datalist.password != datalist.repassword)
@@ -105,17 +76,13 @@ export default function Employerregister() {
       }
       else
       {
-        // console.log("---------------------------------------")
-        // console.log( datalist )
         const data = await Axioscall("post","company/",datalist)
-        // console.log( data)
         if (data.status === 200)
         {
           notify("Company Registered Successfully , Please Login Your Account")
           navigate("/employerlogin")
         }
       }
-      // navigate("/employer-profile")
     } catch (error) {
       console.log("error",error)
       setload(false)
@@ -138,8 +105,6 @@ export default function Employerregister() {
   }
   const emailVerification=async()=>{
     try {
-      // setemailvalid(true)
-      // console.log("email",companydata.email)
       setload(true)
       let data = await Axioscall("post","company/sendcode",{email:companydata.email})
       console.log("dataemail",data)
@@ -154,25 +119,21 @@ export default function Employerregister() {
       setload(false)
       notifyerror("Something Went wrong Sent again")
     }
- 
   }
   const emailotpverify=async()=>{
-    try {
-      
+    try {     
       let body={
         "email" : companydata.email,
         "otp" : emailvalidationdata.otp
       }
-      // console.log("e",body)
       let data = await Axioscall("post","company/verifycode",body)
-      // console.log("data",data)
       if(data.status===200){
         inputemail.current.disabled=true
+        setcompanydata({...companydata,username:companydata.email})
         setemailvalid(true)
       }
       else(
         notifyerror(data.response.data.message )
-        // console.log("errordfghjkl",data.response.data.message )
       )
     } catch (error) {
       console.log(error)
@@ -188,16 +149,12 @@ export default function Employerregister() {
         notify("check your phone for verification otp")
         setphonevalidationdata({...phonevalidationdata,verifynumber:true})
       }
-      
-      // inputphone.current.disabled=true
-      
     } catch (error) {
       
       notifyerror("try again")
     }
     setload(false)
   }
-
   const phoneotpverify=async()=>{
     setload(true)
     try {
@@ -206,17 +163,14 @@ export default function Employerregister() {
         "mobile" : companydata.phone,
         "otp" : phonevalidationdata.otp
       }
-      // console.log("e",body)
       let data = await Axioscall("post","otp/verify-otp",body)
       console.log("data",data)
       if(data.status===200){
-        // inputphone.current.disabled=true
         setdisablephone(true)
         setphonevalid(true)
       }
       else(
         notifyerror(data.response.data.message )
-        // console.log("errordfghjkl",data.response.data.message )
       )
     } catch (error) {
       console.log(error)
@@ -236,7 +190,6 @@ export default function Employerregister() {
           <div className="text-center">
             <p className="font-sm text-brand-2">Register</p>
             <h2 className="mt-10 mb-5 text-brand-1">Complete Profile Today</h2>
-            {/* <p className="font-sm text-muted mb-30">Access to all features. No credit card required.</p> */}
           </div>
           <Form  noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Regstersubmithandler,setValidated)} className="login-register text-start mt-20 reg-form row" >
             <div className="form-group mb-3">
@@ -267,7 +220,6 @@ export default function Employerregister() {
                 style={{ width:"100%",fontSize: '14px',display:"flex",border:'1px solid #E0E6F6',borderRadius:"6px",paddingLeft:"13px"}}
                 />
             </div>
-              {/* <input className={`form-control  ${companydata.phone?regex.test(companydata.phone)?'': 'is-invalid' :""}`} id="input-3" ref={inputphone} onChange={(e)=>setcompanydata({...companydata,phone:e.target.value})} value={companydata.phone??""} type="tel" required name="username" placeholder="Company Phone" /> */}
               <Form.Control.Feedback type="invalid">Please provide valid Phone Number</Form.Control.Feedback>
             </div>
             {phonevalid?<>
@@ -279,7 +231,6 @@ export default function Employerregister() {
             <div className="form-group mb-3 col-md-6">
               <label className="col-sm-12 font-sm color-text-mutted">Age of the company (Year)*</label>
               <input required  className={`form-control ${companydata.ageOfCompany?numberRegex.test(companydata.ageOfCompany)?"":"is-invalid":""}` } type="text" pattern="[0-9]*" onChange={(e)=>setcompanydata({...companydata,ageOfCompany:e.target.value})} value={companydata.ageOfCompany??""} placeholder="01 - 234 567 89" />
-              {/* <input className="form-control" id="input-3" onChange={(e)=>setcompanydata({...companydata,ageOfCompany:e.target.value})} value={companydata.ageOfCompany??""} type="number" required name="username" placeholder="Age of the company" /> */}
               <Form.Control.Feedback type="invalid">Please provide Age of Company</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3 col-md-6">
@@ -368,7 +319,6 @@ export default function Employerregister() {
                 <button onClick={()=>Filestackhandler("landscape",setcertificatedata,certificatedata,'front_url')}  type='button' className='imageselector'> Choose Image</button>
                 <p style={{overflow:"hidden"}}>&nbsp;{certificatedata.front_url??<span>No file chosen</span>}</p>
               </div>
-            {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'front_url')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
             </div>
             <div className="form-group col-lg-6 col-sm-12">
               <label className="font-sm color-text-mutted">Certificate Back side*</label> 
@@ -376,7 +326,6 @@ export default function Employerregister() {
               <button onClick={()=>Filestackhandler("landscape",setcertificatedata,certificatedata,'back_url')}  type='button' className='imageselector'> Choose Image</button>
                 <p style={{overflow:"hidden"}}>&nbsp;{certificatedata.back_url??<span>No file chosen</span>}</p>
               </div>
-              {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'backurl')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
             </div>
 
             <div className="form-group col-lg-6 col-sm-12">
@@ -385,7 +334,6 @@ export default function Employerregister() {
                 <button onClick={()=>Filestackhandler("square",setcompanydata,companydata,'profilePhoto')}  type='button' className='imageselector'> Choose Image</button>
                 <p style={{overflow:"hidden"}}>&nbsp;{companydata.profilePhoto??<span>No file chosen</span>}</p>
               </div>
-            {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'front_url')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
             </div>
             <div className="form-group col-lg-6 col-sm-12">
               <label className="font-sm color-text-mutted">Banner Image</label> 
@@ -393,7 +341,6 @@ export default function Employerregister() {
               <button onClick={()=>Filestackhandler("banner",setcompanydata,companydata,'bannerImage')}  type='button' className='imageselector'> Choose Image</button>
                 <p style={{overflow:"hidden"}}>&nbsp;{companydata.bannerImage??<span>No file chosen</span>}</p>
               </div>
-              {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'backurl')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
             </div>
 
             <h6 className="permenent-address"> Address</h6>
@@ -425,7 +372,7 @@ export default function Employerregister() {
               <Form.Control.Feedback type="invalid">Please provide country</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3 mt-50">
-              <input onChange={(e)=>setcompanydata({...companydata,username:e.target.value})} value={companydata.username??""} className="form-control" id="input-3" type="text" required name="username" placeholder="User Name" />
+              <input disabled onChange={(e)=>setcompanydata({...companydata,username:e.target.value})} value={companydata.username??""} className="form-control" id="input-3" type="text" required name="username" placeholder="User Name" />
               <Form.Control.Feedback type="invalid">Please provide a  UserName/email</Form.Control.Feedback>
             </div>
             <div className="form-group mb-3">
@@ -480,7 +427,6 @@ export default function Employerregister() {
     </div>
   </section>
 </main>
-
       <Helmet>
         <script src="/assets/js/vendor/modernizr-3.6.0.min.js"></script>
         <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>

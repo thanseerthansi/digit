@@ -18,18 +18,13 @@ export default function Employeeslist() {
   const [isOpen,setIsOpen]=useState(false)
   const [hrdata,sethrdata]=useState('')
   const [validated,setValidated]=useState(false)
-  // console.log("employeesdata",employeesdata)
-  // console.log("hrdaraaaaaa",hrdata)
   useEffect(() => {
     window.scrollTo(0,0)
     getCandidte()
   }, [])
-  // console.log("userid",userdetail)
   function Decodetoken (){
-    // console.log(token)
     var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
     if(decoded){
-      // console.log("decodeid",decoded)
       return decoded
     }
   }
@@ -53,18 +48,10 @@ export default function Employeeslist() {
         }
       }
       let data=await Axioscall("get","employee/companyemployees",body)
-      // console.log("dataemployee",data.data.data.docs)
       if (data.status===200){
         let datapage = data.data.data
           setcurrentpage({...currentpage,total:datapage.totalPages,next:datapage.hasNextPage,prev:datapage.hasPrevPage})
           setemployeedata(data.data.data.docs)
-        // if (Decodeall().role==='employer'){
-        //  let cemp = data.data.data.docs.filter(t=>t.hr===null)
-        // //  console.log("cccccceeeemp",cemp)
-        //   setemployeedata(cemp[0].employees)
-        // }else{
-        //   setemployeedata(data.data.data.docs[0].employees)
-        // }
       }
     } catch (error) {
       console.log(error)
@@ -72,7 +59,6 @@ export default function Employeeslist() {
   }
   const Addcompanyhandler=async(userid,hrid)=>{
     try {
-      // console.log("ddddddddddddcoded",Decodeall().role)
       let body={
         user : userid,
         company : window.localStorage.getItem("graiduserid"),
@@ -87,9 +73,7 @@ export default function Employeeslist() {
         hr:Decodeall().assignedHr
       }
     }
-    // console.log("bodyyyyyyyy",body)
       let data = await Axioscall("post","employee/assign",body)
-      // console.log("data",data)
       if(data.status===200){
         notify("removed Successfully")
         getCandidte()
@@ -107,7 +91,6 @@ export default function Employeeslist() {
         type:"changehr"
       }
       let data = await Axioscall("post","employee/assign",body)
-      // console.log("dataasssignhr",data)
       if(data.status===200){
         notify("Added Successfully")
         getCandidte()
@@ -145,38 +128,7 @@ export default function Employeeslist() {
   <section className="section-box mt-30">
     <div className="container">           
       <div className="content-page">
-        {/* <div className="box-filters-job">
-          <div className="row">
-            <div className="col-xl-6 col-lg-5"><span className="text-small text-showing">Showing <strong>41-60 </strong>of <strong>944 </strong>jobs</span></div>
-            <div className="col-xl-6 col-lg-7 text-lg-end mt-sm-15">
-              <div className="display-flex2">
-                <div className="box-border mr-10"><span className="text-sortby">Show:</span>
-                  <div className="dropdown dropdown-sort">
-                    <button className="btn dropdown-toggle" id="dropdownSort" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"><span>12</span><i className="fi-rr-angle-small-down" /></button>
-                    <ul className="dropdown-menu dropdown-menu-light" aria-labelledby="dropdownSort">
-                      <li><a className="dropdown-item active" href="#">10</a></li>
-                      <li><a className="dropdown-item" href="#">12</a></li>
-                      <li><a className="dropdown-item" href="#">20</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="box-border"><span className="text-sortby">Sort by:</span>
-                  <div className="dropdown dropdown-sort">
-                    <button className="btn dropdown-toggle" id="dropdownSort2" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"><span>Newest Post</span><i className="fi-rr-angle-small-down" /></button>
-                    <ul className="dropdown-menu dropdown-menu-light" aria-labelledby="dropdownSort2">
-                      <li><a className="dropdown-item active" href="#">Newest Post</a></li>
-                      <li><a className="dropdown-item" href="#">Oldest Post</a></li>
-                      <li><a className="dropdown-item" href="#">Rating Post</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
-        
         {employeesdata.filter(t=>t.employees.length!=0).length?employeesdata.length?employeesdata.map((employeearr,emk)=>(
-          
         <div key={emk} className="row">
           {employeearr.employees.length?<>
           <h4 className='mb-20 mt-10'>{employeearr?.hr?.firstName??"Company"}</h4>
@@ -197,7 +149,6 @@ export default function Employeeslist() {
                 <div className="card-profile pt-10"><Link to={`/candidatedetails/${emp._id}`}>
                     <h5>{emp.firstName} {emp.middleName} {emp.lastName}</h5></Link><span className="font-xs color-text-mutted">{emp?.careerandeducation?.designation??"designation"}</span>
                   <h6 className="card-id">ID:{emp.uniqueid}</h6>
-                  {/* <div className="rate-reviews-small pt-5"><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span className="ml-10 color-text-mutted font-xs">(65)</span></div> */}
                 </div>
               </div>
               <div className="card-block-info">
@@ -270,9 +221,6 @@ export default function Employeeslist() {
               </>
                
               )):""}
-              
-              {/* <option value>Shibin</option>
-              <option value>Rahul</option> */}
             </select>
             <Form.Control.Feedback type="invalid">Select an HR</Form.Control.Feedback>
           </div>
@@ -280,22 +228,17 @@ export default function Employeeslist() {
         <div className="form-group mb-3">
           <input  value={hrdata?.username??""} disabled onChange={(e)=>sethrdata({...hrdata,username:e.target.value})}  className="form-control" id="input-1" type="tel" required name="fullname" placeholder="User Name" />
           <Form.Control.Feedback type="invalid">Provide Employee</Form.Control.Feedback>
-        </div>
-        
-        
+        </div>    
         <div className="form-group mt-10">
           <button className="btn btn-brand-1 hover-up w-100 " href="index-employee.html" type="submit" name="login">Continue</button>
-        </div>
-        
+        </div>       
       </div>
-
       </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={()=>setIsOpen(false)&Nulldata()}>
             Close
-          </Button>
-          
+          </Button>         
         </Modal.Footer>
       </Modal>
   </section>

@@ -8,7 +8,6 @@ import QRCode from 'qrcode.react';
 export default function Candidatedetails() {
     const {id}=useParams();
     const [userprofile,setuserprofile]=useState('')
-    // console.log("userprofile",userprofile)
     useEffect(()=>{
       getemployee()
       window.scrollTo(0,200)
@@ -21,7 +20,6 @@ export default function Candidatedetails() {
         <td data-label="Write">{userprofile && index < userprofile.lngWrite.length ? userprofile.lngWrite[index] : ''}</td>
       </tr>
     ));
-    // console.log("iduserprofile",userprofile)
     const getemployee=async()=>{
         try {
             let body = {
@@ -30,7 +28,6 @@ export default function Candidatedetails() {
                 user :id
             }
             let data = await Axioscall("get","employee",body)
-            // console.log("employeee data",data.data.data.docs[0])
             if(data){
               setuserprofile(data.data.data.docs[0])              
             }
@@ -43,7 +40,6 @@ export default function Candidatedetails() {
     let exp = userprofile?.careerandeducation?.[0]?.prevCompanies??""
     let from =[]
     let to =[]
-    // console.log(exp,"yhjhh")
     var result = " No Experience"
     if (exp.length){
       exp.forEach(comp => {     
@@ -79,7 +75,6 @@ export default function Candidatedetails() {
  
   const degreeHandler=()=>{
     let data= userprofile?.careerandeducation?.[0]??""
-    // console.log("datahandler",data.bachelorDegree)
     let rslt=""
     if(data){
       if(data.bachelorDegree.length){
@@ -89,7 +84,6 @@ export default function Candidatedetails() {
         console.log("master")
         rslt = "Master Degree"
       }
-      // console.log("reslt",rslt)
       return rslt
     } 
   }
@@ -112,21 +106,9 @@ export default function Candidatedetails() {
                     :<div className=""><img className="ml-3" src="\assets\imgs\page\candidates\grey.png" alt="jobbox" /></div>}
             <h6 className="f-18 u-color">Unique ID : <span>{userprofile?.uniqueid??""}</span></h6>
             <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userprofile?.careerandeducation?.[0]?.designation??""}</p>
-            {/* <div className="mt-10 mb-15"><img className="ml-30" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div> */}
           </div>
           <div className="col-lg-4 col-md-12 text-lg-end">     
             <div>
-              {/* <section>
-                <h5 className="score-section mb-20">Score</h5>
-                <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
-                  <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
-                  <circle className="circle-chart__circle" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
-                  <g className="circle-chart__info">
-                    <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={8}>125</text>
-                    <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={2}>Out of 999</text>
-                  </g>
-                </svg>
-              </section> */}
               <div id="circle-staticstic-demo" />
             </div>
           </div>
@@ -149,7 +131,6 @@ export default function Candidatedetails() {
             <div className="tab-content">
               <div className="tab-pane fade  mb-80" id="tab-short-bio" role="tabpanel" aria-labelledby="tab-short-bio">
                 <h4>About </h4>
-                {/* <p>Hello there! My name is Alan Walker. I am a graphic designer, and I’m very passionate and dedicated to my work. With 20 years experience as a professional a graphic designer, I have acquired the skills and knowledge necessary to make your project a success.</p> */}
                 <div className="class-verification1">
                   <table>
                     <tbody>
@@ -333,7 +314,6 @@ export default function Candidatedetails() {
                   {userprofile?.careerandeducation?.[0]?.skills.map((caritm,crk)=>(
                 <a key={crk} className="btn btn-tags-sm mb-10 mr-5">{caritm}</a>
               ))??""}
-                    {/* <a className="btn btn-grey-small mr-10">Figma</a><a className="btn btn-grey-small mr-10">Adobe XD</a><a className="btn btn-grey-small mr-10">NextJS</a><a className="btn btn-grey-small mr-10">React</a><a className="btn btn-grey-small mr-10">App</a><a className="btn btn-grey-small mr-10">Digital</a><a className="btn btn-grey-small mr-10">NodeJS</a> */}
                   </div>
                 </div>
               </div>
@@ -362,42 +342,6 @@ export default function Candidatedetails() {
                             </div>
                           </div>
                           ))??""}
-                          {/* <div className="item-timeline"> 
-                            <div className="timeline-year"> <span>2012-2013</span></div>
-                            <div className="timeline-info"> 
-                              <h5 className="color-brand-1 mb-20">Compony 2</h5>
-                              <h6 className="color-text-paragraph-2 mb-15">Software engineer</h6>
-                              <p className="color-text-paragraph-2 mb-15">company mail:Dummy@gmail.com</p>
-                              <p className="color-text-paragraph-2 mb-15">Company Phone&nbsp;:+964545432</p>
-                              <p className="color-text-paragraph-2 mb-15">Location:
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, quibusdam?</p>
-                              <p className="color-text-paragraph-2 mb-15">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam debitis voluptas quas ut quisquam vel maiores odit iure nobis ea?</p>
-                            </div>
-                          </div>
-                          <div className="item-timeline"> 
-                            <div className="timeline-year"> <span>2014-2015</span></div>
-                            <div className="timeline-info"> 
-                              <h5 className="color-brand-1 mb-20">Compony 3</h5>
-                              <h6 className="color-text-paragraph-2 mb-15">Software engineer</h6>
-                              <p className="color-text-paragraph-2 mb-15">company mail:Dummy@gmail.com</p>
-                              <p className="color-text-paragraph-2 mb-15">Company Phone&nbsp;:+964545432</p>
-                              <p className="color-text-paragraph-2 mb-15">Location:
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, quibusdam?</p>
-                              <p className="color-text-paragraph-2 mb-15">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam debitis voluptas quas ut quisquam vel maiores odit iure nobis ea?</p>
-                            </div>
-                          </div>
-                          <div className="item-timeline"> 
-                            <div className="timeline-year"> <span>2016-2018 </span></div>
-                            <div className="timeline-info"> 
-                              <h5 className="color-brand-1 mb-20">Compony 4</h5>
-                              <h6 className="color-text-paragraph-2 mb-15">Software engineer</h6>
-                              <p className="color-text-paragraph-2 mb-15">company mail:Dummy@gmail.com</p>
-                              <p className="color-text-paragraph-2 mb-15">Company Phone&nbsp;:+964545432</p>
-                              <p className="color-text-paragraph-2 mb-15">Location:
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, quibusdam?</p>
-                              <p className="color-text-paragraph-2 mb-15">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam debitis voluptas quas ut quisquam vel maiores odit iure nobis ea?</p>
-                            </div>
-                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -428,8 +372,6 @@ export default function Candidatedetails() {
                       {userprofile?.lngRead?.map((lang,lk)=>(
                         <strong key={lk} className="small-heading">{lang}</strong>
                       ))??""}
-                      
-                      {/* <strong className="small-heading">gsggh</strong> */}
                       </div>
                     </li>
                     <li>

@@ -12,7 +12,6 @@ import domtoimage from 'dom-to-image';
 
 export default function Employeeprofile() {
   const {logouthandler,userdetail,employeedata,getUser}=useContext(Simplecontext)
-  // console.log("userdetail in employee profile",userdetail)
   const [shareview,setshareview]=useState(true)
   const maxLength = userdetail ? Math.max(userdetail.lngRead.length, userdetail.lngWrite.length) : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
@@ -22,17 +21,14 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
   </tr>
 ));
 
-// console.log("userdetails",userdetail)
 const Bannerhandler=async(ratio)=>{
   try {
-    // console.log("atio in function",ratio)
     let data =await Filestack(ratio)
     let datalist = {id:userdetail._id}
     if (data){
       datalist.id=userdetail._id
       datalist.bannerImage=data
     }
-    // console.log("datalist",datalist)
     let dataupdate = await Axioscall("put","employee/personal",datalist)
     if (dataupdate.status){
       getUser(); 
@@ -44,20 +40,6 @@ const Bannerhandler=async(ratio)=>{
   }
   
  }
- 
-  // const shareContent = () => {
-  //   const container = document.getElementById('myContainer');
-  //   if (container) {
-  //     const content = container.innerText;
-  //     navigator.share({ text: content })
-  //       .then(() => {
-  //         console.log('Content shared successfully.');
-  //       })
-  //       .catch((error) => {
-  //         console.error('Failed to share content:', error);
-  //       });
-  //   }
-  // };
   const copyValue = (value) => {
     navigator.clipboard.writeText(value)
       .then(() => {
@@ -104,21 +86,9 @@ const Bannerhandler=async(ratio)=>{
             <h5 className="f-18">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.state??""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></h5><br />
             <h5 className="f-18 u-color">Unique ID : <span>{userdetail?.uniqueid??""}</span></h5>
             <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation??""}</p>
-            {/* <div className="rate-reviews-small pt-5"><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span className="ml-10 color-text-mutted font-xs">(65)</span></div> */}
           </div>
           <div className="col-lg-4 col-md-12 text-lg-end">     
             <div>
-              {/* <section>
-                <h5 className="score-section mb-20">Score</h5>
-                <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
-                  <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
-                  <circle className="circle-chart__circle" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
-                  <g className="circle-chart__info">
-                    <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={8}>125</text>
-                    <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={2}>Out of 999</text>
-                  </g>
-                </svg>
-              </section> */}
               <div id="circle-staticstic-demo" />
             </div></div>
         </div>
@@ -143,7 +113,6 @@ const Bannerhandler=async(ratio)=>{
             <div className="mt-10 mb-10">
                     <a href="#" onClick={()=>{logouthandler();}}> Log Out</a>
                   </div>
-            {/* <div className="mt-20 mb-20"><a className="link-red" href="#"><i className="fa fa-paper-plane-o" />Delete Account</a></div> */}
           </div>
         </div>
         <div className="col-lg-10 col-md-12 col-sm-12 col-12 mb-50 ">
@@ -162,7 +131,6 @@ const Bannerhandler=async(ratio)=>{
                         </div>
                         <div className="card-block-info">
                           <div className="class-verification1">
-                            {/* <p className="font-md color-text-paragraph-2 ">| Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero repellendus magni, atque delectus molestias quis?</p> */}
                             <table style={{width:"100%"}}>
                               <tbody>
                                 <tr>
@@ -287,11 +255,6 @@ const Bannerhandler=async(ratio)=>{
                               {userdetail?.careerandeducation?.[0]?.skills.map((caritm,crk)=>(
                                 <a key={crk} className="btn btn-tags-sm mb-10 mr-5">{caritm}</a>
                               ))??""}
-                              
-                              {/* <a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Adobe XD</a> */}
-                              {/* <a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">PSD</a>
-                              <a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">App</a>
-                              <a className="btn btn-tags-sm mb-10 mr-5" href="jobs-grid.html">Digital</a> */}
                             </div>
                           </div>
                         </div>
@@ -316,17 +279,6 @@ const Bannerhandler=async(ratio)=>{
                                  <p>{pcompany.position}</p>
                                </li>
                               ))??""}
-                             
-                              {/* <li className="timeline-sm-item">
-                                <span className="timeline-sm-date">2012 - 15</span>
-                                <h6 className="mt-0 mb-1">Senior Graphic Designer</h6>
-                                <p>Software Inc.</p>
-                              </li>
-                              <li className="timeline-sm-item">
-                                <span className="timeline-sm-date">2010 - 12</span>
-                                <h6 className="mt-0 mb-1">Graphic Designer</h6>
-                                <p>Coderthemes LLP</p>
-                              </li> */}
                             </ul>
                           </div>
                           <div className="sidebar-list-job text-imp ">
@@ -358,7 +310,6 @@ const Bannerhandler=async(ratio)=>{
                               <img src="\assets\imgs\logo\logo_craig-10.png" />
                             </div>
                             <div className="VISA">
-                              {/* <img src="assets/imgs/page/login-register/qr.png" /> */}
                               <QRCode style={{height:"100px",width:"100px",backgroundColor:"white",padding:'6px'}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
                             </div>
                             <div className="card-expiry-group">
@@ -373,29 +324,7 @@ const Bannerhandler=async(ratio)=>{
                         </div>
                       </div>{/* tilt */}
                     </div>       
-
-                      {/* <div id="htmlContent1"  className="theme--dark88">
-                        <div id="container" className="container88">
-                          <div className="header">
-                            <div className="logo" />
-                          </div>    
-                          <section id="htmlContent1"  className="left-section">
-                        
-                            <QRCode style={{height:"100px",width:"100px"}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
-                            <div className="profile-detail">
-                              <p className="profile-name">CRAIGCARD</p>
-                              <span className="profile-summary">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""}</span>
-                              <a className="profile-cv">ID:{userdetail?.uniqueid??""}</a>
-                            </div>
-                            
-                          </section>
-                       
-                          <div className="front-smooth" />
-                        </div>
-                      </div> */}
-                    
-                    </div>
-                    
+                    </div>                   
                   </div>
                 </div>
                 <div className="panel-white mb-30">
@@ -405,8 +334,7 @@ const Bannerhandler=async(ratio)=>{
                       <div className="col-lg-9">
                         <div className="row">
                         </div>
-                        <div className="box-timeline mt-50">
-                         
+                        <div className="box-timeline mt-50">                      
                           {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
                           <div key={pk} className="item-timeline"> 
                             <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid()? moment(pcompany.to, 'YYYY-MM-DD').format('YY'):'Present'}</span></div>
@@ -420,7 +348,6 @@ const Bannerhandler=async(ratio)=>{
                               <p className="color-text-paragraph-2 mb-15">company mail:{pcompany.email}</p>
                               <p className="color-text-paragraph-2 mb-15">Company Phone&nbsp;:{pcompany.phone}</p>
                               <p className="color-text-paragraph-2 mb-15">Location:{pcompany.address}</p>
-                              {/* <p className="color-text-paragraph-2 mb-15">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam debitis voluptas quas ut quisquam vel maiores odit iure nobis ea?</p> */}
                             </div>
                           </div>
                            ))??""}
@@ -479,15 +406,6 @@ const Bannerhandler=async(ratio)=>{
                                 <td data-label="Year">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.year??""}</td>
                               </tr>
                               :""??""}
-                              {/* {userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?
-                              <tr>
-                                <td scope="row" data-label="Cource">Master’s</td>
-                                <td data-label="Field/board">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.course??""}</td>
-                                <td data-label="Collage">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.collage??""}</td>
-                                <td data-label="Grade/Score">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.['garde/score']??""}</td>
-                                <td data-label="Year">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.year??""}</td>
-                              </tr>
-                              :""??""} */}
                             </tbody>
                           </table>
                         </div>
@@ -497,8 +415,7 @@ const Bannerhandler=async(ratio)=>{
                 </div>
               </div>
               <div className="tab-pane fade" id="tab-my-jobs" role="tabpanel" aria-labelledby="tab-my-jobs">
-                <h3 className="mt-0 mb-15 color-brand-1">Update Profile</h3><a className="font-md color-text-paragraph-2" href="#">Update your profile</a>
-               
+                <h3 className="mt-0 mb-15 color-brand-1">Update Profile</h3><a className="font-md color-text-paragraph-2" href="#">Update your profile</a>              
                 <Employeeprofupdate value={1}/>
               </div>
             </div>

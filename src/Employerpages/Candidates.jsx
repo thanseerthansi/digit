@@ -18,14 +18,10 @@ export default function Candidates() {
   const [fileterid,setfilterid]=useState('')
   const [isOpen,setIsOpen]=useState(false)
   const [hrdata,sethrdata]=useState('')
-  const [validated,setValidated]=useState(false)
-  // console.log("employeedata",employeesdata)
-  
+  const [validated,setValidated]=useState(false)  
   useEffect(() => {
     window.scrollTo(0,0)
-    // getCandidte()
   }, [])
-  // console.log("hrdata",hrdata)
   const getCandidte=async(page)=>{ 
     try {
       if(fileterid){
@@ -36,7 +32,6 @@ export default function Candidates() {
           role:"hr"
         }
         let data=await Axioscall("get","employee",body)
-        // console.log("dataemployee",data.data.data)
         if (data.status===200){
           let datapage = data.data.data
           setcurrentpage({...currentpage,total:datapage.totalPages,next:datapage.hasNextPage,prev:datapage.hasPrevPage})
@@ -57,7 +52,6 @@ export default function Candidates() {
         type : "assign",
         role: "employee"
     }
-    // console.log("decode...............",Decodeall())
     if(Decodeall().role==='hr'){
       body={
         user : userid,
@@ -77,9 +71,7 @@ export default function Candidates() {
         password:hrdata.password    
     }    
     }
-    // console.log("bodyyyyyyyy",body)
       let data = await Axioscall("post","employee/assign",body)
-      // console.log("data",data)
       if(data.status===200){
         notify("added Successfully")
         getCandidte()
@@ -96,7 +88,6 @@ export default function Candidates() {
     sethrdata('')
   }
   const checkEmployee=(userid,designation)=>{
-    // console.log("designation",designation)
     if(designation==="HR"){
       sethrdata({...hrdata,HR:userid})
       setIsOpen(true)
@@ -114,7 +105,6 @@ export default function Candidates() {
       <div className="banner-hero banner-company">
         <div className="block-banner text-center">
           <h3 className="wow animate__animated animate__fadeInUp">Browse Candidates</h3>
-          {/* <div className="font-sm color-text-paragraph-2 mt-10 wow animate__animated animate__fadeInUp" data-wow-delay=".1s">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero repellendus magni, <br className="d-none d-xl-block" />atque delectus molestias quis?</div> */}
           <div className="box-list-character">
             <div className="search-wrapper  col-md-6">
               <i className="search-icon fas fa-search mt-3" />
@@ -129,35 +119,6 @@ export default function Candidates() {
   <section className="section-box mt-30">
     <div className="container">           
       <div className="content-page">
-        {/* <div className="box-filters-job">
-          <div className="row">
-            <div className="col-xl-6 col-lg-5"><span className="text-small text-showing">Showing <strong>41-60 </strong>of <strong>944 </strong>jobs</span></div>
-            <div className="col-xl-6 col-lg-7 text-lg-end mt-sm-15">
-              <div className="display-flex2">
-                <div className="box-border mr-10"><span className="text-sortby">Show:</span>
-                  <div className="dropdown dropdown-sort">
-                    <button className="btn dropdown-toggle" id="dropdownSort" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"><span>12</span><i className="fi-rr-angle-small-down" /></button>
-                    <ul className="dropdown-menu dropdown-menu-light" aria-labelledby="dropdownSort">
-                      <li><a className="dropdown-item active" href="#">10</a></li>
-                      <li><a className="dropdown-item" href="#">12</a></li>
-                      <li><a className="dropdown-item" href="#">20</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="box-border"><span className="text-sortby">Sort by:</span>
-                  <div className="dropdown dropdown-sort">
-                    <button className="btn dropdown-toggle" id="dropdownSort2" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"><span>Newest Post</span><i className="fi-rr-angle-small-down" /></button>
-                    <ul className="dropdown-menu dropdown-menu-light" aria-labelledby="dropdownSort2">
-                      <li><a className="dropdown-item active" href="#">Newest Post</a></li>
-                      <li><a className="dropdown-item" href="#">Oldest Post</a></li>
-                      <li><a className="dropdown-item" href="#">Rating Post</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
         <div className="row">
           {employeesdata.length?employeesdata.map((emp,ek)=>(
             <div key={ek} className="col-xl-3 col-lg-4 col-md-6">
@@ -173,7 +134,6 @@ export default function Candidates() {
                 <div className="card-profile pt-10"><Link to={`/candidatedetails/${emp._id}`}>
                     <h5>{emp.firstName} {emp.middleName} {emp.lastName}</h5></Link><span className="font-xs color-text-mutted">{emp?.careerandeducation?.[0]?.designation??"designation"}</span>
                   <h6 className="card-id">ID:{emp.uniqueid}</h6>
-                  {/* <div className="rate-reviews-small pt-5"><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span className="ml-10 color-text-mutted font-xs">(65)</span></div> */}
                 </div>
               </div>
               <div className="card-block-info">
@@ -195,7 +155,6 @@ export default function Candidates() {
                     </div>
                     
                   </div>
-                  {/* <div className='text-end pt-10'><button className='btn btn-tags-sm '>Add to Company</button></div> */}
                 </div>
               </div>
             </div>

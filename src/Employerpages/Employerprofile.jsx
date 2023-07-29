@@ -14,8 +14,6 @@ import jwt_decode from "jwt-decode";
 export default function Employerprofile() {
   const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler,Decodeall}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
-  // console.log("userdetailin profile",userdetail)
-  // console.log("employeedata profile",employeedata)
   const [certificatedata,setcertificatedata]=useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [load,setload]=useState(false)
@@ -24,8 +22,6 @@ export default function Employerprofile() {
   const [photomodal,setphotomodal]=useState({modal:false,data:""})
   const [emailotp,setemailotp]=useState('')
   const numberRegex = /^\d+$/;
-  // const navigate = useNavigate();
-  // console.log("wwwwwwwwwwwwwwwuser",window.localStorage.getItem('graiduser'))
   useEffect(() => {
     window.scrollTo(0,0)
     if(userdetail?.status==="rejected"??""){
@@ -39,9 +35,7 @@ export default function Employerprofile() {
  const Employeeupdate=async()=>{
   try {
     setIsOpen(true)
-    // console.log("okentered to employee update",employeedata)
     let datalist = {...employeedata}
-    // console.log("no of eeeeeeeeeeeeeeeemployes",datalist.noOfemployees)
     if (employeedata._id){
       datalist.id=employeedata._id   
     }
@@ -53,7 +47,6 @@ export default function Employerprofile() {
         datalist.certificate = [{...certificatedata , name : employeedata.address_proof_type}]
       }}
     let data = await Axioscall("put","company",datalist)
-    // console.log(" response",data)
     if(data.status===200){
       getUser(); 
       notify("Updated Successfully")
@@ -68,20 +61,17 @@ export default function Employerprofile() {
  }
  const Bannerhandler=async(ratio)=>{
   try {
-    // console.log("atio in function",ratio)
     let data =await Filestack(ratio)
     let datalist = {...employeedata}
     if (data){
       datalist.id=employeedata._id
       datalist.bannerImage=data
     }
-    // console.log("datalist",datalist)
     let dataupdate = await Axioscall("put","company",datalist)
     if (dataupdate.status){
       getUser(); 
       notify("Image Updated")  
     }
-  
   } catch (error) {
     console.log(error)
   }
@@ -90,13 +80,11 @@ export default function Employerprofile() {
  const zipcodeHandler=async(e,code)=>{
   setload(true)
   let data =await axios.get(`https://api.postalpincode.in/pincode/${code}`)
-  // console.log("zipcode data",data.data[0].Status)
   if(data.data[0].Status==='Success'){
     
     e.target.classList.remove('is-invalid');
     let place = data.data[0].PostOffice[0]
     setemployeedata({...employeedata,address:[{...employeedata.address[0],city:place.Name,state:place.State,country:place.Country}]})
-    // setaddressdata({...addressdata,city:place.Name,state:place.State,country:place.Country})
   }else{
     e.target.classList.add('is-invalid');
   }
@@ -104,11 +92,8 @@ export default function Employerprofile() {
 }
 const ConfirmmailSend=async()=>{
   try {
-    // setemailvalid(true)
-    // console.log("email",userdetail.email)
     setload(true)
     let data = await Axioscall("post","company/sendcode",{email:userdetail.email})
-    // console.log("dataemail",data)
     if(data.status===200){
       notify("check your mail for verification otp")
       setIsOpen(true)
@@ -121,7 +106,6 @@ const ConfirmmailSend=async()=>{
     console.log(error)
     notifyerror("Something Went wrong Sent again")
   }
- 
 }
 
 const verifyotp=async()=>{
@@ -131,9 +115,7 @@ const verifyotp=async()=>{
       "email" : userdetail.email,
       "otp" : emailotp
     }
-    // console.log("e",body)
     let data = await Axioscall("post","company/verifycode",body)
-    // console.log("data",data)
     if(data.status===200){
       setIsOpen(false)
       Employeeupdate()
@@ -141,7 +123,6 @@ const verifyotp=async()=>{
     }
     else(
       notifyerror(data.response.data.message )
-      // console.log("errordfghjkl",data.response.data.message )
     )
   } catch (error) {
     console.log(error)
@@ -149,7 +130,6 @@ const verifyotp=async()=>{
 
 }
 function Decodetoken (){
-  // console.log(token)
   var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
   if(decoded){
     console.log("decodeid",decoded)
@@ -244,9 +224,7 @@ function Decodetoken (){
                     <a href="#" onClick={()=>{logouthandler();}}> Log Out</a>
                   </div>
                 </div>
-                <div className="mt-20 mb-20">
-                  {/* <a className="link-red" href="#" onClick={() => {logouthandler();}}> Delete Account </a> */}
-                    
+                <div className="mt-20 mb-20">                    
                 </div>
               </div>
               <div className="col-lg-9 col-md-8 col-sm-12 col-12 mb-50">
@@ -292,7 +270,6 @@ function Decodetoken (){
                                   <tr>
                                     <td> Location</td>
                                     <td>:</td>
-                                    {/* <td className="td-verify">{employeedata?.address?.[0]?.city??""}</td> */}
                                     <td className="td-verify">{userdetail?.address?.[0]?.landmark??""}</td>
                                   </tr>
                                   <tr>
@@ -367,7 +344,6 @@ function Decodetoken (){
                             <Form.Control.Feedback type="invalid">Please provide a Company Name</Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mb-3">
-                            {/* {employeedata.user.username} */}
                             <label className="font-sm color-text-mutted mb-10">Email *</label>
                             <input required className="form-control" disabled type="text"value={employeedata?.email??""} onChange={(e)=>setemployeedata({...employeedata,email:e.target.value})}/>
                             <Form.Control.Feedback type="invalid">
@@ -474,7 +450,6 @@ function Decodetoken (){
                 <button onClick={()=>Filestackhandler("landscape",setcertificatedata,certificatedata,'front_url')}  type='button' className='imageselector'> Choose Image</button>
                 <p onClick={()=>setphotomodal({...photomodal,modal:true,data:certificatedata.front_url})} style={{overflow:"hidden"}}>&nbsp;{certificatedata.front_url??<span>No file chosen</span>}</p>
               </div>
-            {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'front_url')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
             </div>
             <div className="form-group col-lg-6 col-sm-12">
               <label className="font-sm color-text-mutted">Certificate Back side*</label> 
@@ -482,7 +457,6 @@ function Decodetoken (){
               <button onClick={()=>Filestackhandler("landscape",setcertificatedata,certificatedata,'back_url')}  type='button' className='imageselector'> Choose Image</button>
                 <p  onClick={()=>setphotomodal({...photomodal,modal:true,data:certificatedata.back_url})} style={{overflow:"hidden"}}>&nbsp;{certificatedata.back_url??<span>No file chosen</span>}</p>
               </div>
-              {/* <input onChange={(e)=>Filestackhandler("landscape",setcertificatedata,certificatedata,'backurl')}  type="file" className="form-control" name="pic" accept="image/*" />  */}
             </div>
                           <h6 className="permenent-address mb-3"> Address</h6>
                           <div className="form-group mb-3">
@@ -540,39 +514,7 @@ function Decodetoken (){
                         </div>
                           </Form>
                       </div>
-
                       {/* form ends................................... */}
-                      {/* <div className="row form-contact">
-                        <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Employeeupdate,setValidated)} >
-                        <div className="col-lg-12 col-md-12 row "> 
-                          <div className="form-group col-lg-6 mb-3">
-                            <label className="font-sm color-text-mutted mb-10">
-                              City
-                            </label>
-                            <input
-                              className="form-control"
-                              type="text"
-                              defaultValue="Mcallen"
-                            />
-                          </div>
-                          <div className="form-group col-lg-6 mb-3">
-                            <label className="font-sm color-text-mutted mb-10">
-                              Zip code
-                            </label>
-                            <input
-                              className="form-control"
-                              type="text"
-                              defaultValue={82356}
-                            />
-                          </div>
-                          <div className="box-button mt-15 ">
-                            <button className="btn btn-apply-big font-md font-bold">
-                              Update
-                            </button>
-                          </div>
-                        </div>
-                        </Form>
-                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -613,35 +555,6 @@ function Decodetoken (){
             </div>
           </div>
           {/* modal................................................................ */}
-          {/* <button variant="primary" onClick={()=>setIsOpen(true)}>
-        Launch demo modal
-      </button> */}
-
-      
-      {/* <div className="modal " id="exampleModalCenter" tabIndex={1} aria-labelledby="exampleModalCenterTitle" aria-modal="true" role="dialog" style={isOpen === true ? { display: 'block', paddingRight: 17 } : { display: 'none' }}>
-        <div className="modal-dialog modal-dialog-centered modal-lg box-shadow-blank" >
-          <div className="modal-content"><div className="modal-header">
-            <h5 className="modal-title" id="exampleModalCenterTitle">Department</h5>
-            <button onClick={() => setIsOpen(!isOpen)} type="button" className="btn-close" data-bs-dismiss="modal" aria-label="btn-close" />
-          </div>
-            <form className="forms-sample" onSubmit={(e)=>Postdepartrment(e)} >
-              <div className="modal-body">
-                
-                <div />
-              </div>
-              <div className="modal-footer">
-                <button onClick={() => setIsOpen(!isOpen)} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" className="btn btn-primary">Save</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div> */}
-
-{/* <Button variant="primary" onClick={()=>setIsOpen(true)}>
-        Launch demo modal
-      </Button> */}
-
       <Modal show={isOpen} onHide={()=>setIsOpen(false)}>
         <Modal.Header closeButton>
           <Modal.Title><h4>Check your email for otp</h4></Modal.Title>
@@ -664,7 +577,6 @@ function Decodetoken (){
       </Modal>
       <Modal show={notcomplete} onHide={()=>setnotcomplete(false)}>
         <Modal.Header closeButton>
-          {/* <Modal.Title><h4>Check your email for otp</h4></Modal.Title> */}
         </Modal.Header>
         <Modal.Body>
           {userdetail?.status==="rejected"?
@@ -675,37 +587,14 @@ function Decodetoken (){
           }
           
         <div className="text-end mt-4">
-        {/* <a className="btn btn-border recruitment-icon mb-20" href="#tab-saved-jobs"  data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" >
-                        Complete Profile
-                      </a> */}
-                     
-                      {/* <div className="box-nav-tabs nav-tavs-profile mb-5">
-                  <ul className="nav" role="tablist">
-                    
-                    <li>
-                      <a className="btn btn-border recruitment-icon mb-20" onClick={()=>setphotomodal({...photomodal,modal:false})} href="#tab-saved-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">
-                        Complete Profile
-                      </a>
-                    </li>
-                  </ul>
-              </div>   */}
-          {/* <Button className="text-center" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Complete </Button> */}
           </div>
         
         </Modal.Body>
-        {/* <Modal.Footer> */}
-          {/* <Button variant="secondary" onClick={()=>setnotcomplete(false)}>
-            Close
-          </Button> */}
-          
-        {/* </Modal.Footer> */}
       </Modal>
       <Modal show={photomodal.modal} onHide={()=>setphotomodal({...photomodal,modal:false})}>
         <Modal.Header closeButton>
-          {/* <Modal.Title><h4>Check your email for otp</h4></Modal.Title> */}
         </Modal.Header>
         <Modal.Body>
-        {/* <p> Image Not Found</p>??<p> Im age Not Found</p> */}
         {photomodal.data?
         <img
                 src={photomodal.data?photomodal?.data:""??""}
@@ -714,12 +603,6 @@ function Decodetoken (){
               />
               :<p> Image Not Found</p>}
         </Modal.Body>
-        {/* <Modal.Footer> */}
-          {/* <Button variant="secondary" onClick={()=>setnotcomplete(false)}>
-            Close
-          </Button> */}
-          
-        {/* </Modal.Footer> */}
       </Modal>
         </section>
       </main>

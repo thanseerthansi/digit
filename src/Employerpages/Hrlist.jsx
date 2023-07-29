@@ -19,7 +19,6 @@ export default function Hrlist() {
   const [load,setload]=useState(false)
   const [hrdata,sethrdata]=useState('')
   const [userid,setuserid]=useState('')
-  // console.log("hrdata",hrdata)
   useEffect(() => {
     getCandidte()
     window.scrollTo(0,0)
@@ -35,7 +34,6 @@ export default function Hrlist() {
         company_id:window.localStorage.getItem("graiduserid")
       }
       let data=await Axioscall("get","employee",body)
-      // console.log("dataemployee",data.data)
       if (data.status===200){
         let datapage = data.data.data
         setcurrentpage({...currentpage,total:datapage.totalPages,next:datapage.hasNextPage,prev:datapage.hasPrevPage})
@@ -45,27 +43,22 @@ export default function Hrlist() {
       console.log(error)
     }
   }
-  const hrAssign=async(user)=>{
-   
+  const hrAssign=async(user)=>{  
     let msg ="HR added Successfully"
     setload(true)
     try {
       let body={
         user : userid?userid:user,
         company : window.localStorage.getItem("graiduserid"),
-        role:'hr',
-        
+        role:'hr',      
     }
     if(hrdata.type==="assign"){
-
     }else{
       msg ="HR Removed Successfully"
       body.type="remove"
     }
     let obj ={...hrdata,...body}
-    // console.log("bodyyyyyyyyyy1",obj)
       let data = await Axioscall("post","employee/assign",obj)
-      // console.log("data",data)
       if(data.status===200){
         notify(msg)
         getCandidte()
@@ -95,7 +88,6 @@ export default function Hrlist() {
       <div className="banner-hero banner-company">
         <div className="block-banner text-center">
           <h3 className="wow animate__animated animate__fadeInUp">Browse Candidates</h3>
-          {/* <div className="font-sm color-text-paragraph-2 mt-10 wow animate__animated animate__fadeInUp" data-wow-delay=".1s">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero repellendus magni, <br className="d-none d-xl-block" />atque delectus molestias quis?</div> */}
           <div className="box-list-character">
             <div className="search-wrapper  col-md-6">
               <i className="search-icon fas fa-search mt-3" />
@@ -125,7 +117,6 @@ export default function Hrlist() {
                 <div className="card-profile pt-10"><Link to={`/candidatedetails/${emp._id}`}>
                     <h5>{emp.firstName} {emp.middleName} {emp.lastName}</h5></Link><span className="font-xs color-text-mutted">{emp?.careerandeducation?.[0]?.designation??"designation"}</span>
                   <h6 className="card-id">ID:{emp.uniqueid}</h6>
-                  {/* <div className="rate-reviews-small pt-5"><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span><img src="assets/imgs/template/icons/star.svg" alt="jobBox" /></span><span className="ml-10 color-text-mutted font-xs">(65)</span></div> */}
                 </div>
               </div>
               <div className="card-block-info">
@@ -194,9 +185,6 @@ export default function Hrlist() {
               {employeesdata.length?employeesdata.map((emp,ek)=>(
                 <option key={ek} value={emp._id}>{emp.firstName} {emp.middleName} {emp.lastName}</option>
               )):""}
-              
-              {/* <option value>Shibin</option>
-              <option value>Rahul</option> */}
             </select>
             <Form.Control.Feedback type="invalid">Select an HR</Form.Control.Feedback>
           </div>
@@ -212,25 +200,19 @@ export default function Hrlist() {
         <div className="form-group">
           <input value={hrdata?.repassword??""}  onChange={(e)=>sethrdata({...hrdata,repassword:e.target.value})} className={`form-control   ${hrdata.password?hrdata.password===hrdata.repassword ?'': 'is-invalid' :""}`} id="input-1" type="password" required name="fullname" placeholder="re-password" />
           <Form.Control.Feedback type="invalid">Password Not Match</Form.Control.Feedback>
-        </div>
-        
+        </div>       
         <div className="form-group mt-10">
           <button className="btn btn-brand-1 hover-up w-100 " href="index-employee.html" type="submit" name="login">Continue</button>
-        </div>
-        
+        </div>    
       </div>
-
       </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={()=>setIsOpen(false)&Nulldata()}>
             Close
-          </Button>
-          
+          </Button>        
         </Modal.Footer>
       </Modal>
-  
-
 </main>
     <Helmet>
     <script src="https://kit.fontawesome.com/065c1878aa.js" crossorigin="anonymous"></script>

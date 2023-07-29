@@ -28,14 +28,12 @@ export default function Home() {
               <div className="mt-40  " data-wow-delay=".2s">
                 <div className="block-signin banner-button"><Link className="btn btn-default btn-shadow ml-40 hover-up" to="/contactus">Get in Touch</Link></div>
               </div>
-              {/* <div class="list-tags-banner mt-60 wow animate__animated animate__fadeInUp" data-wow-delay=".3s"><strong>Popular Searches:</strong><a href="#">Designer</a>, <a href="#">Web</a>, <a href="#">IOS</a>, <a href="#">Developer</a>, <a href="#">PHP</a>, <a href="#">Senior</a>, <a href="#">Engineer</a></div> */}
             </div>
           </div>
           <div className="col-xl-4 col-lg-12 d-none d-xl-block col-md-6">
             <div className="banner-imgs">
               <div className="block-1 shape-1"><img className="img-responsive" alt="jobBox" src="assets/imgs/page/homepage1/banner1 copy1.png" /></div>
               <div className="block-2 shape-2"><img className="img-responsive" alt="jobBox" src="assets/imgs/page/homepage1/banner2 copy.png" /></div>
-              {/* <div class="block-3 shape-3"><img class="img-responsive" alt="jobBox" src="assets/imgs/page/homepage1/icon-top-banner copy1.png"></div> */}
               <div className="block-4 shape-3"><img className="img-responsive" alt="jobBox" src="assets/imgs/page/homepage1/icon-bottom-banner copy.png" /></div>
             </div>
           </div>
