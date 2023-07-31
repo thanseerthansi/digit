@@ -170,6 +170,7 @@ export default function Employeeprofupdate(value) {
         if(arraydata.name){
           setlistdata([...listdata,arraydata])
           setarraydata({})
+          setpresentcompany(false)
         }else{
           notifyerror("Provide all Company Data")
         }
@@ -371,6 +372,7 @@ export default function Employeeprofupdate(value) {
       let msg ="successfully updated"
       setload(true)
       let datalist = {...employeedata3}
+      console.log("employeeeeedata",datalist)
       if (datalist.id){
         let userid=tokenhandler()
         if (userid){
@@ -747,7 +749,7 @@ export default function Employeeprofupdate(value) {
             <div className="row justify-content-center">
               <div className="col-11 col-sm-12 col-md-12 col-lg-9 col-xl-12 text-center p-0 mt-3 mb-2">
                 <div className="card3 px-0 pt-4 pb-0 mt-3 mb-3">
-\                    {/* progressbar */}
+                   {/* progressbar */}
                     <ul id="progressbar">
                       <li className="active" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(1) :""} id="account"><strong>Personal</strong></li>
                       <li id="personal" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(2) :""} className={wizard===1?'':'active'}><strong>Address</strong></li>
@@ -1514,7 +1516,7 @@ export default function Employeeprofupdate(value) {
                             {presentcompany?"":
                             <div className="form-group col-lg-6 mt-">
                               <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
-                              <input type="date"  onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className="form-control" placeholder=" To" id=" " />
+                              <input type="date" required  onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className="form-control" placeholder=" To" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide to date </Form.Control.Feedback>
                             </div>}
                             </>:""}
@@ -1574,7 +1576,7 @@ export default function Employeeprofupdate(value) {
   </div>{/* tilt */}
 </div>
                           <div className="profile-pils mt-20">
-                            <span className="pils"><Link to="/employee-profile" target="_blank"><i className="fa fa-eye" />View Profile</Link></span>
+                            <span className="pils"><Link to="/employee-profile" ><i className="fa fa-eye" />View Profile</Link></span>
                             <span className="pils"><a href  onClick={()=>downloadHtmlAsImage('htmlContent')} target="_blank"><i className="fa fa-paper-plane-o" /> Share Profile</a></span>
                           </div>
                         </div> <br /><br />
