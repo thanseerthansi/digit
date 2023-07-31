@@ -1528,7 +1528,7 @@ export default function Employeeprofupdate(value) {
                         <div className="row">
                           <h6 className=" form-t mb-3 mt-3 col-12">Any other Proficiancy</h6>
                           <div className="form-group col-lg-12 ">
-                            <textarea onChange={(e)=>setemployeedata3({...employeedata3,otherproficency:e.target.value})}  value={employeedata.otherproficency??''} type="text" className="form-control text-area11" placeholder="Message" id=" "  />
+                            <textarea onChange={(e)=>setemployeedata3({...employeedata3,otherproficency:e.target.value})}  value={employeedata3.otherproficency??''} type="text" className="form-control text-area11" placeholder="Message" id=" "  />
                             <Form.Control.Feedback type="invalid">Please provide otherproficency </Form.Control.Feedback>
                           </div>
                         </div>
