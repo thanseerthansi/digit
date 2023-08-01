@@ -140,6 +140,54 @@ function Decodetoken (){
   return (
     <>
       <main className="main">
+      {/* {userdetail?.status==="rejected"?
+          <><div><img src="\assets\imgs\page\blog\warning-icon.png" width={100} alt="cookie" /></div>
+          <p>Your Profile is Rejected  due to "{userdetail?.rejectedReason??""}" Update Your Profile Again..</p></>
+          : userdetail?.certificate?.length===0?<>
+          <div><img src="\assets\imgs\page\blog\warning-icon.png" width={50} alt="cookie" /></div>
+            <p>Your Profile is Incomplete  <br/> Upload Certificates to complete ....</p></>
+            :""??""
+          } */}
+      {userdetail?.status==="rejected"?
+      <section>
+          <div className="container mt-5">
+            <div className="row">        
+              <div className="col-sm-12">
+                <div className="alert fade alert-simple alert-danger alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show " role="alert" data-brk-library="component__alert">
+                  {/* <button type="button" className="close font__size-18" data-dismiss="alert">
+                    <span aria-hidden="true">
+                      <i className="fa fa-times danger " />
+                    </span>
+                    <span className="sr-only">Close</span>
+                  </button> */}
+                  <i class="start-icon fa fa-exclamation-triangle faa-flash animated"></i>
+                  <strong className="font__weight-semibold">Warning !</strong> Your Profile is Incomplete  Upload Certificates to complete </div>
+              </div>
+              
+            </div>
+          </div>
+        </section>:userdetail?.certificate?.length===0?
+              <section>
+          <div className="container mt-5">
+            <div className="row">      
+              <div className="col-sm-12">
+                <div className="alert fade alert-simple alert-danger alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show " role="alert" data-brk-library="component__alert">
+                  {/* <button type="button" className="close font__size-18" data-dismiss="alert">
+                    <span aria-hidden="true">
+                      <i className="fa fa-times danger " />
+                    </span>
+                    <span className="sr-only">Close</span>
+                  </button> */}
+                  <i class="start-icon fa fa-exclamation-triangle faa-flash animated"></i>&nbsp;&nbsp;
+                  <strong className="font__weight-semibold">Warning !</strong> Your Profile is Incomplete . Upload Certificates to complete </div>
+              </div>
+              
+            </div>
+          </div>
+        </section>
+        :""??""
+        }
+
         <div className="carousel-inner"></div>
         {load? 
             <div className="spinner-container">
@@ -578,14 +626,33 @@ function Decodetoken (){
           
         </Modal.Footer>
       </Modal>
-      <Modal show={notcomplete} onHide={()=>setnotcomplete(false)}>
+      {/* popup warning start */}
+     {/* <section className="sec__container">
+  <div className="cookie__box">
+    <img src="https://i.postimg.cc/mDLqkpv7/cookie.png" alt="cookie" />
+    
+    <div className="content">
+      <h2>Cookie Notice</h2>
+      <p>#### uses cookies because they're freshly baked &amp; tasty.</p>
+      <div className="btn__group">
+        <button className="accept__btn">Accept</button>
+        <a href="#####" target="_blank" className="learn__more-btn">Learn More</a>
+      </div>
+    </div>
+  </div>
+</section> */}
+
+      {/* popup warning end */}
+      {/* <Modal show={notcomplete} onHide={()=>setnotcomplete(false)} centered  size="sm">
         <Modal.Header closeButton>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="mt-3 text-center">
           {userdetail?.status==="rejected"?
-          <p>Your Profile is Rejected  due to "{userdetail?.rejectedReason??""}" Update Your Profile Again..</p>
-          : userdetail?.certificate?.length===0?
-            <p>Your Profile is Incomplete  Upload Certificates to complete ....</p>
+          <><div><img src="\assets\imgs\page\blog\warning-icon.png" width={100} alt="cookie" /></div>
+          <p>Your Profile is Rejected  due to "{userdetail?.rejectedReason??""}" Update Your Profile Again..</p></>
+          : userdetail?.certificate?.length===0?<>
+          <div><img src="\assets\imgs\page\blog\warning-icon.png" width={50} alt="cookie" /></div>
+            <p>Your Profile is Incomplete  <br/> Upload Certificates to complete ....</p></>
             :""??""
           }
           
@@ -593,7 +660,7 @@ function Decodetoken (){
           </div>
         
         </Modal.Body>
-      </Modal>
+      </Modal> */}
       <Modal show={photomodal.modal} onHide={()=>setphotomodal({...photomodal,modal:false})}>
         <Modal.Header closeButton>
         </Modal.Header>

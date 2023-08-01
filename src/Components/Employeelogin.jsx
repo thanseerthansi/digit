@@ -36,7 +36,7 @@ export default function Employeelogin() {
       datalist.role="employer"
       let data = await Axioscall("post","user/login",datalist)
       if (data.status===200){
-        console.log("datadocs",data.data.data.token)
+        // console.log("datadocs",data.data.data.token)
           if(data.data.data.token){
             window.localStorage.setItem("craig-token",data.data.data.token)
             Decodetoken(data.data.data.token)

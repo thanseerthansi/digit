@@ -12560,4 +12560,219 @@ margin-left: 300px!important;
     
     -webkit-font-smoothing: subpixel-antialiased;
   }
- 
+ /* popup warning  */
+ .containerss {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 3rem 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.sec__container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 90%;
+  margin: 40px auto;
+  justify-content: center;
+}
+
+/* COOKIE CONSENT BOX */
+
+.cookie__box {
+  --clr-primary: #c1610c;
+  --clr-accent: #615f5f;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  max-width: 365px;
+  width: 100%;
+  border-radius: 15px;
+  text-align: center;
+  padding: 25px 25px 30px;
+  transform: translateX(0px);
+  background-color: #ffffff;
+}
+.cookie__box.hide {
+  display: none;
+  transform: translateX(-500px);
+}
+.cookie__box > img {
+  max-width: 90px;
+}
+.cookie__box .content {
+  margin-top: 10px;
+}
+.cookie__box .content h2 {
+  font-size: 24px;
+  font-weight: 700;
+}
+.cookie__box .content p {
+  font-size: 15px;
+  margin: 5px 0 20px;
+  color: var(--clr-accent);
+}
+.cookie__box .content .btn__group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cookie__box .content .btn__group * {
+  margin: 0 10px;
+}
+.cookie__box .content .btn__group .accept__btn {
+  padding: 10px 20px;
+  outline: none;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 2px solid var(--clr-primary);
+  color: #ffffff;
+  background-color: var(--clr-primary);
+}
+.cookie__box .content .btn__group .accept__btn:hover {
+  background-color: #ffffff;
+  color: var(--clr-primary);
+}
+.cookie__box .content .btn__group .learn__more-btn {
+  text-decoration: none;
+  color: var(--clr-primary);
+}
+.cookie__box .content .btn__group .learn__more-btn:hover {
+  text-decoration: underline;
+}
+
+/* For medium devices */
+@media screen and (max-width: 600px) {
+  .cookie__box {
+    left: 10px;
+    bottom: 10px;
+    padding: 20px 10px;
+  }
+}
+
+/* For small devices */
+@media screen and (max-width: 400px) {
+  .cookie__box {
+    max-width: 340px;
+  }
+  .cookie__box .content .btn__group {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+/* For extra-small devices */
+@media screen and (max-width: 320px) {
+  .cookie__box {
+    max-width: 290px;
+  }
+}
+/* warning pop alert */
+
+.alert-simple.alert-danger {
+  border: 1px solid rgba(241, 6, 6, 0.81);
+  background-color: rgba(220, 17, 1, 0.16);
+  /* box-shadow: 0px 0px 2px #ff0303; */
+  color: #ff0303;
+  /* text-shadow: 2px 1px #00040a; */
+  transition: 0.5s;
+  /* cursor: pointer; */
+}
+/* 
+.alert-danger:hover {
+  background-color: rgba(220, 17, 1, 0.33) !important;
+  transition: 0.5s !important;
+} */
+
+.danger {
+  font-size: 18px !important;
+  color: #fc2222 !important;
+  text-shadow: none !important;
+}
+
+.alert-simple.alert-primary {
+  border: 1px solid rgba(6, 241, 226, 0.81);
+  background-color: rgba(1, 204, 220, 0.16);
+  box-shadow: 0px 0px 2px #03fff5;
+  color: #03d0ff;
+  text-shadow: 2px 1px #00040a;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+
+
+.alertprimary {
+  font-size: 18px;
+  color: #03d0ff;
+  text-shadow: none;
+}
+
+/* .square_box {
+  position: absolute;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  border-top-left-radius: 45px;
+  opacity: 0.302;
+} */
+
+
+
+
+.alert:before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: calc(100% - 44px);
+  border-left: 1px solid;
+  border-right: 2px solid;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+  left: 0;
+  top: 50%;
+  transform: translate(0, -50%);
+  height: 20px;
+}
+
+.fa-times {
+  -webkit-animation: blink-1 2s infinite both;
+  animation: blink-1 2s infinite both;
+}
+
+/**
+ * ----------------------------------------
+ * animation blink-1
+ * ----------------------------------------
+ */
+@-webkit-keyframes blink-1 {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+@keyframes blink-1 {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
