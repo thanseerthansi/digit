@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Simplecontext } from "../Commonpages/Simplecontext";
 import { Helmet } from "react-helmet";
+import { Simplecontext } from "../Commonpages/Simplecontext";
 
 export default function Header() {
   const { path, pathvalue,userdetail,logouthandler } = useContext(Simplecontext);

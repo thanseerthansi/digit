@@ -9,6 +9,7 @@ import { Form } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { notify } from '../Commonpages/toast'
+import { submitdelete } from '../Commonpages/Confirmsubmit'
 export default function Hrlist() {
   const {userdetail,Check_Validation}=useContext(Simplecontext) 
   const [employeesdata,setemployeedata]=useState([])
@@ -107,7 +108,7 @@ export default function Hrlist() {
             <div key={ek} className="col-xl-3 col-lg-4 col-md-6">
             <div className="card-grid-2 hover-up">
               {emp?.user?.[0]?.isHr?<>
-                <div className='text-end mr-5 pt-5'><button onClick={()=>setuserid(emp?._id??"")&hrAssign(emp?._id??"")} className='btn btn-tags-sm '>Remove HR</button></div>
+                <div className='text-end mr-5 pt-5'><button onClick={()=>setuserid(emp?._id??"")&submitdelete(hrAssign,emp?._id??"")} className='btn btn-tags-sm '>Remove HR</button></div>
               </>:
                 <div className='text-end mr-5 pt-5'><button onClick={()=>{setIsOpen(true)&setuserid(emp?.user?.[0]?._id??"") & sethrdata({...hrdata,HR:emp._id,type:"assign" })}} className='btn btn-tags-sm '>Create HR</button></div>
               ??""}

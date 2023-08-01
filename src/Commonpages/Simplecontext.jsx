@@ -10,11 +10,11 @@ export default function Simplecontextprovider({children}){
     const [pathvalue,setpathvalue]=useState('')
     const [userdetail,setuserdetail]=useState('')
     const [employeedata,setemployeedata]=useState('')
+    const [hrdata,sethrdata]=useState('')
     useEffect(() => {
         path()
         getUser()
-      
-        
+        Hrcheck()
       }, [])
     const path =()=>{
         setpathvalue(window.location.pathname)
@@ -71,6 +71,7 @@ export default function Simplecontextprovider({children}){
                 }
               } catch (error) {
                 console.log(error)
+                logouthandler()  
               }
                 
             }else if(user==="employee"){
@@ -92,6 +93,7 @@ export default function Simplecontextprovider({children}){
             }     
       } catch (error) {
         console.log("errorrr",error)
+        logouthandler() 
       }
      
     }
@@ -123,17 +125,31 @@ export default function Simplecontextprovider({children}){
           // console.log("no user.............................................................")
           logouthandler()
         }else{
-          if(userdetail){
-            if(userdetail.careerandeducation.length===0 || userdetail.address.length===0){
+          if(userdetail){ 
+            if(userdetail.address.length===0){
               logouthandler()
             }
           }         
         }
     }
-   
+    async function  Hrcheck(){
+    if(window.localStorage.getItem('craig-token')){
+      let hr = Decodeall()
+      if(hr.role==="hr"){
+        let data = await Axioscall("get","user",{id:hr.assignedHr})
+        if(data.status===200){
+          if(data.data.data){
+            sethrdata(data.data.data)
+          }else{
+            logouthandler()
+          }
+        }
+      }
+    }
+   }
 return (
     <Simplecontext.Provider value={{
-        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler,Decodetoken,loghandler,Decodeall
+        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler,Decodetoken,loghandler,Decodeall,Hrcheck,hrdata
     }}>{children}</Simplecontext.Provider>
     )
 }

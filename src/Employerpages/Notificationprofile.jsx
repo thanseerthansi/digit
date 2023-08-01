@@ -74,9 +74,14 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
               userprofile.careerandeducation[0].prevCompanies.forEach((element) => {
                 if (element.email===window.localStorage.getItem("graiduseremail")){
                   if(element?.to && moment(element.to, 'YYYY-MM-DD', true).isValid()){
+                   
                   }else{
                     if(value===true){
                       if(emp){
+                        if(emp==="employee"){
+                          Addcompanyhandler(emp)
+                        }
+                        
                       }                    
                     }
                 }
@@ -125,8 +130,12 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
     }    
     }
         let data = await Axioscall("post","employee/assign",body)
+        console.log("addcompany ",data)
         if(data.status===200){
-          verifynot()
+          if(!emp){
+            verifynot()
+          }
+          
           return
         }
       } catch (error) {
@@ -173,7 +182,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
           <div className=" mt-40 ">
             
             <div className="class-verification ">
-              <table style={{width:"100%"}}>
+              <table style={{width:"110%"}}>
                 <tbody>
                   <tr>
                     <td>Date of birth</td>
@@ -211,7 +220,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                     <td className="td-verify">{userprofile?.fatherName??""}</td>
                   </tr>
                   <tr>
-                    <td className='d-flex'>Father's Occupation</td>
+                    <td className='d-flex'>Father's Career</td>
                     <td>:</td>
                     <td className="td-verify">{userprofile?.fatherOccupation??""}</td>
                   </tr>
@@ -221,10 +230,11 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                     <td className="td-verify">{userprofile?.motherName??""}</td>
                   </tr>
                   <tr>
-                    <td>Mother's Occupation</td>
+                    <td>Mother's Career</td>
                     <td>:</td>
                     <td className="td-verify">{userprofile?.motherOccupation??""}</td>
                   </tr>
+                  {userprofile?.siblingsDetails?.length?<>
                   <tr>
                   <td className=" verification-tb-margin" colSpan={3}><h6>Sibling Details</h6></td>
                                 </tr>
@@ -245,6 +255,8 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                                   <td className="td-verify">{sibling?.occupation??""}</td>
                                 </tr>
                                 </>)):"No Siblings Found"??""}
+                                </>:""??""}
+                                {userprofile?.spouseDetails?.length?<>
                                 <tr>
                                   <td className=" verification-tb-margin" colSpan={3}><h6>Spouse Details</h6></td>
                                 </tr>
@@ -265,6 +277,8 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                                   <td className="td-verify">{spouse?.occupation??""}</td>
                                 </tr>
                                 </>)):"No Spouse Found"??""}
+                                </>:""??""}
+                                {userprofile?.childDetails?.length?<>
                                 <tr>
                                   <td className=" verification-tb-margin" colSpan={3}><h6>Child Details</h6></td>
                                 </tr>
@@ -285,7 +299,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                                   <td className="td-verify">{child?.occupation??""}</td>
                                 </tr>
                                 </>)):"No Child Found"??""}
-                             
+                                </>:""??""}
                 </tbody>
               </table>
             </div>

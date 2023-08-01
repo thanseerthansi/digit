@@ -403,7 +403,32 @@ export default function Candidatedetails() {
             </div>
           </div>
           <div className="theme--dark77">
-            <div id="container" className="container77">
+          <div className="content-wrapper11">
+                      <div className="tilt">
+                        <div className="credit-card">
+                          <div className="credit-card__front" style={{backgroundImage: 'url(/assets/imgs/template/visa-bg.jpg)'}}>    
+                            <div className="circle circle-1" />
+                            <div className="circle circle-2" />
+                            <div className="logo">
+                              <img src="\assets\imgs\logo\logo_craig-10.png" />
+                            </div>
+                            <div className="VISA">
+                              <QRCode style={{height:"100px",width:"100px",backgroundColor:"white",padding:'6px'}} value={`${window.location.origin}/candidatedetails/${userprofile?._id??""}`} />
+                            </div>
+                            <div className="card-expiry-group">
+                              <label htmlFor="card-expiry">Unique ID</label>
+                              <h5 className="card-number">{userprofile?.uniqueid??""}</h5>
+                            </div>
+                            <div className="card-name-group">
+                              <label htmlFor="card-name">NAME</label>
+                              <h6 className="card-number">{userprofile?.firstName??""} {userprofile?.middleName??""} {userprofile?.lastName??""} </h6>
+                            </div>
+                          </div>
+                        </div>
+                      </div>{/* tilt */}
+                    </div>  
+          
+            {/* <div id="container" className="container77">
               <div className="header">
                 <div className="logo" />
               </div>    
@@ -416,7 +441,7 @@ export default function Candidatedetails() {
                 </div>
               </section>
               <div className="front-smooth" />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

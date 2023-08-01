@@ -70,7 +70,7 @@ export default function Employeeprofupdate(value) {
   const [emailverify,setemailverify]=useState({otp:"",valid:false,modal:false})
   const [phoneverify,setphoneverify]=useState({otp:"",valid:false,modal:false})
   const presentcompanylist = precompanyarray.filter(t=>t.to==="Present")??[]
-
+  // console.log("userdetails",userdetail)
     useEffect(() => {     
       window.scrollTo(0,0)
       getCompanydata()
@@ -230,6 +230,7 @@ export default function Employeeprofupdate(value) {
     try {
       setload(true)
       let datalist ={...employeedata}
+      // console.log("datalisr",datalist)
       if (datalist._id){
         datalist.id=datalist._id
       }else{
@@ -311,6 +312,7 @@ export default function Employeeprofupdate(value) {
         datalist.childDetails=arraychild
       }
       let data = await Axioscall(method,"employee/personal",datalist) 
+      // console.log("ddddddddddddddatacrarreer",data)
       if(data.status===200){
         notify(msg)
         setWizard(2) 
@@ -1516,7 +1518,7 @@ export default function Employeeprofupdate(value) {
                             {presentcompany?"":
                             <div className="form-group col-lg-6 mt-">
                               <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
-                              <input type="date" required  onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className="form-control" placeholder=" To" id=" " />
+                              <input type="date" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className="form-control" placeholder=" To" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide to date </Form.Control.Feedback>
                             </div>}
                             </>:""}

@@ -10,6 +10,7 @@ import jwt_decode from "jwt-decode";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from "react-bootstrap";
+import { submitdelete } from '../Commonpages/Confirmsubmit'
 export default function Employeeslist() {
   const {userdetail,Decodeall,Check_Validation}=useContext(Simplecontext) 
   const [employeesdata,setemployeedata]=useState([])
@@ -63,14 +64,16 @@ export default function Employeeslist() {
         user : userid,
         company : window.localStorage.getItem("graiduserid"),
         type : "remove",
-        hr:hrid
+        hr:hrid,
+        role:"employee"
     }
     if(Decodeall().role ==='hr'){
       body={
         user : userid,
         company : window.localStorage.getItem("graiduserid"),
         type : "remove",
-        hr:Decodeall().assignedHr
+        hr:Decodeall().assignedHr,
+        role:"employee"
       }
     }
       let data = await Axioscall("post","employee/assign",body)
@@ -140,7 +143,7 @@ export default function Employeeslist() {
                 {employeearr.hr?"":
             <div className='text-end ml-5 mr-5 pt-5'><button onClick={()=>setIsOpen(true)&sethrdata({...hrdata,id:emp._id,username:emp.firstName})} className='btn btn-tags-sm '>Assign to HR</button></div>
             }
-              <div className='text-end  mr-5 pt-5'><button onClick={()=>Addcompanyhandler(emp._id,employeearr.hr?._id??"")} className='btn btn-tags-sm '>Remove From Company</button></div>
+              <div className='text-end  mr-5 pt-5'><button onClick={()=>submitdelete(Addcompanyhandler,emp._id,employeearr.hr?._id??"")} className='btn btn-tags-sm '>Remove From Company</button></div>
               </div>
             
               <div className="card-grid-2-image-left">

@@ -183,7 +183,7 @@ const Bannerhandler=async(ratio)=>{
                                   <td>:</td>
                                   <td className="td-verify">{userdetail?.motherOccupation??""}</td>
                                 </tr>
-                               
+                                
                                 <tr>
                                   <td className=" verification-tb-margin" colSpan={3}><h6>Sibling Details</h6></td>
                                 </tr>
@@ -303,7 +303,7 @@ const Bannerhandler=async(ratio)=>{
                       <div className="content-wrapper11">
                       <div className="tilt">
                         <div className="credit-card">
-                          <div className="credit-card__front" style={{backgroundImage: 'url(assets/imgs/template/visa-bg.jpg)'}}>    
+                          <div className="credit-card__front" style={{backgroundImage: 'url(/assets/imgs/template/visa-bg.jpg)'}}>    
                             <div className="circle circle-1" />
                             <div className="circle circle-2" />
                             <div className="logo">
@@ -329,14 +329,14 @@ const Bannerhandler=async(ratio)=>{
                 </div>
                 <div className="panel-white mb-30">
                   <div className="box-padding">
-                    <h5 className="icon-edu">Career</h5>
+                    <h5 className="icon-edu">Career Experience</h5>
                     <div className="row mt-30">
                       <div className="col-lg-9">
                         <div className="row">
                         </div>
                         <div className="box-timeline mt-50">                      
                           {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
-                          <div key={pk} className="item-timeline"> 
+                          <div key={pk} className="item-timeline">
                             <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid()? moment(pcompany.to, 'YYYY-MM-DD').format('YY'):'Present'}</span></div>
 
                             <div className="timeline-info"> 
@@ -350,8 +350,7 @@ const Bannerhandler=async(ratio)=>{
                               <p className="color-text-paragraph-2 mb-15">Location:{pcompany.address}</p>
                             </div>
                           </div>
-                           ))??""}
-                         
+                           ))??<p>No Experience</p>}
                         </div>
                       </div>
                     </div>

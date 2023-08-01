@@ -55,7 +55,6 @@ export default function Employeelogin() {
   }
   const Decodetoken =(token)=>{
     var decoded = jwt_decode(token)
-    console.log("decode",decoded)
     if(decoded.role==='hr'){
       if(decoded.company){
         Getuser({id:decoded.company})

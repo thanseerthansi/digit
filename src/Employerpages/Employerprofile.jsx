@@ -12,7 +12,7 @@ import Modal from 'react-bootstrap/Modal';
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 export default function Employerprofile() {
-  const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler,Decodeall}=useContext(Simplecontext) 
+  const {logouthandler,userdetail,Check_Validation,employeedata,setemployeedata,getUser,Filestackhandler,Decodeall,hrdata,Hrcheck}=useContext(Simplecontext) 
   const [validated,setValidated]=useState(false)
   const [certificatedata,setcertificatedata]=useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -22,6 +22,7 @@ export default function Employerprofile() {
   const [photomodal,setphotomodal]=useState({modal:false,data:""})
   const [emailotp,setemailotp]=useState('')
   const numberRegex = /^\d+$/;
+
   useEffect(() => {
     window.scrollTo(0,0)
     if(userdetail?.status==="rejected"??""){
@@ -30,8 +31,9 @@ export default function Employerprofile() {
     if(userdetail?.certificate?.length===0??""){
       setnotcomplete(true)
     }
+    Hrcheck()
   }, [])
-  
+  console.log("hrrrrrrrrrrrrrrrrrrrr",hrdata)
  const Employeeupdate=async()=>{
   try {
     setIsOpen(true)
@@ -166,7 +168,8 @@ function Decodetoken (){
               <div className="row mt-10">
                 <div className="col-lg-8 col-md-12">
                   <h5 className="f-18">
-                    {userdetail?userdetail.user.username:""}
+                    {hrdata?.username??userdetail?.user?.username??""}
+                    {/* {hrdata?.username??userdetail?userdetail.user.username:""} */}
                     <span className="card-location font-regular ml-20">
                       {userdetail?userdetail?.address?.[0]?.city??"":""},{userdetail?userdetail?.address?.[0]?.country??"":""}
                     </span>
@@ -247,7 +250,8 @@ function Decodetoken (){
                                 </div>
                                 <div className="card-profile pt-10">
                                   <a href="candidate-details.html">
-                                    <h5>{userdetail?userdetail?.user.username??""??"":""}</h5>
+                                    <h5>{hrdata?.username??userdetail?.user?.username??""}</h5>
+                                    {/* <h5>{hrdata?.username??userdetail?userdetail?.user.username??""??"":""}</h5> */}
                                   </a>
                                   <span className="font-xs color-text-mutted">
                                     {userdetail?.name??""}

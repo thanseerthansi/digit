@@ -85,19 +85,19 @@ export default function Signin() {
             Decodetoken(data.data.data.token,emp)
           }
       }else{
-        console.log(data)
+        // console.log(data)
         notifyerror("something went wrong ")
       }
     } catch (error) {
-      console.log("error",error)
+      console.log(error)
     }
   }
   const Decodetoken =(token,emp)=>{
-    console.log(token)
+    // console.log(token)
     var decoded = jwt_decode(token)
     if(decoded.completion===3){
       if(decoded.id){
-        console.log("decode",decoded)
+        // console.log("decode",decoded)
         Getuser(decoded.id,emp)
         window.localStorage.setItem("graiduser", "employee");
       }
@@ -122,11 +122,11 @@ export default function Signin() {
   }
   const Getuser =async(datalist,emp)=>{
     try {
-      console.log("id:::::",datalist)
+      // console.log("id:::::",datalist)
         let data = await Axioscall("get","employee",{id:datalist})
-        console.log("datagetuser",data)
+        // console.log("datagetuser",data)
         if (data.status===200){
-          console.log("datadocs",data.data.data.docs)
+          // console.log("datadocs",data.data.data.docs)
           if(data.data.data.docs){
             setuserdetail(data.data.data.docs[0])
             setemployeedata(data.data.data.docs[0])
@@ -145,7 +145,7 @@ export default function Signin() {
           }
         }
     } catch (error) {
-        console.log("datagetuser",error)
+        console.log(error)
     }
 }
 const requestOTP=async(e)=>{
