@@ -32,9 +32,6 @@ export default function Footer() {
       <div className="footer-col-4 col-md-3 col-xs-6">
         <h6 className="mb-20">Resources</h6>
         <ul className="menu-footer">
-          {/* <li><Link to="employee-register.html">Register</Link></li>
-          <li><Link to="#">Candidate Register</Link></li>
-          <li><Link to="#">Profile</Link></li> */}
           {windowuser==="employer"? <li className="has-children"><Link to="/candidates">Find Candidates</Link>
                 </li>:null}
                 {windowuser==="employer"?<>

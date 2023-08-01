@@ -13,13 +13,10 @@ export default function Notificationfile() {
      getNotification()
 
     }, [])
-    // console.log("useruserdetail",userdetail)
-    // console.log("notificationdata",notificationdata)
     const tokenhandler=()=>{
       let token = window.localStorage.getItem('craig-token')??""
       if(token){
         let data  = Decodetoken(token)
-        // console.log("dataid",data)
         return data
       }
     }
@@ -30,10 +27,8 @@ export default function Notificationfile() {
           page:1,
           limit:10
         }
-        // console.log("body notify",body)
         let data = await Axioscall("get","notification",body)
         if (data.status===200){
-          // console.log("n/otification_data",data)
           setnotificationdata(data.data.data.docs)
         }
       } catch (error) {
@@ -72,18 +67,6 @@ export default function Notificationfile() {
               
             </div>
             )):<div><p className='text-center'>No Recent Notifications Found</p></div>}
-            {/* <div className="p-3 d-flex align-items-center osahan-post-header">
-              <div className="dropdown-list-image mr-3">
-                <img className="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png"  alt=""/>
-              </div>
-              <div className="font-weight-bold mr-3">
-                <div className="text-truncate ">Request For Profile Verification</div>
-                <div className="small">Income tax sops on the cards, The bias in VC funding, and other top news for you</div>
-              </div>
-              <div className="font-weight-bold mr-3 ml-30 margin-left1">
-                <button type="button" className="btn btn-outline-success btn-sm">Verify</button>
-              </div>
-            </div> */}
           </div>
         </div>
        

@@ -33,7 +33,6 @@ export default function Employerprofile() {
     }
     Hrcheck()
   }, [])
-  console.log("hrrrrrrrrrrrrrrrrrrrr",hrdata)
  const Employeeupdate=async()=>{
   try {
     setIsOpen(true)
@@ -134,7 +133,7 @@ const verifyotp=async()=>{
 function Decodetoken (){
   var decoded = jwt_decode(window.localStorage.getItem('craig-token'))
   if(decoded){
-    console.log("decodeid",decoded)
+   
     return decoded
   }
 }
