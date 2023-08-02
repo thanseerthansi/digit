@@ -53,6 +53,7 @@ const Bannerhandler=async(ratio)=>{
 
   const downloadHtmlAsImage = (elementId) => {
     const htmlContent = document.getElementById(elementId);
+    // console.log("sgjadhghasbd",htmlContent)
     domtoimage.toPng(htmlContent,{ useCORS: true,scale:3 })
       .then((dataUrl) => {
         const link = document.createElement('a');
@@ -64,7 +65,6 @@ const Bannerhandler=async(ratio)=>{
         console.error('Error while converting HTML to image:', error);
       });
   };
- console.log("userdetailllllll",userdetail)
   return (
     <>
       <main className="main">
@@ -303,9 +303,9 @@ const Bannerhandler=async(ratio)=>{
                           </div>
                         </div>
                       </div>
-                      <div className="content-wrapper11">
-                      <div className="tilt">
-                        <div className="credit-card">
+                      <div className="content-wrapper11" id="htmlContent1" >
+                      <div className="tilt" >
+                        <div className="credit-card" >
                           <div className="credit-card__front" style={{backgroundImage: 'url(/assets/imgs/template/visa-bg.jpg)'}}>    
                             <div className="circle circle-1" />
                             <div className="circle circle-2" />

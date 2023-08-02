@@ -1577,7 +1577,7 @@ export default function Employeeprofupdate(value) {
                         </div> <br /><br />
                         <h2 className="purple-text text-center mb-20"><strong>SUCCESS </strong></h2> <br />
                         <div className="row justify-content-center">
-                       <div className="content-wrapper11">
+                       <div className="content-wrapper11" id="htmlContent">
   <div className="tilt">
     <div className="credit-card">
       <div className="credit-card__front" style={{backgroundImage: 'url(assets/imgs/template/visa-bg.jpg)'}}>    
