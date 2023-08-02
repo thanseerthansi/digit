@@ -130,16 +130,22 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
     }    
     }
         let data = await Axioscall("post","employee/assign",body)
-        console.log("addcompany ",data)
-        if(data.status===200){
-          if(!emp){
-            verifynot()
-          }
+        try {
+          if(data.status===200){
+            if(!emp){ 
+              verifynot(true)
+            }
+            
+            return
+          }else{ 
+            console.log(".............",data.response.data.message)
+             notifyerror(data.response.data.message)}
+        } catch (error) {
+          console.log(error)
           
-          return
         }
       } catch (error) {
-        console.log(error) 
+        console.log("errrror",error) 
       }
       setload(false)
     }
@@ -175,7 +181,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
             <h4 className="mb-0">{userprofile?.firstName??""} {userprofile?.middleName??""} {userprofile?.lastName??""}</h4>
             {userprofile.is_verified?
             <div className=""><img className="ml-3" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
-            :<div className=""><img className="ml-3" src="\assets\imgs\page\candidates\grey.png" alt="jobbox" /></div>}
+            :<div className=""><img className="ml-3" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
             <p className="text-muted">@{userprofile?.careerandeducation?.[0]?.designation??""}</p>
             <p className="text-muted">ID:{userprofile?.uniqueid??""} </p>
           </div>
@@ -319,7 +325,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                   <h6 className="mt-0 mb-1">{pcompany.name} / {pcompany.position}</h6>
                   {pcompany.is_verified?
                     <div className=""><img className="ml-3" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
-                    :<div className=""><img className="ml-3" src="\assets\imgs\page\candidates\grey.png" alt="jobbox" /></div>}
+                    :<div className=""><img className="ml-3" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
                   <p>{pcompany.email}</p>
                   <p>{pcompany.address}</p>
                   <p>{pcompany.jobDescription}</p>

@@ -64,7 +64,7 @@ const Bannerhandler=async(ratio)=>{
         console.error('Error while converting HTML to image:', error);
       });
   };
- 
+ console.log("userdetailllllll",userdetail)
   return (
     <>
       <main className="main">
@@ -81,9 +81,12 @@ const Bannerhandler=async(ratio)=>{
           <img style={{ height:"85px" , width:"85px"}} src={userdetail?.profilePhoto??"assets/imgs/page/candidates/candidate-profile copy1.png"} alt="jobbox" />
           
           </div>
-        <div className="row mt-10">
+        <div className="row mt-10" style={{lineHeight:"2px"}}>
           <div className="col-lg-8 col-md-12">
             <h5 className="f-18">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.state??""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></h5><br />
+            {userdetail.is_verified?
+            <div className=""><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
+            :<div className=""><img className="ml-0 " src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
             <h5 className="f-18 u-color">Unique ID : <span>{userdetail?.uniqueid??""}</span></h5>
             <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation??""}</p>
           </div>
@@ -275,7 +278,7 @@ const Bannerhandler=async(ratio)=>{
                                  <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to,'YYYY-MM-DD', true).isValid()? moment(pcompany.to,'YYYY-MM-DD').format('YY'): ''}</span>
                                  <h6 className="mt-0 mb-1">{pcompany.name} </h6>
                                  {pcompany.is_verified?
-                                 <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:<div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\grey.png" alt="jobbox" /></div>}
+                                 <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:<div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
                                  <p>{pcompany.position}</p>
                                </li>
                               ))??""}
@@ -342,7 +345,7 @@ const Bannerhandler=async(ratio)=>{
                             <div className="timeline-info"> 
                               <h5 className="color-brand-1 mb-10">{pcompany?.name??""}</h5>
                               {pcompany.is_verified?
-                                 <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:<div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\grey.png" alt="jobbox" /></div>}
+                                 <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:<div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
                               
                               <h6 className="color-text-paragraph-2 mb-15">{pcompany.position}</h6>
                               <p className="color-text-paragraph-2 mb-15">company mail:{pcompany.email}</p>

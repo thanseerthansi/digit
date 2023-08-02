@@ -70,7 +70,6 @@ export default function Employeeprofupdate(value) {
   const [emailverify,setemailverify]=useState({otp:"",valid:false,modal:false})
   const [phoneverify,setphoneverify]=useState({otp:"",valid:false,modal:false})
   const presentcompanylist = precompanyarray.filter(t=>t.to==="Present")??[]
-  // console.log("userdetails",userdetail)
     useEffect(() => {     
       window.scrollTo(0,0)
       getCompanydata()
@@ -164,8 +163,7 @@ export default function Employeeprofupdate(value) {
     }
     
   }
-  const pushhandler=(arraydata,setarraydata,listdata,setlistdata)=>{
-   
+  const pushhandler=(arraydata,setarraydata,listdata,setlistdata)=>{  
       if (Object.keys(arraydata).length){
         if(arraydata.name){
           setlistdata([...listdata,arraydata])
@@ -175,8 +173,7 @@ export default function Employeeprofupdate(value) {
           notifyerror("Provide all Company Data")
         }
       }else{
-        notifyerror("no dataa added")
-      
+        notifyerror("no dataa added")   
     }
   }
   const removeHandler=(listdata,setlistdata)=>{   
@@ -374,7 +371,6 @@ export default function Employeeprofupdate(value) {
       let msg ="successfully updated"
       setload(true)
       let datalist = {...employeedata3}
-      console.log("employeeeeedata",datalist)
       if (datalist.id){
         let userid=tokenhandler()
         if (userid){
@@ -411,17 +407,17 @@ export default function Employeeprofupdate(value) {
           additional.push(additionaldata) 
         }
       }
-      if (additional.length){
+      
         datalist.additional=additional
-      }
+      
       if(selectedskills.length){
         let skills =[]
         selectedskills.forEach(element => {
           skills.push(element.value)
         });
-        if (skills.length){
+      
           datalist.skills=skills
-        }
+        
       }
         // ...........................company data push to datalist
         let company = companyarray
@@ -455,10 +451,12 @@ export default function Employeeprofupdate(value) {
               element.is_verified=false
             }})
             company=[...company,...precompany]
+        }else{
+          company = [...precompany]
         }
-        if(company.length){
+        
           datalist.prevCompanies=company
-        }
+        
         let data = await Axioscall(method,"employee/educationandcareer",datalist)
         if(data.status===200){
           notify(msg)
@@ -729,6 +727,26 @@ export default function Employeeprofupdate(value) {
       }
     } catch (error) {
       console.log(error)
+    }
+  }
+  const Removeprecompany=(k)=>{
+    
+    let newCompanyArray = [...precompanyarray]; // Create a copy of the array
+    newCompanyArray.splice(k, 1); // Modify the copy
+    setprecompanyarray(newCompanyArray); 
+    if(newCompanyArray.length===0){
+      setwindowcompany(true)
+    }
+  }
+  const dateCheck=(from,to)=>{
+    const date1 = moment(from);
+    const date2 = moment(to);
+
+    // Compare the dates using the `isBefore()` method
+    if (date1.isBefore(date2)) {
+        return true
+    } else {
+        return false;
     }
   }
   return (
@@ -1435,7 +1453,7 @@ export default function Employeeprofupdate(value) {
                             <React.Fragment key={ck}>
                              <div className="form-group col-lg-6 mt-20">
                                <div className="text__center">
-                               <input type="text"  value={citm.name} className="" disabled placeholder=" Position" id=" " />
+                               <input type="text"  value={citm?.name??""} className="" disabled placeholder=" Position" id=" " />
                                  
                                </div>
                              </div>
@@ -1466,7 +1484,11 @@ export default function Employeeprofupdate(value) {
                                <input type="date"  disabled value={citm.to} className="" placeholder=" To" id=" " />
                                 }
                              </div>
-                     
+                             {!citm.is_verified?
+                             <div className="line-item-property__actions col-12 row mt-3 mb-3">
+                             <button onClick={()=>Removeprecompany(ck)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
+                             </div>
+                             :""}
                              </React.Fragment>):null}
                              {windowcompany?<>
                              <div className="form-group col-lg-12 mt-20 d-flex">
@@ -1518,14 +1540,16 @@ export default function Employeeprofupdate(value) {
                             {presentcompany?"":
                             <div className="form-group col-lg-6 mt-">
                               <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
-                              <input type="date" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className="form-control" placeholder=" To" id=" " />
-                              <Form.Control.Feedback type="invalid">Please provide to date </Form.Control.Feedback>
+                              <input type="date" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className={`form-control ${precompanydata.from?dateCheck(precompanydata.from??"",precompanydata.to??"")?'':'is-invalid':''}`} placeholder=" To" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide valid To* date </Form.Control.Feedback>
                             </div>}
                             </>:""}
                           </div>
                           <div className="line-item-property__actions col-12 row mt-3 mb-3">
                           <button onClick={()=>windowcompany?pushhandler(precompanydata,setprecompanydata,precompanyarray,setprecompanyarray):setwindowcompany(true)}  className="col-lg-2 button-form1" type="button"  value="+">Add</button>
-                          <button onClick={()=>precompanydata?setprecompanydata(''):windowcompany?setwindowcompany(false): removeHandler(precompanyarray,setprecompanyarray)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
+                          
+                          <button  onClick={()=>setprecompanydata('')& setwindowcompany(false)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
+                          
                           </div>
                         </div>
                         

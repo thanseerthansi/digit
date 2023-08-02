@@ -161,7 +161,7 @@ function Decodetoken (){
                     <span className="sr-only">Close</span>
                   </button> */}
                   <i class="start-icon fa fa-exclamation-triangle faa-flash animated"></i>
-                  <strong className="font__weight-semibold">Warning !</strong> Your Profile is Incomplete  Upload Certificates to complete </div>
+                  <strong className="font__weight-semibold">Warning !</strong> Your Profile is Rejected  due to "{userdetail?.rejectedReason??""}" Update Your Profile Again.. </div>
               </div>
               
             </div>
