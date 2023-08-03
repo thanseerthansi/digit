@@ -152,15 +152,15 @@ export default function Candidatedetails() {
                       <tr>
                         <td> Permenent Address</td>
                         <td>:</td>
-                        <td className="td-verify">{userprofile?.address?.[0]?.permanantAddress?.[0]?.line1??""} {userprofile?.address?.[0]?.permanantAddress?.[0]?.line2??""} {userprofile?.address?.[0]?.permanantAddress?.[0]?.landmark??""},{userprofile?.address?.[0]?.permanantAddress?.[0]?.city??""}-{userprofile?.address?.[0]?.permanantAddress?.[0]?.zip??""}</td>
+                        <td className="td-verify">{userprofile?.address?.[0]?.permanantAddress?.[0]?.line1??""}&nbsp;  {userprofile?.address?.[0]?.permanantAddress?.[0]?.line2??""}&nbsp;  {userprofile?.address?.[0]?.permanantAddress?.[0]?.landmark??""},&nbsp; {userprofile?.address?.[0]?.permanantAddress?.[0]?.city??""}&nbsp;-&nbsp;{userprofile?.address?.[0]?.permanantAddress?.[0]?.zip??""}</td>
                       </tr>
                       <tr>
                     <td> Current Address</td>
                     <td>:</td>
-                    <td className="td-verify">{userprofile?.address?.[0]?.currentAddress?.[0]?.line1??""} {userprofile?.address?.[0]?.currentAddress?.[0]?.line2??""} {userprofile?.address?.[0]?.currentAddress?.[0]?.landmark??""} {userprofile?.address?.[0]?.currentAddress?.[0]?.city??""}-{userprofile?.address?.[0]?.currentAddress?.[0]?.zip??""}</td>
+                    <td className="td-verify">{userprofile?.address?.[0]?.currentAddress?.[0]?.line1??""}&nbsp; {userprofile?.address?.[0]?.currentAddress?.[0]?.line2??""}&nbsp;  {userprofile?.address?.[0]?.currentAddress?.[0]?.landmark??""},&nbsp; {userprofile?.address?.[0]?.currentAddress?.[0]?.city??""}&nbsp;-&nbsp;{userprofile?.address?.[0]?.currentAddress?.[0]?.zip??""}</td>
                   </tr>
                   <tr>
-                    <td>Merital Status</td>
+                    <td>Marital Status</td>
                     <td>:</td>
                     <td className="td-verify">{userprofile?.maritalStatus??""}</td>
                   </tr>

@@ -147,9 +147,12 @@ export default function Simplecontextprovider({children}){
       }
     }
    }
+   function Capitalizefirst(str){
+    return str.charAt(0).toUpperCase() + str.slice(1);
+   }
 return (
     <Simplecontext.Provider value={{
-        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler,Decodetoken,loghandler,Decodeall,Hrcheck,hrdata
+        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler,Decodetoken,loghandler,Decodeall,Hrcheck,hrdata,Capitalizefirst
     }}>{children}</Simplecontext.Provider>
     )
 }

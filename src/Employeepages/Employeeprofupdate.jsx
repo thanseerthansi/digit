@@ -113,6 +113,7 @@ export default function Employeeprofupdate(value) {
       }
     }
     const downloadHtmlAsImage = (elementId) => {
+      setload(true)
       const htmlContent = document.getElementById(elementId);
       domtoimage.toPng(htmlContent,{ useCORS: true,scale:3 })
         .then((dataUrl) => {
@@ -124,6 +125,7 @@ export default function Employeeprofupdate(value) {
         .catch((error) => {
           console.error('Error while converting HTML to image:', error);
         });
+        setload(false)
     };
   const getCompanydata=async()=>{
     try {
@@ -218,7 +220,7 @@ export default function Employeeprofupdate(value) {
     let company = companyvalues.filter(t=>t.name===e)
     if(company.length){
       
-      setprecompanydata({...precompanydata,name:e,phone:company[0].phone,email:company[0].email,address:company[0].address[0].line1+""+ company[0].address[0].line2+""+ company[0].address[0].city+"" +company[0].address[0].state+"" +company[0].address[0].country,is_craigcompany:true})
+      setprecompanydata({...precompanydata,name:e,phone:company[0].phone,email:company[0].email,address:company[0].address[0].line1 + " " + company[0].address[0].line2 + " " + company[0].address[0].city + " " + company[0].address[0].state + " " + company[0].address[0].country,is_craigcompany:true})
     }
   }
   const registerEmployee=async()=>{
@@ -749,6 +751,10 @@ export default function Employeeprofupdate(value) {
         return false;
     }
   }
+  const formatNumber = (number) => {
+    const formattedNumber = number.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1    ');
+    return formattedNumber;
+  };
   return (
     <> 
     <link href="/assets/css/stylecd4e.css?version=4.1" rel="stylesheet"></link>
@@ -1591,7 +1597,7 @@ export default function Employeeprofupdate(value) {
         </div>
         <div className="card-expiry-group">
           <label htmlFor="card-expiry">Unique ID</label>
-          <h5 className="card-number">{userdetail?.uniqueid??""}</h5>
+          <h5 className="card-number">{formatNumber(userdetail?.uniqueid??"")}</h5>
         </div>
         <div className="card-name-group">
           <label htmlFor="card-name">NAME</label>

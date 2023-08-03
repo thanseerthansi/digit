@@ -208,12 +208,12 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
                   <tr>
                     <td> Permenent Address</td>
                     <td>:</td>
-                    <td className="td-verify">{userprofile?.address?.[0]?.permanantAddress?.[0]?.line1??""} {userprofile?.address?.[0]?.permanantAddress?.[0]?.line2??""} {userprofile?.address?.[0]?.permanantAddress?.[0]?.landmark??""},{userprofile?.address?.[0]?.permanantAddress?.[0]?.city??""}-{userprofile?.address?.[0]?.permanantAddress?.[0]?.zip??""}</td>
+                    <td className="td-verify">{userprofile?.address?.[0]?.permanantAddress?.[0]?.line1??""}&nbsp; {userprofile?.address?.[0]?.permanantAddress?.[0]?.line2??""}&nbsp; {userprofile?.address?.[0]?.permanantAddress?.[0]?.landmark??""},&nbsp;{userprofile?.address?.[0]?.permanantAddress?.[0]?.city??""}&nbsp;-&nbsp;{userprofile?.address?.[0]?.permanantAddress?.[0]?.zip??""}</td>
                   </tr>
                   <tr>
                     <td> Current Address</td>
                     <td>:</td>
-                    <td className="td-verify">{userprofile?.address?.[0]?.currentAddress?.[0]?.line1??""} {userprofile?.address?.[0]?.currentAddress?.[0]?.line2??""} {userprofile?.address?.[0]?.currentAddress?.[0]?.landmark??""} {userprofile?.address?.[0]?.currentAddress?.[0]?.city??""}-{userprofile?.address?.[0]?.currentAddress?.[0]?.zip??""}</td>
+                    <td className="td-verify">{userprofile?.address?.[0]?.currentAddress?.[0]?.line1??""}&nbsp; {userprofile?.address?.[0]?.currentAddress?.[0]?.line2??""}&nbsp; {userprofile?.address?.[0]?.currentAddress?.[0]?.landmark??""},&nbsp; {userprofile?.address?.[0]?.currentAddress?.[0]?.city??""}&nbsp;-&nbsp;{userprofile?.address?.[0]?.currentAddress?.[0]?.zip??""}</td>
                   </tr>
                   <tr>
                     <td>Marital Status</td>
@@ -411,10 +411,10 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
         </div> {/* end tab-content */}
         <div className="row " style={{float: 'right'}}>
           <div className="text-left col-md-5  col-6">
-            <button type="submit" onClick={()=>checkEmployee(userprofile.user[0]._id,userprofile.careerandeducation[0].designation,true)} className="btn btn-success waves-effect  mt-2"><i className="mdi mdi-content-save" /> Verify</button>
+            <button type="submit" onClick={()=>checkEmployee(userprofile.user[0]._id,userprofile.careerandeducation[0].designation,true)} className="btn btn-success waves-effect  mt-2"><i className="mdi mdi-content-save" /> Verify Employee</button>
           </div>
           <div className="text-right col-md-5 col-6 ">
-            <button type="submit" onClick={()=>verifynot(false)} className="btn btn-danger waves-effect w mt-2"><i className="mdi mdi-content-save" /> Cancel</button>
+            <button type="submit" onClick={()=>submitdelete(verifynot,false)} className="btn btn-danger waves-effect w mt-2"><i className="mdi mdi-content-save" /> Reject</button>
           </div>
         </div>
       </div> {/* end card-box*/}

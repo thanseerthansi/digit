@@ -11,13 +11,14 @@ import { notify } from '../Commonpages/toast';
 import domtoimage from 'dom-to-image';
 
 export default function Employeeprofile() {
-  const {logouthandler,userdetail,employeedata,getUser}=useContext(Simplecontext)
+  const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst}=useContext(Simplecontext)
   const [shareview,setshareview]=useState(true)
+  const [load,setload]=useState(false)
   const maxLength = userdetail ? Math.max(userdetail.lngRead.length, userdetail.lngWrite.length) : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
-    <td data-label="Read">{userdetail && index < userdetail.lngRead.length ? userdetail.lngRead[index] : ''}</td>
-    <td data-label="Write">{userdetail && index < userdetail.lngWrite.length ? userdetail.lngWrite[index] : ''}</td>
+    <td data-label="Read">{Capitalizefirst(userdetail && index < userdetail.lngRead.length ? userdetail.lngRead[index] : '')}</td>
+    <td data-label="Write">{Capitalizefirst(userdetail && index < userdetail.lngWrite.length ? userdetail.lngWrite[index] : '')}</td>
   </tr>
 ));
 
@@ -52,6 +53,7 @@ const Bannerhandler=async(ratio)=>{
   };
 
   const downloadHtmlAsImage = (elementId) => {
+    setload(true)
     const htmlContent = document.getElementById(elementId);
     // console.log("sgjadhghasbd",htmlContent)
     domtoimage.toPng(htmlContent,{ useCORS: true,scale:3 })
@@ -60,14 +62,25 @@ const Bannerhandler=async(ratio)=>{
         link.download = 'image.png';
         link.href = dataUrl;
         link.click();
+        setload(false)
       })
       .catch((error) => {
         console.error('Error while converting HTML to image:', error);
+        setload(false)
       });
+      
+  };
+  const formatNumber = (number) => {
+    const formattedNumber = number.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1    ');
+    return formattedNumber;
   };
   return (
     <>
       <main className="main">
+      {load? 
+  <div className="spinner-container">
+    <div className="spinner" />
+  </div>:null}
   <div className="carousel-inner">
   </div>
   <section className="section-box-2">
@@ -124,7 +137,7 @@ const Bannerhandler=async(ratio)=>{
               <div className="tab-pane fade show active" id="tab-my-profile" role="tabpanel" aria-labelledby="tab-my-profile">
                 <div className="row form-contact">
                   <div className="row">
-                    <div className="col-xl-8 col-lg-8 col-md-12 col-sm-12">
+                    <div className="col-xl-7 col-lg-7 col-md-12 col-sm-12">
                       <div className="card-grid- hover-up">
                         <div className="card-grid-2-image-left">
                           <div className="card-grid-2-image-rd online">
@@ -139,7 +152,7 @@ const Bannerhandler=async(ratio)=>{
                                 <tr>
                                   <td>Date of birth</td>
                                   <td>:</td>
-                                  <td className="td-verify">{userdetail?.dob?moment(userdetail.dob).format("YYYY-MM-DD"):""??"no"}</td>
+                                  <td className="td-verify">{userdetail?.dob?moment(userdetail.dob).format("YYYY-MM-DD"):""??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Email</td>
@@ -162,7 +175,7 @@ const Bannerhandler=async(ratio)=>{
                                   <td className="td-verify">{userdetail?.address?.[0]?.currentAddress?.[0]?.line1??""} {userdetail?.address?.[0]?.currentAddress?.[0]?.line2??""} {userdetail?.address?.[0]?.currentAddress?.[0]?.landmark??""} {userdetail?.address?.[0]?.currentAddress?.[0]?.city??""}-{userdetail?.address?.[0]?.currentAddress?.[0]?.zip??""}</td>
                                   </tr>
                                 <tr>
-                                  <td>Merital Status</td>
+                                  <td>Marital Status</td>
                                   <td>:</td>
                                   <td className="td-verify">{userdetail?.maritalStatus??""}</td>
                                 </tr>
@@ -263,7 +276,7 @@ const Bannerhandler=async(ratio)=>{
                         </div>
                       </div>
                     </div>
-                    <div className="col-xl-4 col-lg-4  col-sm-12  pl-lg-15 mt-lg-30">
+                    <div className="col-xl-5 col-lg-5  col-sm-12  pl-lg-15 mt-lg-30">
                       <div className="sidebar-border">
                         <div className="box-profile-completed text-center mb-10">
                           <div className="grid">
@@ -275,7 +288,7 @@ const Bannerhandler=async(ratio)=>{
                             <ul className="list-unstyled timeline-sm">
                               {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
                                  <li key={pk} className="timeline-sm-item">
-                                 <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to,'YYYY-MM-DD', true).isValid()? moment(pcompany.to,'YYYY-MM-DD').format('YY'): ''}</span>
+                                 <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to,'YYYY-MM-DD', true).isValid()? moment(pcompany.to,'YYYY-MM-DD').format('yyy'): "Present"}</span>
                                  <h6 className="mt-0 mb-1">{pcompany.name} </h6>
                                  {pcompany.is_verified?
                                  <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:<div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
@@ -313,11 +326,11 @@ const Bannerhandler=async(ratio)=>{
                               <img src="\assets\imgs\logo\logo_craig-10.png" />
                             </div>
                             <div className="VISA">
-                              <QRCode style={{height:"100px",width:"100px",backgroundColor:"white",padding:'6px'}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
+                              <QRCode style={{height:"90px",width:"90px",backgroundColor:"white",padding:'6px'}} value={`${window.location.origin}/candidatedetails/${userdetail?._id??""}`} />
                             </div>
                             <div className="card-expiry-group">
                               <label htmlFor="card-expiry">Unique ID</label>
-                              <h5 className="card-number">{userdetail?.uniqueid??""}</h5>
+                              <h5 className="card-number">{formatNumber(userdetail?.uniqueid??"")}</h5>
                             </div>
                             <div className="card-name-group">
                               <label htmlFor="card-name">NAME</label>

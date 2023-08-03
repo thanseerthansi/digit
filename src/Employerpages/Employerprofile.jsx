@@ -22,7 +22,6 @@ export default function Employerprofile() {
   const [photomodal,setphotomodal]=useState({modal:false,data:""})
   const [emailotp,setemailotp]=useState('')
   const numberRegex = /^\d+$/;
-
   useEffect(() => {
     window.scrollTo(0,0)
     if(userdetail?.status==="rejected"??""){
@@ -33,6 +32,13 @@ export default function Employerprofile() {
     }
     Hrcheck()
   }, [])
+  useEffect(()=>{
+    if(!Object.keys(certificatedata).length){
+    if(employeedata.certificate?.length){
+      setcertificatedata(employeedata.certificate[0])
+      setemployeedata({...employeedata,address_proof_type:employeedata.certificate[0].name})
+    }}
+  },[employeedata])
  const Employeeupdate=async()=>{
   try {
     setIsOpen(true)
@@ -46,7 +52,11 @@ export default function Employerprofile() {
     if(Object.keys(certificatedata).length){
       if (certificatedata.front_url&&certificatedata.back_url){
         datalist.certificate = [{...certificatedata , name : employeedata.address_proof_type}]
-      }}
+      }}else{
+        if(employeedata.address_proof_type){
+          datalist.certificate
+        }
+      }
     let data = await Axioscall("put","company",datalist)
     if(data.status===200){
       getUser(); 
@@ -307,7 +317,7 @@ function Decodetoken (){
                               </div>
                               {/* profile start..................... */}
                              <div className="card-block-info class-verification1">
-                              <table>
+                              <table style={{width:"100%"}}>
                                 <tbody><tr>
                                     <td>Email</td>
                                     <td>:</td>
@@ -486,13 +496,13 @@ function Decodetoken (){
                           </div>
                           <label className="dropdown col-lg-12 col-sm-12 mt-15">
               <div className="text__center">
-                <select  onChange={(e)=>setemployeedata({...employeedata,address_proof_type:e.target.value})}   value={employeedata.address_proof_type??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                <select required={certificatedata.front_url||certificatedata.back_url} onChange={(e)=>setemployeedata({...employeedata,address_proof_type:e.target.value})}   value={employeedata.address_proof_type??""} className={`form-control cs-select mb-0 cs-skin-elastic cs-skin-elastic1 ${certificatedata.front_url||certificatedata.back_url?employeedata.address_proof_type?'':"is-invalid":""}` }>
                   <option value="" defaultValue="" disabled>Government Approved Certificate</option>
                   <option value="MOA">MOA</option>
                   <option value="Incorporation Certificate">Incorporation Certificate</option>
                   <option value="Panchayath Certificate">Panchayath Certificate</option>
                 </select>
-              <Form.Control.Feedback type="invalid">Please Select Certificate type</Form.Control.Feedback>
+              <Form.Control.Feedback className="text-start"  type="invalid">Please Select Certificate type</Form.Control.Feedback>
               </div>
             </label>
             <div className="form-group col-lg-6 col-sm-12">
@@ -559,9 +569,13 @@ function Decodetoken (){
                               Please provide country
                             </Form.Control.Feedback>
                           </div>
+                          {/* <div className="text-center">{validated?<span className="text-danger">Fill all required field</span>:""}</div> */}
                           <div className="box-button mt-15 ">
+
                             <button  type="submit" className="btn btn-apply-big font-md font-bold">Update</button>
+                            
                           </div>
+                         
                         </div>
                           </Form>
                       </div>

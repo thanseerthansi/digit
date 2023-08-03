@@ -304,7 +304,7 @@ export default function Employerregister() {
             </label>
             <label className="dropdown col-lg-12 col-sm-12 mt-15">
               <div className="text__center">
-                <select  onChange={(e)=>setcompanydata({...companydata,address_proof_type:e.target.value})}  value={companydata.address_proof_type??""} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                <select required={certificatedata.front_url||certificatedata.back_url} onChange={(e)=>setcompanydata({...companydata,address_proof_type:e.target.value})}  value={companydata.address_proof_type??""} className={`form-control cs-select cs-skin-elastic cs-skin-elastic1 mb-0 ${certificatedata.front_url||certificatedata.back_url?companydata.address_proof_type?'':"is-invalid":""}`}>
                   <option value="" defaultValue="" disabled>Government Approved Certificate</option>
                   <option value="MOA">MOA</option>
                   <option value="Incorporation Certificate">Incorporation Certificate</option>
@@ -400,6 +400,7 @@ export default function Employerregister() {
              <input onChange={(e)=>setphonevalidationdata({...phonevalidationdata,otp:e.target.value})} value={phonevalidationdata.otp??""} className={`form-control mb-3`} id="input-5" type="otp"  name="otp" placeholder="OTP" />
              <Form.Control.Feedback type="invalid">not  match</Form.Control.Feedback>
            </div>
+           {/* <div className="text-center">{validated?<span className="text-danger">Fill all required field</span>:""}</div> */}
            <div className="form-group">
            <button className="btn btn-brand-1 hover-up w-100" type="button" onClick={()=>phoneotpverify()} name="login">Submit OTP</button>
          </div>

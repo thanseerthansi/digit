@@ -9260,7 +9260,7 @@ input[type=file]::file-selector-button:hover {
 }
 .content-single ul {
   
-  line-height: 32px;
+  line-height: 27px;
   font-size: 16px;
   color: #4F5E64;
   list-style: disc;
@@ -9445,7 +9445,7 @@ input[type=file]::file-selector-button:hover {
 
 @media only screen and (min-width: 1000px) {
   .sidebar-list-job88 ul li{
-    margin-left: 100px;
+    margin-left: 125px;
   }
 }
 
@@ -12061,7 +12061,7 @@ margin-left: 300px!important;
 .timeline-sm .timeline-sm-item {
   position: relative;
   padding-bottom: 20px;
-  padding-left: 10px;
+  padding-left: 15px;
   border-left: 2px solid #dee2e6;
 }
 .timeline-sm .timeline-sm-item:after {
@@ -12078,7 +12078,7 @@ margin-left: 300px!important;
 }
 .timeline-sm .timeline-sm-item .timeline-sm-date {
   position: absolute;
-  left: -104px;
+  left: -125px;
 }
 @media (max-width: 420px) {
   .timeline-sm {
