@@ -33,12 +33,13 @@ export default function Employerprofile() {
     Hrcheck()
   }, [])
   useEffect(()=>{
-    if(!Object.keys(certificatedata).length){
+    // if(!Object.keys(certificatedata).length){
     if(employeedata.certificate?.length){
       setcertificatedata(employeedata.certificate[0])
       setemployeedata({...employeedata,address_proof_type:employeedata.certificate[0].name})
-    }}
-  },[employeedata])
+    }
+  // }
+  },[userdetail])
  const Employeeupdate=async()=>{
   try {
     setIsOpen(true)
