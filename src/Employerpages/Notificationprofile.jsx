@@ -414,7 +414,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
             <button type="submit" onClick={()=>checkEmployee(userprofile.user[0]._id,userprofile.careerandeducation[0].designation,true)} className="btn btn-success waves-effect  mt-2"><i className="mdi mdi-content-save" /> Verify Employee</button>
           </div>
           <div className="text-right col-md-5 col-6 ">
-            <button type="submit" onClick={()=>submitdelete(verifynot,false)} className="btn btn-danger waves-effect w mt-2"><i className="mdi mdi-content-save" /> Reject</button>
+            <button type="submit" onClick={()=>submitdelete(verifynot,false)} className="btn btn-danger waves-effect w mt-2"><i className="mdi mdi-content-save" />Reject</button>
           </div>
         </div>
       </div> {/* end card-box*/}
@@ -422,7 +422,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
   </div>
   <Modal show={isOpen} onHide={()=>setIsOpen(false)&Nulldata()}>
         <Modal.Header closeButton>
-          <Modal.Title><h4>HR</h4></Modal.Title>
+          <Modal.Title><h4>Assign HR</h4></Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,Addcompanyhandler,setValidated)} className="login-register text-start mt-20 pb-30" action="#">
@@ -455,12 +455,12 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
 
       </Form>
         </Modal.Body>
-        <Modal.Footer>
+        {/* <Modal.Footer>
           <Button variant="secondary" onClick={()=>setIsOpen(false)&Nulldata()}>
             Close
           </Button>
           
-        </Modal.Footer>
+        </Modal.Footer> */}
       </Modal>
 </main>
 

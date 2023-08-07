@@ -1640,12 +1640,12 @@ export default function Employeeprofupdate(value) {
            <button className="btn btn-brand-1 hover-up w-100" type="button" onClick={()=>emailotpverify()}  name="login">Submit OTP</button>
          </div>
         </Modal.Body>
-        <Modal.Footer>
+        {/* <Modal.Footer>
           <Button variant="secondary" onClick={()=>setemailverify({...emailverify,modal:false})}>
             Close
           </Button>
           
-        </Modal.Footer>
+        </Modal.Footer> */}
       </Modal>
     <Modal show={phoneverify.modal} onHide={()=>setphoneverify({...emailverify,modal:false})}>
         <Modal.Header closeButton>
@@ -1660,12 +1660,12 @@ export default function Employeeprofupdate(value) {
            <button className="btn btn-brand-1 hover-up w-100" type="button" onClick={()=>phoneotpverify()}  name="login">Submit OTP</button>
          </div>
         </Modal.Body>
-        <Modal.Footer>
+        {/* <Modal.Footer>
           <Button variant="secondary" onClick={()=>setphoneverify({...phoneverify,modal:false})}>
             Close
           </Button>
           
-        </Modal.Footer>
+        </Modal.Footer> */}
       </Modal>
   </section>
 </main>
