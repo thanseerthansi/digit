@@ -238,11 +238,11 @@ export default function Employeeslist() {
       </div>
       </Form>
         </Modal.Body>
-        <Modal.Footer>
+        {/* <Modal.Footer>
           <Button variant="secondary" onClick={()=>setIsOpen(false)&Nulldata()}>
             Close
           </Button>         
-        </Modal.Footer>
+        </Modal.Footer> */}
       </Modal>
   </section>
 </main>

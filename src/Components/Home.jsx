@@ -107,7 +107,7 @@ export default function Home() {
         <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
           <div className="text-center">
             <h1 className="color-brand-2"><span className="count">28</span><span> +</span></h1>
-            <h5>CHappy Clients</h5>
+            <h5>Happy Clients</h5>
             <p className="font-sm color-text-paragraph mt-10">We always provide people a <br className="d-none d-lg-block" />complete solution upon focused of <br className="d-none d-lg-block" />any business</p>
           </div>
         </div>

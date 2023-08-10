@@ -8,6 +8,7 @@ import { notify, notifyerror } from '../Commonpages/toast';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from "react-bootstrap";
+import { submitdelete } from '../Commonpages/Confirmsubmit';
 
 export default function Notificationprofile() {
   const {userdetail,Decodeall,Check_Validation } = useContext(Simplecontext);
@@ -69,6 +70,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
             notificationid:id
         }
           let data =await Axioscall("post","employee/companyVerify",body)
+          // console.log("dataverify",data)
           if(data.status===200){
             try { 
               userprofile.careerandeducation[0].prevCompanies.forEach((element) => {
@@ -409,13 +411,14 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
           </div>
           {/* end settings content*/}
         </div> {/* end tab-content */}
-        <div className="row " style={{float: 'right'}}>
-          <div className="text-left col-md-5  col-6">
+        <div className="row d-flex " style={{float: 'right'}}>
+          <div className="text-left ">
             <button type="submit" onClick={()=>checkEmployee(userprofile.user[0]._id,userprofile.careerandeducation[0].designation,true)} className="btn btn-success waves-effect  mt-2"><i className="mdi mdi-content-save" /> Verify Employee</button>
+            <button type="submit" onClick={()=>submitdelete(verifynot,false)} className="btn btn-danger waves-effect w mt-2 ml-10"><i className="mdi mdi-content-save" />Reject</button>
           </div>
-          <div className="text-right col-md-5 col-6 ">
+          {/* <div className="text-right col-md-5 col-6 ">
             <button type="submit" onClick={()=>submitdelete(verifynot,false)} className="btn btn-danger waves-effect w mt-2"><i className="mdi mdi-content-save" />Reject</button>
-          </div>
+          </div> */}
         </div>
       </div> {/* end card-box*/}
     </div> {/* end col */}

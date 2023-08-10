@@ -121,11 +121,13 @@ export default function Employeeprofupdate(value) {
           link.download = 'image.png';
           link.href = dataUrl;
           link.click();
+          setload(false)
         })
         .catch((error) => {
+          setload(false)
           console.error('Error while converting HTML to image:', error);
         });
-        setload(false)
+        
     };
   const getCompanydata=async()=>{
     try {

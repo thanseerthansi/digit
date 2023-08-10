@@ -152,13 +152,17 @@ const requestOTP=async(e)=>{
   try {
     e.preventDefault();
     setload(true)
-    
-    let data =await Axioscall("post","otp/send-otp",{mobile:phoneNumber})
+    if(phoneNumber){
+      let data =await Axioscall("post","otp/send-otp",{mobile:phoneNumber})
     if (data.status===200){
       setExpandForm(true);
       generateRecaptcha();
       notify("check your phone for verification otp") 
-    }    
+    }  
+    }else{
+      notifyerror("Provide Phone Number")
+    } 
+     
   } catch (error) {
     
     notifyerror("try again")

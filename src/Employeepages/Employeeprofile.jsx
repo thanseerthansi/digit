@@ -14,14 +14,14 @@ export default function Employeeprofile() {
   const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst}=useContext(Simplecontext)
   const [shareview,setshareview]=useState(true)
   const [load,setload]=useState(false)
-  const maxLength = userdetail ? Math.max(userdetail.lngRead.length, userdetail.lngWrite.length) : 0;
+  const maxLength = userdetail ? Math.max(userdetail.lngRead?.length??"", userdetail.lngWrite?.length??"") : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
     <td data-label="Read">{Capitalizefirst(userdetail && index < userdetail.lngRead.length ? userdetail.lngRead[index] : '')}</td>
     <td data-label="Write">{Capitalizefirst(userdetail && index < userdetail.lngWrite.length ? userdetail.lngWrite[index] : '')}</td>
   </tr>
 ));
-
+// console.log("employeee profile",userdetail)
 const Bannerhandler=async(ratio)=>{
   try {
     let data =await Filestack(ratio)
@@ -55,24 +55,25 @@ const Bannerhandler=async(ratio)=>{
   const downloadHtmlAsImage = (elementId) => {
     setload(true)
     const htmlContent = document.getElementById(elementId);
-    // console.log("sgjadhghasbd",htmlContent)
     domtoimage.toPng(htmlContent,{ useCORS: true,scale:3 })
       .then((dataUrl) => {
         const link = document.createElement('a');
         link.download = 'image.png';
         link.href = dataUrl;
         link.click();
-        setload(false)
       })
       .catch((error) => {
         console.error('Error while converting HTML to image:', error);
-        setload(false)
       });
-      
+      setload(false)
   };
   const formatNumber = (number) => {
     const formattedNumber = number.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1    ');
     return formattedNumber;
+  };
+  const calculateDashArray = (value) => {
+    const percentage = (value - 399) / (999 - 399) * 100;
+    return `${percentage}, 100`;
   };
   return (
     <>
@@ -103,11 +104,30 @@ const Bannerhandler=async(ratio)=>{
             <h5 className="f-18 u-color">Unique ID : <span>{userdetail?.uniqueid??""}</span></h5>
             <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation??""}</p>
           </div>
+            {/* score ....start */}
+          <div className="col-lg-4 col-md-12 text-lg-end">     
+          <div>
+            <section>
+              <h5 className="score-section mb-20">Score</h5>
+              <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
+                <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                <circle className="circle-chart__circle"  style={{ strokeDasharray: calculateDashArray(699) }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                <g className="circle-chart__info">
+                  <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={8}>699</text>
+                  <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={2}>Out of 999</text>
+                </g>
+              </svg>
+            </section>
+            <div id="circle-staticstic-demo" />
+          </div></div>
+
+          {/* score ....end */}
           <div className="col-lg-4 col-md-12 text-lg-end">     
             <div>
               <div id="circle-staticstic-demo" />
             </div></div>
         </div>
+       
       </div>
       <div className="border-bottom pt-10 pb-10" />
     </div>
@@ -127,7 +147,7 @@ const Bannerhandler=async(ratio)=>{
             <div className="mt-20 mb-20"><a href='#' onClick={()=>downloadHtmlAsImage('htmlContent1')}>Share Profile</a></div>
             :""}
             <div className="mt-10 mb-10">
-                    <a href="#" onClick={()=>{logouthandler();}}> Log Out</a>
+                    <a href="#" onClick={()=>{logouthandler();}}> Logout</a>
                   </div>
           </div>
         </div>

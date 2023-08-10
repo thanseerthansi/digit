@@ -117,12 +117,12 @@ export default function Header() {
               {pathvalue === "/Signin" || pathvalue === "/employerlogin" ? (
                 pathvalue === "/Signin" ? (
                   <div className="block-signin" style={{width:"180px"}}>
-                    <Link
+                    {/* <Link
                      className="btn btn-default btn-shadow ml-40 hover-up"
                       to="/employeeregister"
                     >
                       Register
-                    </Link>
+                    </Link> */}
                   </div>
                 ) : 
                 (pathvalue!="/employer-register"?
@@ -193,12 +193,12 @@ export default function Header() {
                 pathvalue === "/Signin" ? "" : 
                 (
                   <li className="has-children">
-                    <Link
+                    {/* <Link
                       
                       to="/employer-register"
                     >
                       Register
-                    </Link>
+                    </Link> */}
                   </li>
                 )
               ) : (

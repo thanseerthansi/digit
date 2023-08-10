@@ -233,12 +233,12 @@ export default function Candidates() {
 
       </Form>
         </Modal.Body>
-        <Modal.Footer>
+        {/* <Modal.Footer>
           <Button variant="secondary" onClick={()=>setIsOpen(false)&Nulldata()}>
             Close
           </Button>
           
-        </Modal.Footer>
+        </Modal.Footer> */}
       </Modal>
 </main>
     <Helmet>

@@ -121,7 +121,8 @@ export default function Employerregister() {
     }
   }
   const emailotpverify=async()=>{
-    try {     
+    try {   
+      
       let body={
         "email" : companydata.email,
         "otp" : emailvalidationdata.otp

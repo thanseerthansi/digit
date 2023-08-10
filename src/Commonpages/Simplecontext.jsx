@@ -15,7 +15,8 @@ export default function Simplecontextprovider({children}){
         path()
         getUser()
         Hrcheck()
-      }, [])
+      }, []);
+
     const path =()=>{
         setpathvalue(window.location.pathname)
     }
@@ -118,6 +119,7 @@ export default function Simplecontextprovider({children}){
       }
     }
     function loghandler(){
+      
       let user = window.localStorage.getItem("graiduser")
         let path = window.location.pathname
         let userdata = userdetail

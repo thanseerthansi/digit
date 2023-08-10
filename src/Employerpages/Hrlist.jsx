@@ -174,7 +174,7 @@ export default function Hrlist() {
   </section>
   <Modal show={isOpen} onHide={()=>setIsOpen(false)&Nulldata()}>
         <Modal.Header closeButton>
-          <Modal.Title><h4>HR</h4></Modal.Title>
+          <Modal.Title><h4>Assign HR</h4></Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <Form noValidate validated={validated} onSubmit={(e)=>Check_Validation(e,hrAssign,setValidated)} className="login-register text-start mt-20 pb-30" action="#">
@@ -208,11 +208,11 @@ export default function Hrlist() {
       </div>
       </Form>
         </Modal.Body>
-        <Modal.Footer>
+        {/* <Modal.Footer>
           <Button variant="secondary" onClick={()=>setIsOpen(false)&Nulldata()}>
             Close
           </Button>        
-        </Modal.Footer>
+        </Modal.Footer> */}
       </Modal>
 </main>
     <Helmet>

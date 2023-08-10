@@ -87,7 +87,10 @@ export default function Candidatedetails() {
       return rslt
     } 
   }
-
+  const calculateDashArray = (value) => {
+    const percentage = (value - 399) / (999 - 399) * 100;
+    return `${percentage}, 100`;
+  };
   return (
     <>
     <main className="main">
@@ -107,6 +110,24 @@ export default function Candidatedetails() {
             <h6 className="f-18 u-color">Unique ID : <span>{userprofile?.uniqueid??""}</span></h6>
             <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userprofile?.careerandeducation?.[0]?.designation??""}</p>
           </div>
+          {/* score ....start */}
+          <div className="col-lg-4 col-md-12 text-lg-end">     
+          <div>
+            <section>
+              <h5 className="score-section mb-20">Score</h5>
+              <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
+                <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                <circle className="circle-chart__circle"  style={{ strokeDasharray: calculateDashArray(699) }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                <g className="circle-chart__info">
+                  <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={8}>699</text>
+                  <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={2}>Out of 999</text>
+                </g>
+              </svg>
+            </section>
+            <div id="circle-staticstic-demo" />
+          </div></div>
+
+          {/* score ....end */}
           <div className="col-lg-4 col-md-12 text-lg-end">     
             <div>
               <div id="circle-staticstic-demo" />

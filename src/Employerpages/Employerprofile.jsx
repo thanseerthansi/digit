@@ -282,7 +282,7 @@ function Decodetoken (){
                   </ul>
                   <div className="border-bottom pt-10 pb-10" />
                   <div className="mt-10 mb-10">
-                    <a href="#" onClick={()=>{logouthandler();}}> Log Out</a>
+                    <a href="#" onClick={(e)=>{logouthandler()}}> Logout</a>
                   </div>
                 </div>
                 <div className="mt-20 mb-20">                    
@@ -634,12 +634,12 @@ function Decodetoken (){
            <button className="btn btn-brand-1 hover-up w-100" type="button" onClick={()=>verifyotp()}  name="login">Submit OTP</button>
          </div>
         </Modal.Body>
-        <Modal.Footer>
+        {/* <Modal.Footer>
           <Button variant="secondary" onClick={()=>setIsOpen(false)}>
             Close
           </Button>
           
-        </Modal.Footer>
+        </Modal.Footer> */}
       </Modal>
       {/* popup warning start */}
      {/* <section className="sec__container">
