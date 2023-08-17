@@ -43,7 +43,7 @@ export default function Employeeslist() {
         body ={
           limit:16,
           page:page?page:currentpage.current,
-          uniqueid:fileterid,
+          uniqueid:fileterid, 
           company:window.localStorage.getItem("graiduserid"),
           role:'employer',
         }

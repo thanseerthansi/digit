@@ -14,13 +14,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Axioscall from "../Commonpages/Axioscall";
 import jwt_decode from "jwt-decode";
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css';
 
 export default function Signin() {
   const { path,userdetail,setuserdetail,setemployeedata } = useContext(Simplecontext);
   const navigate = useNavigate();
-  const countryCode = "+91";
-
-  const [phoneNumber, setPhoneNumber] = useState(countryCode);
+  // const countryCode = "+91";
+  let regex = /(0|91)?[6-9][0-9]{9}/;
+  const [phoneNumber, setPhoneNumber] = useState();
   const [expandForm, setExpandForm] = useState(false);
   const [added_otp, setadded_otp] = useState("");
   const [load,setload]=useState(false)
@@ -95,6 +97,8 @@ export default function Signin() {
   const Decodetoken =(token,emp)=>{
     // console.log(token)
     var decoded = jwt_decode(token)
+    console.log("decooooded",decoded)
+    
     if(decoded.completion===3){
       if(decoded.id){
         // console.log("decode",decoded)
@@ -152,15 +156,18 @@ const requestOTP=async(e)=>{
   try {
     e.preventDefault();
     setload(true)
-    if(phoneNumber){
+    console.log("phoneNumber",phoneNumber)
+    if(regex.test(phoneNumber)){
       let data =await Axioscall("post","otp/send-otp",{mobile:phoneNumber})
     if (data.status===200){
       setExpandForm(true);
       generateRecaptcha();
       notify("check your phone for verification otp") 
-    }  
+    } else{
+      notifyerror("check Your Number is Valid")
+    } 
     }else{
-      notifyerror("Provide Phone Number")
+      notifyerror("Provide Valid Phone Number")
     } 
      
   } catch (error) {
@@ -205,7 +212,7 @@ const verifyOTP=async()=>{
                 <div className="text-center">
                   <p className="font-sm text-brand-2">Welcome back! </p>
                   <h3 className="mt-10 mb-5 text-brand-1 font-log">
-                    Create an Account or Log in
+                    Create an Account or Login
                   </h3>
                   <button
                     onClick={googlesigninhandler}
@@ -249,7 +256,7 @@ const verifyOTP=async()=>{
                   className="login-register text-start mt-20"
                   onSubmit={(e)=>requestOTP(e)}
                 >
-                  <div className="form-group">
+                  {/* <div className="form-group">
                     <input
                       className="form-control"
                       id="input-1"
@@ -260,7 +267,15 @@ const verifyOTP=async()=>{
                       name="fullname"
                       placeholder="Phone Number"
                     />
-                  </div><br/>
+                  </div><br/> */}
+                  <PhoneInput
+                international
+                countryCallingCodeEditable={false}
+                defaultCountry="IN"
+                value={phoneNumber}
+                onChange={phoneNumber=>setPhoneNumber(phoneNumber)}
+                style={{ width:"100%",fontSize: '14px',display:"flex",border:'1px solid #E0E6F6',borderRadius:"4px",paddingLeft:"6px"}}
+                />
                   {expandForm?<>
                      <div className="form-group">
                      <input

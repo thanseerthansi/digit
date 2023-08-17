@@ -1144,7 +1144,7 @@ export default function Employeeprofupdate(value) {
                         </div>
                       </div> 
                       <input type="submit" name="next" onClick={()=>tophandler(0,500)}  className="pr-button  action-button" defaultValue="Next" /> 
-                      <input type="button" name="previous" onClick={()=>setWizard(1)} className="pr-button  action-button-prev" defaultValue="Previous" />
+                      <input type="button" name="previous" onClick={()=>setWizard(1)&getPersonal()} className="pr-button  action-button-prev" defaultValue="Previous" />
                     </fieldset>
                     </Form>
                     :null}
@@ -1555,9 +1555,9 @@ export default function Employeeprofupdate(value) {
                           </div>
                           <div className="line-item-property__actions col-12 row mt-3 mb-3">
                           <button onClick={()=>windowcompany?pushhandler(precompanydata,setprecompanydata,precompanyarray,setprecompanyarray):setwindowcompany(true)}  className="col-lg-2 button-form1" type="button"  value="+">Add</button>
-                          
+                          {windowcompany?
                           <button  onClick={()=>setprecompanydata('')& setwindowcompany(false)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
-                          
+                          :""}
                           </div>
                         </div>
                         
@@ -1570,7 +1570,7 @@ export default function Employeeprofupdate(value) {
                         </div>
                       </div>
                       <input type="submit" name="next" onClick={()=>tophandler(0,500)} className="pr-button next action-button"   defaultValue="Submit" /> 
-                      <input type="button" name="previous" onClick={()=>setWizard(2)} className="pr-button  action-button-prev" defaultValue="Previous" />
+                      <input type="button" name="previous" onClick={()=>setWizard(2)&getaddress()} className="pr-button  action-button-prev" defaultValue="Previous" />
                     </fieldset>
                     </Form>
                     :null}
