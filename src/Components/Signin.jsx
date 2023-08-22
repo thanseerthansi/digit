@@ -44,6 +44,7 @@ export default function Signin() {
 
   const googlesigninhandler = async () => {
     const data = await signInWithGoogle();
+    console.log("ddddddddddddsign in",data)
     let emp ={}
     if (data._tokenResponse) {
       emp.email=data._tokenResponse.email
@@ -279,7 +280,7 @@ const verifyOTP=async()=>{
                   {expandForm?<>
                      <div className="form-group">
                      <input
-                       className="form-control"
+                       className="form-control mt-20"
                        id="input-1"
                        type="number"
                        value={added_otp}
@@ -288,7 +289,7 @@ const verifyOTP=async()=>{
                        placeholder="OTP"
                      />
                    </div><br/>  
-                   <div className="form-group">
+                   <div className="form-group ">
                     <button
                       className="btn btn-brand-1 hover-up w-100 "
                       type="button"

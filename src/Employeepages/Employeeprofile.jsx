@@ -170,9 +170,9 @@ const Bannerhandler=async(ratio)=>{
                             <table style={{width:"100%"}}>
                               <tbody>
                                 <tr>
-                                  <td>Date of birth</td>
+                                  <td>DOB</td>
                                   <td>:</td>
-                                  <td className="td-verify">{userdetail?.dob?moment(userdetail.dob).format("YYYY-MM-DD"):""??""}</td>
+                                  <td className="td-verify">{userdetail?.dob?moment(userdetail.dob).format("DD-MM-YYYY"):""??""}</td>
                                 </tr>
                                 <tr>
                                   <td>Email</td>
@@ -185,7 +185,7 @@ const Bannerhandler=async(ratio)=>{
                                   <td className="td-verify">{userdetail?.phone??""}</td>
                                 </tr>
                                 <tr>
-                                  <td> Permenent Address</td>
+                                  <td> Permanent Address</td>
                                   <td>:</td>
                                   <td className="td-verify">{userdetail?.address?.[0]?.permanantAddress?.[0]?.line1??""} {userdetail?.address?.[0]?.permanantAddress?.[0]?.line2??""} {userdetail?.address?.[0]?.permanantAddress?.[0]?.landmark??""} {userdetail?.address?.[0]?.permanantAddress?.[0]?.city??""}-{userdetail?.address?.[0]?.permanantAddress?.[0]?.zip??""}</td>
                                 </tr>
@@ -314,7 +314,7 @@ const Bannerhandler=async(ratio)=>{
                                  <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:<div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
                                  <p>{pcompany.position}</p>
                                </li>
-                              ))??""}
+                              ))??<li>No Experience</li>}
                             </ul>
                           </div>
                           <div className="sidebar-list-job text-imp ">

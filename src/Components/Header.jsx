@@ -94,9 +94,9 @@ export default function Header() {
                 <span className="burger-icon-bottom" />
               </div>
             </div>
-            {windowuser==="employer"?<>
+            {windowuser==="employee"?<>
           <div className="header-right">
-          <div className="block-signin"><Link className="btn btn-default2 btn-shadow ml-40 "  to="/notification"><i className="fa-sharp fa-solid fa-bell notification-bell"></i></Link></div>
+          <div className="block-signin"><Link className="btn btn-default2 btn-shadow ml-40 "  to="/employee-notification"><i className="fa-sharp fa-solid fa-bell notification-bell"></i></Link></div>
         </div>
         </>:null}
             <div className="header-right">
@@ -138,12 +138,12 @@ export default function Header() {
                 :"")
               ) : (
                 <div className="block-signin block-signin1">
-                  <Link
-                    className="text-link-bd-btom hover-up"
-                    to="/employerlogin"
-                  >
-                    For &nbsp; Employers
-                  </Link>
+                    {/* <Link
+                      className="text-link-bd-btom hover-up"
+                      to="/employerlogin"
+                    >
+                      For &nbsp; Employers
+                    </Link> */}
                   <Link
                     className="btn btn-default btn-shadow ml-40 hover-up"
                     to="Signin"
@@ -174,11 +174,10 @@ export default function Header() {
                     <li className="has-children">
                       <Link to="/contactus">Contact us</Link>
                     </li>
-                    {windowuser==="employer"? <li className="has-children"><Link to="/candidates">Find Candidates</Link>
-                </li>:null}
-                {windowuser==="employer"?<>
+                    
+                {windowuser==="employee"?<>
             
-          <li className="has-children"><Link   to="/notification">Notification</Link></li>
+          <li className="has-children"><Link   to="/employee-notification">Notification</Link></li>
         
         </>:null}
         {windowuser?windowuser==="employer"?<>
