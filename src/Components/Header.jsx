@@ -94,7 +94,7 @@ export default function Header() {
                 <span className="burger-icon-bottom" />
               </div>
             </div>
-            {windowuser==="employee"?<>
+            {windowuser==="employee" && pathvalue!="/employeeregister"?<>
           <div className="header-right">
           <div className="block-signin"><Link className="btn btn-default2 btn-shadow ml-40 "  to="/employee-notification"><i className="fa-sharp fa-solid fa-bell notification-bell"></i></Link></div>
         </div>

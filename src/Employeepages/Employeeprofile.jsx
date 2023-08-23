@@ -7,7 +7,7 @@ import Filestack from '../Commonpages/Filestack';
 import Axioscall from '../Commonpages/Axioscall';
 import Employeeprofupdate from './Employeeprofupdate';
 import { notify } from '../Commonpages/toast';
-
+import ProgressBar from "@ramonak/react-progress-bar";
 import domtoimage from 'dom-to-image';
 
 export default function Employeeprofile() {
@@ -105,10 +105,25 @@ const Bannerhandler=async(ratio)=>{
             <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation??""}</p>
           </div>
             {/* score ....start */}
-          <div className="col-lg-4 col-md-12 text-lg-end">     
+          <div className="col-lg-4 col-md-12 text-lg-end ">     
           <div>
+           
             <section>
-              <h5 className="score-section mb-20">Score</h5>
+              
+              <div className='d-flex'>
+                <div style={{marginTop:"90px"}}>
+                {/* <span className="text-start ">Performance</span> */}
+              <svg className="circle-chart " style={{width:"80px"}} viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
+                <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                <circle className="circle-chart__circle"  style={{ strokeDasharray:"60,100" }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                <g className="circle-chart__info">
+                  <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={7}>60%</text>
+                  <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={4}>Performance</text>
+                </g>
+              </svg>
+              </div>
+              <div>
+              <h5 className="text-center">Score</h5>
               <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                 <circle className="circle-chart__circle"  style={{ strokeDasharray: calculateDashArray(699) }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
@@ -117,7 +132,42 @@ const Bannerhandler=async(ratio)=>{
                   <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={2}>Out of 999</text>
                 </g>
               </svg>
+              </div>
+              {/* <span className="text-end ">Attendance</span> */}
+              <div style={{marginTop:"90px"}}>
+              
+              <svg className="circle-chart  " style={{width:"80px"}} viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
+                <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                <circle className="circle-chart__circle"  style={{ strokeDasharray: "50,100" }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                <g className="circle-chart__info">
+                  <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={7}>50%</text>
+                  <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={4}>Attendance</text>
+                </g>
+              </svg>
+              </div>
+              </div>
+              <br/>
+              {/* <div className=''>
+                
+                <div className='' style={{border:"1px solid grey",borderRadius:"12px"}}><h4>jhvjhb</h4></div>
+              </div> */}
+              
             </section>
+           
+            
+         
+            {/* <div className='row'>
+            <div className='col-sm-12 col-md-6 mt-3'></div>
+              <div className='col-6' >
+                <div className='mt-2' >
+                <h6 className='text-start'>Performance</h6>
+                <ProgressBar bgColor='red' completed={60} />
+                <h6 className='text-start'>Attendance</h6>
+                <ProgressBar bgColor='red' completed={40} />
+            </div>
+              </div>
+            </div> */}
+            
             <div id="circle-staticstic-demo" />
           </div></div>
 
