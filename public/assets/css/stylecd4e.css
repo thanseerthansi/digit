@@ -12966,3 +12966,11 @@ animation: Logo 4s ease infinite;
     background-size: cover;
     opacity: 0.5;
 }
+@media only screen and (max-width:767px) {
+  .ntn-btn {
+    margin-left: 65px !important;
+  }
+}
+.ntn-btn {
+  /* margin-left: 65px !important; */
+}

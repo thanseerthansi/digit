@@ -4,6 +4,7 @@ import Axioscall from '../Commonpages/Axioscall'
 import { Simplecontext } from '../Commonpages/Simplecontext';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { notify, notifyerror } from '../Commonpages/toast';
 
 export default function Notification() {
     const {userdetail } = useContext(Simplecontext);
@@ -13,6 +14,7 @@ export default function Notification() {
        getNotification()
   
       }, [])
+      // console.log("notificartiom",notificationdata)
       const tokenhandler=()=>{
         let token = window.localStorage.getItem('craig-token')??""
         if(token){
@@ -28,9 +30,30 @@ export default function Notification() {
             limit:10
           }
           let data = await Axioscall("get","notification",body)
-          console.log("data",data)
+          // console.log("data",data)
           if (data.status===200){
             setnotificationdata(data.data.data.docs)
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      const notificationUpdate=async(notif,type)=>{
+        try {
+          let body = {
+            id:notif.interviewId,
+            notification:notif._id,
+            userId:notif.user._id,
+            type:type
+          }
+          // console.log("nottttt",body)
+          let data = await Axioscall("put","interview",body,"header")
+          // console.log("data",data)
+          if(data.status===200){
+            notify(data.data.message)
+            getNotification()
+          }else{
+            notifyerror("went wrong")
           }
         } catch (error) {
           console.log(error)
@@ -51,46 +74,37 @@ export default function Notification() {
               <h6 className="m-0">Recent</h6>
             </div>
             <div className="box-body p-0">
-              {notificationdata.filter(t=>t.is_viewed===false).length?notificationdata.filter(t=>t.is_viewed===false).map((newnot,nk)=>(
+              {notificationdata.length?notificationdata.map((newnot,nk)=>(
                <React.Fragment key={nk}> 
-               {newnot.type==="jobpost_notification"?<>
-              <div key={nk} className="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header">
-                <div className="dropdown-list-image mr-3">
+               <>
+              <div key={nk} className="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header row">
+                <div className='col-12 col-md-9 col-lg-9 d-flex'>
+                <div className="dropdown-list-image mr-3 ">
                   <img className="rounded-circle" src={newnot?.user?.profilePhoto??"https://bootdey.com/img/Content/avatar/avatar3.png"}  alt=""/>
                 </div>
-                <div className="font-weight-bold mr-3">
-                <Link to={`/verification/${newnot._id}/${newnot.user._id}`} className="text-truncate ">Invitation For Job Interview</Link>
-                  <div className="small">{newnot.user.firstName} {newnot.user.middleName} {newnot.user.lastName}  Worked from {newnot?.message?.from??""} to {newnot?.message?.to??"Present"} </div>
+                <div className="font-weight-bold mr-3 mt-2">
+                <p  className="">{newnot.message}</p>
+                  {/* <div className="small">{newnot.user.firstName} {newnot.user.middleName} {newnot.user.lastName}  Worked from {newnot?.message?.from??""} to {newnot?.message?.to??"Present"} </div> */}
+                </div>
                 </div>
                 
-                
-                <div className="font-weight-bold mr-3 ml-30 margin-left1">
-                  <Link type="button" to={`/verification/${newnot._id}/${newnot.user._id}`} className="btn btn-outline-success btn-sm ">Verify</Link>
+                <div className=" ntn-btn font-weight-bold d-flex col-12 col-md-3 col-lg-3"  >
+                  <div>
+                  <button onClick={()=>notificationUpdate(newnot,"accept")} type="button"  className="btn btn-outline-success btn-sm ">Accept</button>
+                  </div>
+                  <div className='ml-2' style={{marginLeft:"10px"}}>
+                  <button  onClick={()=>notificationUpdate(newnot,"reject")} type="button" className="btn btn-outline-success btn-sm  ">Reject</button>
+                  </div>
                 </div>
                 
               </div>
-              </>:
-              <div key={nk} className="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header">
-                <div className="dropdown-list-image mr-3">
-                  <img className="rounded-circle" src={newnot?.user?.profilePhoto??"https://bootdey.com/img/Content/avatar/avatar3.png"}  alt=""/>
-                </div>
-                <div className="font-weight-bold mr-3">
-                <Link to={`/verification/${newnot._id}/${newnot.user._id}`} className="text-truncate ">Request For Employee Verification</Link>
-                  <div className="small">{newnot.user.firstName} {newnot.user.middleName} {newnot.user.lastName}  Worked from {newnot?.message?.from??""} to {newnot?.message?.to??"Present"} </div>
-                </div>
-                
-                
-                <div className="font-weight-bold mr-3 ml-30 margin-left1">
-                  <Link type="button" to={`/verification/${newnot._id}/${newnot.user._id}`} className="btn btn-outline-success btn-sm ">Verify</Link>
-                </div>
-                
-              </div>}
+              </>
               </React.Fragment>
-              )):<div><p className='text-center'>No Recent Notifications Found</p></div>}
+              )):<div><p className='text-center'>No  Notifications Found</p></div>}
             </div>
           </div>
          
-          {notificationdata.filter(t=>t.is_viewed===true).length?
+          {/* {notificationdata.filter(t=>t.is_viewed===true).length?
           <div className="box shadow-sm rounded bg-white mb-3">
             <div className="box-title border-bottom p-3">
               <h6 className="m-0">Earlier</h6>
@@ -113,7 +127,7 @@ export default function Notification() {
               
             </div>
           </div>
-          :""}
+          :""} */}
         </div>
       </div>
     </div>

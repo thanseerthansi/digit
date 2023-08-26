@@ -2,7 +2,7 @@ import axios from 'axios'
 import React from 'react'
 import { BaseURL } from './Baseurl';
 
-export default async function Axioscall(method,url,datalist) {
+export default async function Axioscall(method,url,datalist,header) {
   try {
     let baseurl = BaseURL+'/'+url
     let data;
@@ -11,7 +11,10 @@ export default async function Axioscall(method,url,datalist) {
       url:baseurl,
       data:datalist
     }
-    
+    if(header){
+      const headerauth = {'Authorization': `Bearer ${localStorage.getItem('craig-token')}`}
+      body.headers = headerauth
+    }
     if(method==="get"){
       data = await axios.get(baseurl,{params:datalist})
     }else {
