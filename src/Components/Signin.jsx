@@ -44,7 +44,7 @@ export default function Signin() {
 
   const googlesigninhandler = async () => {
     const data = await signInWithGoogle();
-    console.log("ddddddddddddsign in",data)
+    // console.log("ddddddddddddsign in",data)
     let emp ={}
     if (data._tokenResponse) {
       emp.email=data._tokenResponse.email
@@ -98,7 +98,7 @@ export default function Signin() {
   const Decodetoken =(token,emp)=>{
     // console.log(token)
     var decoded = jwt_decode(token)
-    console.log("decooooded",decoded)
+    // console.log("decooooded",decoded)
     
     if(decoded.completion===3){
       if(decoded.id){
@@ -157,7 +157,7 @@ const requestOTP=async(e)=>{
   try {
     e.preventDefault();
     setload(true)
-    console.log("phoneNumber",phoneNumber)
+    // console.log("phoneNumber",phoneNumber)
     if(regex.test(phoneNumber)){
       let data =await Axioscall("post","otp/send-otp",{mobile:phoneNumber})
     if (data.status===200){
@@ -213,7 +213,7 @@ const verifyOTP=async()=>{
                 <div className="text-center">
                   <p className="font-sm text-brand-2">Welcome back! </p>
                   <h3 className="mt-10 mb-5 text-brand-1 font-log">
-                    Create an Account or Login
+                    Create an Account or Log in
                   </h3>
                   <button
                     onClick={googlesigninhandler}
@@ -247,7 +247,7 @@ const verifyOTP=async()=>{
                       src="assets/imgs/template/icons/icon-mail.svg"
                       alt="jobbox"
                     />
-                    <strong className="social-text">Sign in with E mail</strong>
+                    <strong className="social-text">Sign in with E-mail</strong>
                   </button>
                   <div className="divider-text-center">
                     <span>Or continue with</span>
