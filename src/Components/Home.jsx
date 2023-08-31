@@ -57,8 +57,8 @@ world. Your story. Your score. Your legacy </div>
         <div className="col-lg-6 col-sm-12">
           <div className="content-job-inner"><span className="color-text-mutted text-32">Unlock Opportunities: </span>
             <h2 className="text-52 wow animate__animated animate__fadeInUp">Highlight Your
-Profile, Get Hired!! <span className="color-brand-2"></span> </h2>
-            <div className="mt-40 pr-50 text-md-lh28 wow animate__animated animate__fadeInUp">Embrace the power of showcasing your profile. With each
+Profile,<span className="color-brand-2">Get Hired!!</span> </h2>
+            <div className="mt-20 pr-50 text-md-lh28 wow animate__animated animate__fadeInUp">Embrace the power of showcasing your profile. With each
 carefully curated detail, you're inviting employers to see your
 potential, encouraging them to envision you as a valuable asset to
 their team. The journey from profile highlight to job offer is within
@@ -78,7 +78,7 @@ embark on a path toward a fulfilling and successful career.</div>
       <div className="col-lg-6 col-sm-12">
         <div className="content-job-inner">
           <h2 className="text-52 wow animate__animated animate__fadeInUp">How it <span className="color-brand-2">Works</span> </h2>
-          <div className="mt-40  text-md-lh28 wow animate__animated animate__fadeInUp"><span className="color-brand-2">1. </span>Begin your journey by creating an account.</div>
+          <div className="mt-20  text-md-lh28 wow animate__animated animate__fadeInUp"><span className="color-brand-2">1. </span>Begin your journey by creating an account.</div>
           <div className="mt-20  text-md-lh28 wow animate__animated animate__fadeInUp"><span className="color-brand-2">2. </span>Provide accurate information to personalize your experience.</div>
           <div className="mt-20  text-md-lh28 wow animate__animated animate__fadeInUp"><span className="color-brand-2">3. </span>Your career experiences will be validated through verification from your respective employers.</div>
           <div className="mt-20  text-md-lh28 wow animate__animated animate__fadeInUp"><span className="color-brand-2">4. </span>Keep track of your progress by getting an update on your Craig score every month.</div>
