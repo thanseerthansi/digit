@@ -24,10 +24,14 @@ export default function Home() {
           <div className="col-xl-8 col-lg-12 ">
             <div className="block-banner">
               <h1 className="heading-banner wow animate__animated animate__fadeInUp"> <span className="color-brand-2">Your Story ,Your Score:</span> Unveil Your Global Employee Performance</h1>
-              <div className="banner-description mt-20 wow animate__animated animate__fadeInUp" data-wow-delay=".1s">Each month, more than 3 million job seekers turn to <br className="d-none d-lg-block" />website in their search for work, making over 140,000 <br className="d-none d-lg-block" />applications every single day</div>
-              <div className="mt-40  " data-wow-delay=".2s">
+              <div className="banner-description mt-20 wow animate__animated animate__fadeInUp" data-wow-delay=".1s">Join us in celebrating the power of your individuality, the strength
+of our global community, and the incredible achievements that
+unite us all. Unveil your global employee performance today and
+continue crafting a story that leaves an indelible mark on the
+world. Your story. Your score. Your legacy </div>
+              {/* <div className="mt-40  " data-wow-delay=".2s">
                 <div className="block-signin banner-button"><Link className="btn btn-default btn-shadow ml-40 hover-up" to="/contactus">Get in Touch</Link></div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="col-xl-4 col-lg-12 d-none d-xl-block col-md-6">
@@ -51,12 +55,18 @@ export default function Home() {
           </div>
         </div>
         <div className="col-lg-6 col-sm-12">
-          <div className="content-job-inner"><span className="color-text-mutted text-32">Millions Of Jobs. </span>
-            <h2 className="text-52 wow animate__animated animate__fadeInUp">Find The One That’s <span className="color-brand-2">Right</span> For You</h2>
-            <div className="mt-40 pr-50 text-md-lh28 wow animate__animated animate__fadeInUp">Search all the open positions on the web. Get your own personalized salary estimate. Read reviews on over 600,000 companies worldwide. The right job is out there.</div>
-            <div className="mt-40">
+          <div className="content-job-inner"><span className="color-text-mutted text-32">Unlock Opportunities: </span>
+            <h2 className="text-52 wow animate__animated animate__fadeInUp">Highlight Your
+Profile, Get Hired!! <span className="color-brand-2"></span> </h2>
+            <div className="mt-40 pr-50 text-md-lh28 wow animate__animated animate__fadeInUp">Embrace the power of showcasing your profile. With each
+carefully curated detail, you're inviting employers to see your
+potential, encouraging them to envision you as a valuable asset to
+their team. The journey from profile highlight to job offer is within
+your grasp – take that step, unlock those opportunities, and
+embark on a path toward a fulfilling and successful career.</div>
+            {/* <div className="mt-40">
               <div className="wow animate__animated animate__fadeInUp"><Link className="btn btn-default" to="aboutus">More</Link></div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -68,8 +78,12 @@ export default function Home() {
       <div className="col-lg-6 col-sm-12">
         <div className="content-job-inner">
           <h2 className="text-52 wow animate__animated animate__fadeInUp">How it <span className="color-brand-2">Works</span> </h2>
-          <div className="mt-40  text-md-lh28 wow animate__animated animate__fadeInUp">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit at vero possimus aut dolore, minus, eligendi unde, commodi illum inventore nulla sequi labore repellat molestiae accusantium laboriosam? Maiores nihil ipsa delectus adipisci perspiciatis eaque quisquam eos voluptas labore est voluptatem aliquid, ea nulla facere! Maxime aliquid modi velit officiis nobis distinctio aperiam omnis nulla ipsam corrupti, fuga quo illum atque tempore numquam quisquam debitis assumenda? Sed fugiat consequuntur quisquam non iste, esse libero corporis, autem similique maxime reprehenderit quia! Adipisci enim ut ea veniam vero recusandae non provident aspernatur blanditiis hic facilis ipsa tenetur porro unde, quas rem sequi est?</div>
-        </div>
+          <div className="mt-40  text-md-lh28 wow animate__animated animate__fadeInUp"><span className="color-brand-2">1. </span>Begin your journey by creating an account.</div>
+          <div className="mt-20  text-md-lh28 wow animate__animated animate__fadeInUp"><span className="color-brand-2">2. </span>Provide accurate information to personalize your experience.</div>
+          <div className="mt-20  text-md-lh28 wow animate__animated animate__fadeInUp"><span className="color-brand-2">3. </span>Your career experiences will be validated through verification from your respective employers.</div>
+          <div className="mt-20  text-md-lh28 wow animate__animated animate__fadeInUp"><span className="color-brand-2">4. </span>Keep track of your progress by getting an update on your Craig score every month.</div>
+          <div className="mt-20  text-md-lh28 wow animate__animated animate__fadeInUp"><span className="color-brand-2">5. </span>Stand Out Among Candidates: Get Noticed by Recruiters with Your High Craig Score.</div>
+         </div>
       </div>
       <div className="col-lg-6 col-sm-12">
         <div className="box-image-job ">

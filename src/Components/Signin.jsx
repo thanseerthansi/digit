@@ -166,6 +166,7 @@ const requestOTP=async(e)=>{
       notify("check your phone for verification otp") 
     } else{
       notifyerror("check Your Number is Valid")
+      console.log(data)
     } 
     }else{
       notifyerror("Provide Valid Phone Number")
