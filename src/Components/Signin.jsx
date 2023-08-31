@@ -27,12 +27,12 @@ export default function Signin() {
   const [added_otp, setadded_otp] = useState("");
   const [load,setload]=useState(false)
   const [logindata,setlogindata]=useState({email:'',firstName:"",lastName:""})
+
   useEffect(() => {
     Getusernumber()
     window.scrollTo(0, 0);
     path();
   }, []);
-  
   const notify = (msg) => toast.success(msg, {
     position: "top-left",
     theme: "dark",

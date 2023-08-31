@@ -23,7 +23,7 @@ export default function Home() {
         <div className="row">
           <div className="col-xl-8 col-lg-12 ">
             <div className="block-banner">
-              <h1 className="heading-banner wow animate__animated animate__fadeInUp">The <span className="color-brand-2">Easiest Way</span><br className="d-none d-lg-block" />to Get Your New Job</h1>
+              <h1 className="heading-banner wow animate__animated animate__fadeInUp"> <span className="color-brand-2">Your Story ,Your Score:</span> Unveil Your Global Employee Performance</h1>
               <div className="banner-description mt-20 wow animate__animated animate__fadeInUp" data-wow-delay=".1s">Each month, more than 3 million job seekers turn to <br className="d-none d-lg-block" />website in their search for work, making over 140,000 <br className="d-none d-lg-block" />applications every single day</div>
               <div className="mt-40  " data-wow-delay=".2s">
                 <div className="block-signin banner-button"><Link className="btn btn-default btn-shadow ml-40 hover-up" to="/contactus">Get in Touch</Link></div>

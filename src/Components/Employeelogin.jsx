@@ -118,7 +118,7 @@ export default function Employeelogin() {
               <div className="col-lg-4 col-md-6 col-sm-12 mx-auto reg-form">
                 <div className="text-center">
                   <p className="font-sm text-brand-2">Welcome back! </p>
-                  <h3 className="mt-10 mb-5 text-brand-1 font-log">Log in</h3>
+                  <h3 className="mt-10 mb-5 text-brand-1 font-log">Login</h3>
                   {/* <p className="font-sm text-muted mb-30">
                     Access to all features. No credit card required.
                   </p> */}
