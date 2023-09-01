@@ -43,7 +43,7 @@ export default function Notification() {
           let body = {
             id:notif.interviewId,
             notification:notif._id,
-            userId:notif.user._id,
+            userId:[notif.user._id],
             type:type
           }
           // console.log("nottttt",body)
