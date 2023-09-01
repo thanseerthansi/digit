@@ -128,7 +128,7 @@ embark on a path toward a fulfilling and successful career.</div>
       </div>
     </div>
   </section>
-  <section className="section-box mt-50 mb-20">
+  {/* <section className="section-box mt-50 mb-20">
     <div className="container">
       <div className="box-newsletter">
         <div className="row">
@@ -145,7 +145,7 @@ embark on a path toward a fulfilling and successful career.</div>
         </div>
       </div>
     </div>
-  </section>
+  </section> */}
 </main>
 <Helmet>
     <script src="/assets/js/vendor/modernizr-3.6.0.min.js"></script>

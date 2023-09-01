@@ -165,7 +165,7 @@ const requestOTP=async(e)=>{
       generateRecaptcha();
       notify("check your phone for verification otp") 
     } else{
-      notifyerror("check Your Number is Valid")
+      notifyerror(data.response.statusText)
       console.log(data)
     } 
     }else{

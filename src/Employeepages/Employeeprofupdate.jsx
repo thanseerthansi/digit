@@ -84,10 +84,12 @@ export default function Employeeprofupdate(value) {
       setemailverify({...emailverify,valid:true})
     }else{
       if(obj.phone){
+        // console.log("phoooooooooooooooooooooone")
         setphoneverify({...phoneverify,valid:true})
       }
     }
      }, [])
+    //  console.log("phoenverify",phoneverify)
      useEffect(()=>{
       if(window.location.pathname==='/employeeregister'){
         setWizard(value.value)
@@ -521,6 +523,7 @@ export default function Employeeprofupdate(value) {
     try {
         let user = tokenhandler()
         let data =await Axioscall("get","employee/personal",{user:user})
+        // console.log("userdataaaaaaa",data)
         if (data.status===200){
           if (data.data.data!=null){
             let userdata =data.data.data
@@ -707,6 +710,7 @@ export default function Employeeprofupdate(value) {
         "otp" : phoneverify.otp
       }
       let data = await Axioscall("post","otp/verify-otp",body)
+      // console.log("phone otp verify",data)
       if(data.status===200){
         setphoneverify({...phoneverify,valid:true,modal:false})
       }
@@ -724,6 +728,7 @@ export default function Employeeprofupdate(value) {
   const phonenumberCheck=async()=>{
     try {
       let data = await Axioscall("post","employee/validatenumber",{phone:employeedata.phone})
+      // console.log("vvvvvvvvvvvvalid",data)
       if(data.status===200){
         phoneVerification()
       }else{
@@ -1408,7 +1413,7 @@ export default function Employeeprofupdate(value) {
                         </div>
                         <h6 className="mt-3 color-brand-1">Designation</h6>
                         <div className="col-lg-12 col-md-12">
-                          <select  value={employeedata3?.designation??""}  onChange={(e)=>setemployeedata3({...employeedata3,designation:e.target.value})} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                          <select  value={employeedata3?.designation??""} required onChange={(e)=>setemployeedata3({...employeedata3,designation:e.target.value})} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                             <option value="" defaultValue="" disabled  >Select Designation</option>
                             <option value="Chief Executive Officer (CEO)">Chief Executive Officer (CEO)</option>
                             <option value="Chief Technology Officer (CTO)">Chief Technology Officer (CTO)</option>
@@ -1649,7 +1654,7 @@ export default function Employeeprofupdate(value) {
           
         </Modal.Footer> */}
       </Modal>
-    <Modal show={phoneverify.modal} onHide={()=>setphoneverify({...emailverify,modal:false})}>
+    <Modal show={phoneverify.modal} onHide={()=>setphoneverify({...emailverify,modal:false,valid:false})}>
         <Modal.Header closeButton>
           <Modal.Title><h4>Check your message for otp</h4></Modal.Title>
         </Modal.Header>
