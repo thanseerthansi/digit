@@ -467,7 +467,7 @@ export default function Candidatedetails() {
         </div>
       </div>
     </div></section>
-  <section className="section-box mt-50 mb-20">
+  {/* <section className="section-box mt-50 mb-20">
     <div className="container">
       <div className="box-newsletter">
         <div className="row">
@@ -484,7 +484,7 @@ export default function Candidatedetails() {
         </div>
       </div>
     </div>
-  </section>
+  </section> */}
 </main>
 <Helmet>
 <script src="https://kit.fontawesome.com/065c1878aa.js" crossorigin="anonymous"></script>

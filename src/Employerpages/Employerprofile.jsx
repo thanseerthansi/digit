@@ -588,7 +588,7 @@ function Decodetoken (){
             </div>
           </div>
         </section>
-        <section className="section-box mt-50 mb-20">
+        {/* <section className="section-box mt-50 mb-20">
           <div className="container">
             <div className="box-newsletter">
               <div className="row">
@@ -620,6 +620,7 @@ function Decodetoken (){
               </div>
             </div>
           </div>
+          </section> */}
           {/* modal................................................................ */}
       <Modal show={isOpen} onHide={()=>setIsOpen(false)}>
         <Modal.Header closeButton>
@@ -689,7 +690,7 @@ function Decodetoken (){
               :<p> Image Not Found</p>}
         </Modal.Body>
       </Modal>
-        </section>
+       
       </main>
     </>
   );

@@ -325,6 +325,8 @@ export default function Employeeprofupdate(value) {
         if(data.message==="Request failed with status code 409"){
           notifyerror(data.response.data.message)
           inputemail.current.disabled=false
+        }else{
+          notifyerror(data.response.data.message)
         }
       }
       setload(false)

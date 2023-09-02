@@ -191,7 +191,7 @@ export default function Employeeslist() {
       </div>:""}
     </div>
   </section>
-  <section className="section-box mt-50 mb-20">
+  {/* <section className="section-box mt-50 mb-20">
     <div className="container">
       <div className="box-newsletter">
         <div className="row">
@@ -208,7 +208,9 @@ export default function Employeeslist() {
         </div>
       </div>
     </div>
-    <Modal show={isOpen} onHide={()=>setIsOpen(false)&Nulldata()}>
+    
+  </section> */}
+  <Modal show={isOpen} onHide={()=>setIsOpen(false)&Nulldata()}>
         <Modal.Header closeButton>
           <Modal.Title><h4>Employee Assign</h4></Modal.Title>
         </Modal.Header>
@@ -244,7 +246,6 @@ export default function Employeeslist() {
           </Button>         
         </Modal.Footer> */}
       </Modal>
-  </section>
 </main>
     <Helmet>
     <script src="https://kit.fontawesome.com/065c1878aa.js" crossorigin="anonymous"></script>
