@@ -173,7 +173,7 @@ export default function Candidates() {
       </div>:""}
     </div>
   </section>
-  <section className="section-box mt-50 mb-20">
+  {/* <section className="section-box mt-50 mb-20">
     <div className="container">
       <div className="box-newsletter">
         <div className="row">
@@ -190,7 +190,7 @@ export default function Candidates() {
         </div>
       </div>
     </div>
-  </section>
+  </section> */}
   <Modal show={isOpen} onHide={()=>setIsOpen(false)&Nulldata()}>
         <Modal.Header closeButton>
           <Modal.Title><h4>HR</h4></Modal.Title>
