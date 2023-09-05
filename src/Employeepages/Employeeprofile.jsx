@@ -564,8 +564,6 @@ const Bannerhandler=async(ratio)=>{
     </div>
   </section> */}
 </main>
-
-
       <Modal show={isOpen} onHide={() => setIsopen(false)}>
         <Modal.Header closeButton>
           <Modal.Title><h4>Resignation</h4></Modal.Title>
