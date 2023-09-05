@@ -9,11 +9,21 @@ import Employeeprofupdate from './Employeeprofupdate';
 import { notify } from '../Commonpages/toast';
 import ProgressBar from "@ramonak/react-progress-bar";
 import domtoimage from 'dom-to-image';
+import { Modal, ModalFooter } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 
 export default function Employeeprofile() {
-  const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst}=useContext(Simplecontext)
+  const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst,Check_Validation}=useContext(Simplecontext)
+  console.log(userdetail)
+  console.log(employeedata)
+  
   const [shareview,setshareview]=useState(true)
   const [load,setload]=useState(false)
+  const [validated,setValidated]=useState(false)
+  const[resignationList,setResignationList]=useState([])
+  const[reason,setReason]=useState('')
+  const[isOpen,setIsopen]=useState(false)
   const maxLength = userdetail ? Math.max(userdetail.lngRead?.length??"", userdetail.lngWrite?.length??"") : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
@@ -75,6 +85,22 @@ const Bannerhandler=async(ratio)=>{
     const percentage = (value - 399) / (999 - 399) * 100;
     return `${percentage}, 100`;
   };
+
+  //Create resignation----------------------
+  const createResignation = async()=>{
+    let userId = userdetail?._id
+    let company_id=userdetail.user[0]?.current_company
+    let data = {
+      company_id,
+      user:userId,
+      resignationDate:moment().format('YYYY-MM-DD'),
+      reason
+    }
+    const response = await Axioscall('post', 'resignation', data,{})
+    if(response.status){
+    setIsopen(false)
+    }
+  }
   return (
     <>
       <main className="main">
@@ -191,6 +217,8 @@ const Bannerhandler=async(ratio)=>{
             <ul className="nav" role="tablist">
               <li><a className="btn btn-border aboutus-icon mb-20 active" onClick={()=>setshareview(true)} href="#tab-my-profile" data-bs-toggle="tab" role="tab" aria-controls="tab-my-profile" aria-selected="true">My Profile</a></li>
               <li><a className="btn btn-border recruitment-icon mb-20" onClick={()=>setshareview(false)} href="#tab-my-jobs"  data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Update Profile</a></li>
+              <li><a className="btn btn-border recruitment-icon mb-20" onClick={()=>setshareview(false)} href="#tab-my-jobs"  data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Resignation</a></li>
+
             </ul>
             <div className="border-bottom pt-10 pb-10" />
             {shareview?
@@ -357,13 +385,21 @@ const Bannerhandler=async(ratio)=>{
                           <div className="sidebar-list-job88 text-imp">
                             <ul className="list-unstyled timeline-sm">
                               {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
-                                 <li key={pk} className="timeline-sm-item">
-                                 <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to,'YYYY-MM-DD', true).isValid()? moment(pcompany.to,'YYYY-MM-DD').format('yyy'): "Present"}</span>
-                                 <h6 className="mt-0 mb-1">{pcompany.name} </h6>
-                                 {pcompany.is_verified?
-                                 <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>:<div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
-                                 <p>{pcompany.position}</p>
-                               </li>
+                                <>
+                                  <li key={pk} className="timeline-sm-item">
+                                    <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid() ? moment(pcompany.to, 'YYYY-MM-DD').format('yyy') : "Present"}</span>
+                                    <h6 className="mt-0 mb-1">{pcompany.name} </h6>
+                                    {pcompany.is_verified ?
+                                      <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div> : <div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
+                                    <p>{pcompany.position}</p>
+                                  </li>
+                                  {pcompany?.to === "Present" ?
+                                  
+                                    <li><a className="btn btn-border recruitment-icon mb-0" onClick={() => setIsopen(true)} href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Resignation</a></li>: null
+                                  }
+                                </>
+
+                               
                               ))??<li>No Experience</li>}
                             </ul>
                           </div>
@@ -528,6 +564,26 @@ const Bannerhandler=async(ratio)=>{
     </div>
   </section> */}
 </main>
+      <Modal show={isOpen} onHide={() => setIsopen(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title><h4>Resignation</h4></Modal.Title>
+        </Modal.Header>
+        <Form validated={validated} noValidate onSubmit={(e)=>Check_Validation(e,createResignation,setValidated)}>
+          <Modal.Body>
+
+            <div className="form-group col-md-12 mb-3 ">
+              <label className="font-sm color-text-mutted mb-10">Reason</label>
+              <input required onChange={(e) => setReason(e.target.value)} type="text" className="form-control" placeholder="" id="pCountry" />
+              <Form.Control.Feedback type="invalid">
+                Please provide any reason
+              </Form.Control.Feedback>
+            </div>
+          </Modal.Body>
+          <ModalFooter>
+            <Button type='submit'>Submit</Button>
+          </ModalFooter>
+        </Form>
+      </Modal>
 <Helmet>
 <script src="/assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
