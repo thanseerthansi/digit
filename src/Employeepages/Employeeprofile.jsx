@@ -87,20 +87,30 @@ const Bannerhandler=async(ratio)=>{
   };
 
   //Create resignation----------------------
-  const createResignation = async()=>{
-    let userId = userdetail?._id
-    let company_id=userdetail.user[0]?.current_company
-    let data = {
-      company_id,
-      user:userId,
-      resignationDate:moment().format('YYYY-MM-DD'),
-      reason
+  const createResignation = async () => {
+    try {
+      let userId = userdetail?._id;
+      let company_id = userdetail.user[0]?.current_company;
+      let data = {
+        company_id,
+        user: userId,
+        resignationDate: moment().format('YYYY-MM-DD'),
+        reason,
+      };
+      const response = await Axioscall('post', 'resignation', data, {});
+      if (response.status) {
+        setIsopen(false);
+        setValidated(false);
+      } else {
+        console.error('API request failed:', response.error);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
     }
-    const response = await Axioscall('post', 'resignation', data,{})
-    if(response.status){
-    setIsopen(false)
-    }
-  }
+  };
+  
+
+  
   return (
     <>
       <main className="main">
