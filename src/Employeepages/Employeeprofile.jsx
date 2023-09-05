@@ -14,7 +14,7 @@ import { Form } from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 
 export default function Employeeprofile() {
-  const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst}=useContext(Simplecontext)
+  const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst,Check_Validation}=useContext(Simplecontext)
   console.log(userdetail)
   console.log(employeedata)
   
@@ -97,7 +97,9 @@ const Bannerhandler=async(ratio)=>{
       reason
     }
     const response = await Axioscall('post', 'resignation', data,{})
-    console.log(response )
+    if(response.status){
+    setIsopen(false)
+    }
   }
   return (
     <>
@@ -391,8 +393,11 @@ const Bannerhandler=async(ratio)=>{
                                       <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div> : <div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
                                     <p>{pcompany.position}</p>
                                   </li>
-                                  <li><a className="btn btn-border recruitment-icon mb-0" onClick={() => setIsopen(true)} href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Resignation</a></li>
-                                  </>
+                                  {pcompany?.to === "Present" ?
+                                  
+                                    <li><a className="btn btn-border recruitment-icon mb-0" onClick={() => setIsopen(true)} href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Resignation</a></li>: null
+                                  }
+                                </>
 
                                
                               ))??<li>No Experience</li>}
@@ -565,19 +570,19 @@ const Bannerhandler=async(ratio)=>{
         <Modal.Header closeButton>
           <Modal.Title><h4>Resignation</h4></Modal.Title>
         </Modal.Header>
-        <Form validated={validated} noValidate >
+        <Form validated={validated} noValidate onSubmit={(e)=>Check_Validation(e,createResignation,setValidated)}>
           <Modal.Body>
 
             <div className="form-group col-md-12 mb-3 ">
               <label className="font-sm color-text-mutted mb-10">Reason</label>
               <input required onChange={(e) => setReason(e.target.value)} type="text" className="form-control" placeholder="" id="pCountry" />
               <Form.Control.Feedback type="invalid">
-                Please provide Reason
+                Please provide any reason
               </Form.Control.Feedback>
             </div>
           </Modal.Body>
           <ModalFooter>
-            <Button onClick={createResignation}>Submit</Button>
+            <Button type='submit'>Submit</Button>
           </ModalFooter>
         </Form>
       </Modal>
