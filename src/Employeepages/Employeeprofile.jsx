@@ -6,12 +6,13 @@ import QRCode from 'qrcode.react';
 import Filestack from '../Commonpages/Filestack';
 import Axioscall from '../Commonpages/Axioscall';
 import Employeeprofupdate from './Employeeprofupdate';
-import { notify } from '../Commonpages/toast';
+import { notify, notifyerror } from '../Commonpages/toast';
 import ProgressBar from "@ramonak/react-progress-bar";
 import domtoimage from 'dom-to-image';
 import { Modal, ModalFooter } from 'react-bootstrap';
 import { Form } from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
+
 
 export default function Employeeprofile() {
   const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst,Check_Validation}=useContext(Simplecontext)
@@ -103,20 +104,22 @@ const Bannerhandler=async(ratio)=>{
         reason,
       };
       const response = await Axioscall('post', 'resignation', data, {});
-      if (response.status) {
+      if (response.status==200) {
+        notify('Resignation submitted successfully')
         setIsopen(false);
         setValidated(false);
       } else {
-        console.error('API request failed:', response.error);
+        notifyerror(response.response.data.message)
+        // console.log(response.response.data.message)
+        setIsopen(false);
+
       }
     } catch (error) {
       console.error('An error occurred:', error);
+
     }
 
-    const response = await Axioscall('post', 'resignation', data,{})
-    if(response.status){
-    setIsopen(false)
-    }
+
   }
   const getScore=async()=>{
     try {
