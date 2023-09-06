@@ -129,7 +129,7 @@ const Bannerhandler=async(ratio)=>{
       
     }
   }
-  console.log("employeescore",employeeScore )
+  // console.log("employeescore",employeeScore )
   const attendanceHandler=(value)=>{
     let data = 0
     if(value==="platinum"){
@@ -141,7 +141,7 @@ const Bannerhandler=async(ratio)=>{
     }else if(value==="bronze"){
       data = 30
     }else{
-      data =0
+      data = 0
     }
     // console.log("attandance dara",data)
     return data
@@ -157,7 +157,7 @@ const Bannerhandler=async(ratio)=>{
     }else if(value==="bronze"){
       data = {value:"65",data:"(Below 80%)"}
     }else{
-      data =""
+      data ={value:"0",data:"(NA)"}
     }
     // console.log("attandance dara",data)
     return data
@@ -173,7 +173,7 @@ const Bannerhandler=async(ratio)=>{
     }else if(value==="bronze"){
       data = "(1-3 Rating)"
     }else{
-      data =""
+      data ="(NA)"
     }
     // console.log("attandance dara",data)
     return data
