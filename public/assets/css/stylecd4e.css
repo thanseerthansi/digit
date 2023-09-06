@@ -10170,7 +10170,21 @@ input[type=file]::file-selector-button:hover {
   background-color: #ffffff;
   border-color: #B4C0E0;
 }
-
+.res-icon:hover, .res-icon.active {
+  color: black;
+  background-image: url(../imgs/page/company/resign-1.svg);
+  background-color: #ffffff !important;
+  border-color: #B4C0E0;
+}
+.res-icon {
+  background-image: url(../imgs/page/company/resign-1.svg);
+  background-position: 17px 14px;
+  background-repeat: no-repeat;
+  font-weight: 500 !important;
+  padding-left: 45px;
+  border-color: #EFF2FB;
+  font-size: 15px;
+}
 .people-icon {
   background-image: url(../imgs/page/company/icon-people.svg);
   background-position: 17px 14px;
