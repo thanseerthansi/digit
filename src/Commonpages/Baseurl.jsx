@@ -1,5 +1,5 @@
 
-export const BaseURL = "http://192.168.1.44:3006"
+export const BaseURL = "http://192.168.1.65:3006"
 
 // export const BaseURL = "https://craigrade.foxiomlabs.com"
 
