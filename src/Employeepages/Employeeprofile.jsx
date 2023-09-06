@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Simplecontext } from '../Commonpages/Simplecontext'
 import { Helmet } from 'react-helmet'
 import moment from 'moment';
@@ -24,6 +24,7 @@ export default function Employeeprofile() {
   const[resignationList,setResignationList]=useState([])
   const[reason,setReason]=useState('')
   const[isOpen,setIsopen]=useState(false)
+  const[employeeScore,setemployeeScore]=useState()
   const maxLength = userdetail ? Math.max(userdetail.lngRead?.length??"", userdetail.lngWrite?.length??"") : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
@@ -31,6 +32,10 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
     <td data-label="Write">{Capitalizefirst(userdetail && index < userdetail.lngWrite.length ? userdetail.lngWrite[index] : '')}</td>
   </tr>
 ));
+useEffect(() => {
+  getScore()
+}, [userdetail])
+
 // console.log("employeee profile",userdetail)
 const Bannerhandler=async(ratio)=>{
   try {
@@ -82,7 +87,7 @@ const Bannerhandler=async(ratio)=>{
     return formattedNumber;
   };
   const calculateDashArray = (value) => {
-    const percentage = (value - 399) / (999 - 399) * 100;
+    const percentage = (value - 0) / (999 - 0) * 100;
     return `${percentage}, 100`;
   };
 
@@ -107,10 +112,72 @@ const Bannerhandler=async(ratio)=>{
     } catch (error) {
       console.error('An error occurred:', error);
     }
-  };
-  
 
-  
+    const response = await Axioscall('post', 'resignation', data,{})
+    if(response.status){
+    setIsopen(false)
+    }
+  }
+  const getScore=async()=>{
+    try {
+      let data = await Axioscall("get","temp-score/getEmployeeMainScore",{user_id:userdetail._id})
+      // console.log("data",data) 
+      if(data.status===200){
+        setemployeeScore(data.data?.data??"")
+      }
+    } catch (error) {
+      
+    }
+  }
+  console.log("employeescore",employeeScore )
+  const attendanceHandler=(value)=>{
+    let data = 0
+    if(value==="platinum"){
+      data = 100
+    }else if(value==="gold"){
+      data = 80 
+    }else if(value==="silver"){
+      data = 45
+    }else if(value==="bronze"){
+      data = 30
+    }else{
+      data =0
+    }
+    // console.log("attandance dara",data)
+    return data
+  }
+  const perfomanceHandler=(value)=>{
+    let data = 0
+    if(value==="platinum"){
+      data = {value:"100",data:"(95% - 100%)"}
+    }else if(value==="gold"){
+      data = {value:"92",data:"(90% - 95%)"}
+    }else if(value==="silver"){
+      data = {value:"85",data:"(80% - 90%)"}
+    }else if(value==="bronze"){
+      data = {value:"65",data:"(Below 80%)"}
+    }else{
+      data =""
+    }
+    // console.log("attandance dara",data)
+    return data
+  }
+  const ratingHandler=(value)=>{
+    let data = 0
+    if(value==="platinum"){
+      data = "(10 Rating)"
+    }else if(value==="gold"){
+      data = "(7-9 Rating)"
+    }else if(value==="silver"){
+      data = "(4-6 Rating)"
+    }else if(value==="bronze"){
+      data = "(1-3 Rating)"
+    }else{
+      data =""
+    }
+    // console.log("attandance dara",data)
+    return data
+  }
   return (
     <>
       <main className="main">
@@ -151,9 +218,9 @@ const Bannerhandler=async(ratio)=>{
                 {/* <span className="text-start ">Performance</span> */}
               <svg className="circle-chart " style={{width:"80px"}} viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
-                <circle className="circle-chart__circle"  style={{ strokeDasharray:"60,100" }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                <circle className="circle-chart__circle"  style={{ strokeDasharray:`${attendanceHandler(employeeScore?.perfomance?.value??"")},100` }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                 <g className="circle-chart__info">
-                  <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={7}>60%</text>
+                  <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={4} fontWeight={600}>{ratingHandler(employeeScore?.perfomance?.value??"")}</text>
                   <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={4}>Performance</text>
                 </g>
               </svg>
@@ -162,9 +229,9 @@ const Bannerhandler=async(ratio)=>{
               <h5 className="text-center">Score</h5>
               <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
-                <circle className="circle-chart__circle"  style={{ strokeDasharray: calculateDashArray(699) }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                <circle className="circle-chart__circle"  style={{ strokeDasharray: calculateDashArray(employeeScore?.score??0) }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                 <g className="circle-chart__info">
-                  <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={8}>699</text>
+                  <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={8}>{employeeScore?.score??0}</text>
                   <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={2}>Out of 999</text>
                 </g>
               </svg>
@@ -174,9 +241,9 @@ const Bannerhandler=async(ratio)=>{
               
               <svg className="circle-chart  " style={{width:"80px"}} viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
-                <circle className="circle-chart__circle"  style={{ strokeDasharray: "50,100" }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                <circle className="circle-chart__circle"  style={{ strokeDasharray: `${perfomanceHandler(employeeScore?.attendance?.value??"").value},100`}} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                 <g className="circle-chart__info">
-                  <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={7}>50%</text>
+                  <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={4} fontWeight={600}>{perfomanceHandler(employeeScore?.attendance?.value??"").data}</text>
                   <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={4}>Attendance</text>
                 </g>
               </svg>
@@ -227,7 +294,7 @@ const Bannerhandler=async(ratio)=>{
             <ul className="nav" role="tablist">
               <li><a className="btn btn-border aboutus-icon mb-20 active" onClick={()=>setshareview(true)} href="#tab-my-profile" data-bs-toggle="tab" role="tab" aria-controls="tab-my-profile" aria-selected="true">My Profile</a></li>
               <li><a className="btn btn-border recruitment-icon mb-20" onClick={()=>setshareview(false)} href="#tab-my-jobs"  data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Update Profile</a></li>
-              <li><a className="btn btn-border recruitment-icon mb-20" onClick={()=>setshareview(false)} href="#tab-my-jobs"  data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Resignation</a></li>
+              {/* <li><a className="btn btn-border recruitment-icon mb-20" onClick={()=>setshareview(false)} href="#tab-my-jobs"  data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Resignation</a></li> */}
 
             </ul>
             <div className="border-bottom pt-10 pb-10" />
@@ -402,11 +469,12 @@ const Bannerhandler=async(ratio)=>{
                                     {pcompany.is_verified ?
                                       <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div> : <div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
                                     <p>{pcompany.position}</p>
-                                  </li>
-                                  {pcompany?.to === "Present" ?
+                                    {pcompany?.to === "Present" ?
                                   
-                                    <li><a className="btn btn-border recruitment-icon mb-0" onClick={() => setIsopen(true)} href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Resignation</a></li>: null
-                                  }
+                                  <a className="btn btn-border res-icon mb-0" onClick={() => setIsopen(true)} href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Resign</a>: null
+                                }
+                                  </li>
+                                 
                                 </>
 
                                
@@ -576,21 +644,21 @@ const Bannerhandler=async(ratio)=>{
 </main>
       <Modal show={isOpen} onHide={() => setIsopen(false)}>
         <Modal.Header closeButton>
-          <Modal.Title><h4>Resignation</h4></Modal.Title>
+          <Modal.Title><h6>Resignation</h6></Modal.Title>
         </Modal.Header>
         <Form validated={validated} noValidate onSubmit={(e)=>Check_Validation(e,createResignation,setValidated)}>
           <Modal.Body>
-
+            
             <div className="form-group col-md-12 mb-3 ">
-              <label className="font-sm color-text-mutted mb-10">Reason</label>
-              <input required onChange={(e) => setReason(e.target.value)} type="text" className="form-control" placeholder="" id="pCountry" />
+              <label className="font-sm color-text mb-10">Reason For Resign  :</label>
+              <textarea rows="5" required placeholder="Reason for Resignation" onChange={(e) => setReason(e.target.value)} value={reason} type="text" className="form-control"  />
               <Form.Control.Feedback type="invalid">
                 Please provide any reason
               </Form.Control.Feedback>
             </div>
           </Modal.Body>
           <ModalFooter>
-            <Button type='submit'>Submit</Button>
+            <Button variant="success" type='submit'>Submit</Button>
           </ModalFooter>
         </Form>
       </Modal>
