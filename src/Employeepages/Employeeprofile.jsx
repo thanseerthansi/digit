@@ -16,8 +16,8 @@ import {Button} from 'react-bootstrap';
 
 export default function Employeeprofile() {
   const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst,Check_Validation}=useContext(Simplecontext)
-  console.log(userdetail)
-  console.log(employeedata)
+  // console.log(userdetail)
+  // console.log(employeedata)
   
   const [shareview,setshareview]=useState(true)
   const [load,setload]=useState(false)
