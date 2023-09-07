@@ -467,7 +467,7 @@ const Bannerhandler=async(ratio)=>{
                               {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
                                 <>
                                   <li key={pk} className="timeline-sm-item">
-                                    <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid() ? moment(pcompany.to, 'YYYY-MM-DD').format('yyy') : "Present"}</span>
+                                    <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, true).isValid() ? moment(pcompany.to, 'YYYY-MM-DD').format('yyy') : "Present"}</span>
                                     <h6 className="mt-0 mb-1">{pcompany.name} </h6>
                                     {pcompany.is_verified ?
                                       <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div> : <div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
@@ -540,7 +540,7 @@ const Bannerhandler=async(ratio)=>{
                         <div className="box-timeline mt-50">                      
                           {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
                           <div key={pk} className="item-timeline">
-                            <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid()? moment(pcompany.to, 'YYYY-MM-DD').format('YY'):'Present'}</span></div>
+                            <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, true).isValid()? moment(pcompany.to, 'YYYY-MM-DD').format('YY'):'Present'}</span></div>
 
                             <div className="timeline-info"> 
                               <h5 className="color-brand-1 mb-10">{pcompany?.name??""}</h5>
