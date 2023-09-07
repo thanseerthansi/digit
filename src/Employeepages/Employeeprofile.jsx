@@ -608,6 +608,19 @@ const Bannerhandler=async(ratio)=>{
                                 <td data-label="Year">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.year??""}</td>
                               </tr>
                               :""??""}
+                              {userdetail?.careerandeducation?.[0]?.additional.length?
+                              <>{
+                                userdetail?.careerandeducation[0].additional.map((additonal,key)=>(
+                              <tr key={key}>
+                                <td scope="row" data-label="Cource">Additional Course</td>
+                                <td data-label="Field/board">{additonal?.course??""}</td>
+                                <td data-label="Collage">{additonal?.collage??""}</td>
+                                <td data-label="Grade/Score">{additonal?.['garde/score']??""}</td>
+                                <td data-label="Year">{additonal?.year??""}</td>
+                              </tr>
+                              ))
+                            }
+                              </>:""??""}
                             </tbody>
                           </table>
                         </div>
