@@ -25,10 +25,10 @@ export default function Home() {
             <div className="block-banner">
               <h1 className="heading-banner wow animate__animated animate__fadeInUp"> <span className="color-brand-2">Your Story ,Your Score:</span> Unveil Your Global Employee Performance</h1>
               <div className="banner-description mt-20 wow animate__animated animate__fadeInUp" data-wow-delay=".1s">Join us in celebrating the power of your individuality, the strength
-of our global community, and the incredible achievements that
-unite us all. Unveil your global employee performance today and
-continue crafting a story that leaves an indelible mark on the
-world. Your story. Your score. Your legacy </div>
+                of our global community, and the incredible achievements that
+                unite us all. Unveil your global employee performance today and
+                continue crafting a story that leaves an indelible mark on the
+                world. Your story. Your score. Your legacy </div>
               {/* <div className="mt-40  " data-wow-delay=".2s">
                 <div className="block-signin banner-button"><Link className="btn btn-default btn-shadow ml-40 hover-up" to="/contactus">Get in Touch</Link></div>
               </div> */}
@@ -57,13 +57,13 @@ world. Your story. Your score. Your legacy </div>
         <div className="col-lg-6 col-sm-12">
           <div className="content-job-inner"><span className="color-text-mutted text-32">Unlock Opportunities: </span>
             <h2 className="text-52 wow animate__animated animate__fadeInUp">Highlight Your
-Profile,<span className="color-brand-2">Get Hired!!</span> </h2>
+              Profile,<span className="color-brand-2">Get Hired!!</span> </h2>
             <div className="mt-20 pr-50 text-md-lh28 wow animate__animated animate__fadeInUp">Embrace the power of showcasing your profile. With each
-carefully curated detail, you're inviting employers to see your
-potential, encouraging them to envision you as a valuable asset to
-their team. The journey from profile highlight to job offer is within
-your grasp – take that step, unlock those opportunities, and
-embark on a path toward a fulfilling and successful career.</div>
+              carefully curated detail, you're inviting employers to see your
+              potential, encouraging them to envision you as a valuable asset to
+              their team. The journey from profile highlight to job offer is within
+              your grasp – take that step, unlock those opportunities, and
+              embark on a path toward a fulfilling and successful career.</div>
             {/* <div className="mt-40">
               <div className="wow animate__animated animate__fadeInUp"><Link className="btn btn-default" to="aboutus">More</Link></div>
             </div> */}
@@ -71,7 +71,7 @@ embark on a path toward a fulfilling and successful career.</div>
         </div>
       </div>
     </div>
-  </section>
+  </section>                                                      
   <section className="section-box overflow-visible mt-80 mb-50">
   <div className="container">
     <div className="row parent00">

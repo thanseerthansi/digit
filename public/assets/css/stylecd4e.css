@@ -10147,7 +10147,37 @@ input[type=file]::file-selector-button:hover {
   background-color: #ffffff;
   border-color: #B4C0E0;
 }
-
+/* .history-icon {
+  background-image: url(../imgs/page/company/icons8-history-30.png);
+  background-position: 17px 14px;
+  background-repeat: no-repeat;
+  font-weight: 500;
+  padding-left: 45px;
+  border-color: #EFF2FB;
+}
+.history-icon:hover, .history-icon.active {
+  color: black;
+  background-image: url(../imgs/page/company/icons8-history-30.png);
+  background-color: #ffffff;
+  border-color: #B4C0E0;
+} */
+.history-icon:hover, .history-icon.active {
+  color: black;
+  background-image: url(../imgs/page/company/icons8-history-30.png);
+  background-color: #ffffff !important;
+  /* border-color: #B4C0E0; */
+}
+.history-icon {
+  background-image: url(../imgs/page/company/icons8-history-31.png);
+  background-position: 5px 17px;
+  background-repeat: no-repeat;
+  font-weight: 500 !important;
+  padding-left: 2px;
+  /* border-color: #EFF2FB; */
+  font-size: 15px;
+  background-size: 20px;
+}
+/* bx-arrow-back:before{content:"\e983"}.bx-at:before{content:"\e984"}.bx-award:before{content:"\e985"}; */
 .recruitment-icon {
   background-image: url(../imgs/page/company/icon-recruitment.svg);
   background-position: 17px 14px;
@@ -10156,6 +10186,7 @@ input[type=file]::file-selector-button:hover {
   padding-left: 45px;
   border-color: #EFF2FB;
 }
+
 .settings-icon1 {
   background-image: url(../imgs/page/company/settings.svg);
   background-position: 17px 14px;

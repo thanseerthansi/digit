@@ -87,11 +87,11 @@ export default function Aboutus() {
           <h6 className="f-18 color-text-mutted text-uppercase">Our company</h6>
           <h2 className="section-title mb-10 wow animate__animated animate__fadeInUp">About Our Company</h2>
           <p className="font-sm color-text-paragraph wow animate__animated animate__fadeInUp w-lg-50 mx-auto">At EUPHORICODERS PRIVATE LIMITED, we are driven by our passion for 
-revolutionizing the employee-employer relationship. We are committed 
-to innovation, continuous improvement, and the relentless pursuit of 
-excellence. Together with our dedicated team, forward-thinking 
-partners, and visionary clients, we aim to create a future where every 
-workplace is characterized by trust, collaboration, and mutual success.</p>
+            revolutionizing the employee-employer relationship. We are committed 
+            to innovation, continuous improvement, and the relentless pursuit of 
+            excellence. Together with our dedicated team, forward-thinking 
+            partners, and visionary clients, we aim to create a future where every 
+            workplace is characterized by trust, collaboration, and mutual success.</p>
         </div>
         <div className="row mt-70">
           <div className="col-lg-6 col-md-12 col-sm-12"><div className="box-image-job "><img className="img-job-1 block-1 shape-1 z-index-banner" alt="jobBox" src="assets/imgs/page/homepage1/img-chart-Recovered.png" />
@@ -101,16 +101,16 @@ workplace is characterized by trust, collaboration, and mutual success.</p>
             <h3 className="mt-15">What we can do?</h3>
             <div className="mt-20">
               <p className="font-md color-text-paragraph mt-20">We understand that the relationship between employees and employers 
-is the backbone of any successful organization. However, traditional 
-approaches to employee-employer interactions often fall short, leading 
-to miscommunication, disengagement, and a lack of trust. We aim to 
-bridge this gap by creating an innovative solution that transforms the 
-dynamics between employees and employers.</p>
+              is the backbone of any successful organization. However, traditional 
+              approaches to employee-employer interactions often fall short, leading 
+              to miscommunication, disengagement, and a lack of trust. We aim to 
+              bridge this gap by creating an innovative solution that transforms the 
+              dynamics between employees and employers.</p>
               <p className="font-md color-text-paragraph mt-20">By enhancing the employee-employer relationship, we envision a 
-workplace where employees feel valued, supported, and motivated to 
-perform at their best. Our product will help employers create a positive 
-work environment that encourages growth, promotes professional 
-development, and recognizes the contributions of their workforce</p>
+                workplace where employees feel valued, supported, and motivated to 
+                perform at their best. Our product will help employers create a positive 
+                work environment that encourages growth, promotes professional 
+                development, and recognizes the contributions of their workforce</p>
               {/* <p className="font-md color-text-paragraph mt-20">Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis non nisi purus. Integer sit nostra, per inceptos himenaeos.</p>
               <p className="font-md color-text-paragraph mt-20">Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis non nisi purus. Integer sit nostra, per inceptos himenaeos.</p> */}
             </div>

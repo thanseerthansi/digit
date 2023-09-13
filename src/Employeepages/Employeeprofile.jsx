@@ -12,6 +12,7 @@ import domtoimage from 'dom-to-image';
 import { Modal, ModalFooter } from 'react-bootstrap';
 import { Form } from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Employeeprofile() {
@@ -33,6 +34,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
     <td data-label="Write">{Capitalizefirst(userdetail && index < userdetail.lngWrite.length ? userdetail.lngWrite[index] : '')}</td>
   </tr>
 ));
+let navigate = useNavigate();
 useEffect(() => {
   getScore()
 }, [userdetail])
@@ -229,7 +231,10 @@ const Bannerhandler=async(ratio)=>{
               </svg>
               </div>
               <div>
-              <h5 className="text-center">Score</h5>
+              <h5 className="text-center ml-3">Score
+              {/* <a className="btn btn-border history-icon mb-20 active"  ></a> */}
+              <a className="btn history-icon mb-10" onClick={() =>{return navigate('/history')}} href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false"><span className='m-1'></span></a>
+              </h5>
               <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                 <circle className="circle-chart__circle"  style={{ strokeDasharray: calculateDashArray(employeeScore?.score??0) }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
