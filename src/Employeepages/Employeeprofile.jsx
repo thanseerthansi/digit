@@ -27,6 +27,7 @@ export default function Employeeprofile() {
   const[reason,setReason]=useState('')
   const[isOpen,setIsopen]=useState(false)
   const[employeeScore,setemployeeScore]=useState()
+  const [showtoast, setshowtoast] = useState(false)
   const maxLength = userdetail ? Math.max(userdetail.lngRead?.length??"", userdetail.lngWrite?.length??"") : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
@@ -186,6 +187,7 @@ const Bannerhandler=async(ratio)=>{
   return (
     <>
       <main className="main">
+        
       {load? 
   <div className="spinner-container">
     <div className="spinner" />
@@ -203,6 +205,7 @@ const Bannerhandler=async(ratio)=>{
           <img style={{ height:"85px" , width:"85px"}} src={userdetail?.profilePhoto??"assets/imgs/page/candidates/candidate-profile copy1.png"} alt="jobbox" />
           
           </div>
+          
         <div className="row mt-10" style={{lineHeight:"2px"}}>
           <div className="col-lg-8 col-md-12">
             <h5 className="f-18">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.state??""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></h5><br />
@@ -212,6 +215,8 @@ const Bannerhandler=async(ratio)=>{
             <h5 className="f-18 u-color">Unique ID : <span>{userdetail?.uniqueid??""}</span></h5>
             <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation??""}</p>
           </div>
+          
+
             {/* score ....start */}
           <div className="col-lg-4 col-md-12 text-lg-end ">     
           <div>
@@ -230,10 +235,12 @@ const Bannerhandler=async(ratio)=>{
                 </g>
               </svg>
               </div>
+              
               <div>
               <h5 className="text-center ml-3">Score
+    
               {/* <a className="btn btn-border history-icon mb-20 active"  ></a> */}
-              <a className="btn history-icon mb-10" onClick={() =>{return navigate('/history')}} href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false"><span className='m-1'></span></a>
+              <a className="btn history-icon mb-10" onClick={() =>{return navigate('/history')}} onMouseEnter={()=>setshowtoast(true)} onMouseLeave={()=>setshowtoast(false)} href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false"><span className='m-1'></span></a>
               </h5>
               <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />

@@ -163,6 +163,7 @@ export default function Employeeprofupdate(value) {
     }),
   };
   const Filestackhandler=async(ratio,setvalue,value,keypair)=>{
+    
     let data =await Filestack(ratio)
     if (data){
       setvalue({...value,[keypair]:data})
