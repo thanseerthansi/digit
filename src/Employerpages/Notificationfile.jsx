@@ -28,6 +28,8 @@ export default function Notificationfile() {
           limit:10
         }
         let data = await Axioscall("get","notification",body)
+        console.log("ahsgdasghvdhb",data)
+
         if (data.status===200){
           setnotificationdata(data.data.data.docs)
         }

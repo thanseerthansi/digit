@@ -5,16 +5,22 @@ import { Simplecontext } from '../Commonpages/Simplecontext';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { notify, notifyerror } from '../Commonpages/toast';
+import { Modal, ModalFooter } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
+import moment from 'moment';
 
 export default function Notification() {
-    const {userdetail } = useContext(Simplecontext);
+    const {userdetail,Check_Validation } = useContext(Simplecontext);
     const [notificationdata,setnotificationdata]=useState([])
+    const[isOpen,setIsopen]=useState({show:false,value:null})
+    const [validated,setValidated]=useState(false)
       useEffect(() => {
        window.scrollTo(0,0)
        getNotification()
   
       }, [])
-      // console.log("notificartiom",notificationdata)
+      console.log("isopen",isOpen)
       const tokenhandler=()=>{
         let token = window.localStorage.getItem('craig-token')??""
         if(token){
@@ -30,7 +36,7 @@ export default function Notification() {
             limit:10
           }
           let data = await Axioscall("get","notification",body)
-          // console.log("data",data)
+          console.log("data",data.data.data.docs)
           if (data.status===200){
             setnotificationdata(data.data.data.docs)
           }
@@ -40,17 +46,30 @@ export default function Notification() {
       }
       const notificationUpdate=async(notif,type)=>{
         try {
-          let body = {
-            id:notif.interviewId,
-            notification:notif._id,
-            userId:[notif.user._id],
-            type:type
+          if(!type){
+            notif = isOpen.value.notification
+            type = "reschedule"
+           
           }
-          // console.log("nottttt",body)
-          let data = await Axioscall("put","interview",body,"header")
+          let body = {
+            interviewId:notif.interviewId,
+            notificationId:notif._id,
+            user:notif.user._id,
+            type:type,
+            company:notif.company
+          }
+          if(type==="reschedule"){
+            body.date = isOpen.value.date
+            body.time = isOpen.value.time
+            body.place = isOpen.value.beforeData.place
+            body.beforedate =isOpen.value.beforeData
+          }
+          console.log("nottttt",body)
+          let data = await Axioscall("put","interview-schedule",body,"header")
           // console.log("data",data)
           if(data.status===200){
             notify(data.data.message)
+            setIsopen({show:false,value:null})
             getNotification()
           }else{
             notifyerror("went wrong")
@@ -58,6 +77,10 @@ export default function Notification() {
         } catch (error) {
           console.log(error)
         }
+      }
+      const timeHandler=(value)=>{
+        const formattedTime = moment(value, 'HH:mm').format('hh:mm A');
+        setIsopen({...isOpen,value:{...isOpen.value,time:formattedTime}})
       }
     return (
       <>
@@ -77,27 +100,48 @@ export default function Notification() {
               {notificationdata.length?notificationdata.map((newnot,nk)=>(
                <React.Fragment key={nk}> 
                <>
-              <div key={nk} className="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header row">
-                <div className='col-12 col-md-9 col-lg-9 d-flex'>
+               {newnot.type==="interview_schedule"?
+              <div key={nk} className="p-3 align-items-center bg-light border-bottom osahan-post-header row">
+                <div className='col-12 col-md-12 col-lg-12 d-flex'>
                 <div className="dropdown-list-image mr-3 ">
                   <img className="rounded-circle" src={newnot?.user?.profilePhoto??"https://bootdey.com/img/Content/avatar/avatar3.png"}  alt=""/>
                 </div>
                 <div className="font-weight-bold mr-3 mt-2">
-                <p  className="">{newnot.message}</p>
+                <p  className="">{newnot?.message??""}</p>
                   {/* <div className="small">{newnot.user.firstName} {newnot.user.middleName} {newnot.user.lastName}  Worked from {newnot?.message?.from??""} to {newnot?.message?.to??"Present"} </div> */}
                 </div>
-                </div>
+                <br/>
                 
-                <div className=" ntn-btn font-weight-bold d-flex col-12 col-md-3 col-lg-3"  >
+                </div>
+                <div style={{marginLeft:"6%"}} className='text-center'>
+                <div className=" ntn-btn font-weight-bold d-flex ml-4"   >
                   <div>
                   <button onClick={()=>notificationUpdate(newnot,"accept")} type="button"  className="btn btn-outline-success btn-sm ">Accept</button>
                   </div>
                   <div className='ml-2' style={{marginLeft:"10px"}}>
                   <button  onClick={()=>notificationUpdate(newnot,"reject")} type="button" className="btn btn-outline-success btn-sm  ">Reject</button>
                   </div>
+                  <div className='ml-2' style={{marginLeft:"10px"}}>
+                  <button  onClick={()=>setIsopen({...isOpen,show:true,value:{...isOpen.value,notification:newnot,beforeData:newnot.beforeData}})} type="button" className="btn btn-outline-success btn-sm  ">Reschedule</button>
+                  </div>
                 </div>
+                </div>
+
                 
               </div>
+              :<div key={nk} className="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header row">
+              <div className='col-12 col-md-9 col-lg-9 d-flex'>
+              <div className="dropdown-list-image mr-3 ">
+                <img className="rounded-circle" src={newnot?.user?.profilePhoto??"https://bootdey.com/img/Content/avatar/avatar3.png"}  alt=""/>
+              </div>
+              <div className="font-weight-bold mr-3 mt-2">
+              <p  className="">{newnot?.message??""}</p>
+                {/* <div className="small">{newnot.user.firstName} {newnot.user.middleName} {newnot.user.lastName}  Worked from {newnot?.message?.from??""} to {newnot?.message?.to??"Present"} </div> */}
+              </div>
+              </div>
+              
+             
+            </div>}
               </>
               </React.Fragment>
               )):<div><p className='text-center'>No  Notifications Found</p></div>}
@@ -131,6 +175,33 @@ export default function Notification() {
         </div>
       </div>
     </div>
+    <Modal show={isOpen.show} onHide={() => setIsopen({...isOpen,show:false})}>
+        <Modal.Header closeButton>
+          <Modal.Title><h6>Reschedule Interview</h6></Modal.Title>
+        </Modal.Header>
+        <Form validated={validated} noValidate onSubmit={(e)=>Check_Validation(e,notificationUpdate,setValidated)}>
+          <Modal.Body>
+            
+            <div className="form-group col-md-12 mb-3 ">
+              <label className="font-sm color-text mb-10">Available Date:</label>
+              <input  required placeholder="Available Date" onChange={(e) => setIsopen({...isOpen,value:{...isOpen.value,date:e.target.value}})} value={isOpen.value?.date??""} type="date" className="form-control"  />
+              <Form.Control.Feedback type="invalid">
+                Please provide any reason
+              </Form.Control.Feedback>
+            </div>
+            <div className="form-group col-md-12 mb-3 ">
+              <label className="font-sm color-text mb-10">Available Time:</label>
+              <input  required placeholder="Available Time" onChange={(e) => timeHandler(e.target.value)} value={isOpen.value?.time?moment(isOpen.value.time, 'hh:mm A').format('HH:mm'):""} type="time" className="form-control"  />
+              <Form.Control.Feedback type="invalid">
+                Please provide any reason
+              </Form.Control.Feedback>
+            </div>
+          </Modal.Body>
+          <ModalFooter>
+            <Button variant="success" type='submit'>Submit</Button>
+          </ModalFooter>
+        </Form>
+      </Modal>
   </main>
   <Helmet>
       <script src="https://kit.fontawesome.com/065c1878aa.js" crossorigin="anonymous"></script>

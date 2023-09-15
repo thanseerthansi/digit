@@ -226,6 +226,28 @@ const Bannerhandler=async(ratio)=>{
               <div className='d-flex'>
                 <div style={{marginTop:"90px"}}>
                 {/* <span className="text-start ">Performance</span> */}
+                {/* svg start */}
+             {/* <div>
+
+  <div className="gauge-wrapper">
+    <div className="gauge four rischio1">
+      <div className="slice-colors">
+        <div className="st slice-item"  />
+        <div className="st slice-item" />
+        <div className="st slice-item" />
+        <div className="st slice-item" />
+      </div>
+      <div className="needle"  />
+      <div className="gauge-center">
+        <div className="label">Platinum</div>
+        <div className="label">(90%-95%)</div>
+        
+      </div>    
+    </div>
+  </div>
+ 
+</div> */}
+
               <svg className="circle-chart " style={{width:"80px"}} viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                 <circle className="circle-chart__circle"  style={{ strokeDasharray:`${attendanceHandler(employeeScore?.perfomance?.value??"")},100` }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
