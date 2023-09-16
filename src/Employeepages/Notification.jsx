@@ -11,8 +11,8 @@ import {Button} from 'react-bootstrap';
 import moment from 'moment';
 
 export default function Notification() {
-    const {userdetail,Check_Validation } = useContext(Simplecontext);
-    const [notificationdata,setnotificationdata]=useState([])
+    const {userdetail,Check_Validation,getNotification,notificationdata,setnotificationdata } = useContext(Simplecontext);
+    // const [notificationdata,setnotificationdata]=useState([])
     const[isOpen,setIsopen]=useState({show:false,value:null})
     const [validated,setValidated]=useState(false)
       useEffect(() => {
@@ -28,22 +28,22 @@ export default function Notification() {
           return data
         }
       }
-      const getNotification=async()=>{
-        try {
-          let body ={
-            email:window.localStorage.getItem("graiduseremail"),
-            page:1,
-            limit:10
-          }
-          let data = await Axioscall("get","notification",body)
-          console.log("data",data.data.data.docs)
-          if (data.status===200){
-            setnotificationdata(data.data.data.docs)
-          }
-        } catch (error) {
-          console.log(error)
-        }
-      }
+      // const getNotification=async()=>{
+      //   try {
+      //     let body ={
+      //       email:window.localStorage.getItem("graiduseremail"),
+      //       page:1,
+      //       limit:10
+      //     }
+      //     let data = await Axioscall("get","notification",body)
+      //     console.log("data",data.data.data.docs)
+      //     if (data.status===200){
+      //       setnotificationdata(data.data.data.docs)
+      //     }
+      //   } catch (error) {
+      //     console.log(error)
+      //   }
+      // }
       const notificationUpdate=async(notif,type)=>{
         try {
           if(!type){
@@ -121,9 +121,10 @@ export default function Notification() {
                   <div className='ml-2' style={{marginLeft:"10px"}}>
                   <button  onClick={()=>notificationUpdate(newnot,"reject")} type="button" className="btn btn-outline-success btn-sm  ">Reject</button>
                   </div>
+                  {newnot.isRescheduled?"":
                   <div className='ml-2' style={{marginLeft:"10px"}}>
                   <button  onClick={()=>setIsopen({...isOpen,show:true,value:{...isOpen.value,notification:newnot,beforeData:newnot.beforeData}})} type="button" className="btn btn-outline-success btn-sm  ">Reschedule</button>
-                  </div>
+                  </div>}
                 </div>
                 </div>
 

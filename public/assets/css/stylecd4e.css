@@ -11764,14 +11764,14 @@ margin-left: 300px!important;
   
 }
 .notification-label {
-  border-radius: 50%;
-  top: 17px;
-  width: 23px;
-  height: 23px;
-  line-height: 20px;
-  color: #fff;
-  font-size: 1rem;
-  animation: bounceIn 700ms;
+    border-radius: 50%;
+    top: 30px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    color: #fff;
+    font-size: 0.7rem;
+    animation: bounceIn 700ms;
   
   &.notification-label-red {
     background: #FC3768;
