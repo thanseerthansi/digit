@@ -20,7 +20,7 @@ export default function Notification() {
        getNotification()
   
       }, [])
-      console.log("isopen",isOpen)
+      // console.log("isopen",isOpen)
       const tokenhandler=()=>{
         let token = window.localStorage.getItem('craig-token')??""
         if(token){
@@ -82,6 +82,41 @@ export default function Notification() {
         const formattedTime = moment(value, 'HH:mm').format('hh:mm A');
         setIsopen({...isOpen,value:{...isOpen.value,time:formattedTime}})
       }
+      const notificationdeleteHalndler=async(notid)=>{
+        try {
+          let data = await Axioscall("delete",`notification`,{id:notid})
+          // console.log("datanotide.ete",data)
+          if(data.status===200){
+            notify(data.data.message)
+            getNotification()
+          }else{
+            notifyerror("Something Went Wrong")
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      const Beforetime = (gdate) => {
+        const dateStr = gdate.date;
+        const timeStr = gdate.time;
+        const [year, month, day] = dateStr.split("-").map(Number);
+        const [time, period] = timeStr.split(" ");
+        const [hours, minutes] = time.split(":").map(Number);
+        const givenDate = new Date(year, month - 1, day, hours, minutes);
+        const currentDate = new Date();
+        // console.log("givendaet",givenDate)
+        // console.log("currentdate",currentDate)
+        // Calculate the time difference in milliseconds
+        const timeDifference = givenDate - currentDate;
+        // console.log("Timediff",timeDifference)
+        if (timeDifference < 48 * 60 * 60 * 1000) {
+          // console.log("The given date is within 48 hours of now")
+          return true; // The given date is within 48 hours of now
+        } else {
+          // console.log("The given date is not within 48 hours of now")
+          return false; // The given date is not within 48 hours of now
+        }
+      };
     return (
       <>
       <main className="main notification-container">
@@ -120,11 +155,15 @@ export default function Notification() {
                   </div>
                   <div className='ml-2' style={{marginLeft:"10px"}}>
                   <button  onClick={()=>notificationUpdate(newnot,"reject")} type="button" className="btn btn-outline-success btn-sm  ">Reject</button>
-                  </div>
+                  </div>{Beforetime(newnot.beforeData)?
+                   ""
+                  : <>
+                    
                   {newnot.isRescheduled?"":
                   <div className='ml-2' style={{marginLeft:"10px"}}>
                   <button  onClick={()=>setIsopen({...isOpen,show:true,value:{...isOpen.value,notification:newnot,beforeData:newnot.beforeData}})} type="button" className="btn btn-outline-success btn-sm  ">Reschedule</button>
                   </div>}
+                  </>}
                 </div>
                 </div>
 
@@ -139,8 +178,17 @@ export default function Notification() {
               <p  className="">{newnot?.message??""}</p>
                 {/* <div className="small">{newnot.user.firstName} {newnot.user.middleName} {newnot.user.lastName}  Worked from {newnot?.message?.from??""} to {newnot?.message?.to??"Present"} </div> */}
               </div>
+             
+              </div>
+              <div className='col-md-3 col-lg-3 '>
+              <div className='ml-2' style={{marginLeft:"10px"}}>
+                  <button onClick={(e)=>notificationdeleteHalndler(newnot._id)} type="button" className="btn btn-outline-success btn-sm  ">Delete</button>
+                  </div>
+
               </div>
               
+                
+        
              
             </div>}
               </>

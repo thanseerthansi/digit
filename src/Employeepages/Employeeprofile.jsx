@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function Employeeprofile() {
-  const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst,Check_Validation}=useContext(Simplecontext)
+  const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst,Check_Validation,getNotification}=useContext(Simplecontext)
   // console.log(userdetail)
   // console.log(employeedata)
   
@@ -38,6 +38,7 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
 let navigate = useNavigate();
 useEffect(() => {
   getScore()
+  getNotification()
 }, [userdetail])
 
 // console.log("employeee profile",userdetail)
