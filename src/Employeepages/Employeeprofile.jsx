@@ -92,8 +92,21 @@ const Bannerhandler=async(ratio)=>{
     return formattedNumber;
   };
   const calculateDashArray = (value) => {
-    const percentage = (value - 0) / (999 - 0) * 100;
-    return `${percentage}, 100`;
+    // console.log("value",value)
+    // const percentage = (value - 0) / (999 - 0) * 100;
+    // return `${percentage}, 100`;
+    const minValue = 0;
+  const maxValue = 999;
+  const minDegree = 316;
+  const maxDegree = 584;
+
+  // Calculate the degree using linear interpolation
+  const degree = minDegree + ((value - minValue) / (maxValue - minValue)) * (maxDegree - minDegree);
+  console.log("degreea",degree)
+  // Ensure the degree is within the valid range (316deg to 584deg)
+  return Math.min(maxDegree, Math.max(minDegree, degree));
+    // return 366
+   
   };
 
   //Create resignation----------------------
@@ -225,7 +238,8 @@ const Bannerhandler=async(ratio)=>{
             <section>
               
               <div className='d-flex'>
-                <div style={{marginTop:"90px"}}>
+                <div >
+                  
                 {/* <span className="text-start ">Performance</span> */}
                 {/* svg start */}
              {/* <div>
@@ -248,7 +262,7 @@ const Bannerhandler=async(ratio)=>{
   </div>
  
 </div> */}
-
+              <div style={{marginTop:"166px"}}>
               <svg className="circle-chart " style={{width:"80px"}} viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                 <circle className="circle-chart__circle"  style={{ strokeDasharray:`${attendanceHandler(employeeScore?.perfomance?.value??"")},100` }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
@@ -258,24 +272,49 @@ const Bannerhandler=async(ratio)=>{
                 </g>
               </svg>
               </div>
+              </div>
               
               <div>
-              <h5 className="text-center ml-3">Score
+              <h5 className="text-center " style={{marginLeft:"40px"}}>Score
     
               {/* <a className="btn btn-border history-icon mb-20 active"  ></a> */}
               <a className="btn history-icon mb-10" onClick={() =>{return navigate('/history')}} onMouseEnter={()=>setshowtoast(true)} onMouseLeave={()=>setshowtoast(false)} href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false"><span className='m-1'></span></a>
               </h5>
-              <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
+              <div id="barometer" >
+                <div className="container">
+                  <div className="first_ring">
+                    <div className="second_ring">
+                      <div className="third_ring" />
+                      </div></div><div className="pie">
+                      
+                        <div className="pie_segment red" />
+                        <div className="pie_segment orange" />
+                        <div className="pie_segment green" />
+                        
+                        <div className="pie_segment white" />
+                        </div><div className="second_layer" />
+                        <div className="third_layer" />
+                        <div className="arrow" style={{ transform:employeeScore? `rotate(${calculateDashArray(employeeScore?.score??0)}deg)`:'rotate(315deg)',transition:'all 0.3s' }}>
+                          <div className="arrowtop" /><div className="arrowbottom" />
+                          </div><div className="middle_point" ><div className='score-bord'><h6 >{employeeScore?.score??0}</h6><br/>
+                          </div></div>
+                          </div>
+                          
+                            </div>
+              
+
+              {/* <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                 <circle className="circle-chart__circle"  style={{ strokeDasharray: calculateDashArray(employeeScore?.score??0) }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                 <g className="circle-chart__info">
                   <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={8}>{employeeScore?.score??0}</text>
                   <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={2}>Out of 999</text>
                 </g>
-              </svg>
+              </svg> */}
               </div>
               {/* <span className="text-end ">Attendance</span> */}
-              <div style={{marginTop:"90px"}}>
+              <div style={{marginTop:"166px"}}>
+              <div style={{marginLeft:"25px"}} >
               
               <svg className="circle-chart  " style={{width:"80px"}} viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
@@ -288,6 +327,7 @@ const Bannerhandler=async(ratio)=>{
               </div>
               </div>
               <br/>
+              </div>
               {/* <div className=''>
                 
                 <div className='' style={{border:"1px solid grey",borderRadius:"12px"}}><h4>jhvjhb</h4></div>
