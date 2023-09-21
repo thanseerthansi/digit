@@ -1134,7 +1134,7 @@ export default function Employeeprofupdate(value) {
                             <Form.Control.Feedback type="invalid">Please provide landmark </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-6 mt-20">
-                            <input type="text" required onBlur={(e)=>zipcodeHandler(e,addressdata.zipcode)} onChange={(e)=>setcurrentaddressdata({...currentaddressdata,zip:e.target.value})} value={currentaddressdata.zip??""} className="form-control" placeholder="Zip Code" id="curZipcode" />
+                            <input type="text" required onBlur={(e)=>zipcodeHandler(e,addressdata.zip)} onChange={(e)=>setcurrentaddressdata({...currentaddressdata,zip:e.target.value})} value={currentaddressdata.zip??""} className="form-control" placeholder="Zip Code" id="curZipcode" />
                             <Form.Control.Feedback type="invalid">Please provide valid Pincode </Form.Control.Feedback>
                           </div>
                           <div className="form-group col-lg-4 mt-20">
@@ -1369,7 +1369,7 @@ export default function Employeeprofupdate(value) {
                               <React.Fragment key={ak}>
                                <div className="form-group col-lg-3 mt-10">
                                 <div className="text__center">
-                                <input  disabled  value={aitm.course??""} type="text" className="" placeholder=" course" id=" " />
+                                <input  disabled  value={aitm.course??""} type="text" className="" placeholder="course" id=" " />
                                   
                                 </div>
                               </div>
@@ -1389,7 +1389,7 @@ export default function Employeeprofupdate(value) {
                               </React.Fragment>):null}
                               <div className="form-group col-lg-3 mt-10">
                                 <div className="text__center">
-                                <input type="text" onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="form-control" placeholder=" college" id=" " />
+                                <input type="text" onChange={(e)=>setadditionaldata({...additionaldata,course:e.target.value})} value={additionaldata.course??""} className="form-control" placeholder=" course" id=" " />
                                   
                                   <Form.Control.Feedback type="invalid">Please provide Course </Form.Control.Feedback>
                                 </div>
