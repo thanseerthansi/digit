@@ -64,7 +64,7 @@ export default function Notification() {
             body.place = isOpen.value.beforeData.place
             body.beforedate =isOpen.value.beforeData
           }
-          console.log("nottttt",body)
+          // console.log("nottttt",body)
           let data = await Axioscall("put","interview-schedule",body,"header")
           // console.log("data",data)
           if(data.status===200){

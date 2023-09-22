@@ -97,7 +97,7 @@ export default function Scorehistory() {
             <div className='row'>
                     <div className='col-4'><span style={{fontWeight:"bold"}}>Extra Hours</span></div>
                     <div className='col-1'>:</div>
-                    <div className='col-6'>{capitalizeFirstLetter(itm.extraWork.value)}</div>
+                    <div className='col-6'>{itm.extraWork?.value?capitalizeFirstLetter(itm.extraWork.value):""??""}</div>
                 </div>
                 <div className='row'>
                     <div className='col-4'><span style={{fontWeight:"bold"}}>Senior duty </span></div>

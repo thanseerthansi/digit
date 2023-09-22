@@ -1,5 +1,5 @@
 
-// export const BaseURL = "http://192.168.1.80:3006"
+// export const BaseURL = "http://192.168.1.70:3006"
 
 export const BaseURL = "https://craigrade.foxiomlabs.com"
 
