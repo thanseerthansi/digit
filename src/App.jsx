@@ -22,6 +22,7 @@ import Notificationprofile from "./Employerpages/Notificationprofile";
 import Candidatedetails from "./Employerpages/Candidatedetails";
 import Hrlist from "./Employerpages/Hrlist";
 import Notification from "./Employeepages/Notification";
+import Scorehistory from "./Employeepages/Scorehistory";
 // import Employeeslist from "./Employerpages/Employeeslist";
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="contactus" element={<Contactus />} />
             <Route path="Signin" element={<Signin />} />
             <Route path="employee-notification" element={<Notification />} />
+            <Route path="history" element={<Scorehistory/>} />
             <Route path="employerlogin" element={<Employeelogin />} />
             <Route path="employeeregister" element={<Employeeregister />} />
             <Route path="employer-register" element={<Employerregister />} />
