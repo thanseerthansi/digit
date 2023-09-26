@@ -64,7 +64,7 @@ const Bannerhandler=async(ratio)=>{
   const copyValue = (value) => {
     navigator.clipboard.writeText(value)
       .then(() => {
-        console.log('Value copied to clipboard:', value);
+        // console.log('Value copied to clipboard:', value);
         notify("Copied Uniqueid")
       })
       .catch((error) => {
@@ -102,7 +102,7 @@ const Bannerhandler=async(ratio)=>{
 
   // Calculate the degree using linear interpolation
   const degree = minDegree + ((value - minValue) / (maxValue - minValue)) * (maxDegree - minDegree);
-  console.log("degreea",degree)
+  // console.log("degreea",degree)
   // Ensure the degree is within the valid range (316deg to 584deg)
   return Math.min(maxDegree, Math.max(minDegree, degree));
     // return 366

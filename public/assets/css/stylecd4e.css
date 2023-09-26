@@ -1748,7 +1748,7 @@ font-weight: 30px;
 #progressbar li {
   list-style-type: none;
   font-size: 15px;
-  width: 25%;
+  width: 20%;
   float: left;
   position: relative;
   font-weight: 400
@@ -1767,6 +1767,10 @@ font-weight: 30px;
 #progressbar #payment:before {
   font-family: FontAwesome;
   content: "\f549"
+}
+#progressbar #career:before {
+  font-family: FontAwesome;
+  content: "\f0b1"
 }
 
 #progressbar #confirm:before {
@@ -4064,7 +4068,7 @@ textarea {
   padding: 10px 10px 10px 20px;
   font-size: 16px;
   width: 100%;
-  min-height: 250px;
+  min-height: 100px;
 }
 textarea:focus {
   background: transparent;
@@ -13331,7 +13335,9 @@ animation: Logo 4s ease infinite;
   transform-origin: right;
   transform: rotate(0deg);
 }
-
+.wizardtext{
+  display: none !important;
+}
 }
 @media only screen and (min-width:1400px) {
   .third_layer{

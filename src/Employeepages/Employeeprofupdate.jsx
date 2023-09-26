@@ -469,10 +469,121 @@ export default function Employeeprofupdate(value) {
         let data = await Axioscall(method,"employee/educationandcareer",datalist)
         if(data.status===200){
           notify(msg)
+          // console.log("data carrerstatsut",data)
+          setemployeedata3({...employeedata3,id:data.data.data._id})
+         
+          setWizard(4)   
+             
+          tophandler(0,200)
+          getUser()
+        }
+        setload(false)
+    } catch (error) {
+      console.log(error)
+      setload(false)
+    }
+  }
+  const RegsterFourthform=async()=>{
+    try {
+      let method ="put"
+      let msg ="successfully updated"
+      setload(true)
+      let datalist = {...employeedata3}
+      if (datalist.id){
+        let userid=tokenhandler()
+        if (userid){
+          datalist.user=userid
+        }
+      }else{
+        method="post"
+        let userid = tokenhandler()
+        msg ="successfully Registered"
+        if (userid){
+          datalist.user=userid
+        }
+      }
+      
+      if(tenthdata){
+        if(Object.keys(tenthdata).length){
+        datalist.tenth=[{...tenthdata}]
+      }}
+      if (twelthdata){
+      if(Object.keys(twelthdata).length){
+        datalist.twelth=[{...twelthdata}]
+      }}
+      if(bachlerdata){
+      if(Object.keys(bachlerdata).length){
+        datalist.bachelorDegree=[{...bachlerdata}]
+      }}
+      if(masterDegreedata){
+      if(Object.keys(masterDegreedata).length){
+        datalist.masterDegree=[{...masterDegreedata}]
+      }}
+      let additional = additionalarray
+      if(additionaldata){
+        if(Object.keys(additionaldata).length){
+          additional.push(additionaldata) 
+        }
+      }
+      
+        datalist.additional=additional
+      
+      if(selectedskills.length){
+        let skills =[]
+        selectedskills.forEach(element => {
+          skills.push(element.value)
+        });
+      
+          datalist.skills=skills
+        
+      }
+        // ...........................company data push to datalist
+        let company = companyarray
+        if(companydata){
+          if(companydata.course){
+            if(Object.keys(companydata).length){
+              company.push(companydata) 
+            }
+          }
+          setprecompanydata('')
+          
+        }
+        
+        if(company.length){
+          company.forEach((element)=>{         
+            element.is_craigcompany=true
+            if(!element.is_verified){
+              element.is_verified=false
+            }
+          }
+            )}
+        let precompany = precompanyarray
+        if(precompanydata){
+            if(Object.keys(precompanydata).length){
+              precompany.push(precompanydata) 
+            }}   
+        if(precompany.length){
+          precompany.forEach((element)=>{         
+          
+            if(!element.is_verified){
+              element.is_verified=false
+            }})
+            company=[...company,...precompany]
+        }else{
+          company = [...precompany]
+        }
+        
+          datalist.prevCompanies=company
+        
+        let data = await Axioscall(method,"employee/educationandcareer",datalist)
+        if(data.status===200){
+          notify(msg)
+          console.log("data carrerstatsut",data)
+          
           if(method ==="put"){
             setWizard(1)
           }else{
-            setWizard(4) 
+            setWizard(5)   
           }     
           tophandler(0,200)
           getUser()
@@ -526,19 +637,19 @@ export default function Employeeprofupdate(value) {
     try {
         let user = tokenhandler()
         let data =await Axioscall("get","employee/personal",{user:user})
-        // console.log("userdataaaaaaa",data)
+        console.log("userdataaaaaaa",data)
         if (data.status===200){
           if (data.data.data!=null){
             let userdata =data.data.data
             if(userdata.dob){
                 userdata.dob = moment(userdata.dob).format("YYYY-MM-DD")
             }
-            if(userdata.addressproof.length){
-                setaddressproof(userdata.addressproof[0])
-            }
-            if(userdata.idcard.length){
-                setcarddata(userdata.idcard[0])
-            }
+            // if(userdata.addressproof.length){
+            //     setaddressproof(userdata.addressproof[0])
+            // }
+            // if(userdata.idcard.length){
+            //     setcarddata(userdata.idcard[0])
+            // }
             if(userdata.siblingsDetails.length){
                 setsiblingsarray(userdata.siblingsDetails)
             }
@@ -787,10 +898,11 @@ export default function Employeeprofupdate(value) {
                 <div className="card3 px-0 pt-4 pb-0 mt-3 mb-3">
                    {/* progressbar */}
                     <ul id="progressbar">
-                      <li className="active" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(1) :""} id="account"><strong>Personal</strong></li>
-                      <li id="personal" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(2) :""} className={wizard===1?'':'active'}><strong>Address</strong></li>
-                      <li id="payment" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(3) :""} className={wizard===2||wizard===1?'':'active'}><strong>Education&amp; Career</strong></li>
-                      <li id="confirm"  className={wizard===4?'active':''}><strong>Finish</strong></li>
+                      <li className="active" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(1) :""} id="account"><strong className='wizardtext'>Personal</strong></li>
+                      <li id="personal" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(2) :""} className={wizard===1?'':'active'}><strong className='wizardtext'>Address</strong></li>
+                      <li id="payment" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(3) :""} className={wizard===2||wizard===1?'':'active'}><strong className='wizardtext'>Education</strong></li>
+                      <li id="career" onClick={()=>window.location.pathname!='/employeeregister'? setWizard(4) :""} className={wizard===2||wizard===1||wizard===3?'':'active'}><strong className='wizardtext'>Experiance</strong></li>
+                      <li id="confirm"  className={wizard===5?'active':''}><strong className='wizardtext'>Finish</strong></li>
                     </ul>
                     <div className="progress">
                       <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin={0} aria-valuemax={100}>
@@ -858,7 +970,7 @@ export default function Employeeprofupdate(value) {
                           <input type="text" required onChange={(e)=>setemployeedata({...employeedata,lngWrite:e.target.value})} value={employeedata.lngWrite??""}  className="form-control" placeholder="  English,hindi..." id="" />
                           <Form.Control.Feedback type="invalid">Please provide Valid Languages</Form.Control.Feedback>
                         </div>
-                        <div className="col-md-12 mb-3">
+                        {/* <div className="col-md-12 mb-3">
                           <label className="col-sm-12 font-sm color-text-mutted">Upload Your Photo*</label> 
                           <div className='imageselectorborder d-flex'>
                             <button onClick={()=>Filestackhandler("square",setemployeedata,employeedata,'profilePhoto')}  type='button' className='imageselector'> Choose Image</button>
@@ -916,7 +1028,7 @@ export default function Employeeprofupdate(value) {
                             <button onClick={()=>Filestackhandler("landscape",setaddressproof,addressproof,'backUrl')} type='button' className='imageselector'> Choose Image</button>
                             <p style={{overflow:"hidden"}}>&nbsp;{addressproof.backUrl??<span>No file chosen</span>}</p>
                           </div>
-                        </div>
+                        </div> */}
                         <div className="col-12 row mt-3 mb-20">
                           <label className="col-lg-4 col-sm-6">Marital status</label>
                           <p className="col-lg-2 col-sm-2 mari">
@@ -1162,7 +1274,7 @@ export default function Employeeprofupdate(value) {
                       <div className="form-card">
                         <div className="row">
                           <div className="col-12">
-                            <h2 className="fs-title">Education and career:</h2>
+                            <h2 className="fs-title">Education:</h2>
                           </div>
                         </div>
                         <div className="row">
@@ -1414,7 +1526,7 @@ export default function Employeeprofupdate(value) {
                             </div>
                           </div>
                         </div>
-                        <h6 className="mt-3 color-brand-1">Designation</h6>
+                        {/* <h6 className="mt-3 color-brand-1">Designation</h6>
                         <div className="col-lg-12 col-md-12">
                           <select  value={employeedata3?.designation??""} required onChange={(e)=>setemployeedata3({...employeedata3,designation:e.target.value})} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
                             <option value="" defaultValue="" disabled  >Select Designation</option>
@@ -1575,7 +1687,7 @@ export default function Employeeprofupdate(value) {
                             <textarea onChange={(e)=>setemployeedata3({...employeedata3,otherproficency:e.target.value})}  value={employeedata3.otherproficency??''} type="text" className="form-control text-area11" placeholder="Message" id=" "  />
                             <Form.Control.Feedback type="invalid">Please provide otherproficency </Form.Control.Feedback>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                       <input type="submit" name="next" onClick={()=>tophandler(0,500)} className="pr-button next action-button"   defaultValue="Submit" /> 
                       <input type="button" name="previous" onClick={()=>setWizard(2)&getaddress()} className="pr-button  action-button-prev" defaultValue="Previous" />
@@ -1583,6 +1695,281 @@ export default function Employeeprofupdate(value) {
                     </Form>
                     :null}
                     {wizard===4?
+                    <Form  noValidate validated={validated3} onSubmit={(e)=>Check_Validation(e,RegsterFourthform,setValidated3)}  className="reg-form contact10 ">
+                    <fieldset>
+                      <div className="form-card">
+                        <div className="row">
+                          <div className="col-12">
+                            <h2 className="fs-title">Experience:</h2>
+                          </div>
+                        </div>
+                       
+                        <h6 className="mt-3 color-brand-1">Designation</h6>
+                        <div className="col-lg-12 col-md-12">
+                          <select  value={employeedata3?.designation??""} required onChange={(e)=>setemployeedata3({...employeedata3,designation:e.target.value})} className="form-control cs-select cs-skin-elastic cs-skin-elastic1">
+                            <option value="" defaultValue="" disabled  >Select Designation</option>
+                            <option value="Chief Executive Officer (CEO)">Chief Executive Officer (CEO)</option>
+                            <option value="Chief Technology Officer (CTO)">Chief Technology Officer (CTO)</option>
+                            <option value="Chief Financial Officer (CFO)">Chief  Financial Officer (CFO)</option>
+                            <option value="Chief Operating Officer (COO)">Chief Operating Officer (COO)</option>
+                            <option value="Chief Marketing Officer (CMO)">Chief Marketing Officer (CMO)</option>
+                            <option value="HR">Human Resources (HR) Manager</option>
+                            <option value="Administrator">Administrator</option>
+                            <option value="Accountant">Accountant</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Supervisor">Supervisor</option>
+                            <option value="Engineer">Engineer</option>
+                            <option value="Developer">Developer</option>
+                            <option value="Designer">Designer</option>
+                            <option value="Analyst">Analyst</option>
+                            <option value="Programmer">Programmer</option>
+                            <option value="Full Stack Developer">Full Stack Developer</option>
+                            <option value="Backend Developer">Backend Developer</option>
+                            <option value="Frontend Developer">Frontend Developer</option>
+                            <option value="Technician">Technician</option>
+                            <option value="Specialist">Specialist</option>
+                            <option value="Consultant">Consultant</option>
+                            <option value="Intern">Intern</option>
+                            <option value="Trainee">Trainee</option>
+                          </select>
+                          <Form.Control.Feedback type="invalid">Please provide Designation</Form.Control.Feedback>
+                          </div>
+                        <h6 className="mt-3 ">Skills</h6>
+                        <div className="col-lg-12 col-md-12">
+                        <Select
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            isMulti
+                            options={skilloptions}
+                            placeholder={<div>Select Skills....</div>}
+                            value={selectedskills}
+                            className=''
+                            onChange={newcontent => {setselectedskills( newcontent ) }}
+                            onInputChange={(value)=>skillapicall(value)} 
+                            // styles={customStyles}
+                          />
+                          <Form.Control.Feedback type="invalid">Please provide Skills </Form.Control.Feedback>
+
+                        </div>
+                        <h6 className="permenent-address mb-3">Career Experience</h6>
+                        <div className="property-fields__ro ">
+                          <div id="property-fields__row-2" className="property-fields__ro row">
+                            <h6 className="permenent-address form-t mb-3 col-12">Company</h6>
+                            
+                          <div className="sidebar-list-job88 text-imp">
+                            <ul className="list-unstyled timeline-sm">
+                            {precompanyarray.length?precompanyarray.map((citm,ck)=>
+                            <React.Fragment key={ck}>
+                              <div className='row timeline-sm-item'>
+                                <div className='col-8 col-sm-12'>
+                                  <div className='row '>
+                                    <div className='col-3'>
+                                     <strong>Company</strong>
+                                    </div>
+                                    <div className='col-1'>
+                                      <span><strong>:</strong></span>
+                                    </div>
+                                    <div className='col-6'>
+                                      <span><b>{citm?.name??""}</b></span>
+                                    </div>
+                                  </div>
+                                  <div className='row'>
+                                    <div className='col-3'>
+                                     <strong>Position</strong>
+                                    </div>
+                                    <div className='col-1'>
+                                      <span><strong>:</strong></span>
+                                    </div>
+                                    <div className='col-6'>
+                                      <span><b>{citm?.position??""}</b></span>
+                                    </div>
+                                  </div>
+                                  <div className='row'>
+                                    <div className='col-3'>
+                                     <strong>Phone</strong>
+                                    </div>
+                                    <div className='col-1'>
+                                      <span><strong>:</strong></span>
+                                    </div>
+                                    <div className='col-6'>
+                                      <span><b>{citm?.phone??""}</b></span>
+                                    </div>
+                                  </div>
+                                  <div className='row'>
+                                    <div className='col-3'>
+                                     <strong>email</strong>
+                                    </div>
+                                    <div className='col-1'>
+                                      <span><strong>:</strong></span>
+                                    </div>
+                                    <div className='col-6'>
+                                      <span><b>{citm?.email??""}</b></span>
+                                    </div>
+                                  </div>
+                                  <div className='row'>
+                                    <div className='col-3'>
+                                     <strong>Address</strong>
+                                    </div>
+                                    <div className='col-1'>
+                                      <span><strong>:</strong></span>
+                                    </div>
+                                    <div className='col-6'>
+                                      <span><b>{citm?.address??""}</b></span>
+                                    </div>
+                                  </div>
+                                  <div className='row'>
+                                    <div className='col-3'>
+                                     <strong>Description</strong>
+                                    </div>
+                                    <div className='col-1'>
+                                      <span><strong>:</strong></span>
+                                    </div>
+                                    <div className='col-6'>
+                                      <span><b>{citm?.jobDescription??""}</b></span>
+                                    </div>
+                                  </div>
+                                  <div className='row'>
+                                    <div className='col-3'>
+                                     <strong>From</strong>
+                                    </div>
+                                    <div className='col-1'>
+                                      <span><strong>:</strong></span>
+                                    </div>
+                                    <div className='col-6'>
+                                      <span><b>{citm?.from?moment(citm.from).format('DD-MM-YYYY'):""??""}</b></span>
+                                    </div>
+                                  </div>
+                                  <div className='row'>
+                                    <div className='col-3'>
+                                     <strong>To</strong>
+                                    </div>
+                                    <div className='col-1'>
+                                      <span><strong>:</strong></span>
+                                    </div>
+                                    <div className='col-6'>
+                                      <span><b>{citm?.to!=="Present"?moment(citm.to).format('DD-MM-YYYY'):citm.to??""}</b></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                             {/* <div className="form-group col-lg-6 mt-20">
+                               <div className="text__center">
+                               <input type="text"  value={citm?.name??""} className="" disabled placeholder=" Position" id=" " />
+                                 
+                               </div>
+                             </div>
+                             <div className="form-group col-lg-6 mt-20 ">
+                               <input type="text"  value={citm.position} className="" disabled placeholder=" Position" id=" " />
+                             </div>
+                             <div className="form-group col-lg-6 mt-20">
+                               <input type="tel"  value={citm.phone} className="" disabled placeholder=" Company Phone" id=" " />
+                             </div>
+                             <div className="form-group col-lg-6  mt-20">
+                               <input type="email"  value={citm.email} className="" disabled placeholder="Company email" id=" " />
+                             </div>
+                             <div className="form-group col-lg-12  mt-20">
+                               <input type="text" value={citm.address} disabled className="" placeholder="Company Address" id=" " />
+                             </div>
+                             <div className="form-group col-lg-12 mt-20 ">
+                               <textarea type="text" value={citm.jobDescription} disabled className=" text-area11" placeholder="Job Description" id=" "  />
+                             </div>
+                             <div className="form-group col-lg-6 mt-20">
+                               <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
+                               <input type="date" disabled value={citm.from} className="" placeholder=" From" id=" " />
+                             </div>
+                             <div className="form-group col-lg-6 mt-20">
+                               <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
+                               {citm.to==="Present"?
+                               <input type="text"  disabled value={citm.to} className="" placeholder=" To" id=" " />
+                               :
+                               <input type="date"  disabled value={citm.to} className="" placeholder=" To" id=" " />
+                                }
+                             </div> */}
+                             {!citm.is_verified?
+                             <div className="line-item-property__actions col-12 row mt-3 mb-3">
+                             <button onClick={()=>Removeprecompany(ck)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
+                             </div>
+                             :""}
+                             </React.Fragment>):null}
+                             </ul>
+                          </div>
+                             {windowcompany?<>
+                             <div className="form-group col-lg-12 mt-20 d-flex">
+                              <input className="check " onChange={(e)=>companyHandler(e)}  type="checkbox"  />
+                              <label className='mt-15 pl-10 '  >Other Company</label> 
+                              </div>
+                            <div className="form-group col-lg-6 sidebar-list-job88 ">
+                            {othercompany?
+                                <input type="text"  onChange={(e)=>setprecompanydata({...precompanydata,name:e.target.value,is_craigcompany:false})} value={precompanydata.name??""} className="form-control" placeholder=" Company Name" id=" " />
+                                :
+                                <select onChange={(e)=>CompanydataHandler(e.target.value)} value={precompanydata?.name??""} className="form-control  cs-skin-elastic cs-skin-elastic1">
+                                  <option value="" defaultValue="" disabled  >Select Company</option>
+                                  {companyvalues.map((company,k)=>(
+                                    <option key={k} value={company.name}>{company.name}</option>  
+                                  ))} 
+                                </select>
+                                }
+                              <Form.Control.Feedback type="invalid">Please provide company name </Form.Control.Feedback>
+                            </div>
+                            <div className="form-group col-lg-6 ">
+                              <input type="text" required={precompanydata.name} onChange={(e)=>setprecompanydata({...precompanydata,position:e.target.value,isnew:true})} value={precompanydata.position??""} className="form-control" placeholder=" Position" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide position </Form.Control.Feedback>
+                            </div>
+                            <div className="form-group col-lg-6 mt-20">
+                              <input type="tel" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,phone:e.target.value})} value={precompanydata.phone??""} className="form-control" placeholder=" Company Phone" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide phone </Form.Control.Feedback>
+                            </div>
+                            <div className="form-group col-lg-6  mt-20">
+                              <input type="email" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,email:e.target.value})} value={precompanydata.email??""} className="form-control" placeholder="Company email" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide valid email </Form.Control.Feedback>
+                            </div>
+                            <div className="form-group col-lg-12  mt-20">
+                              <input type="text" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,address:e.target.value})} value={precompanydata.address??""} className="form-control" placeholder="Company Address" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide address </Form.Control.Feedback>
+                            </div>
+                            <div className="form-group col-lg-12  mt-20">
+                              <textarea required={precompanydata.name}  type="text"onChange={(e)=>setprecompanydata({...precompanydata,jobDescription:e.target.value})} value={precompanydata.jobDescription??""} className="form-control text-area11" placeholder="Job Description" id=" "  />
+                              <Form.Control.Feedback type="invalid">Please provide Job Description </Form.Control.Feedback>
+                            </div>
+                            <div className="form-group col-lg-12 mt-10 d-flex">
+                              <input className="check " checked={presentcompany}  onChange={(e)=>PresentcompanyHandler(e)}  type="checkbox"  />
+                              <label className='mt-15 pl-10 '  >Present Company</label> 
+                              </div>
+                            <div className="form-group col-lg-6 mt- ">
+                              <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
+                              <input required={precompanydata.name}  type="date"onChange={(e)=>setprecompanydata({...precompanydata,from:e.target.value})} value={precompanydata.from??""} className="form-control" placeholder=" From" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide Join date </Form.Control.Feedback>
+                            </div>
+                            {presentcompany?"":
+                            <div className="form-group col-lg-6 mt-">
+                              <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
+                              <input type="date" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className={`form-control ${precompanydata.from?dateCheck(precompanydata.from??"",precompanydata.to??"")?'':'is-invalid':''}`} placeholder=" To" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide valid To* date </Form.Control.Feedback>
+                            </div>}
+                            </>:""}
+                          </div>
+                          <div className="line-item-property__actions col-12 row mt-3 mb-3">
+                          <button onClick={()=>windowcompany?pushhandler(precompanydata,setprecompanydata,precompanyarray,setprecompanyarray):setwindowcompany(true)}  className="col-lg-2 button-form1" type="button"  value="+">Add</button>
+                          {windowcompany?
+                          <button  onClick={()=>setprecompanydata('')& setwindowcompany(false)} className="col-lg-2 button-form2" type="button" value="-">Remove</button>
+                          :""}
+                          </div>
+                        </div>
+                        
+                        <div className="row">
+                          <h6 className=" form-t mb-3 mt-3 col-12">Any other Proficiancy</h6>
+                          <div className="form-group col-lg-12 ">
+                            <textarea onChange={(e)=>setemployeedata3({...employeedata3,otherproficency:e.target.value})}  value={employeedata3.otherproficency??''} type="text" className="form-control text-area11" placeholder="Message" id=" "  />
+                            <Form.Control.Feedback type="invalid">Please provide otherproficency </Form.Control.Feedback>
+                          </div>
+                        </div>
+                      </div>
+                      <input type="submit" name="next" onClick={()=>tophandler(0,500)} className="pr-button next action-button"   defaultValue="Submit" /> 
+                      <input type="button" name="previous" onClick={()=>setWizard(3)&getaddress()} className="pr-button  action-button-prev" defaultValue="Previous" />
+                    </fieldset>
+                    </Form>
+                    :null}
+                    {wizard===5?
                     <fieldset>
                       <div className="form-card reg-form">
                         <div className="row">
