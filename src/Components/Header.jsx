@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 import { Simplecontext } from "../Commonpages/Simplecontext";
 
 export default function Header() {
-  const { path, pathvalue,userdetail,logouthandler } = useContext(Simplecontext);
+  const { path, pathvalue,userdetail,logouthandler,notificationdata } = useContext(Simplecontext);
   const windowuser = window.localStorage.getItem("graiduser")??""
   const [scrollPosition, setScrollPosition] = useState(0);
   
@@ -96,7 +96,7 @@ export default function Header() {
             </div>
             {windowuser==="employee" && pathvalue!="/employeeregister"?<>
           <div className="header-right">
-          <div className="block-signin"><Link className="btn btn-default2 btn-shadow ml-40 "  to="/employee-notification"><i className="fa-sharp fa-solid fa-bell notification-bell"></i></Link></div>
+          <div className="block-signin"><Link className="btn btn-default2 btn-shadow ml-40 "  to="/employee-notification"><i className="fa-sharp fa-solid fa-bell notification-bell"></i><span class="notification-label notification-label-red">{notificationdata.length}</span></Link></div>
         </div>
         </>:null}
             <div className="header-right">

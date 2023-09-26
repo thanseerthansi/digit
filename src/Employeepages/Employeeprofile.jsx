@@ -12,12 +12,13 @@ import domtoimage from 'dom-to-image';
 import { Modal, ModalFooter } from 'react-bootstrap';
 import { Form } from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Employeeprofile() {
-  const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst,Check_Validation}=useContext(Simplecontext)
-  console.log(userdetail)
-  console.log(employeedata)
+  const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst,Check_Validation,getNotification}=useContext(Simplecontext)
+  // console.log(userdetail)
+  // console.log(employeedata)
   
   const [shareview,setshareview]=useState(true)
   const [load,setload]=useState(false)
@@ -26,6 +27,7 @@ export default function Employeeprofile() {
   const[reason,setReason]=useState('')
   const[isOpen,setIsopen]=useState(false)
   const[employeeScore,setemployeeScore]=useState()
+  const [showtoast, setshowtoast] = useState(false)
   const maxLength = userdetail ? Math.max(userdetail.lngRead?.length??"", userdetail.lngWrite?.length??"") : 0;
 const rows = Array.from({ length: maxLength }, (_, index) => (
   <tr key={index}>
@@ -33,8 +35,10 @@ const rows = Array.from({ length: maxLength }, (_, index) => (
     <td data-label="Write">{Capitalizefirst(userdetail && index < userdetail.lngWrite.length ? userdetail.lngWrite[index] : '')}</td>
   </tr>
 ));
+let navigate = useNavigate();
 useEffect(() => {
   getScore()
+  getNotification()
 }, [userdetail])
 
 // console.log("employeee profile",userdetail)
@@ -60,7 +64,7 @@ const Bannerhandler=async(ratio)=>{
   const copyValue = (value) => {
     navigator.clipboard.writeText(value)
       .then(() => {
-        console.log('Value copied to clipboard:', value);
+        // console.log('Value copied to clipboard:', value);
         notify("Copied Uniqueid")
       })
       .catch((error) => {
@@ -88,8 +92,21 @@ const Bannerhandler=async(ratio)=>{
     return formattedNumber;
   };
   const calculateDashArray = (value) => {
-    const percentage = (value - 0) / (999 - 0) * 100;
-    return `${percentage}, 100`;
+    // console.log("value",value)
+    // const percentage = (value - 0) / (999 - 0) * 100;
+    // return `${percentage}, 100`;
+    const minValue = 0;
+  const maxValue = 999;
+  const minDegree = 316;
+  const maxDegree = 584;
+
+  // Calculate the degree using linear interpolation
+  const degree = minDegree + ((value - minValue) / (maxValue - minValue)) * (maxDegree - minDegree);
+  // console.log("degreea",degree)
+  // Ensure the degree is within the valid range (316deg to 584deg)
+  return Math.min(maxDegree, Math.max(minDegree, degree));
+    // return 366
+   
   };
 
   //Create resignation----------------------
@@ -184,6 +201,7 @@ const Bannerhandler=async(ratio)=>{
   return (
     <>
       <main className="main">
+        
       {load? 
   <div className="spinner-container">
     <div className="spinner" />
@@ -201,6 +219,7 @@ const Bannerhandler=async(ratio)=>{
           <img style={{ height:"85px" , width:"85px"}} src={userdetail?.profilePhoto??"assets/imgs/page/candidates/candidate-profile copy1.png"} alt="jobbox" />
           
           </div>
+          
         <div className="row mt-10" style={{lineHeight:"2px"}}>
           <div className="col-lg-8 col-md-12">
             <h5 className="f-18">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.state??""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></h5><br />
@@ -210,6 +229,8 @@ const Bannerhandler=async(ratio)=>{
             <h5 className="f-18 u-color">Unique ID : <span>{userdetail?.uniqueid??""}</span></h5>
             <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation??""}</p>
           </div>
+          
+
             {/* score ....start */}
           <div className="col-lg-4 col-md-12 text-lg-end ">     
           <div>
@@ -217,8 +238,31 @@ const Bannerhandler=async(ratio)=>{
             <section>
               
               <div className='d-flex'>
-                <div style={{marginTop:"90px"}}>
+                <div >
+                  
                 {/* <span className="text-start ">Performance</span> */}
+                {/* svg start */}
+             {/* <div>
+
+  <div className="gauge-wrapper">
+    <div className="gauge four rischio1">
+      <div className="slice-colors">
+        <div className="st slice-item"  />
+        <div className="st slice-item" />
+        <div className="st slice-item" />
+        <div className="st slice-item" />
+      </div>
+      <div className="needle"  />
+      <div className="gauge-center">
+        <div className="label">Platinum</div>
+        <div className="label">(90%-95%)</div>
+        
+      </div>    
+    </div>
+  </div>
+ 
+</div> */}
+              <div style={{marginTop:"166px"}}>
               <svg className="circle-chart " style={{width:"80px"}} viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                 <circle className="circle-chart__circle"  style={{ strokeDasharray:`${attendanceHandler(employeeScore?.perfomance?.value??"")},100` }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
@@ -228,19 +272,49 @@ const Bannerhandler=async(ratio)=>{
                 </g>
               </svg>
               </div>
+              </div>
+              
               <div>
-              <h5 className="text-center">Score</h5>
-              <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
+              <h5 className="text-center " style={{marginLeft:"40px"}}>Score
+    
+              {/* <a className="btn btn-border history-icon mb-20 active"  ></a> */}
+              <a className="btn history-icon mb-10" onClick={() =>{return navigate('/history')}} onMouseEnter={()=>setshowtoast(true)} onMouseLeave={()=>setshowtoast(false)} href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false"><span className='m-1'></span></a>
+              </h5>
+              <div id="barometer" >
+                <div className="container">
+                  <div className="first_ring">
+                    <div className="second_ring">
+                      <div className="third_ring" />
+                      </div></div><div className="pie">
+                      
+                        <div className="pie_segment red" />
+                        <div className="pie_segment orange" />
+                        <div className="pie_segment green" />
+                        
+                        <div className="pie_segment white" />
+                        </div><div className="second_layer" />
+                        <div className="third_layer" />
+                        <div className="arrow" style={{ transform:employeeScore? `rotate(${calculateDashArray(employeeScore?.score??0)}deg)`:'rotate(315deg)',transition:'all 0.3s' }}>
+                          <div className="arrowtop" /><div className="arrowbottom" />
+                          </div><div className="middle_point" ><div className='score-bord'><h6 >{employeeScore?.score??0}</h6><br/>
+                          </div></div>
+                          </div>
+                          
+                            </div>
+              
+
+              {/* <svg className="circle-chart mt-10" viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                 <circle className="circle-chart__circle"  style={{ strokeDasharray: calculateDashArray(employeeScore?.score??0) }} fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                 <g className="circle-chart__info">
                   <text className="circle-chart__percent" x="16.91549431" y="15.5" alignmentBaseline="central" textAnchor="middle" fontSize={8}>{employeeScore?.score??0}</text>
                   <text className="circle-chart__subline" x="16.91549431" y="20.5" alignmentBaseline="central" textAnchor="middle" fontSize={2}>Out of 999</text>
                 </g>
-              </svg>
+              </svg> */}
               </div>
               {/* <span className="text-end ">Attendance</span> */}
-              <div style={{marginTop:"90px"}}>
+              <div style={{marginTop:"166px"}}>
+              <div style={{marginLeft:"25px"}} >
               
               <svg className="circle-chart  " style={{width:"80px"}} viewBox="0 0 33.83098862 33.83098862" xmlns="http://www.w3.org/2000/svg">
                 <circle className="circle-chart__background" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
@@ -253,6 +327,7 @@ const Bannerhandler=async(ratio)=>{
               </div>
               </div>
               <br/>
+              </div>
               {/* <div className=''>
                 
                 <div className='' style={{border:"1px solid grey",borderRadius:"12px"}}><h4>jhvjhb</h4></div>
@@ -467,7 +542,7 @@ const Bannerhandler=async(ratio)=>{
                               {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
                                 <>
                                   <li key={pk} className="timeline-sm-item">
-                                    <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid() ? moment(pcompany.to, 'YYYY-MM-DD').format('yyy') : "Present"}</span>
+                                    <span className="timeline-sm-date">{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, true).isValid() ? moment(pcompany.to, 'YYYY-MM-DD').format('yyy') : "Present"}</span>
                                     <h6 className="mt-0 mb-1">{pcompany.name} </h6>
                                     {pcompany.is_verified ?
                                       <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div> : <div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
@@ -540,7 +615,7 @@ const Bannerhandler=async(ratio)=>{
                         <div className="box-timeline mt-50">                      
                           {userdetail?.careerandeducation?.[0]?.prevCompanies.map((pcompany,pk)=>(
                           <div key={pk} className="item-timeline">
-                            <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, 'YYYY-MM-DD', true).isValid()? moment(pcompany.to, 'YYYY-MM-DD').format('YY'):'Present'}</span></div>
+                            <div className="timeline-year"> <span>{moment(pcompany.from).format('yyy')}-{pcompany?.to && moment(pcompany.to, true).isValid()? moment(pcompany.to, 'YYYY-MM-DD').format('YY'):'Present'}</span></div>
 
                             <div className="timeline-info"> 
                               <h5 className="color-brand-1 mb-10">{pcompany?.name??""}</h5>
@@ -608,6 +683,19 @@ const Bannerhandler=async(ratio)=>{
                                 <td data-label="Year">{userdetail?.careerandeducation?.[0]?.masterDegree?.[0]?.year??""}</td>
                               </tr>
                               :""??""}
+                              {userdetail?.careerandeducation?.[0]?.additional.length?
+                              <>{
+                                userdetail?.careerandeducation[0].additional.map((additonal,key)=>(
+                              <tr key={key}>
+                                <td scope="row" data-label="Cource">Additional Course</td>
+                                <td data-label="Field/board">{additonal?.course??""}</td>
+                                <td data-label="Collage">{additonal?.collage??""}</td>
+                                <td data-label="Grade/Score">{additonal?.['garde/score']??""}</td>
+                                <td data-label="Year">{additonal?.year??""}</td>
+                              </tr>
+                              ))
+                            }
+                              </>:""??""}
                             </tbody>
                           </table>
                         </div>

@@ -11,6 +11,7 @@ export default function Simplecontextprovider({children}){
     const [userdetail,setuserdetail]=useState('')
     const [employeedata,setemployeedata]=useState('')
     const [hrdata,sethrdata]=useState('')
+    const [notificationdata,setnotificationdata]=useState([])
     useEffect(() => {
         path()
         getUser()
@@ -83,6 +84,7 @@ export default function Simplecontextprovider({children}){
                     setemployeedata(data.data.data.docs[0])
                     window.localStorage.setItem("graiduseremail",data.data.data.docs[0].email);
                     window.localStorage.setItem("graiduserid",data.data.data.docs[0]._id);
+                    getNotification()
                   }else{
                     logouthandler()
                   }
@@ -152,9 +154,25 @@ export default function Simplecontextprovider({children}){
    function Capitalizefirst(str){
     return str.charAt(0).toUpperCase() + str.slice(1);
    }
+   const getNotification=async()=>{
+    try {
+      let body ={
+        email:window.localStorage.getItem("graiduseremail"),
+        page:1,
+        limit:10
+      }
+      let data = await Axioscall("get","notification",body)
+      console.log("data",data.data.data.docs)
+      if (data.status===200){
+        setnotificationdata(data.data.data.docs)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 return (
     <Simplecontext.Provider value={{
-        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler,Decodetoken,loghandler,Decodeall,Hrcheck,hrdata,Capitalizefirst
+        path,pathvalue,logouthandler,Check_Validation,userdetail,setuserdetail,employeedata,setemployeedata,getUser,Filestackhandler,Decodetoken,loghandler,Decodeall,Hrcheck,hrdata,Capitalizefirst,notificationdata,setnotificationdata,getNotification
     }}>{children}</Simplecontext.Provider>
     )
 }
