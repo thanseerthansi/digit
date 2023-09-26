@@ -15,6 +15,7 @@ import {Button} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 
+
 export default function Employeeprofile() {
   const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst,Check_Validation,getNotification}=useContext(Simplecontext)
   // console.log(userdetail)
@@ -218,21 +219,26 @@ const Bannerhandler=async(ratio)=>{
         <div className="image-compay">
           <img style={{ height:"85px" , width:"85px"}} src={userdetail?.profilePhoto??"assets/imgs/page/candidates/candidate-profile copy1.png"} alt="jobbox" />
           
-          </div>
-          
-        <div className="row mt-10" style={{lineHeight:"2px"}}>
-          <div className="col-lg-8 col-md-12">
-            <h5 className="f-18">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.state??""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></h5><br />
-            {userdetail.is_verified?
-            <div className=""><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
-            :<div className=""><img className="ml-0 " src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
-            <h5 className="f-18 u-color">Unique ID : <span>{userdetail?.uniqueid??""}</span></h5>
-            <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation??""}</p>
-          </div>
-          
+              </div>
 
-            {/* score ....start */}
-          <div className="col-lg-4 col-md-12 text-lg-end ">     
+              <div className="row mt-10" style={{ lineHeight: "2px" }}>
+                <div className="col-lg-8 col-md-12">
+                  <h5 className="f-18">{userdetail?.firstName ?? ""} {userdetail?.middleName ?? ""} {userdetail?.lastName ?? ""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.state ?? ""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country ?? ""}</span></h5><br />
+                  {userdetail.is_verified === 'verified' ? (
+                    <img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" />
+                  ) : userdetail.is_verified === 'requested' ? (
+                    <img className="ml-0 " src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" />
+                  ) : (
+                    /* Handle 'pending' case here, you can add an image or text for 'pending' */
+                    <button onClick={()=>navigate('/complete-profile')} className="btn btn-sm " style={{backgroundColor:"#4444ac", color: 'white',borderRadius:'0'}}>click to verify</button>
+                  )}
+                  <h5 className="f-18 u-color">Unique ID : <span>{userdetail?.uniqueid ?? ""}</span></h5>
+                  <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation ?? ""}</p>
+                </div>
+
+
+                {/* score ....start */}
+                <div className="col-lg-4 col-md-12 text-lg-end ">     
           <div>
            
             <section>
