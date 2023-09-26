@@ -227,7 +227,11 @@ const Bannerhandler=async(ratio)=>{
                   {userdetail.is_verified === 'verified' ? (
                     <img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" />
                   ) : userdetail.is_verified === 'requested' ? (
-                    <img className="ml-0 " src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" />
+                    <div className='mt-2'>
+                              <span className='p-1 mt-5' style={{backgroundColor:'orange',borderRadius:'5px',color:'white'}}>requested</span>
+                    </div>
+            
+                    // <img className="ml-0 " src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" />
                   ) : (
                     /* Handle 'pending' case here, you can add an image or text for 'pending' */
                     <button onClick={()=>navigate('/complete-profile')} className="btn btn-sm " style={{backgroundColor:"#4444ac", color: 'white',borderRadius:'0'}}>click to verify</button>
