@@ -225,18 +225,23 @@ const Bannerhandler=async(ratio)=>{
                 <div className="col-lg-8 col-md-12">
                   <h5 className="f-18">{userdetail?.firstName ?? ""} {userdetail?.middleName ?? ""} {userdetail?.lastName ?? ""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.state ?? ""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country ?? ""}</span></h5><br />
                   {userdetail.is_verified === 'verified' ? (
+                    <div className='mt-3'>
+                      <span className="p-1 bg-success rounded text-white ">
+                        verified
+                      </span>
+                    </div>
                     // <img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" />
-                    <span className='p-1 mt-5' style={{ backgroundColor: 'green', borderRadius: '5px', color: 'white' }}>requested</span>
                   ) : userdetail.is_verified === 'requested' ? (
-                    <div className='mt-2'>
-                      <span className="p-3 bg-warning rounded text-white d-inline-flex align-items-center">
+                    <div className='mt-3'>
+                      <span className="p-1 bg-warning rounded text-white ">
                         Requested
                       </span>
                     </div>
                     // <img className="ml-0 " src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" />
                   ) : (
                     /* Handle 'pending' case here, you can add an image or text for 'pending' */
-                    <button onClick={() => navigate('/complete-profile')} className="btn btn-sm p-2 bg-primary" style={{ backgroundColor: "white", color: 'white', borderRadius: '5px', }}><i className="fas fa-check-circle mr-5 text-white" ></i>click to verify</button>)}
+                    <button onClick={() => navigate('/complete-profile')} className="btn btn-sm p-1 bg-primary" style={{ backgroundColor: "white", color: 'white', borderRadius: '5px', }}><i className="fas fa-check-circle mr-5 text-white" ></i>click to verify</button>
+                    )}
                   <h5 className="f-18 u-color">Unique ID : <span>{userdetail?.uniqueid ?? ""}</span></h5>
                   <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation ?? ""}</p>
                 </div>
