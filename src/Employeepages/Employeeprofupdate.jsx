@@ -637,7 +637,7 @@ export default function Employeeprofupdate(value) {
     try {
         let user = tokenhandler()
         let data =await Axioscall("get","employee/personal",{user:user})
-        console.log("userdataaaaaaa",data)
+        // console.log("userdataaaaaaa",data)
         if (data.status===200){
           if (data.data.data!=null){
             let userdata =data.data.data
@@ -876,6 +876,44 @@ export default function Employeeprofupdate(value) {
     const formattedNumber = number.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1    ');
     return formattedNumber;
   };
+
+  console.log("precompanyarray",precompanyarray)
+  const checkDateBetween=(dateToCheck)=>{
+    const newFromDate = new Date(newExperience.from);
+    const newToDate = new Date(newExperience.to === 'Present' ? new Date() : newExperience.to);
+
+    // Check if the new experience overlaps with any previous experiences
+    const isOverlapping = previousExperiences.some((experience) => {
+      const fromDate = new Date(experience.from);
+      const toDate = new Date(experience.to === 'Present' ? new Date() : experience.to);
+      return newFromDate <= toDate && newToDate >= fromDate;
+    });
+
+    // Check if the new experience falls under any existing new experiences
+    const isFallingUnderExisting = newExperiences.some((existingNewExperience) => {
+      const existingFromDate = new Date(existingNewExperience.from);
+      const existingToDate = new Date(existingNewExperience.to === 'Present' ? new Date() : existingNewExperience.to);
+      return newFromDate >= existingFromDate && newToDate <= existingToDate;
+    });
+
+    if (isOverlapping || isFallingUnderExisting) {
+      return false; // Invalid new experience
+    } else {
+      // Add the new experience to the list of new experiences
+      setNewExperiences([...newExperiences, newExperience]);
+      setNewExperience({ from: '', to: '' });
+      return true; // Valid new experience
+    }
+    }
+    // console.log("datecheckkkkkk",dateCheck)
+    // Check if the date is not in range
+    // if(startDateObj > dateToCheckObj || dateToCheckObj > endDateObj){
+    //   datecheck = true
+    // }else{
+    //   datecheck = false
+    // }
+    return true
+  }
   return (
     <> 
     <link href="/assets/css/stylecd4e.css?version=4.1" rel="stylesheet"></link>
@@ -1760,96 +1798,82 @@ export default function Employeeprofupdate(value) {
                             <ul className="list-unstyled timeline-sm">
                             {precompanyarray.length?precompanyarray.map((citm,ck)=>
                             <React.Fragment key={ck}>
-                              <div className='row timeline-sm-item'>
-                                <div className='col-8 col-sm-12'>
+                              <div className='row timeline-sm-item '>
+                                <div className='col-12'>
+                                <div className='row'>
+                                    <div className='col-10'>
+                                     <span className='experiancetag'>{citm?.from?moment(citm.from).format('DD-MM-YYYY'):""??""}&nbsp; to &nbsp; {citm?.to!=="Present"?moment(citm.to).format('DD-MM-YYYY'):citm.to??""}</span>
+                                    </div>
+                                    
+                                  </div><br/>
                                   <div className='row '>
-                                    <div className='col-3'>
-                                     <strong>Company</strong>
+                                    <div className='col-2 mobhide'>
+                                     <span className="experianceheading mobhide">Company</span>
                                     </div>
-                                    <div className='col-1'>
-                                      <span><strong>:</strong></span>
+                                    <div className='col-1 mobhide'>
+                                      <span className='mobhide'><strong>:</strong></span>
                                     </div>
                                     <div className='col-6'>
-                                      <span><b>{citm?.name??""}</b></span>
+                                      <span className='experiencetext'>{citm?.name??""}</span>
                                     </div>
                                   </div>
                                   <div className='row'>
-                                    <div className='col-3'>
-                                     <strong>Position</strong>
+                                    <div className='col-2 mobhide'>
+                                     <span className="experianceheading mobhide">Position</span>
                                     </div>
-                                    <div className='col-1'>
-                                      <span><strong>:</strong></span>
+                                    <div className='col-1 mobhide'>
+                                      <span className='mobhide'><strong>:</strong></span>
                                     </div>
                                     <div className='col-6'>
-                                      <span><b>{citm?.position??""}</b></span>
+                                      <span className='experiencetext'>{citm?.position??""}</span>
                                     </div>
                                   </div>
                                   <div className='row'>
-                                    <div className='col-3'>
-                                     <strong>Phone</strong>
+                                    <div className='col-2 mobhide'>
+                                     <span className="experianceheading mobhide">Phone</span>
                                     </div>
-                                    <div className='col-1'>
-                                      <span><strong>:</strong></span>
+                                    <div className='col-1 mobhide'>
+                                      <span className='mobhide'><strong>:</strong></span>
                                     </div>
                                     <div className='col-6'>
-                                      <span><b>{citm?.phone??""}</b></span>
+                                      <span className='experiencetext'>{citm?.phone??""}</span>
                                     </div>
                                   </div>
                                   <div className='row'>
-                                    <div className='col-3'>
-                                     <strong>email</strong>
+                                    <div className='col-2 mobhide'>
+                                     <span className="experianceheading mobhide">email</span>
                                     </div>
-                                    <div className='col-1'>
-                                      <span><strong>:</strong></span>
+                                    <div className='col-1 mobhide'>
+                                      <span className='mobhide'><strong>:</strong></span>
                                     </div>
                                     <div className='col-6'>
-                                      <span><b>{citm?.email??""}</b></span>
+                                      <span className='experiencetext'>{citm?.email??""}</span>
                                     </div>
                                   </div>
                                   <div className='row'>
-                                    <div className='col-3'>
-                                     <strong>Address</strong>
+                                    <div className='col-2 mobhide'>
+                                     <span className="experianceheading mobhide">Address</span>
                                     </div>
-                                    <div className='col-1'>
-                                      <span><strong>:</strong></span>
+                                    <div className='col-1 mobhide'>
+                                      <span className='mobhide'><strong>:</strong></span>
                                     </div>
                                     <div className='col-6'>
-                                      <span><b>{citm?.address??""}</b></span>
+                                      <span className='experiencetext '>{citm?.address??""}</span>
                                     </div>
                                   </div>
                                   <div className='row'>
-                                    <div className='col-3'>
-                                     <strong>Description</strong>
+                                    <div className='col-2 mobhide'>
+                                     <span className="experianceheading mobhide">Description</span>
                                     </div>
-                                    <div className='col-1'>
-                                      <span><strong>:</strong></span>
-                                    </div>
-                                    <div className='col-6'>
-                                      <span><b>{citm?.jobDescription??""}</b></span>
-                                    </div>
-                                  </div>
-                                  <div className='row'>
-                                    <div className='col-3'>
-                                     <strong>From</strong>
-                                    </div>
-                                    <div className='col-1'>
-                                      <span><strong>:</strong></span>
+                                    <div className='col-1 mobhide'>
+                                      <span className='mobhide'><strong>:</strong></span>
                                     </div>
                                     <div className='col-6'>
-                                      <span><b>{citm?.from?moment(citm.from).format('DD-MM-YYYY'):""??""}</b></span>
+                                      <span className='experiencetext'>{citm?.jobDescription??""}</span>
                                     </div>
                                   </div>
-                                  <div className='row'>
-                                    <div className='col-3'>
-                                     <strong>To</strong>
-                                    </div>
-                                    <div className='col-1'>
-                                      <span><strong>:</strong></span>
-                                    </div>
-                                    <div className='col-6'>
-                                      <span><b>{citm?.to!=="Present"?moment(citm.to).format('DD-MM-YYYY'):citm.to??""}</b></span>
-                                    </div>
-                                  </div>
+                                  
+                                 
                                 </div>
                               </div>
                              {/* <div className="form-group col-lg-6 mt-20">
@@ -1894,11 +1918,11 @@ export default function Employeeprofupdate(value) {
                              </ul>
                           </div>
                              {windowcompany?<>
-                             <div className="form-group col-lg-12 mt-20 d-flex">
+                             <div className="form-group col-lg-12 mt-20 d-flex sidebar-list-job88">
                               <input className="check " onChange={(e)=>companyHandler(e)}  type="checkbox"  />
                               <label className='mt-15 pl-10 '  >Other Company</label> 
                               </div>
-                            <div className="form-group col-lg-6 sidebar-list-job88 ">
+                            <div className="form-group col-lg-6  ">
                             {othercompany?
                                 <input type="text"  onChange={(e)=>setprecompanydata({...precompanydata,name:e.target.value,is_craigcompany:false})} value={precompanydata.name??""} className="form-control" placeholder=" Company Name" id=" " />
                                 :
@@ -1937,13 +1961,13 @@ export default function Employeeprofupdate(value) {
                               </div>
                             <div className="form-group col-lg-6 mt- ">
                               <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
-                              <input required={precompanydata.name}  type="date"onChange={(e)=>setprecompanydata({...precompanydata,from:e.target.value})} value={precompanydata.from??""} className="form-control" placeholder=" From" id=" " />
-                              <Form.Control.Feedback type="invalid">Please provide Join date </Form.Control.Feedback>
+                              <input required={precompanydata.name}  type="date"onChange={(e)=>setprecompanydata({...precompanydata,from:e.target.value})} value={precompanydata.from??""} className={`form-control `} placeholder=" From" id=" " />
+                              <Form.Control.Feedback type="invalid">Please provide valid Join date </Form.Control.Feedback>
                             </div>
                             {presentcompany?"":
                             <div className="form-group col-lg-6 mt-">
                               <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
-                              <input type="date" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className={`form-control ${precompanydata.from?dateCheck(precompanydata.from??"",precompanydata.to??"")?'':'is-invalid':''}`} placeholder=" To" id=" " />
+                              <input type="date" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className={`form-control ${precompanydata.from?dateCheck(precompanydata.from??"")?'':'is-invalid':''}`} placeholder=" To" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide valid To* date </Form.Control.Feedback>
                             </div>}
                             </>:""}

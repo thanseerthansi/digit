@@ -547,7 +547,7 @@ const Bannerhandler=async(ratio)=>{
                                     {pcompany.is_verified ?
                                       <div className="mt-10 mb-1"><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div> : <div className="mt-10 mb-1"><img className="ml-0" src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
                                     <p>{pcompany.position}</p>
-                                    {pcompany?.to === "Present" ?
+                                    {pcompany?.to === "Present" && pcompany.is_verified?
                                   
                                   <a className="btn btn-border res-icon mb-0" onClick={() => setIsopen(true)} href="#tab-my-jobs" data-bs-toggle="tab" role="tab" aria-controls="tab-my-jobs" aria-selected="false">Resign</a>: null
                                 }
