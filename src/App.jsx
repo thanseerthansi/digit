@@ -23,6 +23,7 @@ import Candidatedetails from "./Employerpages/Candidatedetails";
 import Hrlist from "./Employerpages/Hrlist";
 import Notification from "./Employeepages/Notification";
 import Scorehistory from "./Employeepages/Scorehistory";
+import CompleteProfile from "./Employeepages/CompleteProfile";
 // import Employeeslist from "./Employerpages/Employeeslist";
 function App() {
   return (
@@ -50,7 +51,9 @@ function App() {
             <Route path="employeelist" element={<Employeeslist/>} />
             <Route path="hrlist" element={<Hrlist/>} />
             <Route  default path="verification/:id/:userId" element={<Notificationprofile/>} />
-            <Route   path="candidatedetails/:id" element={<Candidatedetails/>} />
+            <Route   path="complete-profile" element={<CompleteProfile/>} />
+            
+
             
           </Route>
           <Route path="*" element={<Notfound />} />

@@ -938,7 +938,7 @@ export default function Employeeprofupdate(value) {
         <div className="col-12  mx-auto">
          
           {/* multistep */}
-          <div className="container-fluid">
+          <div className="container">
             <div className="row justify-content-center">
               <div className="col-11 col-sm-12 col-md-12 col-lg-9 col-xl-12 text-center p-0 mt-3 mb-2">
                 <div className="card3 px-0 pt-4 pb-0 mt-3 mb-3">
