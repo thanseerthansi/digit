@@ -162,7 +162,7 @@ export default function Simplecontextprovider({children}){
         limit:10
       }
       let data = await Axioscall("get","notification",body)
-      console.log("data",data.data.data.docs)
+      // console.log("data",data.data.data.docs)
       if (data.status===200){
         setnotificationdata(data.data.data.docs)
       }

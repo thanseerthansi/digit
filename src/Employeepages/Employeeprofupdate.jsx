@@ -877,31 +877,39 @@ export default function Employeeprofupdate(value) {
     return formattedNumber;
   };
 
-  console.log("precompanyarray",precompanyarray)
-  const checkDateBetween=(dateToCheck)=>{
-    const newFromDate = new Date(newExperience.from);
-    const newToDate = new Date(newExperience.to === 'Present' ? new Date() : newExperience.to);
+  // console.log("precompanyarray",precompanyarray)
+  const checkDateBetween=(fromcompanydate,tocompanydate)=>{
+    // setprecompanydata({...precompanydata,to:e.target.value})
+    const newFromDate = new Date(fromcompanydate);
+    const newToDate = new Date(tocompanydate === 'Present' ? new Date() : tocompanydate);
 
     // Check if the new experience overlaps with any previous experiences
-    const isOverlapping = previousExperiences.some((experience) => {
+    const isOverlapping = precompanyarray.some((experience) => {
       const fromDate = new Date(experience.from);
       const toDate = new Date(experience.to === 'Present' ? new Date() : experience.to);
+      // console.log("fromdate excpr",fromDate)
+      // console.log("rodata excpr",toDate)
+      // console.log("newFromDate",newFromDate)
+      // console.log("newToDate",newToDate)
       return newFromDate <= toDate && newToDate >= fromDate;
     });
-
-    // Check if the new experience falls under any existing new experiences
-    const isFallingUnderExisting = newExperiences.some((existingNewExperience) => {
-      const existingFromDate = new Date(existingNewExperience.from);
-      const existingToDate = new Date(existingNewExperience.to === 'Present' ? new Date() : existingNewExperience.to);
-      return newFromDate >= existingFromDate && newToDate <= existingToDate;
-    });
+  const isFallingUnderExisting = Object.keys(precompanydata).some((key) => {
+  const existingNewExperience = precompanydata[key];
+  const existingFromDate = new Date(existingNewExperience.from);
+  const existingToDate = new Date(
+    existingNewExperience.to === 'Present' ? new Date() : existingNewExperience.to
+  );
+  
+  return newFromDate >= existingFromDate && newToDate <= existingToDate;
+});
 
     if (isOverlapping || isFallingUnderExisting) {
+      // console.log("nottttttttttttttttttt valid")
+      notifyerror("Cannot add 2 company at same date")
+      // if(datefromorto==="to"){
+        setprecompanydata({...precompanydata,to:"",from:''})
       return false; // Invalid new experience
     } else {
-      // Add the new experience to the list of new experiences
-      setNewExperiences([...newExperiences, newExperience]);
-      setNewExperience({ from: '', to: '' });
       return true; // Valid new experience
     }
     }
@@ -913,7 +921,7 @@ export default function Employeeprofupdate(value) {
     //   datecheck = false
     // }
    
-  
+  console.log("precompany data",precompanydata)
   return (
     <> 
     <link href="/assets/css/stylecd4e.css?version=4.1" rel="stylesheet"></link>
@@ -1008,7 +1016,7 @@ export default function Employeeprofupdate(value) {
                           <input type="text" required onChange={(e)=>setemployeedata({...employeedata,lngWrite:e.target.value})} value={employeedata.lngWrite??""}  className="form-control" placeholder="  English,hindi..." id="" />
                           <Form.Control.Feedback type="invalid">Please provide Valid Languages</Form.Control.Feedback>
                         </div>
-                        {/* <div className="col-md-12 mb-3">
+                        <div className="col-md-12 mb-3">
                           <label className="col-sm-12 font-sm color-text-mutted">Upload Your Photo*</label> 
                           <div className='imageselectorborder d-flex'>
                             <button onClick={()=>Filestackhandler("square",setemployeedata,employeedata,'profilePhoto')}  type='button' className='imageselector'> Choose Image</button>
@@ -1016,7 +1024,7 @@ export default function Employeeprofupdate(value) {
                           </div>
 
                         </div>
-                        <label className="dropdown  col-lg-4 col-md-12 col-sm-12 mt-30">
+                        {/* <label className="dropdown  col-lg-4 col-md-12 col-sm-12 mt-30">
                           <div className="text__center ">
                             <select required onChange={(e)=>setcarddata({...carddata,type:e.target.value})} value={carddata.type??""} className="cs-select form-control  cs-skin-elastic cs-skin-elastic1">
                               <option value="" defaultValue="" disabled  >ID Card Type</option>
@@ -1961,13 +1969,13 @@ export default function Employeeprofupdate(value) {
                               </div>
                             <div className="form-group col-lg-6 mt- ">
                               <label className="col-sm-12 font-sm color-text-mutted">From*</label> 
-                              <input required={precompanydata.name}  type="date"onChange={(e)=>setprecompanydata({...precompanydata,from:e.target.value})} value={precompanydata.from??""} className={`form-control `} placeholder=" From" id=" " />
+                              <input required={precompanydata.name}  type="date"  onChange={(e)=>checkDateBetween(e.target.value,precompanydata.to)?setprecompanydata({...precompanydata,from:e.target.value}):""} value={precompanydata.from??""} className={`form-control `} placeholder=" From" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide valid Join date </Form.Control.Feedback>
                             </div>
                             {presentcompany?"":
                             <div className="form-group col-lg-6 mt-">
                               <label className="col-sm-12 font-sm color-text-mutted">To*</label> 
-                              <input type="date" required={precompanydata.name}  onChange={(e)=>setprecompanydata({...precompanydata,to:e.target.value})} value={precompanydata.to??""} className={`form-control ${precompanydata.from?dateCheck(precompanydata.from??"")?'':'is-invalid':''}`} placeholder=" To" id=" " />
+                              <input type="date" required={precompanydata.name} onChange={(e)=>checkDateBetween(precompanydata.from,e.target.value)?setprecompanydata({...precompanydata,to:e.target.value}):""} value={precompanydata.to??""} className={`form-control ${precompanydata.from?dateCheck(precompanydata.from??"")?'':'is-invalid':''}`} placeholder=" To" id=" " />
                               <Form.Control.Feedback type="invalid">Please provide valid To* date </Form.Control.Feedback>
                             </div>}
                             </>:""}
