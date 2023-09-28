@@ -6,10 +6,11 @@ import { useContext } from "react";
 import { Simplecontext } from "../Commonpages/Simplecontext";
 import Axioscall from "../Commonpages/Axioscall";
 import { notify } from "../Commonpages/toast";
+import { useNavigate } from "react-router-dom";
 
 function CompleteProfile() {
   const [validated, setValidated] = useState(false);
-  const { userdetail, Check_Validation } = useContext(Simplecontext);
+  const { userdetail, Check_Validation,getUser } = useContext(Simplecontext);
 
   const [employeedata, setemployeedata] = useState({});
   console.log(employeedata, "employeedata");
@@ -17,7 +18,7 @@ function CompleteProfile() {
   console.log(carddata, "carddata");
   const [addressproof, setaddressproof] = useState({});
   console.log(addressproof, "addressproof");
-
+    const navigate = useNavigate();
   useEffect(() => {
     if (userdetail) {
       console.log(userdetail);
@@ -42,7 +43,9 @@ function CompleteProfile() {
       const response = await Axioscall("put", "employee/personal", data);
       if (response.status === 200) {
         notify("successfully updated");
-        console.log("successfully updated");
+        getUser()
+        return navigate("/employee-profile")
+        // console.log("successfully updated");
       }
     } catch (error) {
       console.log(error);

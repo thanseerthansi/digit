@@ -468,7 +468,7 @@ export default function Employeeprofupdate(value) {
         
         let data = await Axioscall(method,"employee/educationandcareer",datalist)
         if(data.status===200){
-          notify(msg)
+          // notify(msg)
           // console.log("data carrerstatsut",data)
           setemployeedata3({...employeedata3,id:data.data.data._id})
          
@@ -577,14 +577,14 @@ export default function Employeeprofupdate(value) {
         
         let data = await Axioscall(method,"employee/educationandcareer",datalist)
         if(data.status===200){
-          notify(msg)
-          console.log("data carrerstatsut",data)
+          notify("Successfull")
+          // console.log("data carrerstatsut",data)
           
-          if(method ==="put"){
-            setWizard(1)
-          }else{
+          // if(method ==="put"){
+          //   setWizard(1)
+          // }else{
             setWizard(5)   
-          }     
+          // }     
           tophandler(0,200)
           getUser()
         }
@@ -1736,7 +1736,7 @@ export default function Employeeprofupdate(value) {
                         </div> */}
                       </div>
                       <input type="submit" name="next" onClick={()=>tophandler(0,500)} className="pr-button next action-button"   defaultValue="Submit" /> 
-                      <input type="button" name="previous" onClick={()=>setWizard(2)&getaddress()} className="pr-button  action-button-prev" defaultValue="Previous" />
+                      <input type="button" name="previous" onClick={()=>setWizard(3)&getaddress()} className="pr-button  action-button-prev" defaultValue="Previous" />
                     </fieldset>
                     </Form>
                     :null}
@@ -1802,8 +1802,8 @@ export default function Employeeprofupdate(value) {
                           <div id="property-fields__row-2" className="property-fields__ro row">
                             <h6 className="permenent-address form-t mb-3 col-12">Company</h6>
                             
-                          <div className="sidebar-list-job88 text-imp">
-                            <ul className="list-unstyled timeline-sm">
+                          <div className={`${precompanyarray.length?"sidebar-list-job88":""} text-imp`}>
+                            <ul className={`list-unstyled timeline-sm`}>
                             {precompanyarray.length?precompanyarray.map((citm,ck)=>
                             <React.Fragment key={ck}>
                               <div className='row timeline-sm-item '>
@@ -1926,7 +1926,7 @@ export default function Employeeprofupdate(value) {
                              </ul>
                           </div>
                              {windowcompany?<>
-                             <div className="form-group col-lg-12 mt-20 d-flex sidebar-list-job88">
+                             <div className={`form-group col-lg-12 mt-20 d-flex ${precompanyarray.length?"sidebar-list-job88":""}`}>
                               <input className="check " onChange={(e)=>companyHandler(e)}  type="checkbox"  />
                               <label className='mt-15 pl-10 '  >Other Company</label> 
                               </div>

@@ -205,24 +205,36 @@ const Bannerhandler=async(ratio)=>{
   const statusHandler = () => {
     if (userdetail.is_verified === 'verified') {
       return <div className='mt-3'>
-                     <span className="p-1  rounded text-dark " style={{ backgroundColor: 'rgb(29 172 138)', fontWeight: 'bold' }}>Verified</span>
+                     <span className=" rounded text-white " style={{ backgroundColor: '#059c19',padding:"5px" ,fontWeight:"600"}}>Verified</span>
              </div>
 
     }
     else if (userdetail.is_verified === 'requested') {
       return (
         <div className='mt-3'>
-          <span className="p-1 rounded text-dark"  style={{ backgroundColor: '#e9cb44'}}>Requested</span>
+          <span className=" rounded text-white"  style={{ backgroundColor: '#EFD870',padding:"5px" ,fontWeight:"600"}}>Requested</span>
         </div>
       ) 
     }
     else if(userdetail.is_verified === 'pending'){
-      return <button onClick={() => navigate('/complete-profile')} className="btn btn-sm p-1" style={{ backgroundColor: "#c3d6f1", color: 'black', borderRadius: '5px', }}><i className="fas fa-check-circle mr-5 text-primary" ></i>click to verify</button>
+      return <button onClick={() => navigate('/complete-profile')} className="btn btn-sm " 
+      style={{ 
+        backgroundColor: "#ADD0E0",
+        color: 'black',
+        borderRadius: '6px' ,
+        fontWeight:600 ,
+        padding:"5px",
+        transition: "background-color 0.3s ease",
+      }}
+      onMouseEnter={(e) => (e.target.style.backgroundColor = "#c3d6f1")} 
+      onMouseLeave={(e) => (e.target.style.backgroundColor = "#ADD0E0")}
+      >
+        <i className="fas fa-check-circle mr-5 text-primary"></i>Click to verify</button>
     }
     else if (userdetail.is_verified === 'rejected') {
       return (
         <div className="mt-3">
-          <span className="p-1  rounded text-dark " style={{backgroundColor:'#fdacac'}}><i class="fa-solid fa-xmark" style={{color:'red',marginRight:'4px'}}></i>Rejected</span>
+          <span className=" rounded text-white " style={{backgroundColor:'#f74d36',padding:"5px" ,fontWeight:"600"}}>Rejected</span>
         </div>
 
       )
