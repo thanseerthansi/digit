@@ -15,6 +15,7 @@ import {Button} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 
+
 export default function Employeeprofile() {
   const {logouthandler,userdetail,employeedata,getUser,Capitalizefirst,Check_Validation,getNotification}=useContext(Simplecontext)
   // console.log(userdetail)
@@ -198,6 +199,35 @@ const Bannerhandler=async(ratio)=>{
     // console.log("attandance dara",data)
     return data
   }
+
+
+
+  const statusHandler = () => {
+    if (userdetail.is_verified === 'verified') {
+      return <div className='mt-3'>
+                     <span className="p-1  rounded text-dark " style={{ backgroundColor: 'rgb(29 172 138)', fontWeight: 'bold' }}>Verified</span>
+             </div>
+
+    }
+    else if (userdetail.is_verified === 'requested') {
+      return (
+        <div className='mt-3'>
+          <span className="p-1 rounded text-dark"  style={{ backgroundColor: '#e9cb44'}}>Requested</span>
+        </div>
+      ) 
+    }
+    else if(userdetail.is_verified === 'pending'){
+      return <button onClick={() => navigate('/complete-profile')} className="btn btn-sm p-1" style={{ backgroundColor: "#c3d6f1", color: 'black', borderRadius: '5px', }}><i className="fas fa-check-circle mr-5 text-primary" ></i>click to verify</button>
+    }
+    else if (userdetail.is_verified === 'rejected') {
+      return (
+        <div className="mt-3">
+          <span className="p-1  rounded text-dark " style={{backgroundColor:'#fdacac'}}><i class="fa-solid fa-xmark" style={{color:'red',marginRight:'4px'}}></i>Rejected</span>
+        </div>
+
+      )
+    }
+  }
   return (
     <>
       <main className="main">
@@ -218,21 +248,35 @@ const Bannerhandler=async(ratio)=>{
         <div className="image-compay">
           <img style={{ height:"85px" , width:"85px"}} src={userdetail?.profilePhoto??"assets/imgs/page/candidates/candidate-profile copy1.png"} alt="jobbox" />
           
-          </div>
-          
-        <div className="row mt-10" style={{lineHeight:"2px"}}>
-          <div className="col-lg-8 col-md-12">
-            <h5 className="f-18">{userdetail?.firstName??""} {userdetail?.middleName??""} {userdetail?.lastName??""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.state??""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country??""}</span></h5><br />
-            {userdetail.is_verified?
-            <div className=""><img className="ml-0" src="/assets/imgs/page/candidates/verified.png" alt="jobbox" /></div>
-            :<div className=""><img className="ml-0 " src="\assets\imgs\page\candidates\notverify.png" alt="jobbox" /></div>}
-            <h5 className="f-18 u-color">Unique ID : <span>{userdetail?.uniqueid??""}</span></h5>
-            <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation??""}</p>
-          </div>
-          
+              </div>
+{/* -----------------------------------status-------------------------------------------- */}
+              <div className="row mt-10" style={{ lineHeight: "2px" }}>
+                <div className="col-lg-8 col-md-12">
+                  <h5 className="f-18">{userdetail?.firstName ?? ""} {userdetail?.middleName ?? ""} {userdetail?.lastName ?? ""} <span className="card-location font-regular ml-20">{userdetail?.address?.[0]?.permanantAddress?.[0]?.state ?? ""},{userdetail?.address?.[0]?.permanantAddress?.[0]?.country ?? ""}</span></h5><br />
+                  {/* {userdetail.is_verified === 'verified' ? (
+                    <div className='mt-3'>
+                      <span className="p-1 bg-success rounded text-white ">
+                        verified
+                      </span>
+                    </div>
+                  ) : userdetail.is_verified === 'requested' ? (
+                    <div className='mt-3'>
 
-            {/* score ....start */}
-          <div className="col-lg-4 col-md-12 text-lg-end ">     
+                      <span className="p-1 bg-warning rounded text-white ">
+                        Requested
+                      </span>
+                    </div>
+                  ) : (
+                    <button onClick={() => navigate('/complete-profile')} className="btn btn-sm p-1 bg-primary" style={{ backgroundColor: "white", color: 'white', borderRadius: '5px', }}><i className="fas fa-check-circle mr-5 text-white" ></i>click to verify</button>
+                    )} */}
+                    {statusHandler()}
+                  <h5 className="f-18 u-color">Unique ID : <span>{userdetail?.uniqueid ?? ""}</span></h5>
+                  <p className="mt-0 font-md color-text-paragraph-2 mb-15">{userdetail?.careerandeducation?.[0]?.designation ?? ""}</p>
+                </div>
+
+
+                {/* score ....start */}
+                <div className="col-lg-4 col-md-12 text-lg-end ">     
           <div>
            
             <section>
