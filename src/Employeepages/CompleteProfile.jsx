@@ -5,7 +5,7 @@ import Filestack from "../Commonpages/Filestack";
 import { useContext } from "react";
 import { Simplecontext } from "../Commonpages/Simplecontext";
 import Axioscall from "../Commonpages/Axioscall";
-import { notify } from "../Commonpages/toast";
+import { notify, notifyerror } from "../Commonpages/toast";
 import { useNavigate } from "react-router-dom";
 
 function CompleteProfile() {
@@ -36,9 +36,15 @@ function CompleteProfile() {
     try {
       if (carddata.frontUrl && carddata.backUrl) {
         data.idcard = [{ ...carddata }];
+      }else{
+        notifyerror("Card data not found")
+        return
       }
       if (addressproof.frontUrl && addressproof.backUrl) {
         data.addressproof = [{ ...addressproof }];
+      }else{
+        notifyerror("Address proof not found")
+        return 
       }
       const response = await Axioscall("put", "employee/personal", data);
       if (response.status === 200) {

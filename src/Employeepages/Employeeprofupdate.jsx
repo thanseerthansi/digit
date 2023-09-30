@@ -47,6 +47,7 @@ export default function Employeeprofupdate(value) {
   const [validated,setValidated]=useState(false)
   const [validated2,setValidated2]=useState(false)
   const [validated3,setValidated3]=useState(false)
+  const [validated4,setValidated4]=useState(false)
   const [wizard,setWizard]=useState(1)
   const [load,setload]=useState(false)
   const [windowcompany,setwindowcompany]=useState(true)
@@ -468,14 +469,14 @@ export default function Employeeprofupdate(value) {
         
         let data = await Axioscall(method,"employee/educationandcareer",datalist)
         if(data.status===200){
-          // notify(msg)
+          notify("Successfull")
           // console.log("data carrerstatsut",data)
           setemployeedata3({...employeedata3,id:data.data.data._id})
          
           setWizard(4)   
              
           tophandler(0,200)
-          getUser()
+          getCarreer()
         }
         setload(false)
     } catch (error) {
@@ -483,6 +484,7 @@ export default function Employeeprofupdate(value) {
       setload(false)
     }
   }
+  // console.log("employeedata3",employeedata3)
   const RegsterFourthform=async()=>{
     try {
       let method ="put"
@@ -577,7 +579,7 @@ export default function Employeeprofupdate(value) {
         
         let data = await Axioscall(method,"employee/educationandcareer",datalist)
         if(data.status===200){
-          notify("Successfull")
+          notify("Successfully Completed")
           // console.log("data carrerstatsut",data)
           
           // if(method ==="put"){
@@ -921,7 +923,7 @@ export default function Employeeprofupdate(value) {
     //   datecheck = false
     // }
    
-  console.log("precompany data",precompanydata)
+  // console.log("precompany data",precompanydata)
   return (
     <> 
     <link href="/assets/css/stylecd4e.css?version=4.1" rel="stylesheet"></link>
@@ -1741,7 +1743,7 @@ export default function Employeeprofupdate(value) {
                     </Form>
                     :null}
                     {wizard===4?
-                    <Form  noValidate validated={validated3} onSubmit={(e)=>Check_Validation(e,RegsterFourthform,setValidated3)}  className="reg-form contact10 ">
+                    <Form  noValidate validated={validated4} onSubmit={(e)=>Check_Validation(e,RegsterFourthform,setValidated4)}  className="reg-form contact10 ">
                     <fieldset>
                       <div className="form-card">
                         <div className="row">
