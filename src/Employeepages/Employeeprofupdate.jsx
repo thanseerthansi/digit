@@ -1018,12 +1018,20 @@ export default function Employeeprofupdate(value) {
                           <input type="text" required onChange={(e)=>setemployeedata({...employeedata,lngWrite:e.target.value})} value={employeedata.lngWrite??""}  className="form-control" placeholder="  English,hindi..." id="" />
                           <Form.Control.Feedback type="invalid">Please provide Valid Languages</Form.Control.Feedback>
                         </div>
-                        <div className="col-md-12 mb-3">
+                        <div className="col-md-12 mt-3 mb-3">
                           <label className="col-sm-12 font-sm color-text-mutted">Upload Your Photo*</label> 
-                          <div className='imageselectorborder d-flex'>
+                          <div >{employeedata.profilePhoto?
+                                <span onClick={()=>Filestackhandler("square",setemployeedata,employeedata,'profilePhoto')}>
+                                            <img  src={employeedata.profilePhoto} alt="/" className='profileimage_holder'  />
+                                </span>:
+                                    <span onClick={()=>Filestackhandler("square",setemployeedata,employeedata,'profilePhoto')}>
+                                            <img  src="./assets/imgs/template/image_Placeholder.jpg" alt="/" className='profileimage_holder'  />
+                                      </span>}
+                                      </div>
+                          {/* <div className='imageselectorborder d-flex'>
                             <button onClick={()=>Filestackhandler("square",setemployeedata,employeedata,'profilePhoto')}  type='button' className='imageselector'> Choose Image</button>
                             <p style={{overflow:"hidden"}}>&nbsp;{employeedata.profilePhoto??<span>No file chosen</span>}</p>
-                          </div>
+                          </div> */}
 
                         </div>
                         {/* <label className="dropdown  col-lg-4 col-md-12 col-sm-12 mt-30">
@@ -1077,7 +1085,7 @@ export default function Employeeprofupdate(value) {
                             <p style={{overflow:"hidden"}}>&nbsp;{addressproof.backUrl??<span>No file chosen</span>}</p>
                           </div>
                         </div> */}
-                        <div className="col-12 row mt-3 mb-20">
+                        <div className="col-12 row mt-3 mb-10">
                           <label className="col-lg-4 col-sm-6">Marital status</label>
                           <p className="col-lg-2 col-sm-2 mari">
                             <input onChange={()=>setemployeedata({...employeedata,maritalStatus:"single"})} checked={employeedata.maritalStatus==="single"?true:false}  type="radio" id="test1" name="radio-group"  />

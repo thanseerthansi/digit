@@ -84,7 +84,8 @@ function CompleteProfile() {
                       </div>
                       <div className="form-card row">
 
-                          <label className="dropdown  col-lg-4 col-md-12 col-sm-12 mt-30">
+                          <label className="dropdown  mt-30">
+                            <div className="col-lg-6 col-sm-12">
                               <div className="text__center ">
                                   <select
                                       required
@@ -94,7 +95,7 @@ function CompleteProfile() {
                                       value={carddata.type ?? ""}
                                       className="cs-select form-control  cs-skin-elastic cs-skin-elastic1">
                                       <option value="" defaultValue="" disabled>
-                                          ID Card Type
+                                          -- Select ID Card Type --
                                       </option>
                                       <option
                                           disabled={addressproof.type === "Driving License"}
@@ -116,12 +117,35 @@ function CompleteProfile() {
                                       Please provide Id card type
                                   </Form.Control.Feedback>
                               </div>
+                              </div>
                           </label>
-                          <div className="form-group col-lg-4 col-sm-12">
+                          <div className="form-group col-lg-6 col-sm-12">
                               <label className="col-sm-12 font-sm color-text-mutted">
-                                  Upload ID card front Side*
+                                  Upload front Side*
                               </label>
-                              <div className="imageselectorborder d-flex ">
+                              <div>
+                                <div >{carddata.frontUrl?
+                                <span onClick={() =>
+                                          Filestackhandler(
+                                              "landscape",
+                                              setcarddata,
+                                              carddata,
+                                              "frontUrl"    
+                                          )}>
+                                            <img  src={carddata.frontUrl} alt="/" className='image_holder'  />
+                                </span>:
+                                    <span onClick={() =>
+                                          Filestackhandler(
+                                              "landscape",
+                                              setcarddata,
+                                              carddata,
+                                              "frontUrl"    
+                                          )}>
+                                            <img  src="./assets/imgs/template/image_Placeholder.jpg" alt="/" className='image_holder'  />
+                                      </span>}
+                                      </div>
+                              </div>
+                              {/* <div className="imageselectorborder d-flex ">
                                   <button
                                       onClick={() =>
                                           Filestackhandler(
@@ -139,13 +163,35 @@ function CompleteProfile() {
                                   <p style={{ overflow: "hidden" }}>
                                       &nbsp;{carddata.frontUrl ?? <span>No file chosen</span>}
                                   </p>
-                              </div>
+                              </div> */}
                           </div>
-                          <div className="form-group col-lg-4 col-sm-12">
+                          <div className="form-group col-lg-6 col-sm-12">
                               <label className="col-sm-12 font-sm color-text-mutted">
-                                  Upload ID card Back Side*
+                                  Upload  Back Side*
                               </label>
-                              <div className="imageselectorborder d-flex ">
+                              <div >{carddata.backUrl?
+                                <span onClick={() =>
+                                    Filestackhandler(
+                                        "landscape",
+                                        setcarddata,
+                                        carddata,
+                                        "backUrl"
+                                    )
+                                }>
+                                            <img  src={carddata.backUrl} alt="/" className='image_holder'  />
+                                </span>:
+                                    <span onClick={() =>
+                                        Filestackhandler(
+                                            "landscape",
+                                            setcarddata,
+                                            carddata,
+                                            "backUrl"
+                                        )
+                                    }>
+                                            <img  src="./assets/imgs/template/image_Placeholder.jpg" alt="/" className='image_holder'  />
+                                      </span>}
+                                      </div>
+                              {/* <div className="imageselectorborder d-flex ">
                                   <button
                                       onClick={() =>
                                           Filestackhandler(
@@ -163,9 +209,10 @@ function CompleteProfile() {
                                   <p style={{ overflow: "hidden" }}>
                                       &nbsp;{carddata.backUrl ?? <span>No file chosen</span>}
                                   </p>
-                              </div>
+                              </div> */}
                           </div>
-                          <label className="dropdown col-lg-4 col-sm-12 mt-30">
+                          <label className="dropdown  mt-30">
+                          <div className="col-lg-6 col-sm-12">
                               <div className="text__center">
                                   <select
                                       required
@@ -175,7 +222,7 @@ function CompleteProfile() {
                                       value={addressproof.type ?? ""}
                                       className=" form-control cs-select cs-skin-elastic cs-skin-elastic1">
                                       <option value="" defaultValue="" disabled>
-                                          Address Proof
+                                          -- Select Address Proof --
                                       </option>
                                       <option
                                           disabled={carddata.type === "Driving License"}
@@ -197,12 +244,35 @@ function CompleteProfile() {
                                       Please provide Address Proof{" "}
                                   </Form.Control.Feedback>
                               </div>
+                              </div>
                           </label>
-                          <div className="form-group col-lg-4 col-sm-12">
+                          <div className="form-group col-lg-6 col-sm-12">
                               <label className="col-sm-12 font-sm color-text-mutted">
-                                  Upload Address Proof Front Side*
+                                  Upload Front Side*
                               </label>
-                              <div className="imageselectorborder d-flex ">
+                              <div >{addressproof.frontUrl?
+                                <span onClick={() =>
+                                    Filestackhandler(
+                                        "landscape",
+                                        setaddressproof,
+                                        addressproof,
+                                        "frontUrl"
+                                    )
+                                }>
+                                            <img  src={addressproof.frontUrl} alt="/" className='image_holder'  />
+                                </span>:
+                                    <span onClick={() =>
+                                        Filestackhandler(
+                                            "landscape",
+                                            setaddressproof,
+                                            addressproof,
+                                            "frontUrl"
+                                        )
+                                    }>
+                                            <img  src="./assets/imgs/template/image_Placeholder.jpg" alt="/" className='image_holder'  />
+                                      </span>}
+                                      </div>
+                              {/* <div className="imageselectorborder d-flex ">
                                   <button
                                       onClick={() =>
                                           Filestackhandler(
@@ -220,13 +290,35 @@ function CompleteProfile() {
                                   <p style={{ overflow: "hidden" }}>
                                       &nbsp;{addressproof.frontUrl ?? <span>No file chosen</span>}
                                   </p>
-                              </div>
+                              </div> */}
                           </div>
-                          <div className="form-group col-lg-4 col-sm-12 font-sm color-text-mutted">
+                          <div className="form-group col-lg-6 col-sm-12 font-sm color-text-mutted">
                               <label className="col-sm-12">
-                                  Upload Address Proof Back Side*
+                                  Upload  Back Side*
                               </label>
-                              <div className="imageselectorborder d-flex ">
+                              <div >{addressproof.backUrl ?
+                                <span onClick={() =>
+                                    Filestackhandler(
+                                        "landscape",
+                                        setaddressproof,
+                                        addressproof,
+                                        "backUrl"
+                                    )
+                                }>
+                                            <img  src={addressproof.backUrl } alt="/" className='image_holder'  />
+                                </span>:
+                                    <span onClick={() =>
+                                        Filestackhandler(
+                                            "landscape",
+                                            setaddressproof,
+                                            addressproof,
+                                            "backUrl"
+                                        )
+                                    }>
+                                            <img  src="./assets/imgs/template/image_Placeholder.jpg" alt="/" className='image_holder'  />
+                                      </span>}
+                                      </div>
+                              {/* <div className="imageselectorborder d-flex ">
                                   <button
                                       onClick={() =>
                                           Filestackhandler(
@@ -244,7 +336,7 @@ function CompleteProfile() {
                                   <p style={{ overflow: "hidden" }}>
                                       &nbsp;{addressproof.backUrl ?? <span>No file chosen</span>}
                                   </p>
-                              </div>
+                              </div> */}
                           </div>
                       </div>
 

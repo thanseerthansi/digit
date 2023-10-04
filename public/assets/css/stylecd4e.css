@@ -13447,3 +13447,17 @@ animation: Logo 4s ease infinite;
   display: none !important
 }
 }
+.image_holder{
+  height: 239px !important;
+  width: 72% !important;
+  border: 2px solid #bdbdbd !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+}
+.profileimage_holder{
+  height: 150px !important;
+  width: 150px !important;
+  border: 2px solid #bdbdbd !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+}
